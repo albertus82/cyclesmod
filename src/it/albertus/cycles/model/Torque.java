@@ -7,7 +7,7 @@ public class Torque {
 	
 	protected static final int LENGTH = 112;
 	
-	private short[] curve; // 36-147
+	private short[] curve; // 36-147: curva di coppia (regime massimo considerato: ~14500 RPM).
 
 	public Torque(short[] curve) {
 		super();

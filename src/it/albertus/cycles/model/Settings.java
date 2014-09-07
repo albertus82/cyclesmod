@@ -9,22 +9,19 @@ public class Settings {
 	
 	protected static final int LENGTH = 22;
 
-	private int gearsCount; // 0-1
-	private int rpmRedMark; // 2-3
-	private int rpmLimit; // 4-5
-	private int rpmRedMarkGracePeriod; // 6-7
-	private int skiddingThreshold; // 8-9
+	private int gearsCount; // 0-1: numero di marce del cambio (solo lsB).
+	private int rpmRedMark; // 2-3: regime red mark (stessa scala del regime limitatore, il motore si rompe quando regime >= regime red mark per piu' di qualche secondo).
+	private int rpmLimit; // 4-5: regime limitatore (il contagiri si blocca ma la moto conserva le prestazioni di accelerazione a quel regime, quindi la coppia a quel regime deve essere azzerata se si vuole interrompere l'accelerazione della moto).
+	private int rpmRedMarkGracePeriod; // 6-7: periodo di grazia su red mark (valore alto: il motore si rompe dopo piu' tempo. Per valori msB >=80 si rompe subito).
+	private int skiddingThreshold; // 8-9: soglia di slittamento in sterzata (valore alto: slitta meno)
 	private int unknown1; // 10-11
-	private int brakingSpeed; // 12-13
+	private int brakingSpeed; // 12-13: velocita' di frenata.
 	private int unknown2; // 14-15
-	private int spinThreshold; // 16-17
+	private int spinThreshold; // 16-17: soglia di testacoda (valore basso: testacoda piu' probabile. Per valori msB >=80 testacoda sicuro).
 	private int unknown3; // 18-19
 	private int unknown4; // 20-21
 	
-	public Settings(int gearsCount, int rpmRedMark, int rpmLimit,
-			int rpmRedMarkGracePeriod, int skiddingThreshold, int unknown1,
-			int brakingSpeed, int unknown2, int spinThreshold, int unknown3,
-			int unknown4) {
+	public Settings(int gearsCount, int rpmRedMark, int rpmLimit, int rpmRedMarkGracePeriod, int skiddingThreshold, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int unknown4) {
 		super();
 		this.gearsCount = gearsCount;
 		this.rpmRedMark = rpmRedMark;
@@ -54,7 +51,6 @@ public class Settings {
 		byteList.addAll( ByteUtils.toByteList( unknown4 ) );
 		return byteList;
 	}
-	
 	
 	public int getRpmRedMark() {
 		return rpmRedMark;
