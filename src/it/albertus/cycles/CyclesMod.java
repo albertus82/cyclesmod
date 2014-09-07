@@ -78,7 +78,7 @@ public class CyclesMod {
 		final int CRC = 0x28A33682;
 		final short SIZE = 444;
 		
-		ZipInputStream zis = new ZipInputStream( CyclesMod.class.getResourceAsStream( "/bikes.zip" ) );
+		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( "/bikes.zip" ) );
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != CRC ) {
 			throw new StreamCorruptedException( "Il file " + FILE_NAME + " non corrisponde a quello originale; CRC atteso: " + String.format( "%X", CRC ) + ", CRC rilevato: " + String.format( "%X", ze.getCrc() ) + '.' );
