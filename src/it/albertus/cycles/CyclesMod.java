@@ -13,20 +13,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CyclesMod {
-
-	private static final String DESTINATION_PATH = "D:\\Documents\\Dropbox\\Personale\\DOS\\CYCLES\\";
+	
+	private static final String DEFAULT_DESTINATION_PATH = "D:\\Documents\\Dropbox\\Personale\\DOS\\CYCLES\\";
 	
 	private void customizeBikes( FileBikesInf bikesInf ) {
 		// Inserire qui le personalizzazioni...
 	}
 	
 	
-	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
 	private static final String FILE_NAME = "BIKES.INF";
-	private static final int CRC = 0x28A33682;
-	private static final short SIZE = 444;
-
+	
+	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
+	
 	public static void main( String... args ) throws IOException {
+		if ( args.length > 1 ) {
+			throw new IllegalArgumentException( "Troppi parametri. Uso: CyclesMod [percorso di destinazione]" );
+		}
+		String destinationPath = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
 		
 		CyclesMod mod = new CyclesMod();
 		
@@ -42,17 +45,17 @@ public class CyclesMod {
 		
 		// File in uscita
 		log.info( "Preparazione nuovo file " + FILE_NAME + "..." );
-		mod.writeCustomBikesInf(bikesInf);
+		mod.writeCustomBikesInf( bikesInf, destinationPath );
 	}
-
-	private void writeCustomBikesInf( FileBikesInf bikesInf ) throws IOException {
-		FileOutputStream fos = new FileOutputStream( DESTINATION_PATH + FILE_NAME );
+	
+	private void writeCustomBikesInf( FileBikesInf bikesInf, String destinationPath ) throws IOException {
+		FileOutputStream fos = new FileOutputStream( destinationPath + FILE_NAME );
 		fos.write( bikesInf.toByteArray() );
 		fos.flush();
 		fos.close();
-		log.info( "Nuovo file " + FILE_NAME + " scritto correttamente nel percorso \"" + DESTINATION_PATH + "\"." );
+		log.info( "Nuovo file " + FILE_NAME + " scritto correttamente nel percorso \"" + destinationPath + "\"." );
 	}
-
+	
 	private FileBikesInf parseBikesInfInputStream( InputStream is ) throws IOException {
 		byte[] inf125 = new byte[ Bike.LENGTH ];
 		byte[] inf250 = new byte[ Bike.LENGTH ];
@@ -70,8 +73,11 @@ public class CyclesMod {
 		log.info( "File " + FILE_NAME + " originale elaborato." );
 		return bikesInf;
 	}
-
+	
 	private InputStream getBikesInfInputStream() throws IOException {
+		final int CRC = 0x28A33682;
+		final short SIZE = 444;
+		
 		ZipInputStream zis = new ZipInputStream( CyclesMod.class.getResourceAsStream( "/bikes.zip" ) );
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != CRC ) {
@@ -83,5 +89,5 @@ public class CyclesMod {
 		log.info( "File " + FILE_NAME + " originale aperto; CRC OK: " + String.format( "%X", ze.getCrc() ) + '.' );
 		return zis;
 	}
-
+	
 }

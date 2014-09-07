@@ -21,6 +21,11 @@ public class FileBikesInf {
 		this.bike500 = bike500;
 	}
 	
+	/**
+	 * Ricostruisce il file BIKES.INF a partire dalle 3 configurazioni contenute nell'oggetto (125, 250, 500).
+	 * 
+	 * @return L'array di byte corrispondente al file BIKES.INF.
+	 */
 	public byte[] toByteArray() {
 		List<Byte> byteList = new ArrayList<Byte>( LENGTH );
 		byteList.addAll( bike125.toByteList() );
