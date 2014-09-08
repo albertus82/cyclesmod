@@ -32,7 +32,7 @@ public class FileBikesInf {
 		byteList.addAll( bike250.toByteList() );
 		byteList.addAll( bike500.toByteList() );
 		if ( byteList.size() != LENGTH ) {
-			throw new IllegalStateException( "Dimensione finale BIKES.INF errata, effettiva: " + byteList.size() + " byte, prevista: " + LENGTH + " byte." );
+			throw new IllegalStateException( "Wrong BIKES.INF file size, actual: " + byteList.size() + " bytes, expected: " + LENGTH + " bytes." );
 		}
 		return ByteUtils.toByteArray( byteList );
 	}
