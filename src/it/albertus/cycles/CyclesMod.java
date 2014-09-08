@@ -2,10 +2,13 @@ package it.albertus.cycles;
 
 import it.albertus.cycles.model.Bike;
 
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamCorruptedException;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -22,6 +25,8 @@ public class CyclesMod {
 	
 	
 	private static final String FILE_NAME = "BIKES.INF";
+	private static final int CRC = 0x28A33682;
+	private static final short SIZE = 444;
 	
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
 	
@@ -49,11 +54,17 @@ public class CyclesMod {
 	}
 	
 	private void writeCustomBikesInf( FileBikesInf bikesInf, String destinationPath ) throws IOException {
-		FileOutputStream fos = new FileOutputStream( destinationPath + FILE_NAME );
-		fos.write( bikesInf.toByteArray() );
-		fos.flush();
-		fos.close();
-		log.info( "Nuovo file " + FILE_NAME + " scritto correttamente nel percorso \"" + destinationPath + "\"." );
+		byte[] newBikesInf = bikesInf.toByteArray();
+		Checksum crc = new CRC32();
+		crc.update( newBikesInf, 0, newBikesInf.length );
+		
+		log.info( "La configurazione" + ( crc.getValue() == CRC ? " non " : ' ' ) + "e' stata modificata; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
+
+		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( destinationPath + FILE_NAME ), SIZE );
+		bos.write( newBikesInf );
+		bos.flush();
+		bos.close();
+		log.info( "Nuovo file " + FILE_NAME + " scritto correttamente nel percorso \"" + destinationPath + "\"; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
 	}
 	
 	private FileBikesInf parseBikesInfInputStream( InputStream is ) throws IOException {
@@ -74,10 +85,7 @@ public class CyclesMod {
 		return bikesInf;
 	}
 	
-	private InputStream getBikesInfInputStream() throws IOException {
-		final int CRC = 0x28A33682;
-		final short SIZE = 444;
-		
+	private ZipInputStream getBikesInfInputStream() throws IOException {
 		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( "/bikes.zip" ) );
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != CRC ) {
