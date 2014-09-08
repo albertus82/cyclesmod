@@ -37,6 +37,17 @@ public class ByteUtils {
 		return shortArray;
 	}
 
+	public static int[] toIntArray( byte[] byteArray ) {
+		if ( byteArray.length % 2 != 0 ) {
+			throw new IllegalArgumentException( "Cannot convert an odd sized byte array into an int array." );
+		}
+		int[] intArray = new int[ byteArray.length / 2 ];
+		for ( int i = 0; i < byteArray.length; i += 2 ) {
+			intArray[ i / 2 ] = ByteUtils.toInt( byteArray[i], byteArray[i + 1] );
+		}
+		return intArray;
+	}
+	
 	public static short toShort( byte byteValue ) {
 		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(2);
 		byteBuffer.order( ByteOrder.LITTLE_ENDIAN );

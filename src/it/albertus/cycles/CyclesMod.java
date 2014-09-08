@@ -20,7 +20,20 @@ public class CyclesMod {
 	private static final String DEFAULT_DESTINATION_PATH = "D:\\Documents\\Dropbox\\Personale\\DOS\\CYCLES\\";
 	
 	private void customizeBikes( FileBikesInf bikesInf ) {
-		// Inserire qui le personalizzazioni...
+		/* Inserire qui le personalizzazioni... */
+		
+//		bikesInf.getBike500().getGearbox().getGearRatios()[5] = (int)(bikesInf.getBike500().getGearbox().getGearRatios()[5] * 1.03);
+//		bikesInf.getBike500().getGearbox().getGearRatios()[6] = 18900;
+		
+		for ( int i = 1; i <= 6; i++ ) {
+			bikesInf.getBike500().getGearbox().getGearRatios()[i] = (int)(bikesInf.getBike500().getGearbox().getGearRatios()[i] * 0.89);
+		}
+		
+		for ( int i = 0; i < 106; i++ ) {
+			bikesInf.getBike500().getTorque().getCurve()[i] = (short)(bikesInf.getBike500().getTorque().getCurve()[i] * 2);	
+		}
+		
+		/* Fine delle personalizzazioni */
 	}
 	
 	
@@ -32,7 +45,7 @@ public class CyclesMod {
 	
 	public static void main( String... args ) throws IOException {
 		if ( args.length > 1 ) {
-			throw new IllegalArgumentException( "Troppi parametri. Uso: CyclesMod [percorso di destinazione]" );
+			throw new IllegalArgumentException( "Too many parameters. Usage: CyclesMod [destination]" );
 		}
 		String destinationPath = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
 		
@@ -86,13 +99,13 @@ public class CyclesMod {
 	}
 	
 	private ZipInputStream getBikesInfInputStream() throws IOException {
-		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( "/bikes.zip" ) );
+		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( "bikes.zip" ) );
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != CRC ) {
-			throw new StreamCorruptedException( "Il file " + FILE_NAME + " non corrisponde a quello originale; CRC atteso: " + String.format( "%X", CRC ) + ", CRC rilevato: " + String.format( "%X", ze.getCrc() ) + '.' );
+			throw new StreamCorruptedException( "The original " + FILE_NAME + " file is corrupted; CRC miscompare, expected: " + String.format( "%X", CRC ) + ", actual: " + String.format( "%X", ze.getCrc() ) + '.' );
 		}
 		if ( ze.getSize() != SIZE ) {
-			throw new StreamCorruptedException( "Il file " + FILE_NAME + " non corrisponde a quello originale; dimensioni attese: " + SIZE + " byte, dimensioni rilevate: " + ze.getSize() + " byte." );
+			throw new StreamCorruptedException( "The original " + FILE_NAME + " file is corrupted; file size miscompare, expected: " + SIZE + " bytes, actual: " + ze.getSize() + " bytes." );
 		}
 		log.info( "File " + FILE_NAME + " originale aperto; CRC OK: " + String.format( "%X", ze.getCrc() ) + '.' );
 		return zis;
