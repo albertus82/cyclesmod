@@ -17,26 +17,6 @@ import org.slf4j.LoggerFactory;
 
 public class CyclesMod {
 	
-	private static final String DEFAULT_DESTINATION_PATH = "D:\\Documents\\Dropbox\\Personale\\DOS\\CYCLES\\";
-	
-	private void customizeBikes( FileBikesInf bikesInf ) {
-		/* Inserire qui le personalizzazioni... */
-		
-//		bikesInf.getBike500().getGearbox().getGearRatios()[5] = (int)(bikesInf.getBike500().getGearbox().getGearRatios()[5] * 1.03);
-//		bikesInf.getBike500().getGearbox().getGearRatios()[6] = 18900;
-		
-		for ( int i = 1; i <= 6; i++ ) {
-			bikesInf.getBike500().getGearbox().getGearRatios()[i] = (int)(bikesInf.getBike500().getGearbox().getGearRatios()[i] * 0.89);
-		}
-		
-		for ( int i = 0; i < 106; i++ ) {
-			bikesInf.getBike500().getTorque().getCurve()[i] = (short)(bikesInf.getBike500().getTorque().getCurve()[i] * 2);	
-		}
-		
-		/* Fine delle personalizzazioni */
-	}
-	
-	
 	private static final String FILE_NAME = "BIKES.INF";
 	private static final int CRC = 0x28A33682;
 	private static final short SIZE = 444;
@@ -47,7 +27,7 @@ public class CyclesMod {
 		if ( args.length > 1 ) {
 			throw new IllegalArgumentException( "Too many parameters. Usage: CyclesMod [destination]" );
 		}
-		String destinationPath = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
+		String destinationPath = args.length > 0 ? args[0] : Mod.DEFAULT_DESTINATION_PATH;
 		
 		CyclesMod mod = new CyclesMod();
 		
@@ -58,7 +38,7 @@ public class CyclesMod {
 		FileBikesInf bikesInf = mod.parseBikesInfInputStream( is );
 		
 		log.info( "Applicazione delle personalizzazioni alla configurazione..." );
-		mod.customizeBikes( bikesInf );
+		Mod.customize( bikesInf );
 		log.info( "Personalizzazioni applicate." );
 		
 		// File in uscita
