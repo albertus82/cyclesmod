@@ -32,7 +32,7 @@ public class ByteUtils {
 	public static short[] toShortArray( byte[] byteArray ) {
 		short[] shortArray = new short[ byteArray.length ];
 		for ( int i = 0; i < byteArray.length; i++ ) {
-			shortArray[i] = ByteUtils.toShort( byteArray[i] );
+			shortArray[i] = toShort( byteArray[i] );
 		}
 		return shortArray;
 	}
@@ -43,23 +43,31 @@ public class ByteUtils {
 		}
 		int[] intArray = new int[ byteArray.length / 2 ];
 		for ( int i = 0; i < byteArray.length; i += 2 ) {
-			intArray[ i / 2 ] = ByteUtils.toInt( byteArray[i], byteArray[i + 1] );
+			intArray[ i / 2 ] = toInt( byteArray[i], byteArray[i + 1] );
 		}
 		return intArray;
 	}
 	
 	public static short toShort( byte byteValue ) {
+		return toShort( byteValue, ByteOrder.LITTLE_ENDIAN );
+	}
+	
+	public static short toShort( byte byteValue, ByteOrder byteOrder ) {
 		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(2);
-		byteBuffer.order( ByteOrder.LITTLE_ENDIAN );
+		byteBuffer.order( byteOrder );
 	    byteBuffer.put( byteValue );
 	    byteBuffer.put( (byte)0x00 );
 	    byteBuffer.flip();
 	    return byteBuffer.getShort();
 	}
 
-	public static int toInt( byte lowOrderByte, byte highOrderByte) {
+	public static int toInt( byte lowOrderByte, byte highOrderByte ) {
+		return toInt( lowOrderByte, highOrderByte, ByteOrder.LITTLE_ENDIAN );
+	}
+	
+	public static int toInt( byte lowOrderByte, byte highOrderByte, ByteOrder byteOrder ) {
 		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4);
-		byteBuffer.order( ByteOrder.LITTLE_ENDIAN );
+		byteBuffer.order( byteOrder );
 	    byteBuffer.put( lowOrderByte );
 	    byteBuffer.put( highOrderByte );
 	    byteBuffer.put( (byte)0x00 );
