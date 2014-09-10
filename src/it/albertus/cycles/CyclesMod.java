@@ -27,7 +27,7 @@ public class CyclesMod {
 		if ( args.length > 1 ) {
 			throw new IllegalArgumentException( "Too many parameters. Usage: CyclesMod [destination]" );
 		}
-		String destinationPath = args.length > 0 ? args[0] : Mod.DEFAULT_DESTINATION_PATH;
+		String destinationPath = args.length > 0 ? args[0] : Mod.DESTINATION_PATH;
 		
 		CyclesMod mod = new CyclesMod();
 		
