@@ -1,14 +1,30 @@
 package it.albertus.cycles.model;
 
 import static it.albertus.util.ByteUtils.toInt;
-import static it.albertus.util.ByteUtils.toShortArray;
 import static it.albertus.util.ByteUtils.toIntArray;
+import static it.albertus.util.ByteUtils.toShortArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Bike extends BikesInfElement {
+	
+	public enum Type {
+		_125( 125 ),
+		_250( 250 ),
+		_500( 500 );
+		
+		private int displacement;
+		
+		private Type( int displacement ) {
+			this.displacement = displacement;
+		}
+		
+		public int getDisplacement() {
+			return displacement;
+		}
+	}
 	
 	public static final int LENGTH = Settings.LENGTH + Gearbox.LENGTH + Torque.LENGTH;
 	
