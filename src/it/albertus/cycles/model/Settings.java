@@ -5,6 +5,8 @@ import it.albertus.util.ByteUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class Settings extends BikesInfElement {
 	
 	protected static final int LENGTH = 22;
@@ -19,9 +21,9 @@ public class Settings extends BikesInfElement {
 	private int unknown2; // 14-15: ?
 	private int spinThreshold; // 16-17: soglia di testacoda (valore basso: testacoda piu' probabile. Per valori msB >=80 testacoda sicuro).
 	private int unknown3; // 18-19: ?
-	private int unknown4; // 20-21: ?
+	private int rpmDownshift; // 20-21: ?
 	
-	public Settings(int gearsCount, int rpmRedMark, int rpmLimit, int rpmRedMarkGracePeriod, int skiddingThreshold, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int unknown4) {
+	public Settings(int gearsCount, int rpmRedMark, int rpmLimit, int rpmRedMarkGracePeriod, int skiddingThreshold, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int rpmDownshift) {
 		this.gearsCount = gearsCount;
 		this.rpmRedMark = rpmRedMark;
 		this.rpmLimit = rpmLimit;
@@ -32,7 +34,7 @@ public class Settings extends BikesInfElement {
 		this.unknown2 = unknown2;
 		this.spinThreshold = spinThreshold;
 		this.unknown3 = unknown3;
-		this.unknown4 = unknown4;
+		this.rpmDownshift = rpmDownshift;
 	}
 	
 	@Override
@@ -48,7 +50,7 @@ public class Settings extends BikesInfElement {
 		byteList.addAll( ByteUtils.toByteList( unknown2 ) );
 		byteList.addAll( ByteUtils.toByteList( spinThreshold ) );
 		byteList.addAll( ByteUtils.toByteList( unknown3 ) );
-		byteList.addAll( ByteUtils.toByteList( unknown4 ) );
+		byteList.addAll( ByteUtils.toByteList( rpmDownshift ) );
 		return byteList;
 	}
 	
@@ -115,11 +117,11 @@ public class Settings extends BikesInfElement {
 		this.unknown3 = unknown3;
 	}
 	
-	public int getUnknown4() {
-		return unknown4;
+	public int getRpmDownshift() {
+		return rpmDownshift;
 	}
-	public void setUnknown4(int unknown4) {
-		this.unknown4 = unknown4;
+	public void setRpmDownshift(int rpmDownshift) {
+		this.rpmDownshift = rpmDownshift;
 	}
 	
 	public int getGearsCount() {
@@ -127,6 +129,11 @@ public class Settings extends BikesInfElement {
 	}
 	public void setGearsCount(int gearsCount) {
 		this.gearsCount = gearsCount;
+	}
+	
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString( this );
 	}
 
 }
