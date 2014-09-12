@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Torque extends BikesInfElement {
 	
-	protected static final int LENGTH = 106;
+	public static final int LENGTH = 106;
 	
 	private short[] curve = new short[ LENGTH ]; // 42-147: curva di coppia (regime massimo considerato: ~14500 RPM).
 
