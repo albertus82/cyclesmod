@@ -1,6 +1,7 @@
-package it.albertus.cycles;
+package it.albertus.cycles.engine;
 
 import it.albertus.cycles.model.Bike;
+import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
@@ -25,14 +26,12 @@ import java.util.zip.Checksum;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.xml.bind.PropertyException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CyclesMod {
-	
+
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
 	
 	private static final String CFG_FILE_NAME = "BIKES.CFG";
@@ -42,6 +41,8 @@ public class CyclesMod {
 	private static final short INF_FILE_SIZE = 444;
 	
 	private static final String DEFAULT_DESTINATION_PATH = "";
+	
+	private static final String GETTER_PREFIX = "get";
 
 	public static void main( String... args ) throws Exception {
 		if ( args.length > 1 ) {
@@ -55,7 +56,7 @@ public class CyclesMod {
 		InputStream is = mod.getBikesInfInputStream();
 		
 		log.info( "Lettura del file " + INF_FILE_NAME + " originale..." );
-		FileBikesInf bikesInf = mod.parseBikesInfInputStream( is );
+		BikesInf bikesInf = mod.parseBikesInfInputStream( is );
 		
 		log.info( "Applicazione delle personalizzazioni alla configurazione..." );
 		mod.customize( bikesInf, destinationPath );
@@ -66,7 +67,7 @@ public class CyclesMod {
 		mod.writeCustomBikesInf( bikesInf, destinationPath );
 	}
 	
-	private void writeCustomBikesInf( FileBikesInf bikesInf, String destinationPath ) throws IOException {
+	private void writeCustomBikesInf( BikesInf bikesInf, String destinationPath ) throws IOException {
 		byte[] newBikesInf = bikesInf.toByteArray();
 		Checksum crc = new CRC32();
 		crc.update( newBikesInf, 0, newBikesInf.length );
@@ -80,7 +81,7 @@ public class CyclesMod {
 		log.info( "Nuovo file " + INF_FILE_NAME + " scritto correttamente nel percorso \"" + destinationPath + "\"; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
 	}
 	
-	private FileBikesInf parseBikesInfInputStream( InputStream is ) throws IOException {
+	private BikesInf parseBikesInfInputStream( InputStream is ) throws IOException {
 		byte[] inf125 = new byte[ Bike.LENGTH ];
 		byte[] inf250 = new byte[ Bike.LENGTH ];
 		byte[] inf500 = new byte[ Bike.LENGTH ];
@@ -93,13 +94,13 @@ public class CyclesMod {
 		Bike bike125 = new Bike( inf125 );
 		Bike bike250 = new Bike( inf250 );
 		Bike bike500 = new Bike( inf500 );
-		FileBikesInf bikesInf = new FileBikesInf( bike125, bike250, bike500 );
+		BikesInf bikesInf = new BikesInf( bike125, bike250, bike500 );
 		log.info( "File " + INF_FILE_NAME + " originale elaborato." );
 		return bikesInf;
 	}
 	
 	private ZipInputStream getBikesInfInputStream() throws IOException {
-		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( "data/bikes.zip" ) );
+		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( "../data/bikes.zip" ) );
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != INF_FILE_CRC ) {
 			throw new StreamCorruptedException( "The original " + INF_FILE_NAME + " file is corrupted; CRC miscompare, expected: " + String.format( "%X", INF_FILE_CRC ) + ", actual: " + String.format( "%X", ze.getCrc() ) + '.' );
@@ -111,7 +112,7 @@ public class CyclesMod {
 		return zis;
 	}
 	
-	private void customize( FileBikesInf bikesInf, String destinationPath ) throws Exception {
+	private void customize( BikesInf bikesInf, String destinationPath ) throws Exception {
 
 		// Lettura del file di properties BIKES.CFG...
 		log.info( "Lettura del file " + CFG_FILE_NAME + "..." );
@@ -160,14 +161,14 @@ public class CyclesMod {
 		}
 	}
 
-	private void writeDefaultCfg( FileBikesInf bikesInf, String destinationPath ) throws Exception {
+	private void writeDefaultCfg( BikesInf bikesInf, String destinationPath ) throws Exception {
 		Map<String, String> properties = new LinkedHashMap<String, String>();
 		
 		for ( Bike.Type type : Bike.Type.values() ) {
 			String prefix = Integer.toString( type.getDisplacement() );
 			Bike bike = null;
-			for ( Method metodo : FileBikesInf.class.getMethods() ) {
-				if ( metodo.getName().startsWith( "get" ) && metodo.getName().contains( prefix ) ) {
+			for ( Method metodo : BikesInf.class.getMethods() ) {
+				if ( metodo.getName().startsWith( GETTER_PREFIX ) && metodo.getName().contains( prefix ) ) {
 					bike = (Bike)metodo.invoke( bikesInf );
 				}
 			}
@@ -178,19 +179,19 @@ public class CyclesMod {
 			
 			// Settings
 			for ( Method metodo : Settings.class.getMethods() ) {
-				if ( metodo.getName().startsWith( "get" ) && metodo.getReturnType() != null && metodo.getReturnType().getName().equals( "int" ) ) {
-					properties.put( prefix + '.' + Introspector.decapitalize( Settings.class.getSimpleName() ) + '.' + Introspector.decapitalize( StringUtils.substringAfter( metodo.getName(), "get" ) ), Integer.toString( (int) metodo.invoke( bike.getSettings() ) ) );
+				if ( metodo.getName().startsWith( GETTER_PREFIX ) && metodo.getReturnType() != null && "int".equals( metodo.getReturnType().getName() ) ) {
+					properties.put( prefix + '.' + Introspector.decapitalize( Settings.class.getSimpleName() ) + '.' + Introspector.decapitalize( StringUtils.substringAfter( metodo.getName(), GETTER_PREFIX ) ), Integer.toString( (int) metodo.invoke( bike.getSettings() ) ) );
 				}
 			}
 			
 			// Gearbox
-			for ( int i = 0; i < Gearbox.LENGTH / 2; i++ ) {
-				properties.put( prefix + '.' + Introspector.decapitalize( Gearbox.class.getSimpleName() ) + '.' + i, Integer.toString( bike.getGearbox().getRatios()[i] ) );
+			for ( int index = 0; index < bike.getGearbox().getRatios().length; index++ ) {
+				properties.put( prefix + '.' + Introspector.decapitalize( Gearbox.class.getSimpleName() ) + '.' + index, Integer.toString( bike.getGearbox().getRatios()[ index ] ) );
 			}
 			
 			// Torque
-			for ( int i = 0; i < Torque.LENGTH; i++ ) {
-				properties.put( prefix + '.' + Introspector.decapitalize( Torque.class.getSimpleName() ) + '.' + i, Short.toString( bike.getTorque().getCurve()[i] ) );
+			for ( int index = 0; index < bike.getTorque().getCurve().length; index++ ) {
+				properties.put( prefix + '.' + Introspector.decapitalize( Torque.class.getSimpleName() ) + '.' + index, Short.toString( bike.getTorque().getCurve()[ index ] ) );
 			}
 		}
 
@@ -205,13 +206,13 @@ public class CyclesMod {
 		bw.close();
 	}
 
-	private Bike getBike( Properties properties, String key, FileBikesInf bikesInf ) throws Exception {
+	private Bike getBike( Properties properties, String key, BikesInf bikesInf ) throws Exception {
 		Bike bike = null;
 		
 		for ( Bike.Type type : Bike.Type.values() ) {
 			if ( key.startsWith( type.getDisplacement() + "." ) ) {
-				for ( Method method : FileBikesInf.class.getMethods() ) {
-					if ( method.getName().startsWith( "get" ) && method.getName().contains( Integer.toString( type.getDisplacement() ) ) ) {
+				for ( Method method : BikesInf.class.getMethods() ) {
+					if ( method.getName().startsWith( GETTER_PREFIX ) && method.getName().contains( Integer.toString( type.getDisplacement() ) ) ) {
 						bike = (Bike)method.invoke( bikesInf );
 						break;
 					}
@@ -260,7 +261,7 @@ public class CyclesMod {
 			if ( metodo.getName().equals( "set" + StringUtils.capitalize( suffix ) ) ) {
 				setter = metodo;
 			}
-			if ( metodo.getName().equals( "get" + StringUtils.capitalize( suffix ) ) ) {
+			if ( metodo.getName().equals( GETTER_PREFIX + StringUtils.capitalize( suffix ) ) ) {
 				getter = metodo;
 			}
 		}
