@@ -35,53 +35,59 @@ public class CyclesMod {
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
 	
 	private static final String CFG_FILE_NAME = "BIKES.CFG";
-
 	private static final String INF_FILE_NAME = "BIKES.INF";
 	private static final int INF_FILE_CRC = 0x28A33682;
 	private static final short INF_FILE_SIZE = 444;
-	
 	private static final String DEFAULT_DESTINATION_PATH = "";
-	
 	private static final String GETTER_PREFIX = "get";
+	
+	private BikesInf bikesInf;
+	private Properties properties;
+	private String path;
+
+	public CyclesMod( String path ) {
+		this.path = path;
+	}
 
 	public static void main( String... args ) throws Exception {
 		if ( args.length > 1 ) {
 			throw new IllegalArgumentException( "Too many parameters. Usage: CyclesMod [path]" );
 		}
-		String destinationPath = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
+		String path = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
 		
-		CyclesMod mod = new CyclesMod();
-		
-		log.info( "Apertura file " + INF_FILE_NAME + " originale..." );
-		InputStream is = mod.getBikesInfInputStream();
-		
-		log.info( "Lettura del file " + INF_FILE_NAME + " originale..." );
-		BikesInf bikesInf = mod.parseBikesInfInputStream( is );
-		
-		log.info( "Applicazione delle personalizzazioni alla configurazione..." );
-		mod.customize( bikesInf, destinationPath );
-		log.info( "Personalizzazioni applicate." );
-		
-		// File in uscita
-		log.info( "Preparazione nuovo file " + INF_FILE_NAME + "..." );
-		mod.writeCustomBikesInf( bikesInf, destinationPath );
+		new CyclesMod( path ).execute();
 	}
 	
-	private void writeCustomBikesInf( BikesInf bikesInf, String destinationPath ) throws IOException {
+	private void execute() throws Exception {
+		log.info( "Lettura del file " + INF_FILE_NAME + " originale..." );
+		bikesInf = readOriginalBikesInf();
+		
+		log.info( "Applicazione delle personalizzazioni alla configurazione..." );
+		customize();
+		log.info( "Personalizzazioni applicate." );
+		
+		log.info( "Preparazione nuovo file " + INF_FILE_NAME + "..." );
+		writeCustomBikesInf();
+	}
+	
+	private void writeCustomBikesInf() throws IOException {
 		byte[] newBikesInf = bikesInf.toByteArray();
 		Checksum crc = new CRC32();
 		crc.update( newBikesInf, 0, newBikesInf.length );
 		
 		log.info( "La configurazione" + ( crc.getValue() == INF_FILE_CRC ? " non " : ' ' ) + "e' stata modificata; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
 
-		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( destinationPath + INF_FILE_NAME ), INF_FILE_SIZE );
+		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( path + INF_FILE_NAME ), INF_FILE_SIZE );
 		bos.write( newBikesInf );
 		bos.flush();
 		bos.close();
-		log.info( "Nuovo file " + INF_FILE_NAME + " scritto correttamente nel percorso \"" + destinationPath + "\"; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
+		log.info( "Nuovo file " + INF_FILE_NAME + " scritto correttamente nel percorso \"" + path + "\"; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
 	}
 	
-	private BikesInf parseBikesInfInputStream( InputStream is ) throws IOException {
+	private BikesInf readOriginalBikesInf() throws IOException {
+		log.info( "Apertura file " + INF_FILE_NAME + "..." );
+		InputStream is = getBikesInfInputStream();
+		
 		byte[] inf125 = new byte[ Bike.LENGTH ];
 		byte[] inf250 = new byte[ Bike.LENGTH ];
 		byte[] inf500 = new byte[ Bike.LENGTH ];
@@ -112,20 +118,19 @@ public class CyclesMod {
 		return zis;
 	}
 	
-	private void customize( BikesInf bikesInf, String destinationPath ) throws Exception {
-
+	private void customize() throws Exception {
 		// Lettura del file di properties BIKES.CFG...
 		log.info( "Lettura del file " + CFG_FILE_NAME + "..." );
-		Properties properties = new Properties();
+		properties = new Properties();
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader( new FileReader( destinationPath + CFG_FILE_NAME ) );
+			br = new BufferedReader( new FileReader( path + CFG_FILE_NAME ) );
 		}
 		catch ( FileNotFoundException fnfe ) {
 			log.info( "File " + CFG_FILE_NAME + " non trovato. Creazione file di default..." );
-			writeDefaultCfg( bikesInf, destinationPath );
+			writeDefaultCfg();
 			log.info( "Creazione file " + CFG_FILE_NAME + " di default completata." );
-			br = new BufferedReader( new FileReader( destinationPath + CFG_FILE_NAME ) );
+			br = new BufferedReader( new FileReader( path + CFG_FILE_NAME ) );
 		}
 		properties.load( br );
 		br.close();
@@ -138,21 +143,19 @@ public class CyclesMod {
 				throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
 			}
 			
-			Bike bike = getBike(properties, key, bikesInf);
-			
 			// Settings
-			if ( key.substring(4).startsWith( Introspector.decapitalize( Settings.class.getSimpleName() ) ) ) {
-				parseSettingProperty(properties, key, bike);
+			if ( key.substring( 4 ).startsWith( Introspector.decapitalize( Settings.class.getSimpleName() ) ) ) {
+				parseSettingProperty( key );
 			}
 			
 			// Gearbox
-			else if ( key.substring(4).startsWith( Introspector.decapitalize( Gearbox.class.getSimpleName() ) ) ) {
-				parseGearboxProperty(properties, key, bike);
+			else if ( key.substring( 4 ).startsWith( Introspector.decapitalize( Gearbox.class.getSimpleName() ) ) ) {
+				parseGearboxProperty( key );
 			}
 			
 			// Torque
-			else if ( key.substring(4).startsWith( Introspector.decapitalize( Torque.class.getSimpleName() ) ) ) {
-				parseTorqueProperty(properties, key, bike);
+			else if ( key.substring( 4 ).startsWith( Introspector.decapitalize( Torque.class.getSimpleName() ) ) ) {
+				parseTorqueProperty( key );
 			}
 			
 			else {
@@ -161,7 +164,7 @@ public class CyclesMod {
 		}
 	}
 
-	private void writeDefaultCfg( BikesInf bikesInf, String destinationPath ) throws Exception {
+	private void writeDefaultCfg() throws Exception {
 		Map<String, String> properties = new LinkedHashMap<String, String>();
 		
 		for ( Bike.Type type : Bike.Type.values() ) {
@@ -196,7 +199,7 @@ public class CyclesMod {
 		}
 
 		// Salvataggio...
-		BufferedWriter bw = new BufferedWriter( new FileWriter( destinationPath + CFG_FILE_NAME ) );
+		BufferedWriter bw = new BufferedWriter( new FileWriter( path + CFG_FILE_NAME ) );
 		bw.write( "# Default BIKES.INF" );
 		for ( String key : properties.keySet() ) {
 			bw.newLine();
@@ -206,7 +209,7 @@ public class CyclesMod {
 		bw.close();
 	}
 
-	private Bike getBike( Properties properties, String key, BikesInf bikesInf ) throws Exception {
+	private Bike getBike( String key ) throws Exception {
 		Bike bike = null;
 		
 		for ( Bike.Type type : Bike.Type.values() ) {
@@ -227,7 +230,8 @@ public class CyclesMod {
 		return bike;
 	}
 
-	private void parseTorqueProperty( Properties properties, String key, Bike bike ) throws PropertyException {
+	private void parseTorqueProperty( String key ) throws Exception {
+		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Torque.class.getSimpleName() ) + '.' );
 		if ( StringUtils.isNotEmpty( suffix ) && StringUtils.isNumeric( suffix ) && Integer.parseInt( suffix ) < Torque.LENGTH ) {
 			if ( bike.getTorque().getCurve()[ Integer.parseInt( suffix ) ] != Short.parseShort( properties.getProperty( key ) ) ) {
@@ -240,7 +244,8 @@ public class CyclesMod {
 		}
 	}
 
-	private void parseGearboxProperty( Properties properties, String key, Bike bike ) throws PropertyException {
+	private void parseGearboxProperty( String key ) throws Exception {
+		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Gearbox.class.getSimpleName() ) + '.' );
 		if ( StringUtils.isNotEmpty( suffix ) && StringUtils.isNumeric( suffix ) && Integer.parseInt( suffix ) < Gearbox.LENGTH / 2 ) {
 			if ( bike.getGearbox().getRatios()[ Integer.parseInt( suffix ) ] != Integer.parseInt( properties.getProperty( key ) ) ) { 
@@ -253,7 +258,8 @@ public class CyclesMod {
 		}
 	}
 
-	private void parseSettingProperty( Properties properties, String key, Bike bike ) throws Exception {
+	private void parseSettingProperty( String key ) throws Exception {
+		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Settings.class.getSimpleName() ) + '.' );
 		Method setter = null;
 		Method getter = null;
