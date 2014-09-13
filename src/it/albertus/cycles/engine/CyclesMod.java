@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamCorruptedException;
 import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
@@ -42,8 +40,9 @@ public class CyclesMod {
 	private static final String GETTER_PREFIX = "get";
 	
 	private BikesInf bikesInf;
-	private Properties properties;
-	private String path;
+	private final Properties properties = new Properties();
+	private final String path;
+	private short changesCount = 0;
 
 	public CyclesMod( String path ) {
 		this.path = path;
@@ -60,11 +59,10 @@ public class CyclesMod {
 	
 	private void execute() throws Exception {
 		log.info( "Lettura del file " + INF_FILE_NAME + " originale..." );
-		bikesInf = readOriginalBikesInf();
+		readOriginalBikesInf();
 		
 		log.info( "Applicazione delle personalizzazioni alla configurazione..." );
 		customize();
-		log.info( "Personalizzazioni applicate." );
 		
 		log.info( "Preparazione nuovo file " + INF_FILE_NAME + "..." );
 		writeCustomBikesInf();
@@ -84,7 +82,7 @@ public class CyclesMod {
 		log.info( "Nuovo file " + INF_FILE_NAME + " scritto correttamente nel percorso \"" + path + "\"; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
 	}
 	
-	private BikesInf readOriginalBikesInf() throws IOException {
+	private void readOriginalBikesInf() throws IOException {
 		log.info( "Apertura file " + INF_FILE_NAME + "..." );
 		InputStream is = getBikesInfInputStream();
 		
@@ -100,9 +98,8 @@ public class CyclesMod {
 		Bike bike125 = new Bike( inf125 );
 		Bike bike250 = new Bike( inf250 );
 		Bike bike500 = new Bike( inf500 );
-		BikesInf bikesInf = new BikesInf( bike125, bike250, bike500 );
+		bikesInf = new BikesInf( bike125, bike250, bike500 );
 		log.info( "File " + INF_FILE_NAME + " originale elaborato." );
-		return bikesInf;
 	}
 	
 	private ZipInputStream getBikesInfInputStream() throws IOException {
@@ -121,14 +118,13 @@ public class CyclesMod {
 	private void customize() throws Exception {
 		// Lettura del file di properties BIKES.CFG...
 		log.info( "Lettura del file " + CFG_FILE_NAME + "..." );
-		properties = new Properties();
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader( new FileReader( path + CFG_FILE_NAME ) );
 		}
 		catch ( FileNotFoundException fnfe ) {
 			log.info( "File " + CFG_FILE_NAME + " non trovato. Creazione file di default..." );
-			writeDefaultCfg();
+			writeDefaultBikesCfg();
 			log.info( "Creazione file " + CFG_FILE_NAME + " di default completata." );
 			br = new BufferedReader( new FileReader( path + CFG_FILE_NAME ) );
 		}
@@ -144,17 +140,17 @@ public class CyclesMod {
 			}
 			
 			// Settings
-			if ( key.substring( 4 ).startsWith( Introspector.decapitalize( Settings.class.getSimpleName() ) ) ) {
+			if ( StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Settings.class.getSimpleName() ) ) ) {
 				parseSettingProperty( key );
 			}
 			
 			// Gearbox
-			else if ( key.substring( 4 ).startsWith( Introspector.decapitalize( Gearbox.class.getSimpleName() ) ) ) {
+			else if ( StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Gearbox.class.getSimpleName() ) ) ) {
 				parseGearboxProperty( key );
 			}
 			
 			// Torque
-			else if ( key.substring( 4 ).startsWith( Introspector.decapitalize( Torque.class.getSimpleName() ) ) ) {
+			else if ( StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Torque.class.getSimpleName() ) ) ) {
 				parseTorqueProperty( key );
 			}
 			
@@ -162,10 +158,12 @@ public class CyclesMod {
 				throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
 			}
 		}
+		log.info( "Personalizzazioni applicate, " + changesCount + " valori modificati." );
 	}
 
-	private void writeDefaultCfg() throws Exception {
-		Map<String, String> properties = new LinkedHashMap<String, String>();
+	private void writeDefaultBikesCfg() throws Exception {
+        final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
+		final StringBuilder properties = new StringBuilder( "##### BIKES.INF demystified! #####" );
 		
 		for ( Bike.Type type : Bike.Type.values() ) {
 			String prefix = Integer.toString( type.getDisplacement() );
@@ -180,31 +178,53 @@ public class CyclesMod {
 				throw new IllegalStateException();
 			}
 			
+			properties.append( lineSeparator ).append( lineSeparator );
+			properties.append( "### ").append( type.getDisplacement() ).append( " cc - Begin... ###");
+			
 			// Settings
+			properties.append( lineSeparator );
+			properties.append( "# " ).append( Settings.class.getSimpleName() ).append( " #" );
+			properties.append( lineSeparator );
 			for ( Method metodo : Settings.class.getMethods() ) {
 				if ( metodo.getName().startsWith( GETTER_PREFIX ) && metodo.getReturnType() != null && "int".equals( metodo.getReturnType().getName() ) ) {
-					properties.put( prefix + '.' + Introspector.decapitalize( Settings.class.getSimpleName() ) + '.' + Introspector.decapitalize( StringUtils.substringAfter( metodo.getName(), GETTER_PREFIX ) ), Integer.toString( (int) metodo.invoke( bike.getSettings() ) ) );
+					properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Settings.class.getSimpleName() ) ).append( '.' ).append( Introspector.decapitalize( StringUtils.substringAfter( metodo.getName(), GETTER_PREFIX ) ) );
+					properties.append( '=' );
+					properties.append( (int)metodo.invoke( bike.getSettings() ) );
+					properties.append( lineSeparator );
 				}
 			}
 			
 			// Gearbox
+			properties.append( lineSeparator );
+			properties.append( "# " ).append( Gearbox.class.getSimpleName() ).append( " #" );
+			properties.append( lineSeparator );
 			for ( int index = 0; index < bike.getGearbox().getRatios().length; index++ ) {
-				properties.put( prefix + '.' + Introspector.decapitalize( Gearbox.class.getSimpleName() ) + '.' + index, Integer.toString( bike.getGearbox().getRatios()[ index ] ) );
+				properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Gearbox.class.getSimpleName() ) ).append( '.' ).append( index );
+				properties.append( '=' );
+				properties.append( bike.getGearbox().getRatios()[ index ] );
+				properties.append( lineSeparator );
 			}
 			
 			// Torque
+			properties.append( lineSeparator );
+			properties.append( "# " ).append( Torque.class.getSimpleName() ).append( " #" );
+			properties.append( lineSeparator );
 			for ( int index = 0; index < bike.getTorque().getCurve().length; index++ ) {
-				properties.put( prefix + '.' + Introspector.decapitalize( Torque.class.getSimpleName() ) + '.' + index, Short.toString( bike.getTorque().getCurve()[ index ] ) );
+				properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Torque.class.getSimpleName() ) ).append( '.' ).append( index );
+				properties.append( '=' );
+				properties.append( bike.getTorque().getCurve()[ index ] );
+				properties.append( lineSeparator );
 			}
+			
+			properties.append( "### ").append( type.getDisplacement() ).append( " cc - End. ###");
 		}
+		
+		properties.append( lineSeparator ).append( lineSeparator );
+		properties.append( "##### EOF #####");
 
 		// Salvataggio...
 		BufferedWriter bw = new BufferedWriter( new FileWriter( path + CFG_FILE_NAME ) );
-		bw.write( "# Default BIKES.INF" );
-		for ( String key : properties.keySet() ) {
-			bw.newLine();
-			bw.write( key + '=' + properties.get( key ) );
-		}
+		bw.write( properties.toString() );
 		bw.flush();
 		bw.close();
 	}
@@ -231,26 +251,40 @@ public class CyclesMod {
 	}
 
 	private void parseTorqueProperty( String key ) throws Exception {
+		short newValue = Short.parseShort( properties.getProperty( key ) );
+		if ( newValue < Torque.MIN_VALUE || newValue > Torque.MAX_VALUE ) {
+			throw new PropertyException( "Value must be between " + Torque.MIN_VALUE + " and " + Torque.MAX_VALUE + ": " + key + '=' + newValue );
+		}
+		
 		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Torque.class.getSimpleName() ) + '.' );
-		if ( StringUtils.isNotEmpty( suffix ) && StringUtils.isNumeric( suffix ) && Integer.parseInt( suffix ) < Torque.LENGTH ) {
-			if ( bike.getTorque().getCurve()[ Integer.parseInt( suffix ) ] != Short.parseShort( properties.getProperty( key ) ) ) {
-				bike.getTorque().getCurve()[ Integer.parseInt( suffix ) ] = Short.parseShort( properties.getProperty( key ) );
-				log.info( "Applicata modifica: " + key + '=' + properties.getProperty( key ) );
+		if ( StringUtils.isNotEmpty( suffix ) && StringUtils.isNumeric( suffix ) && Integer.parseInt( suffix ) < bike.getTorque().getCurve().length ) {
+			int index = Integer.parseInt( suffix );
+			int defaultValue = bike.getTorque().getCurve()[ index ];
+			if ( defaultValue != newValue ) {
+				bike.getTorque().getCurve()[ index ] = newValue;
+				logChange( key, defaultValue, newValue );
 			}
 		}
 		else {
-			throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
+			throw new PropertyException( "Unsupported property: " + key + '=' + newValue );
 		}
 	}
 
 	private void parseGearboxProperty( String key ) throws Exception {
+		int newValue = Integer.parseInt( properties.getProperty( key ) );
+		if ( newValue < Gearbox.MIN_VALUE || newValue > Gearbox.MAX_VALUE ) {
+			throw new PropertyException( "Value must be between " + Gearbox.MIN_VALUE + " and " + Gearbox.MAX_VALUE + ": " + key + '=' + newValue );
+		}
+		
 		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Gearbox.class.getSimpleName() ) + '.' );
-		if ( StringUtils.isNotEmpty( suffix ) && StringUtils.isNumeric( suffix ) && Integer.parseInt( suffix ) < Gearbox.LENGTH / 2 ) {
-			if ( bike.getGearbox().getRatios()[ Integer.parseInt( suffix ) ] != Integer.parseInt( properties.getProperty( key ) ) ) { 
-				bike.getGearbox().getRatios()[ Integer.parseInt( suffix ) ] = Integer.parseInt( properties.getProperty( key ) );
-				log.info( "Applicata modifica: " + key + '=' + properties.getProperty( key ) );
+		if ( StringUtils.isNotEmpty( suffix ) && StringUtils.isNumeric( suffix ) && Integer.parseInt( suffix ) < bike.getGearbox().getRatios().length ) {
+			int index = Integer.parseInt( suffix );
+			int defaultValue = bike.getGearbox().getRatios()[ index ];
+			if ( defaultValue != newValue ) { 
+				bike.getGearbox().getRatios()[ index ] = newValue;
+				logChange( key, defaultValue, newValue );
 			}
 		}
 		else {
@@ -259,6 +293,11 @@ public class CyclesMod {
 	}
 
 	private void parseSettingProperty( String key ) throws Exception {
+		int newValue = Integer.parseInt( properties.getProperty( key ) );
+		if ( newValue < Settings.MIN_VALUE || newValue > Settings.MAX_VALUE ) {
+			throw new PropertyException( "Value must be between " + Settings.MIN_VALUE + " and " + Settings.MAX_VALUE + ": " + key + '=' + newValue );
+		}
+		
 		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Settings.class.getSimpleName() ) + '.' );
 		Method setter = null;
@@ -272,14 +311,20 @@ public class CyclesMod {
 			}
 		}
 		if ( setter != null && getter != null ) {
-			if ( Integer.parseInt( properties.getProperty( key ) ) != (int)getter.invoke( bike.getSettings() ) ) {
-				setter.invoke( bike.getSettings(), Integer.parseInt( properties.getProperty( key ) ) );
-				log.info( "Applicata modifica: " + key + '=' + properties.getProperty( key ) );
+			int defaultValue = (int)getter.invoke( bike.getSettings() );
+			if ( newValue != defaultValue ) {
+				setter.invoke( bike.getSettings(), newValue );
+				logChange( key, defaultValue, newValue );
 			}
 		}
 		else {
 			throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
 		}
+	}
+
+	private void logChange( String key, int defaultValue, int newValue ) {
+		log.info( "Applicata modifica: " + key + '=' + newValue + " (default: " + defaultValue + ")." );
+		changesCount++;
 	}
 	
 }

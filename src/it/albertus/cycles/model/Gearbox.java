@@ -8,6 +8,8 @@ import java.util.List;
 public class Gearbox extends BikesInfElement {
 	
 	public static final int LENGTH = 20;
+	public static final int MIN_VALUE = 0;
+	public static final int MAX_VALUE = 65535;
 	
 	private final int[] ratios = new int[ LENGTH / 2 ]; // 22-41 (N, 1, 2, 3, 4, 5, 6, 7, 8, 9)
 	

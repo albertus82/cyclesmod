@@ -9,7 +9,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Settings extends BikesInfElement {
 	
-	protected static final int LENGTH = 22;
+	public static final int LENGTH = 22;
+	public static final int MIN_VALUE = 0;
+	public static final int MAX_VALUE = 65535;
 	
 	private int gearsCount; // 0-1: numero di marce del cambio (solo lsB).
 	private int rpmRedMark; // 2-3: regime red mark (stessa scala del regime limitatore, il motore si rompe quando regime >= regime red mark per piu' di qualche secondo).
@@ -21,7 +23,7 @@ public class Settings extends BikesInfElement {
 	private int unknown2; // 14-15: ?
 	private int spinThreshold; // 16-17: soglia di testacoda (valore basso: testacoda piu' probabile. Per valori msB >=80 testacoda sicuro).
 	private int unknown3; // 18-19: ?
-	private int rpmDownshift; // 20-21: ?
+	private int rpmDownshift; // 20-21: regime di scalata con cambio automatico (skill < 3).
 	
 	public Settings(int gearsCount, int rpmRedMark, int rpmLimit, int rpmRedMarkGracePeriod, int skiddingThreshold, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int rpmDownshift) {
 		this.gearsCount = gearsCount;
