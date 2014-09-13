@@ -1,12 +1,11 @@
-package it.albertus.cycles;
+package it.albertus.cycles.model;
 
-import it.albertus.cycles.model.Bike;
 import it.albertus.util.ByteUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileBikesInf {
+public class BikesInf {
 
 	private static final int LENGTH = 3 * Bike.LENGTH;
 	
@@ -14,7 +13,7 @@ public class FileBikesInf {
 	private Bike bike250;
 	private Bike bike500;
 	
-	public FileBikesInf(Bike bike125, Bike bike250, Bike bike500) {
+	public BikesInf(Bike bike125, Bike bike250, Bike bike500) {
 		super();
 		this.bike125 = bike125;
 		this.bike250 = bike250;
