@@ -168,9 +168,9 @@ public class CyclesMod {
 		for ( Bike.Type type : Bike.Type.values() ) {
 			String prefix = Integer.toString( type.getDisplacement() );
 			Bike bike = null;
-			for ( Method metodo : BikesInf.class.getMethods() ) {
-				if ( metodo.getName().startsWith( GETTER_PREFIX ) && metodo.getName().contains( prefix ) ) {
-					bike = (Bike)metodo.invoke( bikesInf );
+			for ( Method method : BikesInf.class.getMethods() ) {
+				if ( method.getName().startsWith( GETTER_PREFIX ) && method.getName().contains( prefix ) ) {
+					bike = (Bike)method.invoke( bikesInf );
 				}
 			}
 			
@@ -185,11 +185,11 @@ public class CyclesMod {
 			properties.append( lineSeparator );
 			properties.append( "# " ).append( Settings.class.getSimpleName() ).append( " #" );
 			properties.append( lineSeparator );
-			for ( Method metodo : Settings.class.getMethods() ) {
-				if ( metodo.getName().startsWith( GETTER_PREFIX ) && metodo.getReturnType() != null && "int".equals( metodo.getReturnType().getName() ) ) {
-					properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Settings.class.getSimpleName() ) ).append( '.' ).append( Introspector.decapitalize( StringUtils.substringAfter( metodo.getName(), GETTER_PREFIX ) ) );
+			for ( Method method : Settings.class.getMethods() ) {
+				if ( method.getName().startsWith( GETTER_PREFIX ) && method.getReturnType() != null && "int".equals( method.getReturnType().getName() ) ) {
+					properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Settings.class.getSimpleName() ) ).append( '.' ).append( Introspector.decapitalize( StringUtils.substringAfter( method.getName(), GETTER_PREFIX ) ) );
 					properties.append( '=' );
-					properties.append( (int)metodo.invoke( bike.getSettings() ) );
+					properties.append( (Integer)method.invoke( bike.getSettings() ) );
 					properties.append( lineSeparator );
 				}
 			}
@@ -302,16 +302,16 @@ public class CyclesMod {
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Settings.class.getSimpleName() ) + '.' );
 		Method setter = null;
 		Method getter = null;
-		for ( Method metodo : Settings.class.getMethods() ) {
-			if ( metodo.getName().equals( "set" + StringUtils.capitalize( suffix ) ) ) {
-				setter = metodo;
+		for ( Method method : Settings.class.getMethods() ) {
+			if ( method.getName().equals( "set" + StringUtils.capitalize( suffix ) ) ) {
+				setter = method;
 			}
-			if ( metodo.getName().equals( GETTER_PREFIX + StringUtils.capitalize( suffix ) ) ) {
-				getter = metodo;
+			if ( method.getName().equals( GETTER_PREFIX + StringUtils.capitalize( suffix ) ) ) {
+				getter = method;
 			}
 		}
 		if ( setter != null && getter != null ) {
-			int defaultValue = (int)getter.invoke( bike.getSettings() );
+			int defaultValue = (Integer)getter.invoke( bike.getSettings() );
 			if ( newValue != defaultValue ) {
 				setter.invoke( bike.getSettings(), newValue );
 				logChange( key, defaultValue, newValue );
