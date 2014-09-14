@@ -18,7 +18,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StreamCorruptedException;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 import java.util.zip.ZipEntry;
@@ -29,8 +33,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CyclesMod {
-
+	
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
+	
+	private static final String VERSION_NUMBER = "1.0.0";
+	private static final String BUILD_DATE = "2014-09-14";
 	
 	private static final String CFG_FILE_NAME = "BIKES.CFG";
 	private static final String INF_FILE_NAME = "BIKES.INF";
@@ -38,6 +45,7 @@ public class CyclesMod {
 	private static final short INF_FILE_SIZE = 444;
 	private static final String DEFAULT_DESTINATION_PATH = "";
 	private static final String GETTER_PREFIX = "get";
+	private static final ResourceBundle messages = ResourceBundle.getBundle( CyclesMod.class.getPackage().getName() + ".resources.messages" );
 	
 	private BikesInf bikesInf;
 	private final Properties properties = new Properties();
@@ -48,23 +56,33 @@ public class CyclesMod {
 		this.path = path;
 	}
 
-	public static void main( String... args ) throws Exception {
-		if ( args.length > 1 ) {
-			throw new IllegalArgumentException( "Too many parameters. Usage: CyclesMod [path]" );
+	public static void main( final String... args ) throws Exception {
+		try {
+			log.info( getMessage( "msg.welcome", VERSION_NUMBER, BUILD_DATE ) );
+			if ( args.length > 1 ) {
+				throw new IllegalArgumentException( getMessage( "err.command.line.help" ) );
+			}
+			String path = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
+			new CyclesMod( path ).execute();
 		}
-		String path = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
-		
-		new CyclesMod( path ).execute();
+		catch ( Exception e ) {
+			if ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) || StringUtils.isNotEmpty( e.getMessage() ) ) {
+				log.error( StringUtils.isNotEmpty( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() );
+			}
+			else {
+				throw e;
+			}
+		}
 	}
 	
 	private void execute() throws Exception {
-		log.info( "Lettura del file " + INF_FILE_NAME + " originale..." );
+		log.info( getMessage( "msg.reading.original.file" , INF_FILE_NAME ) );
 		readOriginalBikesInf();
 		
-		log.info( "Applicazione delle personalizzazioni alla configurazione..." );
+		log.info( getMessage( "msg.applying.customizations" ) );
 		customize();
 		
-		log.info( "Preparazione nuovo file " + INF_FILE_NAME + "..." );
+		log.info( getMessage( "msg.preparing.new.file", INF_FILE_NAME ) );
 		writeCustomBikesInf();
 	}
 	
@@ -73,17 +91,17 @@ public class CyclesMod {
 		Checksum crc = new CRC32();
 		crc.update( newBikesInf, 0, newBikesInf.length );
 		
-		log.info( "La configurazione" + ( crc.getValue() == INF_FILE_CRC ? " non " : ' ' ) + "e' stata modificata; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
+		log.info( getMessage( "msg.configuration.changed", ( crc.getValue() == INF_FILE_CRC ? ' ' + getMessage( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
 
 		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( path + INF_FILE_NAME ), INF_FILE_SIZE );
 		bos.write( newBikesInf );
 		bos.flush();
 		bos.close();
-		log.info( "Nuovo file " + INF_FILE_NAME + " scritto correttamente nel percorso \"" + path + "\"; CRC: " + String.format( "%X", crc.getValue() ) + '.' );
+		log.info( getMessage( "msg.new.file.written.into.path", INF_FILE_NAME, path, String.format( "%X", crc.getValue() ) ) );
 	}
 	
 	private void readOriginalBikesInf() throws IOException {
-		log.info( "Apertura file " + INF_FILE_NAME + "..." );
+		log.info( getMessage( "msg.opening.file", INF_FILE_NAME ) );
 		InputStream is = getBikesInfInputStream();
 		
 		byte[] inf125 = new byte[ Bike.LENGTH ];
@@ -93,50 +111,50 @@ public class CyclesMod {
 		is.read( inf250 );
 		is.read( inf500 );
 		is.close();
-		log.info( "Lettura del file " + INF_FILE_NAME + " originale completata. File chiuso." );
+		log.info( getMessage( "msg.original.file.read", INF_FILE_NAME ) );
 		
 		Bike bike125 = new Bike( inf125 );
 		Bike bike250 = new Bike( inf250 );
 		Bike bike500 = new Bike( inf500 );
 		bikesInf = new BikesInf( bike125, bike250, bike500 );
-		log.info( "File " + INF_FILE_NAME + " originale elaborato." );
+		log.info( getMessage( "msg.original.file.parsed", INF_FILE_NAME ) );
 	}
 	
 	private ZipInputStream getBikesInfInputStream() throws IOException {
 		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( "../data/bikes.zip" ) );
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != INF_FILE_CRC ) {
-			throw new StreamCorruptedException( "The original " + INF_FILE_NAME + " file is corrupted; CRC miscompare, expected: " + String.format( "%X", INF_FILE_CRC ) + ", actual: " + String.format( "%X", ze.getCrc() ) + '.' );
+			throw new StreamCorruptedException( getMessage( "err.original.file.corrupted.crc", INF_FILE_NAME, String.format( "%X", INF_FILE_CRC ), String.format( "%X", ze.getCrc() ) ) );
 		}
 		if ( ze.getSize() != INF_FILE_SIZE ) {
-			throw new StreamCorruptedException( "The original " + INF_FILE_NAME + " file is corrupted; file size miscompare, expected: " + INF_FILE_SIZE + " bytes, actual: " + ze.getSize() + " bytes." );
+			throw new StreamCorruptedException( getMessage( "err.original.file.corrupted.size", INF_FILE_NAME, INF_FILE_SIZE, ze.getSize() ) );
 		}
-		log.info( "File " + INF_FILE_NAME + " originale aperto; CRC OK: " + String.format( "%X", ze.getCrc() ) + '.' );
+		log.info( getMessage( "msg.original.file.opened", INF_FILE_NAME, String.format( "%X", ze.getCrc() ) ) );
 		return zis;
 	}
 	
 	private void customize() throws Exception {
 		// Lettura del file di properties BIKES.CFG...
-		log.info( "Lettura del file " + CFG_FILE_NAME + "..." );
+		log.info( getMessage( "msg.reading.file", CFG_FILE_NAME ) );
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader( new FileReader( path + CFG_FILE_NAME ) );
 		}
 		catch ( FileNotFoundException fnfe ) {
-			log.info( "File " + CFG_FILE_NAME + " non trovato. Creazione file di default..." );
+			log.info( getMessage( "msg.file.not.found.creating.default", CFG_FILE_NAME ) );
 			writeDefaultBikesCfg();
-			log.info( "Creazione file " + CFG_FILE_NAME + " di default completata." );
+			log.info( getMessage( "msg.default.file.created", CFG_FILE_NAME ) );
 			br = new BufferedReader( new FileReader( path + CFG_FILE_NAME ) );
 		}
 		properties.load( br );
 		br.close();
-		log.info( "Lettura del file " + CFG_FILE_NAME + " completata. File chiuso." );
+		log.info( getMessage( "msg.file.read", CFG_FILE_NAME ) );
 		
 		// Elaborazione delle properties...
 		for ( Object objectKey : properties.keySet() ) {
 			String key = (String)objectKey;
 			if ( !StringUtils.isNumeric( properties.getProperty( key ) ) ) {
-				throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
+				throw new PropertyException( getMessage( "err.unsupported.property", key, properties.getProperty( key ) ) );
 			}
 			
 			// Settings
@@ -155,10 +173,10 @@ public class CyclesMod {
 			}
 			
 			else {
-				throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
+				throw new PropertyException( getMessage( "err.unsupported.property", key, properties.getProperty( key ) ) );
 			}
 		}
-		log.info( "Personalizzazioni applicate, " + changesCount + " valori modificati." );
+		log.info( getMessage( "msg.customizations.applied", changesCount ) );
 	}
 
 	private void writeDefaultBikesCfg() throws Exception {
@@ -229,7 +247,7 @@ public class CyclesMod {
 		bw.close();
 	}
 
-	private Bike getBike( String key ) throws Exception {
+	private Bike getBike( final String key ) throws Exception {
 		Bike bike = null;
 		
 		for ( Bike.Type type : Bike.Type.values() ) {
@@ -244,16 +262,16 @@ public class CyclesMod {
 		}
 		
 		if ( bike == null ) {
-			throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
+			throw new PropertyException( getMessage( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 		
 		return bike;
 	}
 
-	private void parseTorqueProperty( String key ) throws Exception {
+	private void parseTorqueProperty( final String key ) throws Exception {
 		short newValue = Short.parseShort( properties.getProperty( key ) );
 		if ( newValue < Torque.MIN_VALUE || newValue > Torque.MAX_VALUE ) {
-			throw new PropertyException( "Value must be between " + Torque.MIN_VALUE + " and " + Torque.MAX_VALUE + ": " + key + '=' + newValue );
+			throw new PropertyException( getMessage( "err.illegal.value", Torque.MIN_VALUE, Torque.MAX_VALUE, key, newValue ) );
 		}
 		
 		Bike bike = getBike( key );
@@ -267,14 +285,14 @@ public class CyclesMod {
 			}
 		}
 		else {
-			throw new PropertyException( "Unsupported property: " + key + '=' + newValue );
+			throw new PropertyException( getMessage( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
 
-	private void parseGearboxProperty( String key ) throws Exception {
+	private void parseGearboxProperty( final String key ) throws Exception {
 		int newValue = Integer.parseInt( properties.getProperty( key ) );
 		if ( newValue < Gearbox.MIN_VALUE || newValue > Gearbox.MAX_VALUE ) {
-			throw new PropertyException( "Value must be between " + Gearbox.MIN_VALUE + " and " + Gearbox.MAX_VALUE + ": " + key + '=' + newValue );
+			throw new PropertyException( getMessage( "err.illegal.value", Gearbox.MIN_VALUE, Gearbox.MAX_VALUE, key, newValue ) );
 		}
 		
 		Bike bike = getBike( key );
@@ -288,14 +306,14 @@ public class CyclesMod {
 			}
 		}
 		else {
-			throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
+			throw new PropertyException( getMessage( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
 
-	private void parseSettingProperty( String key ) throws Exception {
+	private void parseSettingProperty( final String key ) throws Exception {
 		int newValue = Integer.parseInt( properties.getProperty( key ) );
 		if ( newValue < Settings.MIN_VALUE || newValue > Settings.MAX_VALUE ) {
-			throw new PropertyException( "Value must be between " + Settings.MIN_VALUE + " and " + Settings.MAX_VALUE + ": " + key + '=' + newValue );
+			throw new PropertyException( getMessage( "err.illegal.value", Settings.MIN_VALUE, Settings.MAX_VALUE, key, newValue ) );
 		}
 		
 		Bike bike = getBike( key );
@@ -318,13 +336,21 @@ public class CyclesMod {
 			}
 		}
 		else {
-			throw new PropertyException( "Unsupported property: " + key + '=' + properties.getProperty( key ) );
+			throw new PropertyException( getMessage( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
 
-	private void logChange( String key, int defaultValue, int newValue ) {
-		log.info( "Applicata modifica: " + key + '=' + newValue + " (default: " + defaultValue + ")." );
+	private void logChange( final String key, final int defaultValue, final int newValue ) {
+		log.info( getMessage( "msg.custom.value.detected", key, newValue, defaultValue ) );
 		changesCount++;
+	}
+	
+	private static String getMessage( final String key, final Object... params ) {
+		List<String> stringParams = new ArrayList<String>( params.length );
+		for ( Object param : params ) {
+			stringParams.add( param.toString() );
+		}
+		return MessageFormat.format( messages.getString( key ), stringParams.toArray() );
 	}
 	
 }
