@@ -1,0 +1,25 @@
+<project name="CyclesMod" default="jar">
+	
+	<property file="build.properties" />
+	<property file="build.properties.default" />
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="compile" depends="clean">
+		<mkdir dir="${build.dir}/classes/" />
+		<javac srcdir="src" destdir="${build.dir}/classes">
+			<classpath>
+				<fileset dir="lib">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+	
+	<target name="jar" depends="compile">
+		<jar destfile="${build.dir}/dist/CyclesMod.jar" basedir="${build.dir}/classes/" />
+	</target>
+	
+</project>
