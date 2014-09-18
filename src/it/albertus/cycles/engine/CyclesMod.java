@@ -121,7 +121,7 @@ public class CyclesMod {
 	}
 	
 	private ZipInputStream getBikesInfInputStream() throws IOException {
-		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( "../data/bikes.zip" ) );
+		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( '/' + StringUtils.substringBeforeLast( this.getClass().getPackage().getName(), "." ).replace( '.', '/' ) + "/data/bikes.zip" ) );
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != INF_FILE_CRC ) {
 			throw new StreamCorruptedException( getMessage( "err.original.file.corrupted.crc", INF_FILE_NAME, String.format( "%X", INF_FILE_CRC ), String.format( "%X", ze.getCrc() ) ) );
