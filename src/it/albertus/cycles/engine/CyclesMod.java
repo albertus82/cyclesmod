@@ -43,6 +43,8 @@ public class CyclesMod {
 	private static final String INF_FILE_NAME = "BIKES.INF";
 	private static final int INF_FILE_CRC = 0x28A33682;
 	private static final short INF_FILE_SIZE = 444;
+	private static final String ZIP_FILE_PATH = '/' + StringUtils.substringBeforeLast( CyclesMod.class.getPackage().getName(), "." ).replace( '.', '/' ) + "/data/";
+	private static final String ZIP_FILE_NAME = "bikes.zip";
 	private static final String DEFAULT_DESTINATION_PATH = "";
 	private static final String GETTER_PREFIX = "get";
 	private static final ResourceBundle messages = ResourceBundle.getBundle( CyclesMod.class.getPackage().getName() + ".resources.messages" );
@@ -121,7 +123,7 @@ public class CyclesMod {
 	}
 	
 	private ZipInputStream getBikesInfInputStream() throws IOException {
-		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( '/' + StringUtils.substringBeforeLast( this.getClass().getPackage().getName(), "." ).replace( '.', '/' ) + "/data/bikes.zip" ) );
+		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( ZIP_FILE_PATH + ZIP_FILE_NAME ) );
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != INF_FILE_CRC ) {
 			throw new StreamCorruptedException( getMessage( "err.original.file.corrupted.crc", INF_FILE_NAME, String.format( "%X", INF_FILE_CRC ), String.format( "%X", ze.getCrc() ) ) );
