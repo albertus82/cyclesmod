@@ -1,5 +1,7 @@
 package it.albertus.cycles.model;
 
+import it.albertus.cycles.engine.resources.Messages;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +12,10 @@ public class Torque extends BikesInfElement {
 	public static final short MAX_VALUE = 255;
 	
 	private short[] curve = new short[ LENGTH ]; // 42-147: curva di coppia (regime massimo considerato: ~14500 RPM).
-
+	
 	public Torque(short[] curve) {
 		if ( curve.length > LENGTH ) {
-			throw new IllegalArgumentException( "The torque curve cannot accept more than " + LENGTH + " points. Number of values provided: " + curve.length + '.' );
+			throw new IllegalArgumentException( Messages.get( "err.torque", LENGTH, curve.length ) );
 		}
 		for ( int i = 0; i < curve.length; i++ ) {
 			this.curve[i] = curve[i];
@@ -28,9 +30,9 @@ public class Torque extends BikesInfElement {
 		}
 		return byteList;
 	}
-
+	
 	public short[] getCurve() {
 		return curve;
 	}
-
+	
 }

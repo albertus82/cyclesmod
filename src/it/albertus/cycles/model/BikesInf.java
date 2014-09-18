@@ -1,5 +1,6 @@
 package it.albertus.cycles.model;
 
+import it.albertus.cycles.engine.resources.Messages;
 import it.albertus.util.ByteUtils;
 
 import java.util.ArrayList;
@@ -7,14 +8,15 @@ import java.util.List;
 
 public class BikesInf {
 
-	private static final int LENGTH = 3 * Bike.LENGTH;
+	public static final String FILE_NAME = "BIKES.INF";
+	public static final int    FILE_CRC  = 0x28A33682;
+	public static final short  FILE_SIZE = 444;
 	
 	private Bike bike125;
 	private Bike bike250;
 	private Bike bike500;
 	
 	public BikesInf(Bike bike125, Bike bike250, Bike bike500) {
-		super();
 		this.bike125 = bike125;
 		this.bike250 = bike250;
 		this.bike500 = bike500;
@@ -26,12 +28,12 @@ public class BikesInf {
 	 * @return L'array di byte corrispondente al file BIKES.INF.
 	 */
 	public byte[] toByteArray() {
-		List<Byte> byteList = new ArrayList<Byte>( LENGTH );
+		List<Byte> byteList = new ArrayList<Byte>( FILE_SIZE );
 		byteList.addAll( bike125.toByteList() );
 		byteList.addAll( bike250.toByteList() );
 		byteList.addAll( bike500.toByteList() );
-		if ( byteList.size() != LENGTH ) {
-			throw new IllegalStateException( "Wrong BIKES.INF file size, actual: " + byteList.size() + " bytes, expected: " + LENGTH + " bytes." );
+		if ( byteList.size() != FILE_SIZE ) {
+			throw new IllegalStateException( Messages.get( "err.wrong.file.size", FILE_NAME, FILE_SIZE, byteList.size() ) );
 		}
 		return ByteUtils.toByteArray( byteList );
 	}
