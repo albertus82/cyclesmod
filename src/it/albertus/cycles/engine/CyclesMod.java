@@ -1,11 +1,11 @@
 package it.albertus.cycles.engine;
 
-import it.albertus.cycles.engine.resources.Messages;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
+import it.albertus.cycles.resources.Messages;
 
 import java.beans.Introspector;
 import java.io.BufferedOutputStream;
