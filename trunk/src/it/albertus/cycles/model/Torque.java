@@ -1,6 +1,6 @@
 package it.albertus.cycles.model;
 
-import it.albertus.cycles.engine.resources.Messages;
+import it.albertus.cycles.resources.Messages;
 
 import java.util.ArrayList;
 import java.util.List;
