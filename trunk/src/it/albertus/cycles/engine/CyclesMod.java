@@ -34,12 +34,13 @@ public class CyclesMod {
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
 	
 	private static final String VERSION_NUMBER = "1.0.0";
-	private static final String BUILD_DATE = "2014-09-18";
+	private static final String BUILD_DATE = "2014-09-19";
 	
 	private static final String CFG_FILE_NAME = "BIKES.CFG";
 	
 	private static final String ZIP_FILE_PATH = '/' + StringUtils.substringBeforeLast( CyclesMod.class.getPackage().getName(), "." ).replace( '.', '/' ) + "/data/";
 	private static final String ZIP_FILE_NAME = "bikes.zip";
+	
 	private static final String DEFAULT_DESTINATION_PATH = "";
 	private static final String GETTER_PREFIX = "get";
 	
