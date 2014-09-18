@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 
 public class Messages {
 	
-	private static final ResourceBundle messages = ResourceBundle.getBundle( Messages.class.getName() );
+	private static final ResourceBundle messages = ResourceBundle.getBundle( Messages.class.getName().toLowerCase() );
 	
 	public static String get( final String key, final Object... params ) {
 		List<String> stringParams = new ArrayList<String>( params.length );
