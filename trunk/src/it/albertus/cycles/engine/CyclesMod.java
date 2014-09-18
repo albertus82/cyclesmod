@@ -194,7 +194,7 @@ public class CyclesMod {
 			}
 			
 			properties.append( lineSeparator ).append( lineSeparator );
-			properties.append( "### ").append( type.getDisplacement() ).append( " cc - Begin... ###");
+			properties.append( "### ").append( type.getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.begin" ) + "... ###");
 			
 			// Settings
 			properties.append( lineSeparator );
@@ -231,7 +231,7 @@ public class CyclesMod {
 				properties.append( lineSeparator );
 			}
 			
-			properties.append( "### ").append( type.getDisplacement() ).append( " cc - End. ###");
+			properties.append( "### ").append( type.getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.end" ) + ". ###");
 		}
 		
 		properties.append( lineSeparator ).append( lineSeparator );
