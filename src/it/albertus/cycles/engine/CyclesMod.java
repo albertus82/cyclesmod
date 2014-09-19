@@ -57,13 +57,21 @@ public class CyclesMod {
 	public static void main( final String... args ) throws Exception {
 		try {
 			log.info( Messages.get( "msg.welcome", VERSION_NUMBER, BUILD_DATE ) );
+			
+			// Gestione parametri da riga di comando...
 			if ( args.length > 1 ) {
-				throw new IllegalArgumentException( Messages.get( "err.command.line.help" ) );
+				throw new IllegalArgumentException( Messages.get( "err.too.many.parameters" ) + ' ' + Messages.get( "msg.command.line.help", CyclesMod.class.getSimpleName() ) );
 			}
-			String path = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
+			String path = args.length == 1 ? args[0] : DEFAULT_DESTINATION_PATH;
+			
+			if ( path.contains( "?" ) || StringUtils.startsWithIgnoreCase( path, "-help" ) || StringUtils.startsWithIgnoreCase( path, "/help" ) ) {
+				log.info( Messages.get( "msg.command.line.help", CyclesMod.class.getSimpleName() ) );
+				return;
+			}
 			if ( !"".equals( path ) && !path.endsWith( "/" ) && !path.endsWith( "\\" ) && !path.endsWith( File.separator ) ) {
 				path += File.separator;
 			}
+			
 			new CyclesMod( path ).execute();
 		}
 		catch ( Exception e ) {
@@ -77,13 +85,13 @@ public class CyclesMod {
 	}
 	
 	private void execute() throws Exception {
-		log.info( Messages.get( "msg.reading.original.file" , BikesInf.FILE_NAME ) );
+		log.info( Messages.get( "msg.reading.original.file" , BikesInf.NAME ) );
 		readOriginalBikesInf();
 		
 		log.info( Messages.get( "msg.applying.customizations" ) );
 		customize();
 		
-		log.info( Messages.get( "msg.preparing.new.file", BikesInf.FILE_NAME ) );
+		log.info( Messages.get( "msg.preparing.new.file", BikesInf.NAME ) );
 		writeCustomBikesInf();
 	}
 	
@@ -92,17 +100,17 @@ public class CyclesMod {
 		Checksum crc = new CRC32();
 		crc.update( newBikesInf, 0, newBikesInf.length );
 		
-		log.info( Messages.get( "msg.configuration.changed", ( crc.getValue() == BikesInf.FILE_CRC ? ' ' + Messages.get( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
+		log.info( Messages.get( "msg.configuration.changed", ( crc.getValue() == BikesInf.CRC ? ' ' + Messages.get( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
 
-		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( path + BikesInf.FILE_NAME ), BikesInf.FILE_SIZE );
+		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( path + BikesInf.NAME ), BikesInf.SIZE );
 		bos.write( newBikesInf );
 		bos.flush();
 		bos.close();
-		log.info( Messages.get( "msg.new.file.written.into.path", BikesInf.FILE_NAME, "".equals( path ) ? '.' : path, String.format( "%X", crc.getValue() ) ) );
+		log.info( Messages.get( "msg.new.file.written.into.path", BikesInf.NAME, "".equals( path ) ? '.' : path, String.format( "%X", crc.getValue() ) ) );
 	}
 	
 	private void readOriginalBikesInf() throws IOException {
-		log.info( Messages.get( "msg.opening.file", BikesInf.FILE_NAME ) );
+		log.info( Messages.get( "msg.opening.file", BikesInf.NAME ) );
 		InputStream is = getBikesInfInputStream();
 		
 		byte[] inf125 = new byte[ Bike.LENGTH ];
@@ -112,13 +120,13 @@ public class CyclesMod {
 		is.read( inf250 );
 		is.read( inf500 );
 		is.close();
-		log.info( Messages.get( "msg.original.file.read", BikesInf.FILE_NAME ) );
+		log.info( Messages.get( "msg.original.file.read", BikesInf.NAME ) );
 		
 		Bike bike125 = new Bike( inf125 );
 		Bike bike250 = new Bike( inf250 );
 		Bike bike500 = new Bike( inf500 );
 		bikesInf = new BikesInf( bike125, bike250, bike500 );
-		log.info( Messages.get( "msg.original.file.parsed", BikesInf.FILE_NAME ) );
+		log.info( Messages.get( "msg.original.file.parsed", BikesInf.NAME ) );
 	}
 	
 	private ZipInputStream getBikesInfInputStream() throws IOException {
@@ -130,13 +138,13 @@ public class CyclesMod {
 			throw new FileNotFoundException( Messages.get( "msg.file.not.found", ZIP_FILE_PATH + ZIP_FILE_NAME ) );
 		}
 		ZipEntry ze = zis.getNextEntry();
-		if ( ze.getCrc() != BikesInf.FILE_CRC ) {
-			throw new StreamCorruptedException( Messages.get( "err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format( "%X", BikesInf.FILE_CRC ), String.format( "%X", ze.getCrc() ) ) );
+		if ( ze.getCrc() != BikesInf.CRC ) {
+			throw new StreamCorruptedException( Messages.get( "err.original.file.corrupted.crc", BikesInf.NAME, String.format( "%X", BikesInf.CRC ), String.format( "%X", ze.getCrc() ) ) );
 		}
-		if ( ze.getSize() != BikesInf.FILE_SIZE ) {
-			throw new StreamCorruptedException( Messages.get( "err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, ze.getSize() ) );
+		if ( ze.getSize() != BikesInf.SIZE ) {
+			throw new StreamCorruptedException( Messages.get( "err.original.file.corrupted.size", BikesInf.NAME, BikesInf.SIZE, ze.getSize() ) );
 		}
-		log.info( Messages.get( "msg.original.file.opened", BikesInf.FILE_NAME, String.format( "%X", ze.getCrc() ) ) );
+		log.info( Messages.get( "msg.original.file.opened", BikesInf.NAME, String.format( "%X", ze.getCrc() ) ) );
 		return zis;
 	}
 	
