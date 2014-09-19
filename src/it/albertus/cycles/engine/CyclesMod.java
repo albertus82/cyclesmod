@@ -11,6 +11,7 @@ import java.beans.Introspector;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -60,11 +61,14 @@ public class CyclesMod {
 				throw new IllegalArgumentException( Messages.get( "err.command.line.help" ) );
 			}
 			String path = args.length > 0 ? args[0] : DEFAULT_DESTINATION_PATH;
+			if ( !"".equals( path ) && !path.endsWith( "/" ) && !path.endsWith( "\\" ) && !path.endsWith( File.separator ) ) {
+				path += File.separator;
+			}
 			new CyclesMod( path ).execute();
 		}
 		catch ( Exception e ) {
 			if ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) || StringUtils.isNotEmpty( e.getMessage() ) ) {
-				log.error( StringUtils.isNotEmpty( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() );
+				log.error( e.getClass().getName() + ": " + ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() ) );
 			}
 			else {
 				throw e;
@@ -94,7 +98,7 @@ public class CyclesMod {
 		bos.write( newBikesInf );
 		bos.flush();
 		bos.close();
-		log.info( Messages.get( "msg.new.file.written.into.path", BikesInf.FILE_NAME, path, String.format( "%X", crc.getValue() ) ) );
+		log.info( Messages.get( "msg.new.file.written.into.path", BikesInf.FILE_NAME, "".equals( path ) ? '.' : path, String.format( "%X", crc.getValue() ) ) );
 	}
 	
 	private void readOriginalBikesInf() throws IOException {
@@ -118,7 +122,13 @@ public class CyclesMod {
 	}
 	
 	private ZipInputStream getBikesInfInputStream() throws IOException {
-		ZipInputStream zis = new ZipInputStream( getClass().getResourceAsStream( ZIP_FILE_PATH + ZIP_FILE_NAME ) );
+		ZipInputStream zis = null;
+		try {
+			zis = new ZipInputStream( getClass().getResourceAsStream( ZIP_FILE_PATH + ZIP_FILE_NAME ) );
+		}
+		catch ( Exception e ) {
+			throw new FileNotFoundException( Messages.get( "msg.file.not.found", ZIP_FILE_PATH + ZIP_FILE_NAME ) );
+		}
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != BikesInf.FILE_CRC ) {
 			throw new StreamCorruptedException( Messages.get( "err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format( "%X", BikesInf.FILE_CRC ), String.format( "%X", ze.getCrc() ) ) );
