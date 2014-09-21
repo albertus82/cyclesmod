@@ -34,7 +34,7 @@
 		</copy>
 		
 		<!-- Copia della licenza -->
-		<copy todir="${build.dir}/dist" file="license/license.txt" />
+		<copy todir="${build.dir}/dist" file="src/license.txt" />
 	</target>
 	
 	<target name="bat">
