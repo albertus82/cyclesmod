@@ -31,7 +31,10 @@
 		<!-- Copia delle librerie -->
 		<copy todir="${build.dir}/dist/lib">
 			<fileset dir="lib" />
-		</copy>		
+		</copy>
+		
+		<!-- Copia della licenza -->
+		<copy todir="${build.dir}/dist" file="license/license.txt" />
 	</target>
 	
 	<target name="bat">
