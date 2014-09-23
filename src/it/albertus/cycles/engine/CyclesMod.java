@@ -79,7 +79,7 @@ public class CyclesMod {
 				log.error( e.getClass().getName() + ": " + ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() ) );
 			}
 			else {
-				throw e;
+				throw e; // Le eccezioni prive di messaggio vengono semplicemente rilanciate.
 			}
 		}
 	}
