@@ -243,6 +243,10 @@ public class CyclesMod {
 			properties.append( "# " ).append( Torque.class.getSimpleName() ).append( " #" );
 			properties.append( lineSeparator );
 			for ( int index = 0; index < bike.getTorque().getCurve().length; index++ ) {
+				if ( index > 0 && index % 10 == 0 ) {
+					properties.append( "# " + Torque.getRpm( index ) + " RPM");
+					properties.append( lineSeparator );
+				}
 				properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Torque.class.getSimpleName() ) ).append( '.' ).append( index );
 				properties.append( '=' );
 				properties.append( bike.getTorque().getCurve()[ index ] );
