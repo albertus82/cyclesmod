@@ -15,7 +15,7 @@ public class Settings extends BikesInfElement {
 	
 	private int gearsCount; // 0-1: numero di marce del cambio (solo lsB).
 	private int rpmRedMark; // 2-3: regime red mark (stessa scala del regime limitatore, il motore si rompe quando regime >= regime red mark per piu' di qualche secondo).
-	private int rpmLimit; // 4-5: regime limitatore (il contagiri si blocca ma la moto conserva le prestazioni di accelerazione a quel regime, quindi la coppia a quel regime deve essere azzerata se si vuole interrompere l'accelerazione della moto).
+	private int rpmLimit; // 4-5: regime limitatore, max 14334 (il contagiri si blocca ma la moto conserva le prestazioni di accelerazione a quel regime, quindi la coppia a quel regime deve essere azzerata se si vuole interrompere l'accelerazione della moto).
 	private int rpmRedMarkGracePeriod; // 6-7: periodo di grazia su red mark (valore alto: il motore si rompe dopo piu' tempo. Per valori msB >=80 si rompe subito).
 	private int skiddingThreshold; // 8-9: soglia di slittamento in sterzata (valore alto: slitta meno).
 	private int unknown1; // 10-11: ?
