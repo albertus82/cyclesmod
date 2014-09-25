@@ -35,4 +35,8 @@ public class Torque extends BikesInfElement {
 		return curve;
 	}
 	
+	public static int getRpm( int index ) {
+		return 700 + 130 * index;
+	}
+	
 }
