@@ -34,8 +34,8 @@ public class CyclesMod {
 	
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
 	
-	private static final String VERSION_NUMBER = "1.0.0";
-	private static final String BUILD_DATE = "2014-09-21";
+	private static final String VERSION_NUMBER = "1.1.0";
+	private static final String BUILD_DATE = "2014-09-25";
 	
 	private static final String CFG_FILE_NAME = "BIKES.CFG";
 	
