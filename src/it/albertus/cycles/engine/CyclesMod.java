@@ -240,10 +240,10 @@ public class CyclesMod {
 			
 			// Torque
 			properties.append( lineSeparator );
-			properties.append( "# " ).append( Torque.class.getSimpleName() ).append( " #" );
+			properties.append( "# " ).append( Torque.class.getSimpleName() ).append( " (").append( Torque.getRpm( 0 ) ).append( '-' ).append( Torque.getRpm( Torque.LENGTH ) - 1 ).append( " RPM) #" );
 			properties.append( lineSeparator );
 			for ( int index = 0; index < bike.getTorque().getCurve().length; index++ ) {
-				if ( index > 0 && index % 10 == 0 ) {
+				if ( index > 0 && index % 8 == 0 ) {
 					properties.append( "# " + Torque.getRpm( index ) + " RPM");
 					properties.append( lineSeparator );
 				}

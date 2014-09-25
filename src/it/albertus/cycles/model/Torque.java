@@ -10,8 +10,10 @@ public class Torque extends BikesInfElement {
 	public static final int LENGTH = 106;
 	public static final short MIN_VALUE = 0;
 	public static final short MAX_VALUE = 255;
+	public static final short BASE_RPM = 768;
+	public static final short POINT_WIDTH_RPM = 128;
 	
-	private short[] curve = new short[ LENGTH ]; // 42-147: curva di coppia (intervallo regime considerato: ~800-14500 RPM).
+	private short[] curve = new short[ LENGTH ]; // 42-147: curva di coppia (intervallo regime considerato: 768-14335 RPM).
 	
 	public Torque(short[] curve) {
 		if ( curve.length > LENGTH ) {
@@ -36,7 +38,7 @@ public class Torque extends BikesInfElement {
 	}
 	
 	public static int getRpm( int index ) {
-		return 700 + 130 * index;
+		return BASE_RPM + POINT_WIDTH_RPM * index;
 	}
 	
 }
