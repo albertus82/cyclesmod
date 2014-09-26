@@ -362,7 +362,7 @@ public class CyclesMod {
 	}
 	
 	private void logChange( final String key, final int defaultValue, final int newValue ) {
-		log.info( Messages.get( "msg.custom.value.detected", key, newValue, defaultValue ) );
+		log.info( Messages.get( "msg.custom.value.detected", key, newValue, String.format( "%X", newValue ), defaultValue, String.format( "%X", defaultValue ) ) );
 		changesCount++;
 	}
 	

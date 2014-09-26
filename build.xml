@@ -38,7 +38,7 @@
 	</target>
 	
 	<target name="bat">
-		<echo file="${build.dir}/dist/${ant.project.name}.bat">@java -classpath "${ant.project.name}.jar;lib/*" ${main.class} %1</echo>
+		<echo file="${build.dir}/dist/${ant.project.name}.bat">@java -classpath "${ant.project.name}.jar;lib/*" ${main.class} %1 %2</echo>
 	</target>
 	
 	<target name="jar" depends="compile, copy, bat">
