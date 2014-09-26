@@ -34,8 +34,8 @@ public class CyclesMod {
 	
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
 	
-	private static final String VERSION_NUMBER = "1.1.1";
-	private static final String BUILD_DATE = "2014-09-25";
+	private static final String VERSION_NUMBER = "1.1.2";
+	private static final String BUILD_DATE = "2014-09-26";
 	
 	private static final String CFG_FILE_NAME = "BIKES.CFG";
 	
@@ -43,17 +43,19 @@ public class CyclesMod {
 	private static final String ZIP_FILE_NAME = "bikes.zip";
 	
 	private static final String DEFAULT_DESTINATION_PATH = "";
+	
 	private static final String GETTER_PREFIX = "get";
+	private static final String SETTER_PREFIX = "set";
 	
 	private BikesInf bikesInf;
 	private final Properties properties = new Properties();
 	private final String path;
 	private short changesCount = 0;
-
+	
 	public CyclesMod( String path ) {
 		this.path = path;
 	}
-
+	
 	public static void main( final String... args ) throws Exception {
 		try {
 			log.info( Messages.get( "msg.welcome", VERSION_NUMBER, BUILD_DATE ) );
@@ -193,7 +195,7 @@ public class CyclesMod {
 		}
 		log.info( Messages.get( "msg.customizations.applied", changesCount ) );
 	}
-
+	
 	private void writeDefaultBikesCfg() throws Exception {
         final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
 		final StringBuilder properties = new StringBuilder( Messages.get( "str.cfg.header" ) );
@@ -265,7 +267,7 @@ public class CyclesMod {
 		bw.flush();
 		bw.close();
 	}
-
+	
 	private Bike getBike( final String key ) throws Exception {
 		Bike bike = null;
 		
@@ -286,7 +288,7 @@ public class CyclesMod {
 		
 		return bike;
 	}
-
+	
 	private void parseTorqueProperty( final String key ) throws Exception {
 		short newValue = Short.parseShort( properties.getProperty( key ) );
 		if ( newValue < Torque.MIN_VALUE || newValue > Torque.MAX_VALUE ) {
@@ -307,7 +309,7 @@ public class CyclesMod {
 			throw new PropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
-
+	
 	private void parseGearboxProperty( final String key ) throws Exception {
 		int newValue = Integer.parseInt( properties.getProperty( key ) );
 		if ( newValue < Gearbox.MIN_VALUE || newValue > Gearbox.MAX_VALUE ) {
@@ -328,7 +330,7 @@ public class CyclesMod {
 			throw new PropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
-
+	
 	private void parseSettingProperty( final String key ) throws Exception {
 		int newValue = Integer.parseInt( properties.getProperty( key ) );
 		if ( newValue < Settings.MIN_VALUE || newValue > Settings.MAX_VALUE ) {
@@ -340,7 +342,7 @@ public class CyclesMod {
 		Method setter = null;
 		Method getter = null;
 		for ( Method method : Settings.class.getMethods() ) {
-			if ( method.getName().equals( "set" + StringUtils.capitalize( suffix ) ) ) {
+			if ( method.getName().equals( SETTER_PREFIX + StringUtils.capitalize( suffix ) ) ) {
 				setter = method;
 			}
 			if ( method.getName().equals( GETTER_PREFIX + StringUtils.capitalize( suffix ) ) ) {
@@ -358,7 +360,7 @@ public class CyclesMod {
 			throw new PropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
-
+	
 	private void logChange( final String key, final int defaultValue, final int newValue ) {
 		log.info( Messages.get( "msg.custom.value.detected", key, newValue, defaultValue ) );
 		changesCount++;
