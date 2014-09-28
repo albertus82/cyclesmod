@@ -1,7 +1,7 @@
 CyclesMod
 =========
 
-Disclaimer: I will be in no way responsible for any damage caused by use of this software.
+Disclaimer: I will be in no way liable for any loss or damage caused by the use of this software. Please make a backup of the original game before using this software.
 
 CyclesMod is a command line utility for the DOS game "The Cycles: International Grand Prix Racing" (DSI/Accolade, 1989) that allows you to edit the configuration of the motorbikes, overriding their default settings.
 
