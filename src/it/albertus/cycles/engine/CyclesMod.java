@@ -34,8 +34,8 @@ public class CyclesMod {
 	
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
 	
-	private static final String VERSION_NUMBER = "1.1.2";
-	private static final String BUILD_DATE = "2014-09-26";
+	private static final String VERSION_FILE_PATH = "/";
+	private static final String VERSION_FILE_NAME = "version.properties";
 	
 	private static final String CFG_FILE_NAME = "BIKES.CFG";
 	
@@ -58,7 +58,7 @@ public class CyclesMod {
 	
 	public static void main( final String... args ) throws Exception {
 		try {
-			log.info( Messages.get( "msg.welcome", VERSION_NUMBER, BUILD_DATE ) );
+			log.info( getWelcomeMessage() );
 			
 			// Gestione parametri da riga di comando...
 			if ( args.length > 1 ) {
@@ -84,6 +84,14 @@ public class CyclesMod {
 				throw e; // Le eccezioni prive di messaggio vengono semplicemente rilanciate.
 			}
 		}
+	}
+
+	private static String getWelcomeMessage() throws IOException {
+		InputStream is = CyclesMod.class.getResourceAsStream( VERSION_FILE_PATH + VERSION_FILE_NAME );
+		Properties version = new Properties();
+		version.load( is );
+		is.close();
+		return Messages.get( "msg.welcome", version.get( "version.number" ), version.get( "version.date" ) );
 	}
 	
 	private void execute() throws Exception {
