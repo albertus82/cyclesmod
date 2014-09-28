@@ -3,7 +3,15 @@
 	<property file="build.properties" />
 	<property file="build.properties.default" />
 	
+	<property file="src/version.properties" />
+	
 	<property name="main.class" value="it.albertus.cycles.engine.CyclesMod" />
+	
+	<scriptdef language="javascript" name="lower">
+		<attribute name="string" />
+		<attribute name="to" />
+		project.setProperty( attributes.get( "to" ), attributes.get( "string" ).toLowerCase() );
+	</scriptdef>
 	
 	<target name="clean">
 		<delete dir="${build.dir}" />
@@ -43,6 +51,11 @@
 	
 	<target name="jar" depends="compile, copy, bat">
 		<jar destfile="${build.dir}/dist/${ant.project.name}.jar" basedir="${build.dir}/classes" level="9" />
+	</target>
+	
+	<target name="zip" depends="jar">
+		<lower string="${ant.project.name}" to="project.name.lowercase" />
+		<zip destfile="${build.dir}/release/${project.name.lowercase}-${version.number}-bin.zip" basedir="${build.dir}/dist" level="9" />
 	</target>
 	
 </project>
