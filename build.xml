@@ -13,6 +13,8 @@
 		project.setProperty( attributes.get( "to" ), attributes.get( "string" ).toLowerCase() );
 	</scriptdef>
 	
+	<lower string="${ant.project.name}" to="project.name.lowercase" />
+	
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
@@ -29,32 +31,30 @@
 	</target>
 	
 	<target name="copy">
-		<!-- Copia di tutti i file che non sono classi -->
 		<copy todir="${build.dir}/classes">
 			<fileset dir="src">
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
 		
-		<!-- Copia delle librerie -->
 		<copy todir="${build.dir}/dist/lib">
 			<fileset dir="lib" />
 		</copy>
 		
-		<!-- Copia della licenza -->
 		<copy todir="${build.dir}/dist" file="src/license.txt" />
+		
+		<copy todir="${build.dir}/dist" file="readme.txt" />
 	</target>
 	
 	<target name="bat">
-		<echo file="${build.dir}/dist/${ant.project.name}.bat">@java -classpath "${ant.project.name}.jar;lib/*" ${main.class} %1 %2</echo>
+		<echo file="${build.dir}/dist/${project.name.lowercase}.bat">@java -classpath "${project.name.lowercase}.jar;lib/*" ${main.class} %1 %2</echo>
 	</target>
 	
 	<target name="jar" depends="compile, copy, bat">
-		<jar destfile="${build.dir}/dist/${ant.project.name}.jar" basedir="${build.dir}/classes" level="9" />
+		<jar destfile="${build.dir}/dist/${project.name.lowercase}.jar" basedir="${build.dir}/classes" level="9" />
 	</target>
 	
 	<target name="zip" depends="jar">
-		<lower string="${ant.project.name}" to="project.name.lowercase" />
 		<zip destfile="${build.dir}/release/${project.name.lowercase}-${version.number}-bin.zip" basedir="${build.dir}/dist" level="9" />
 	</target>
 	
