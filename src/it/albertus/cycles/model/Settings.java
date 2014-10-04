@@ -137,5 +137,5 @@ public class Settings extends BikesInfElement {
 	public String toString() {
 		return ToStringBuilder.reflectionToString( this );
 	}
-
+	
 }
