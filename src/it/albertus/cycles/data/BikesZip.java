@@ -16,7 +16,9 @@ public class BikesZip {
 	
 	private static final Logger log = LoggerFactory.getLogger( BikesZip.class );
 	
-	public static final String FILE_PATH = '/' + BikesZip.class.getPackage().getName().replace( '.', '/' ) + '/';
+	private static final char PACKAGE_SEPARATOR = '\u002e';
+	private static final char FILE_SEPARATOR = '\u002f';
+	
 	public static final String FILE_NAME = "bikes.zip";
 	
 	private final ZipInputStream inputStream;
@@ -24,7 +26,7 @@ public class BikesZip {
 	public ZipInputStream getInputStream() {
 		return inputStream;
 	}
-
+	
 	public BikesZip() throws IOException {
 		this.inputStream = openBikesInfInputStream();
 	}
@@ -33,10 +35,10 @@ public class BikesZip {
 		log.info( Messages.get( "msg.opening.file", BikesInf.FILE_NAME ) );
 		ZipInputStream zis = null;
 		try {
-			zis = new ZipInputStream( getClass().getResourceAsStream( FILE_PATH + FILE_NAME ) );
+			zis = new ZipInputStream( getClass().getResourceAsStream( FILE_NAME ) );
 		}
 		catch ( Exception e ) {
-			throw new FileNotFoundException( Messages.get( "msg.file.not.found", FILE_PATH + FILE_NAME ) );
+			throw new FileNotFoundException( Messages.get( "msg.file.not.found", FILE_SEPARATOR + getClass().getPackage().getName().replace( PACKAGE_SEPARATOR, FILE_SEPARATOR ) + FILE_SEPARATOR + FILE_NAME ) );
 		}
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != BikesInf.FILE_CRC ) {
