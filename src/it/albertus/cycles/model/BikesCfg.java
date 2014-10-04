@@ -26,10 +26,6 @@ public class BikesCfg {
 	
 	private final Properties properties = new Properties();
 
-	public Properties getProperties() {
-		return properties;
-	}
-
 	public BikesCfg( final BikesInf originalBikesInf, final String path ) throws IllegalAccessException, InvocationTargetException, IOException {
 		log.info( Messages.get( "msg.reading.file", FILE_NAME ) );
 		BufferedReader br = null;
@@ -51,16 +47,11 @@ public class BikesCfg {
         final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
 		final StringBuilder properties = new StringBuilder( Messages.get( "str.cfg.header" ) );
 		
-		for ( Bike.Type bikeType : originalBikesInf.getBikes().keySet() ) {
-			String prefix = Integer.toString( bikeType.getDisplacement() );
-			Bike bike = originalBikesInf.getBikes().get( bikeType );
+		for ( Bike bike : originalBikesInf.getBikes() ) {
+			String prefix = Integer.toString( bike.getType().getDisplacement() );
 
-			if ( bike == null ) {
-				throw new IllegalStateException();
-			}
-			
 			properties.append( lineSeparator ).append( lineSeparator );
-			properties.append( "### ").append( bikeType.getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.begin" ) + "... ###");
+			properties.append( "### ").append( bike.getType().getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.begin" ) + "... ###");
 			
 			// Settings
 			properties.append( lineSeparator );
@@ -101,7 +92,7 @@ public class BikesCfg {
 				properties.append( lineSeparator );
 			}
 			
-			properties.append( "### ").append( bikeType.getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.end" ) + ". ###");
+			properties.append( "### ").append( bike.getType().getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.end" ) + ". ###");
 		}
 		
 		properties.append( lineSeparator ).append( lineSeparator );
@@ -112,6 +103,10 @@ public class BikesCfg {
 		bw.write( properties.toString() );
 		bw.flush();
 		bw.close();
+	}
+	
+	public Properties getProperties() {
+		return properties;
 	}
 	
 }
