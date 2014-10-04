@@ -3,11 +3,22 @@ package it.albertus.cycles.model;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.util.ByteUtils;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BikesInf {
 
+	private static final Logger log = LoggerFactory.getLogger( BikesInf.class );
+	
 	public static final String FILE_NAME = "BIKES.INF";
 	public static final int FILE_CRC = 0x28A33682;
 	public static final short FILE_SIZE = 444;
@@ -16,10 +27,47 @@ public class BikesInf {
 	private Bike bike250;
 	private Bike bike500;
 	
-	public BikesInf(Bike bike125, Bike bike250, Bike bike500) {
-		this.bike125 = bike125;
-		this.bike250 = bike250;
-		this.bike500 = bike500;
+	public Bike getBike125() {
+		return bike125;
+	}
+	public Bike getBike250() {
+		return bike250;
+	}
+	public Bike getBike500() {
+		return bike500;
+	}
+	
+	public BikesInf( InputStream is ) throws IOException {
+		read( is );
+	}
+	
+	private void read( InputStream is ) throws IOException {
+		byte[] inf125 = new byte[ Bike.LENGTH ];
+		byte[] inf250 = new byte[ Bike.LENGTH ];
+		byte[] inf500 = new byte[ Bike.LENGTH ];
+		is.read( inf125 );
+		is.read( inf250 );
+		is.read( inf500 );
+		is.close();
+		log.info( Messages.get( "msg.original.file.read", BikesInf.FILE_NAME ) );
+		
+		this.bike125 = new Bike( inf125 );
+		this.bike250 = new Bike( inf250 );
+		this.bike500 = new Bike( inf500 );
+		log.info( Messages.get( "msg.original.file.parsed", BikesInf.FILE_NAME ) );
+	}
+	
+	public void write( String destinationPath ) throws IOException {
+		byte[] newBikesInf = this.toByteArray();
+		Checksum crc = new CRC32();
+		crc.update( newBikesInf, 0, newBikesInf.length );
+		log.info( Messages.get( "msg.configuration.changed", ( crc.getValue() == FILE_CRC ? ' ' + Messages.get( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
+	
+		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( destinationPath + FILE_NAME ), FILE_SIZE );
+		bos.write( newBikesInf );
+		bos.flush();
+		bos.close();
+		log.info( Messages.get( "msg.new.file.written.into.path", FILE_NAME, "".equals( destinationPath ) ? '.' : destinationPath, String.format( "%X", crc.getValue() ) ) );
 	}
 	
 	/**
@@ -27,7 +75,7 @@ public class BikesInf {
 	 * 
 	 * @return L'array di byte corrispondente al file BIKES.INF.
 	 */
-	public byte[] toByteArray() {
+	private byte[] toByteArray() {
 		List<Byte> byteList = new ArrayList<Byte>( FILE_SIZE );
 		byteList.addAll( bike125.toByteList() );
 		byteList.addAll( bike250.toByteList() );
@@ -36,27 +84,6 @@ public class BikesInf {
 			throw new IllegalStateException( Messages.get( "err.wrong.file.size", FILE_NAME, FILE_SIZE, byteList.size() ) );
 		}
 		return ByteUtils.toByteArray( byteList );
-	}
-	
-	public Bike getBike125() {
-		return bike125;
-	}
-	public void setBike125(Bike bike125) {
-		this.bike125 = bike125;
-	}
-	
-	public Bike getBike250() {
-		return bike250;
-	}
-	public void setBike250(Bike bike250) {
-		this.bike250 = bike250;
-	}
-	
-	public Bike getBike500() {
-		return bike500;
-	}
-	public void setBike500(Bike bike500) {
-		this.bike500 = bike500;
 	}
 	
 }
