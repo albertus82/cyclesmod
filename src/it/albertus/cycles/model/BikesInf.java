@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -25,7 +23,7 @@ public class BikesInf {
 	public static final int FILE_CRC = 0x28A33682;
 	public static final short FILE_SIZE = 444;
 	
-	private final Map<Bike.Type, Bike> bikes = new TreeMap<Bike.Type, Bike>();
+	private final Bike[] bikes = new Bike[3];
 	
 	public BikesInf( final InputStream originalBikesInfInputStream ) throws IOException {
 		read( originalBikesInfInputStream );
@@ -41,9 +39,9 @@ public class BikesInf {
 		inf.close();
 		log.info( Messages.get( "msg.original.file.read", FILE_NAME ) );
 		
-		bikes.put( Bike.Type.CLASS_125, new Bike( inf125 ) );
-		bikes.put( Bike.Type.CLASS_250, new Bike( inf250 ) );
-		bikes.put( Bike.Type.CLASS_500, new Bike( inf500 ) );
+		bikes[0] = new Bike( Bike.Type.CLASS_125, inf125 );
+		bikes[1] = new Bike( Bike.Type.CLASS_250, inf250 );
+		bikes[2] = new Bike( Bike.Type.CLASS_500, inf500 );
 		log.info( Messages.get( "msg.original.file.parsed", FILE_NAME ) );
 	}
 	
@@ -67,7 +65,7 @@ public class BikesInf {
 	 */
 	private byte[] toByteArray() {
 		List<Byte> byteList = new ArrayList<Byte>( FILE_SIZE );
-		for ( Bike bike : bikes.values() ) {
+		for ( Bike bike : bikes ) {
 			byteList.addAll( bike.toByteList() );
 		}
 		if ( byteList.size() != FILE_SIZE ) {
@@ -77,15 +75,15 @@ public class BikesInf {
 	}
 
 	public Bike getBike( int displacement ) {
-		for ( Bike.Type bikeType : Bike.Type.values() ) {
-			if ( bikeType.getDisplacement() == displacement ) {
-				return bikes.get( bikeType );
+		for ( Bike bike : bikes ) {
+			if ( bike.getType().getDisplacement() == displacement ) {
+				return bike;
 			}
 		}
 		return null;
 	}
 	
-	public Map<Bike.Type, Bike> getBikes() {
+	public Bike[] getBikes() {
 		return bikes;
 	}
 	
