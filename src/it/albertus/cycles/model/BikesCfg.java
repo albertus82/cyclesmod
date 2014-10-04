@@ -9,6 +9,8 @@ import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
@@ -28,7 +30,7 @@ public class BikesCfg {
 		return properties;
 	}
 
-	public BikesCfg( BikesInf originalBikesInf, String path ) throws Exception {
+	public BikesCfg( final BikesInf originalBikesInf, final String path ) throws IllegalAccessException, InvocationTargetException, IOException {
 		log.info( Messages.get( "msg.reading.file", FILE_NAME ) );
 		BufferedReader br = null;
 		try {
@@ -45,7 +47,7 @@ public class BikesCfg {
 		log.info( Messages.get( "msg.file.read", FILE_NAME ) );
 	}
 	
-	private void writeDefaultBikesCfg( BikesInf originalBikesInf, String path ) throws Exception {
+	private void writeDefaultBikesCfg( final BikesInf originalBikesInf, final String path ) throws IllegalAccessException, InvocationTargetException, IOException {
         final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
 		final StringBuilder properties = new StringBuilder( Messages.get( "str.cfg.header" ) );
 		

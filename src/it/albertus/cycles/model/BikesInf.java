@@ -27,21 +27,11 @@ public class BikesInf {
 	private Bike bike250;
 	private Bike bike500;
 	
-	public Bike getBike125() {
-		return bike125;
-	}
-	public Bike getBike250() {
-		return bike250;
-	}
-	public Bike getBike500() {
-		return bike500;
-	}
-	
-	public BikesInf( InputStream is ) throws IOException {
+	public BikesInf( final InputStream is ) throws IOException {
 		read( is );
 	}
 	
-	private void read( InputStream is ) throws IOException {
+	private void read( final InputStream is ) throws IOException {
 		byte[] inf125 = new byte[ Bike.LENGTH ];
 		byte[] inf250 = new byte[ Bike.LENGTH ];
 		byte[] inf500 = new byte[ Bike.LENGTH ];
@@ -57,7 +47,7 @@ public class BikesInf {
 		log.info( Messages.get( "msg.original.file.parsed", BikesInf.FILE_NAME ) );
 	}
 	
-	public void write( String destinationPath ) throws IOException {
+	public void write( final String destinationPath ) throws IOException {
 		byte[] newBikesInf = this.toByteArray();
 		Checksum crc = new CRC32();
 		crc.update( newBikesInf, 0, newBikesInf.length );
@@ -84,6 +74,16 @@ public class BikesInf {
 			throw new IllegalStateException( Messages.get( "err.wrong.file.size", FILE_NAME, FILE_SIZE, byteList.size() ) );
 		}
 		return ByteUtils.toByteArray( byteList );
+	}
+	
+	public Bike getBike125() {
+		return bike125;
+	}
+	public Bike getBike250() {
+		return bike250;
+	}
+	public Bike getBike500() {
+		return bike500;
 	}
 	
 }
