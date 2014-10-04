@@ -11,19 +11,11 @@ import it.albertus.cycles.resources.Messages;
 import it.albertus.util.BeanUtils;
 
 import java.beans.Introspector;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StreamCorruptedException;
 import java.lang.reflect.Method;
 import java.util.Properties;
-import java.util.zip.CRC32;
-import java.util.zip.Checksum;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -87,77 +79,24 @@ public class CyclesMod {
 	
 	private void execute() throws Exception {
 		log.info( Messages.get( "msg.reading.original.file", BikesInf.FILE_NAME ) );
-		readOriginalBikesInf();
+		bikesInf = new BikesInf( new BikesZip().getInputStream() );
 		
 		log.info( Messages.get( "msg.applying.customizations" ) );
 		customize();
 		
 		log.info( Messages.get( "msg.preparing.new.file", BikesInf.FILE_NAME ) );
-		writeCustomBikesInf();
-	}
-	
-	private void writeCustomBikesInf() throws IOException {
-		byte[] newBikesInf = bikesInf.toByteArray();
-		Checksum crc = new CRC32();
-		crc.update( newBikesInf, 0, newBikesInf.length );
-		
-		log.info( Messages.get( "msg.configuration.changed", ( crc.getValue() == BikesInf.FILE_CRC ? ' ' + Messages.get( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
-
-		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( path + BikesInf.FILE_NAME ), BikesInf.FILE_SIZE );
-		bos.write( newBikesInf );
-		bos.flush();
-		bos.close();
-		log.info( Messages.get( "msg.new.file.written.into.path", BikesInf.FILE_NAME, "".equals( path ) ? '.' : path, String.format( "%X", crc.getValue() ) ) );
-	}
-	
-	private void readOriginalBikesInf() throws IOException {
-		log.info( Messages.get( "msg.opening.file", BikesInf.FILE_NAME ) );
-		InputStream is = getBikesInfInputStream();
-		
-		byte[] inf125 = new byte[ Bike.LENGTH ];
-		byte[] inf250 = new byte[ Bike.LENGTH ];
-		byte[] inf500 = new byte[ Bike.LENGTH ];
-		is.read( inf125 );
-		is.read( inf250 );
-		is.read( inf500 );
-		is.close();
-		log.info( Messages.get( "msg.original.file.read", BikesInf.FILE_NAME ) );
-		
-		Bike bike125 = new Bike( inf125 );
-		Bike bike250 = new Bike( inf250 );
-		Bike bike500 = new Bike( inf500 );
-		bikesInf = new BikesInf( bike125, bike250, bike500 );
-		log.info( Messages.get( "msg.original.file.parsed", BikesInf.FILE_NAME ) );
-	}
-	
-	private ZipInputStream getBikesInfInputStream() throws IOException {
-		ZipInputStream zis = null;
-		try {
-			zis = new ZipInputStream( getClass().getResourceAsStream( BikesZip.FILE_PATH + BikesZip.FILE_NAME ) );
-		}
-		catch ( Exception e ) {
-			throw new FileNotFoundException( Messages.get( "msg.file.not.found", BikesZip.FILE_PATH + BikesZip.FILE_NAME ) );
-		}
-		ZipEntry ze = zis.getNextEntry();
-		if ( ze.getCrc() != BikesInf.FILE_CRC ) {
-			throw new StreamCorruptedException( Messages.get( "err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format( "%X", BikesInf.FILE_CRC ), String.format( "%X", ze.getCrc() ) ) );
-		}
-		if ( ze.getSize() != BikesInf.FILE_SIZE ) {
-			throw new StreamCorruptedException( Messages.get( "err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, ze.getSize() ) );
-		}
-		log.info( Messages.get( "msg.original.file.opened", BikesInf.FILE_NAME, String.format( "%X", ze.getCrc() ) ) );
-		return zis;
+		bikesInf.write( path );
 	}
 	
 	private void customize() throws Exception {
 		// Lettura del file di properties BIKES.CFG...
 		bikesCfg = new BikesCfg( bikesInf, path );
-		Properties properties = bikesCfg.getProperties();
 		
 		// Elaborazione delle properties...
-		for ( Object objectKey : properties.keySet() ) {
+		for ( Object objectKey : bikesCfg.getProperties().keySet() ) {
 			String key = (String)objectKey;
-			String value = properties.getProperty( key );
+			String value = bikesCfg.getProperties().getProperty( key );
+			
 			if ( !StringUtils.isNumeric( value ) ) {
 				throw new PropertyException( Messages.get( "err.unsupported.property", key, value ) );
 			}
