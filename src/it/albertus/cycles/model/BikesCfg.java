@@ -51,7 +51,7 @@ public class BikesCfg {
         final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
 		final StringBuilder properties = new StringBuilder( Messages.get( "str.cfg.header" ) );
 		
-		for ( Bike.Type type : Bike.Type.values() ) {
+		for ( Bike.Class type : Bike.Class.values() ) {
 			String prefix = Integer.toString( type.getDisplacement() );
 			Bike bike = null;
 			for ( Method method : BikesInf.class.getMethods() ) {
