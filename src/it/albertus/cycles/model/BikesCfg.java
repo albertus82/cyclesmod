@@ -51,21 +51,16 @@ public class BikesCfg {
         final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
 		final StringBuilder properties = new StringBuilder( Messages.get( "str.cfg.header" ) );
 		
-		for ( Bike.Class type : Bike.Class.values() ) {
-			String prefix = Integer.toString( type.getDisplacement() );
-			Bike bike = null;
-			for ( Method method : BikesInf.class.getMethods() ) {
-				if ( method.getName().startsWith( BeanUtils.GETTER_PREFIX ) && method.getName().contains( prefix ) ) {
-					bike = (Bike)method.invoke( originalBikesInf );
-				}
-			}
-			
+		for ( Bike.Class bikeClass : originalBikesInf.getBikes().keySet() ) {
+			String prefix = Integer.toString( bikeClass.getDisplacement() );
+			Bike bike = originalBikesInf.getBikes().get( bikeClass );
+
 			if ( bike == null ) {
 				throw new IllegalStateException();
 			}
 			
 			properties.append( lineSeparator ).append( lineSeparator );
-			properties.append( "### ").append( type.getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.begin" ) + "... ###");
+			properties.append( "### ").append( bikeClass.getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.begin" ) + "... ###");
 			
 			// Settings
 			properties.append( lineSeparator );
@@ -106,7 +101,7 @@ public class BikesCfg {
 				properties.append( lineSeparator );
 			}
 			
-			properties.append( "### ").append( type.getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.end" ) + ". ###");
+			properties.append( "### ").append( bikeClass.getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.end" ) + ". ###");
 		}
 		
 		properties.append( lineSeparator ).append( lineSeparator );

@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
@@ -23,9 +25,7 @@ public class BikesInf {
 	public static final int FILE_CRC = 0x28A33682;
 	public static final short FILE_SIZE = 444;
 	
-	private Bike bike125;
-	private Bike bike250;
-	private Bike bike500;
+	private Map<Bike.Class, Bike> bikes = new TreeMap<Bike.Class, Bike>();
 	
 	public BikesInf( final InputStream originalBikesInfInputStream ) throws IOException {
 		read( originalBikesInfInputStream );
@@ -41,9 +41,9 @@ public class BikesInf {
 		inf.close();
 		log.info( Messages.get( "msg.original.file.read", FILE_NAME ) );
 		
-		this.bike125 = new Bike( inf125 );
-		this.bike250 = new Bike( inf250 );
-		this.bike500 = new Bike( inf500 );
+		bikes.put( Bike.Class.CC_125, new Bike( inf125 ) );
+		bikes.put( Bike.Class.CC_250, new Bike( inf250 ) );
+		bikes.put( Bike.Class.CC_500, new Bike( inf500 ) );
 		log.info( Messages.get( "msg.original.file.parsed", FILE_NAME ) );
 	}
 	
@@ -67,9 +67,9 @@ public class BikesInf {
 	 */
 	private byte[] toByteArray() {
 		List<Byte> byteList = new ArrayList<Byte>( FILE_SIZE );
-		byteList.addAll( bike125.toByteList() );
-		byteList.addAll( bike250.toByteList() );
-		byteList.addAll( bike500.toByteList() );
+		byteList.addAll( bikes.get( Bike.Class.CC_125 ).toByteList() );
+		byteList.addAll( bikes.get( Bike.Class.CC_250 ).toByteList() );
+		byteList.addAll( bikes.get( Bike.Class.CC_500 ).toByteList() );
 		if ( byteList.size() != FILE_SIZE ) {
 			throw new IllegalStateException( Messages.get( "err.wrong.file.size", FILE_NAME, FILE_SIZE, byteList.size() ) );
 		}
@@ -77,25 +77,16 @@ public class BikesInf {
 	}
 
 	public Bike getBike( int displacement ) {
-		switch ( displacement ) {
-		case 125:
-			return this.bike125;
-		case 250:
-			return this.bike250;
-		case 500:
-			return this.bike500;
+		for ( Bike.Class bikeClass : Bike.Class.values() ) {
+			if ( bikeClass.getDisplacement() == displacement ) {
+				return bikes.get( bikeClass );
+			}
 		}
 		return null;
 	}
 	
-	public Bike getBike125() {
-		return bike125;
-	}
-	public Bike getBike250() {
-		return bike250;
-	}
-	public Bike getBike500() {
-		return bike500;
+	public Map<Bike.Class, Bike> getBikes() {
+		return bikes;
 	}
 	
 }
