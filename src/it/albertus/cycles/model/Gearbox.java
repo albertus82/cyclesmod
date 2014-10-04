@@ -38,7 +38,7 @@ public class Gearbox extends BikesInfElement {
 		if ( newValue < MIN_VALUE || newValue > MAX_VALUE ) {
 			throw new PropertyException( Messages.get( "err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue ) );
 		}
-		return (int)newValue;
+		return (int) newValue;
 	}
 	
 	public int[] getRatios() {

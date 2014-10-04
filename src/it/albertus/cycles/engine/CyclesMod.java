@@ -94,7 +94,7 @@ public class CyclesMod {
 		
 		// Elaborazione delle properties...
 		for ( Object objectKey : bikesCfg.getProperties().keySet() ) {
-			String key = (String)objectKey;
+			String key = (String) objectKey;
 			String value = bikesCfg.getProperties().getProperty( key );
 			
 			if ( !StringUtils.isNumeric( value ) ) {
