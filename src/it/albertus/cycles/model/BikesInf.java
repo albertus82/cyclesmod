@@ -27,24 +27,24 @@ public class BikesInf {
 	private Bike bike250;
 	private Bike bike500;
 	
-	public BikesInf( final InputStream is ) throws IOException {
-		read( is );
+	public BikesInf( final InputStream originalBikesInfInputStream ) throws IOException {
+		read( originalBikesInfInputStream );
 	}
 	
-	private void read( final InputStream is ) throws IOException {
+	private void read( final InputStream inf ) throws IOException {
 		byte[] inf125 = new byte[ Bike.LENGTH ];
 		byte[] inf250 = new byte[ Bike.LENGTH ];
 		byte[] inf500 = new byte[ Bike.LENGTH ];
-		is.read( inf125 );
-		is.read( inf250 );
-		is.read( inf500 );
-		is.close();
-		log.info( Messages.get( "msg.original.file.read", BikesInf.FILE_NAME ) );
+		inf.read( inf125 );
+		inf.read( inf250 );
+		inf.read( inf500 );
+		inf.close();
+		log.info( Messages.get( "msg.original.file.read", FILE_NAME ) );
 		
 		this.bike125 = new Bike( inf125 );
 		this.bike250 = new Bike( inf250 );
 		this.bike500 = new Bike( inf500 );
-		log.info( Messages.get( "msg.original.file.parsed", BikesInf.FILE_NAME ) );
+		log.info( Messages.get( "msg.original.file.parsed", FILE_NAME ) );
 	}
 	
 	public void write( final String destinationPath ) throws IOException {
