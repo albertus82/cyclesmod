@@ -124,18 +124,7 @@ public class CyclesMod {
 	}
 	
 	private Bike getBike( final String key ) throws Exception {
-		Bike bike = null;
-		
-		for ( Bike.Type type : Bike.Type.values() ) {
-			if ( key.startsWith( type.getDisplacement() + "." ) ) {
-				for ( Method method : BikesInf.class.getMethods() ) {
-					if ( method.getName().startsWith( BeanUtils.GETTER_PREFIX ) && method.getName().contains( Integer.toString( type.getDisplacement() ) ) ) {
-						bike = (Bike)method.invoke( bikesInf );
-						break;
-					}
-				}
-			}
-		}
+		Bike bike = bikesInf.getBike( Integer.parseInt( StringUtils.substringBefore( key, "." ) ) );
 		
 		if ( bike == null ) {
 			Properties properties = bikesCfg.getProperties();

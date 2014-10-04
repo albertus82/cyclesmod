@@ -75,6 +75,18 @@ public class BikesInf {
 		}
 		return ByteUtils.toByteArray( byteList );
 	}
+
+	public Bike getBike( int displacement ) {
+		switch ( displacement ) {
+		case 125:
+			return this.bike125;
+		case 250:
+			return this.bike250;
+		case 500:
+			return this.bike500;
+		}
+		return null;
+	}
 	
 	public Bike getBike125() {
 		return bike125;
