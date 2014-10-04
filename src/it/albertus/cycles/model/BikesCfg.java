@@ -20,7 +20,7 @@ public class BikesCfg {
 	
 	private static final Logger log = LoggerFactory.getLogger( BikesCfg.class );
 	
-	public static final String FILE_NAME = "BIKES.CFG";
+	private static final String FILE_NAME = "BIKES.CFG";
 	
 	private final Properties properties = new Properties();
 
@@ -29,20 +29,20 @@ public class BikesCfg {
 	}
 
 	public BikesCfg( BikesInf originalBikesInf, String path ) throws Exception {
-		log.info( Messages.get( "msg.reading.file", BikesCfg.FILE_NAME ) );
+		log.info( Messages.get( "msg.reading.file", FILE_NAME ) );
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader( new FileReader( path + BikesCfg.FILE_NAME ) );
+			br = new BufferedReader( new FileReader( path + FILE_NAME ) );
 		}
 		catch ( FileNotFoundException fnfe ) {
-			log.info( Messages.get( "msg.file.not.found.creating.default", BikesCfg.FILE_NAME ) );
+			log.info( Messages.get( "msg.file.not.found.creating.default", FILE_NAME ) );
 			writeDefaultBikesCfg( originalBikesInf, path );
-			log.info( Messages.get( "msg.default.file.created", BikesCfg.FILE_NAME ) );
-			br = new BufferedReader( new FileReader( path + BikesCfg.FILE_NAME ) );
+			log.info( Messages.get( "msg.default.file.created", FILE_NAME ) );
+			br = new BufferedReader( new FileReader( path + FILE_NAME ) );
 		}
 		properties.load( br );
 		br.close();
-		log.info( Messages.get( "msg.file.read", BikesCfg.FILE_NAME ) );
+		log.info( Messages.get( "msg.file.read", FILE_NAME ) );
 	}
 	
 	private void writeDefaultBikesCfg( BikesInf originalBikesInf, String path ) throws Exception {
