@@ -25,7 +25,7 @@ public class BikesInf {
 	public static final int FILE_CRC = 0x28A33682;
 	public static final short FILE_SIZE = 444;
 	
-	private Map<Bike.Class, Bike> bikes = new TreeMap<Bike.Class, Bike>();
+	private final Map<Bike.Type, Bike> bikes = new TreeMap<Bike.Type, Bike>();
 	
 	public BikesInf( final InputStream originalBikesInfInputStream ) throws IOException {
 		read( originalBikesInfInputStream );
@@ -41,9 +41,9 @@ public class BikesInf {
 		inf.close();
 		log.info( Messages.get( "msg.original.file.read", FILE_NAME ) );
 		
-		bikes.put( Bike.Class.CC_125, new Bike( inf125 ) );
-		bikes.put( Bike.Class.CC_250, new Bike( inf250 ) );
-		bikes.put( Bike.Class.CC_500, new Bike( inf500 ) );
+		bikes.put( Bike.Type.CLASS_125, new Bike( inf125 ) );
+		bikes.put( Bike.Type.CLASS_250, new Bike( inf250 ) );
+		bikes.put( Bike.Type.CLASS_500, new Bike( inf500 ) );
 		log.info( Messages.get( "msg.original.file.parsed", FILE_NAME ) );
 	}
 	
@@ -67,9 +67,9 @@ public class BikesInf {
 	 */
 	private byte[] toByteArray() {
 		List<Byte> byteList = new ArrayList<Byte>( FILE_SIZE );
-		byteList.addAll( bikes.get( Bike.Class.CC_125 ).toByteList() );
-		byteList.addAll( bikes.get( Bike.Class.CC_250 ).toByteList() );
-		byteList.addAll( bikes.get( Bike.Class.CC_500 ).toByteList() );
+		for ( Bike bike : bikes.values() ) {
+			byteList.addAll( bike.toByteList() );
+		}
 		if ( byteList.size() != FILE_SIZE ) {
 			throw new IllegalStateException( Messages.get( "err.wrong.file.size", FILE_NAME, FILE_SIZE, byteList.size() ) );
 		}
@@ -77,15 +77,15 @@ public class BikesInf {
 	}
 
 	public Bike getBike( int displacement ) {
-		for ( Bike.Class bikeClass : Bike.Class.values() ) {
-			if ( bikeClass.getDisplacement() == displacement ) {
-				return bikes.get( bikeClass );
+		for ( Bike.Type bikeType : Bike.Type.values() ) {
+			if ( bikeType.getDisplacement() == displacement ) {
+				return bikes.get( bikeType );
 			}
 		}
 		return null;
 	}
 	
-	public Map<Bike.Class, Bike> getBikes() {
+	public Map<Bike.Type, Bike> getBikes() {
 		return bikes;
 	}
 	

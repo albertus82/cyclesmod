@@ -10,14 +10,14 @@ import java.util.List;
 
 public class Bike extends BikesInfElement {
 	
-	public enum Class {
-		CC_125( 125 ),
-		CC_250( 250 ),
-		CC_500( 500 );
+	protected enum Type {
+		CLASS_125( 125 ),
+		CLASS_250( 250 ),
+		CLASS_500( 500 );
 		
 		private int displacement;
 		
-		private Class( int displacement ) {
+		private Type( int displacement ) {
 			this.displacement = displacement;
 		}
 		
