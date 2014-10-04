@@ -173,7 +173,7 @@ public class CyclesMod {
 		if ( StringUtils.isNotEmpty( suffix ) && StringUtils.isNumeric( suffix ) && Integer.parseInt( suffix ) < bike.getGearbox().getRatios().length ) {
 			int index = Integer.parseInt( suffix );
 			int defaultValue = bike.getGearbox().getRatios()[ index ];
-			if ( defaultValue != newValue ) { 
+			if ( defaultValue != newValue ) {
 				bike.getGearbox().getRatios()[ index ] = newValue;
 				logChange( key, defaultValue, newValue );
 			}
