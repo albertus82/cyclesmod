@@ -147,16 +147,13 @@ public class CyclesMod {
 	
 	private void parseTorqueProperty( final String key ) throws Exception {
 		Properties properties = bikesCfg.getProperties();
-		short newValue = Short.parseShort( properties.getProperty( key ) );
-		if ( newValue < Torque.MIN_VALUE || newValue > Torque.MAX_VALUE ) {
-			throw new PropertyException( Messages.get( "err.illegal.value", Torque.MIN_VALUE, Torque.MAX_VALUE, key, newValue ) );
-		}
+		short newValue = Torque.parse( key, properties.getProperty( key ) );
 		
 		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Torque.class.getSimpleName() ) + '.' );
 		if ( StringUtils.isNotEmpty( suffix ) && StringUtils.isNumeric( suffix ) && Integer.parseInt( suffix ) < bike.getTorque().getCurve().length ) {
 			int index = Integer.parseInt( suffix );
-			int defaultValue = bike.getTorque().getCurve()[ index ];
+			short defaultValue = bike.getTorque().getCurve()[ index ];
 			if ( defaultValue != newValue ) {
 				bike.getTorque().getCurve()[ index ] = newValue;
 				logChange( key, defaultValue, newValue );
@@ -169,10 +166,7 @@ public class CyclesMod {
 	
 	private void parseGearboxProperty( final String key ) throws Exception {
 		Properties properties = bikesCfg.getProperties();
-		int newValue = Integer.parseInt( properties.getProperty( key ) );
-		if ( newValue < Gearbox.MIN_VALUE || newValue > Gearbox.MAX_VALUE ) {
-			throw new PropertyException( Messages.get( "err.illegal.value", Gearbox.MIN_VALUE, Gearbox.MAX_VALUE, key, newValue ) );
-		}
+		int newValue = Gearbox.parse( key, properties.getProperty( key ) );
 		
 		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Gearbox.class.getSimpleName() ) + '.' );
@@ -191,10 +185,7 @@ public class CyclesMod {
 	
 	private void parseSettingProperty( final String key ) throws Exception {
 		Properties properties = bikesCfg.getProperties();
-		int newValue = Integer.parseInt( properties.getProperty( key ) );
-		if ( newValue < Settings.MIN_VALUE || newValue > Settings.MAX_VALUE ) {
-			throw new PropertyException( Messages.get( "err.illegal.value", Settings.MIN_VALUE, Settings.MAX_VALUE, key, newValue ) );
-		}
+		int newValue = Settings.parse( key, properties.getProperty( key ) );
 		
 		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Settings.class.getSimpleName() ) + '.' );

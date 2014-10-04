@@ -16,8 +16,8 @@ public class BikesZip {
 	
 	private static final Logger log = LoggerFactory.getLogger( BikesZip.class );
 	
-	private static final char PACKAGE_SEPARATOR = '\u002e';
-	private static final char FILE_SEPARATOR = '\u002f';
+	private static final char PACKAGE_SEPARATOR = '\u002E';
+	private static final char FILE_SEPARATOR = '\u002F';
 	
 	public static final String FILE_NAME = "bikes.zip";
 	

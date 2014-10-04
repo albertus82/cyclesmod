@@ -1,5 +1,7 @@
 package it.albertus.cycles.model;
 
+import it.albertus.cycles.engine.PropertyException;
+import it.albertus.cycles.resources.Messages;
 import it.albertus.util.ByteUtils;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class Settings extends BikesInfElement {
 	private int unknown3; // 18-19: ?
 	private int rpmDownshift; // 20-21: regime di scalata con cambio automatico (skill < 3).
 	
-	public Settings(int gearsCount, int rpmRedMark, int rpmLimit, int rpmRedMarkGracePeriod, int skiddingThreshold, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int rpmDownshift) {
+	public Settings( int gearsCount, int rpmRedMark, int rpmLimit, int rpmRedMarkGracePeriod, int skiddingThreshold, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int rpmDownshift ) {
 		this.gearsCount = gearsCount;
 		this.rpmRedMark = rpmRedMark;
 		this.rpmLimit = rpmLimit;
@@ -54,6 +56,14 @@ public class Settings extends BikesInfElement {
 		byteList.addAll( ByteUtils.toByteList( unknown3 ) );
 		byteList.addAll( ByteUtils.toByteList( rpmDownshift ) );
 		return byteList;
+	}
+	
+	public static int parse( final String key, final String value ) {
+		long newValue = Long.parseLong( value );
+		if ( newValue < MIN_VALUE || newValue > MAX_VALUE ) {
+			throw new PropertyException( Messages.get( "err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue ) );
+		}
+		return (int)newValue;
 	}
 	
 	public int getRpmRedMark() {

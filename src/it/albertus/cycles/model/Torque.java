@@ -1,5 +1,6 @@
 package it.albertus.cycles.model;
 
+import it.albertus.cycles.engine.PropertyException;
 import it.albertus.cycles.resources.Messages;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class Torque extends BikesInfElement {
 	
 	private final short[] curve = new short[ LENGTH ]; // 42-147: curva di coppia (intervallo regime considerato: 768-14335 RPM).
 	
-	public Torque(short[] curve) {
+	public Torque( final short[] curve ) {
 		if ( curve.length > LENGTH ) {
 			throw new IllegalArgumentException( Messages.get( "err.torque", LENGTH, curve.length ) );
 		}
@@ -33,12 +34,20 @@ public class Torque extends BikesInfElement {
 		return byteList;
 	}
 	
-	public short[] getCurve() {
-		return curve;
+	public static int getRpm( final int index ) {
+		return BASE_RPM + POINT_WIDTH_RPM * index;
 	}
 	
-	public static int getRpm( int index ) {
-		return BASE_RPM + POINT_WIDTH_RPM * index;
+	public static short parse( final String key, final String value ) {
+		long newValue = Long.parseLong( value );
+		if ( newValue < MIN_VALUE || newValue > MAX_VALUE ) {
+			throw new PropertyException( Messages.get( "err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue ) );
+		}
+		return (short)newValue;
+	}
+	
+	public short[] getCurve() {
+		return curve;
 	}
 	
 }
