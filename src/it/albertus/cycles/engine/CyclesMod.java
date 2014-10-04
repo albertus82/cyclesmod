@@ -1,5 +1,6 @@
 package it.albertus.cycles.engine;
 
+import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -34,9 +35,6 @@ public class CyclesMod {
 	
 	private static final String VERSION_FILE_PATH = "/";
 	private static final String VERSION_FILE_NAME = "version.properties";
-	
-	private static final String ZIP_FILE_PATH = '/' + StringUtils.substringBeforeLast( CyclesMod.class.getPackage().getName(), "." ).replace( '.', '/' ) + "/data/";
-	private static final String ZIP_FILE_NAME = "bikes.zip";
 	
 	private static final String DEFAULT_DESTINATION_PATH = "";
 	
@@ -135,10 +133,10 @@ public class CyclesMod {
 	private ZipInputStream getBikesInfInputStream() throws IOException {
 		ZipInputStream zis = null;
 		try {
-			zis = new ZipInputStream( getClass().getResourceAsStream( ZIP_FILE_PATH + ZIP_FILE_NAME ) );
+			zis = new ZipInputStream( getClass().getResourceAsStream( BikesZip.FILE_PATH + BikesZip.FILE_NAME ) );
 		}
 		catch ( Exception e ) {
-			throw new FileNotFoundException( Messages.get( "msg.file.not.found", ZIP_FILE_PATH + ZIP_FILE_NAME ) );
+			throw new FileNotFoundException( Messages.get( "msg.file.not.found", BikesZip.FILE_PATH + BikesZip.FILE_NAME ) );
 		}
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != BikesInf.FILE_CRC ) {
