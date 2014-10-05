@@ -61,7 +61,7 @@ public class CyclesMod {
 		}
 		catch ( Exception e ) {
 			if ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) || StringUtils.isNotEmpty( e.getMessage() ) ) {
-				log.error( e.getClass().getName() + ": " + ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() ) );
+				log.error( e.getClass().getSimpleName() + ": " + ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() ) );
 			}
 			else {
 				throw e; // Le eccezioni prive di messaggio vengono semplicemente rilanciate.
@@ -127,8 +127,7 @@ public class CyclesMod {
 		Bike bike = bikesInf.getBike( Integer.parseInt( StringUtils.substringBefore( key, "." ) ) );
 		
 		if ( bike == null ) {
-			Properties properties = bikesCfg.getProperties();
-			throw new PropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
+			throw new PropertyException( Messages.get( "err.unsupported.property", key, bikesCfg.getProperties().getProperty( key ) ) );
 		}
 		
 		return bike;
