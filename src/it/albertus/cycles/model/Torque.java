@@ -11,7 +11,7 @@ public class Torque extends BikesInfElement {
 	public static final int LENGTH = 106;
 	public static final short MIN_VALUE = 0;
 	public static final short MAX_VALUE = 255;
-	public static final short BASE_RPM = 768;
+	public static final short BASE_RPM = 768; // 0-767: overlap con Gearbox '7' (0-255), '8' (256-511) e '9' (512-767). Il range 0-767 RPM e' comunque inferiore al regime minimo, quindi di fatto inutile.
 	public static final short POINT_WIDTH_RPM = 128;
 	
 	private final short[] curve = new short[ LENGTH ]; // 42-147: curva di coppia (intervallo regime considerato: 768-14335 RPM).
