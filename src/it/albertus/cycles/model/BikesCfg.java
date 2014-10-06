@@ -1,7 +1,6 @@
 package it.albertus.cycles.model;
 
 import it.albertus.cycles.resources.Messages;
-import it.albertus.util.BeanUtils;
 
 import java.beans.Introspector;
 import java.io.BufferedReader;
@@ -10,11 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Properties;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +22,7 @@ public class BikesCfg {
 	
 	private final Properties properties = new Properties();
 
-	public BikesCfg( final BikesInf originalBikesInf, final String path ) throws IllegalAccessException, InvocationTargetException, IOException {
+	public BikesCfg( final BikesInf originalBikesInf, final String path ) throws IOException {
 		log.info( Messages.get( "msg.reading.file", FILE_NAME ) );
 		BufferedReader br = null;
 		try {
@@ -43,8 +39,8 @@ public class BikesCfg {
 		log.info( Messages.get( "msg.file.read", FILE_NAME ) );
 	}
 	
-	private void writeDefaultBikesCfg( final BikesInf originalBikesInf, final String path ) throws IllegalAccessException, InvocationTargetException, IOException {
-        final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
+	private void writeDefaultBikesCfg( final BikesInf originalBikesInf, final String path ) throws IOException {
+		final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
 		final StringBuilder properties = new StringBuilder( Messages.get( "str.cfg.header" ) );
 		
 		for ( Bike bike : originalBikesInf.getBikes() ) {
@@ -57,13 +53,11 @@ public class BikesCfg {
 			properties.append( lineSeparator );
 			properties.append( "# " ).append( Settings.class.getSimpleName() ).append( " #" );
 			properties.append( lineSeparator );
-			for ( Method method : Settings.class.getMethods() ) {
-				if ( method.getName().startsWith( BeanUtils.GETTER_PREFIX ) && method.getReturnType() != null && "int".equals( method.getReturnType().getName() ) ) {
-					properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Settings.class.getSimpleName() ) ).append( '.' ).append( Introspector.decapitalize( StringUtils.substringAfter( method.getName(), BeanUtils.GETTER_PREFIX ) ) );
-					properties.append( '=' );
-					properties.append( (Integer)method.invoke( bike.getSettings() ) );
-					properties.append( lineSeparator );
-				}
+			for ( Setting setting : bike.getSettings().getValues().keySet() ) {
+				properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Settings.class.getSimpleName() ) ).append( '.' ).append( setting.toString() );
+				properties.append( '=' );
+				properties.append( (int) bike.getSettings().getValues().get( setting ) );
+				properties.append( lineSeparator );
 			}
 			
 			// Gearbox
