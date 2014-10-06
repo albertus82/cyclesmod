@@ -56,7 +56,7 @@ public class BikesCfg {
 			for ( Setting setting : bike.getSettings().getValues().keySet() ) {
 				properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Settings.class.getSimpleName() ) ).append( '.' ).append( setting.toString() );
 				properties.append( '=' );
-				properties.append( (int) bike.getSettings().getValues().get( setting ) );
+				properties.append( bike.getSettings().getValues().get( setting ).intValue() );
 				properties.append( lineSeparator );
 			}
 			
