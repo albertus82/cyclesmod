@@ -5,16 +5,15 @@ import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.model.Gearbox;
+import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
-import it.albertus.util.BeanUtils;
 
 import java.beans.Introspector;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
@@ -77,7 +76,7 @@ public class CyclesMod {
 		return Messages.get( "msg.welcome", version.get( "version.number" ), version.get( "version.date" ) );
 	}
 	
-	private void execute() throws Exception {
+	private void execute() throws IOException {
 		log.info( Messages.get( "msg.reading.original.file", BikesInf.FILE_NAME ) );
 		bikesInf = new BikesInf( new BikesZip().getInputStream() );
 		
@@ -88,7 +87,7 @@ public class CyclesMod {
 		bikesInf.write( path );
 	}
 	
-	private void customize() throws Exception {
+	private void customize() throws IOException {
 		// Lettura del file di properties BIKES.CFG...
 		bikesCfg = new BikesCfg( bikesInf, path );
 		
@@ -123,17 +122,15 @@ public class CyclesMod {
 		log.info( Messages.get( "msg.customizations.applied", changesCount ) );
 	}
 	
-	private Bike getBike( final String key ) throws Exception {
+	private Bike getBike( final String key ) {
 		Bike bike = bikesInf.getBike( Integer.parseInt( StringUtils.substringBefore( key, "." ) ) );
-		
 		if ( bike == null ) {
 			throw new PropertyException( Messages.get( "err.unsupported.property", key, bikesCfg.getProperties().getProperty( key ) ) );
 		}
-		
 		return bike;
 	}
 	
-	private void parseTorqueProperty( final String key ) throws Exception {
+	private void parseTorqueProperty( final String key ) {
 		Properties properties = bikesCfg.getProperties();
 		short newValue = Torque.parse( key, properties.getProperty( key ) );
 		
@@ -152,7 +149,7 @@ public class CyclesMod {
 		}
 	}
 	
-	private void parseGearboxProperty( final String key ) throws Exception {
+	private void parseGearboxProperty( final String key ) {
 		Properties properties = bikesCfg.getProperties();
 		int newValue = Gearbox.parse( key, properties.getProperty( key ) );
 		
@@ -171,26 +168,17 @@ public class CyclesMod {
 		}
 	}
 	
-	private void parseSettingProperty( final String key ) throws Exception {
+	private void parseSettingProperty( final String key ) {
 		Properties properties = bikesCfg.getProperties();
 		int newValue = Settings.parse( key, properties.getProperty( key ) );
 		
 		Bike bike = getBike( key );
 		String suffix = StringUtils.substringAfter( key, Introspector.decapitalize( Settings.class.getSimpleName() ) + '.' );
-		Method setter = null;
-		Method getter = null;
-		for ( Method method : Settings.class.getMethods() ) {
-			if ( method.getName().equals( BeanUtils.SETTER_PREFIX + StringUtils.capitalize( suffix ) ) ) {
-				setter = method;
-			}
-			if ( method.getName().equals( BeanUtils.GETTER_PREFIX + StringUtils.capitalize( suffix ) ) ) {
-				getter = method;
-			}
-		}
-		if ( setter != null && getter != null ) {
-			int defaultValue = (Integer)getter.invoke( bike.getSettings() );
+		Setting setting = Setting.getSetting( suffix );
+		if ( setting != null ) {
+			int defaultValue = bike.getSettings().getValues().get( setting );
 			if ( newValue != defaultValue ) {
-				setter.invoke( bike.getSettings(), newValue );
+				bike.getSettings().getValues().put( setting, newValue );
 				logChange( key, defaultValue, newValue );
 			}
 		}
