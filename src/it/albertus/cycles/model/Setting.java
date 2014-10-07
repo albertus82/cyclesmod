@@ -17,6 +17,7 @@ public enum Setting { // The order matters.
 	UNKNOWN_3, // 18-19: ?
 	RPM_DOWNSHIFT; // 20-21: regime di scalata con cambio automatico (skill < 3).
 	
+	@Override
 	public String toString() {
 		return StringUtils.uncapitalize( WordUtils.capitalizeFully( this.name(), new char[] {'_'} ).replace( "_", "" ) );
 	}
