@@ -50,11 +50,6 @@ public class Settings extends BikesInfElement {
 		return (int) newValue;
 	}
 	
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString( this );
-	}
-	
 	public Map<Setting, Integer> getValues() {
 		return values;
 	}
