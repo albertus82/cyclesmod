@@ -6,7 +6,7 @@ import org.apache.commons.lang.WordUtils;
 public enum Setting { // The order matters.
 	
 	GEARS_COUNT, // 0-1: numero di marce del cambio (solo lsB).
-	RPM_RED_MARK, // 2-3: regime red mark min 8500 (stessa scala del regime limitatore, il motore si rompe quando regime >= regime red mark per piu' di qualche secondo; valori <8500 sono considerati =8500).
+	RPM_REDLINE, // 2-3: regime redline, min 8500 (stessa scala del regime limitatore, il motore si rompe quando regime >= regime red mark per piu' di qualche secondo; valori <8500 sono considerati =8500).
 	RPM_LIMIT, // 4-5: regime limitatore, max 14335 (il contagiri si blocca ma la moto conserva le prestazioni di accelerazione a quel regime, quindi la coppia a quel regime deve essere azzerata se si vuole interrompere l'accelerazione della moto).
 	OVERSPEED_GRACE_PERIOD, // 6-7: periodo di grazia su red mark (valore alto: il motore si rompe dopo piu' tempo. Per valori msB >=0x80 si rompe subito).
 	GRIP, // 8-9: soglia di slittamento in sterzata (valore alto: slitta meno).
