@@ -69,8 +69,8 @@ public class CyclesMod {
 	}
 
 	private static String getWelcomeMessage() throws IOException {
-		InputStream is = CyclesMod.class.getResourceAsStream( VERSION_FILE_PATH + VERSION_FILE_NAME );
 		Properties version = new Properties();
+		InputStream is = CyclesMod.class.getResourceAsStream( VERSION_FILE_PATH + VERSION_FILE_NAME );
 		version.load( is );
 		is.close();
 		return Messages.get( "msg.welcome", version.get( "version.number" ), version.get( "version.date" ) );
