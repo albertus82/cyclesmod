@@ -97,7 +97,7 @@ public class CyclesMod {
 			String value = bikesCfg.getProperties().getProperty( key );
 			
 			if ( !StringUtils.isNumeric( value ) ) {
-				throw new PropertyException( Messages.get( "err.unsupported.property", key, value ) );
+				throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 			}
 			
 			// Settings
@@ -116,7 +116,7 @@ public class CyclesMod {
 			}
 			
 			else {
-				throw new PropertyException( Messages.get( "err.unsupported.property", key, value ) );
+				throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 			}
 		}
 		log.info( Messages.get( "msg.customizations.applied", changesCount ) );
@@ -125,7 +125,7 @@ public class CyclesMod {
 	private Bike getBike( final String key ) {
 		Bike bike = bikesInf.getBike( Integer.parseInt( StringUtils.substringBefore( key, "." ) ) );
 		if ( bike == null ) {
-			throw new PropertyException( Messages.get( "err.unsupported.property", key, bikesCfg.getProperties().getProperty( key ) ) );
+			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, bikesCfg.getProperties().getProperty( key ) ) );
 		}
 		return bike;
 	}
@@ -145,7 +145,7 @@ public class CyclesMod {
 			}
 		}
 		else {
-			throw new PropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
+			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
 	
@@ -164,7 +164,7 @@ public class CyclesMod {
 			}
 		}
 		else {
-			throw new PropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
+			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
 	
@@ -183,7 +183,7 @@ public class CyclesMod {
 			}
 		}
 		else {
-			throw new PropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
+			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, properties.getProperty( key ) ) );
 		}
 	}
 	
