@@ -1,14 +1,15 @@
 package it.albertus.cycles.gui;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class Property {
+public class FormProperty {
 
 	private Label label;
 	private Text text;
 
-	public Property(Label label, Text text) {
+	public FormProperty(Label label, Text text) {
 		this.label = label;
 		this.text = text;
 	}
@@ -19,6 +20,15 @@ public class Property {
 
 	public Text getText() {
 		return text;
+	}
+	
+	public String getValue() {
+		if ( text != null ) {
+			return StringUtils.trimToEmpty( text.getText() );
+		}
+		else {
+			return "";
+		}
 	}
 
 }

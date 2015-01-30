@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -21,29 +23,51 @@ public class BikesCfg {
 	private static final String FILE_NAME = "BIKES.CFG";
 	
 	private final Properties properties = new Properties();
+	
+	public BikesCfg( final BikesInf bikesInf ) {
+		StringReader reader = new StringReader( createProperties( bikesInf ) );
+		try {
+			populateProperties( reader );
+		}
+		catch ( IOException ioe ) {} // No exception possible with StringReader!
+	}
+
+	private void populateProperties(Reader reader) throws IOException {
+		this.properties.load( reader );	
+		reader.close();
+	}
 
 	public BikesCfg( final BikesInf originalBikesInf, final String path ) throws IOException {
 		log.info( Messages.get( "msg.reading.file", FILE_NAME ) );
-		BufferedReader br = null;
+		BufferedReader reader = null;
 		try {
-			br = new BufferedReader( new FileReader( path + FILE_NAME ) );
+			reader = new BufferedReader( new FileReader( path + FILE_NAME ) );
 		}
 		catch ( FileNotFoundException fnfe ) {
 			log.info( Messages.get( "msg.file.not.found.creating.default", FILE_NAME ) );
 			writeDefaultBikesCfg( originalBikesInf, path );
 			log.info( Messages.get( "msg.default.file.created", FILE_NAME ) );
-			br = new BufferedReader( new FileReader( path + FILE_NAME ) );
+			reader = new BufferedReader( new FileReader( path + FILE_NAME ) );
 		}
-		properties.load( br );
-		br.close();
+		populateProperties( reader );
 		log.info( Messages.get( "msg.file.read", FILE_NAME ) );
 	}
 	
 	private void writeDefaultBikesCfg( final BikesInf originalBikesInf, final String path ) throws IOException {
+		final String properties = createProperties(originalBikesInf);
+
+		// Salvataggio...
+		BufferedWriter bw = new BufferedWriter( new FileWriter( path + FILE_NAME ) );
+		bw.write( properties.toString() );
+		bw.flush();
+		bw.close();
+	}
+
+	private String createProperties( final BikesInf bikesInf ) {
 		final String lineSeparator = java.security.AccessController.doPrivileged( new sun.security.action.GetPropertyAction( "line.separator" ) );
 		final StringBuilder properties = new StringBuilder( Messages.get( "str.cfg.header" ) );
 		
-		for ( Bike bike : originalBikesInf.getBikes() ) {
+		for ( Bike bike : bikesInf.getBikes() ) {
 			String prefix = Integer.toString( bike.getType().getDisplacement() );
 
 			properties.append( lineSeparator ).append( lineSeparator );
@@ -91,12 +115,7 @@ public class BikesCfg {
 		
 		properties.append( lineSeparator ).append( lineSeparator );
 		properties.append( Messages.get( "str.cfg.footer" ) );
-
-		// Salvataggio...
-		BufferedWriter bw = new BufferedWriter( new FileWriter( path + FILE_NAME ) );
-		bw.write( properties.toString() );
-		bw.flush();
-		bw.close();
+		return properties.toString();
 	}
 	
 	public Properties getProperties() {
