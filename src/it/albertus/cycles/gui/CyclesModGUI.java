@@ -256,7 +256,7 @@ public class CyclesModGUI extends PropertyParser {
 				Text text = new Text(gearboxGroup, SWT.BORDER);
 				text.setText(Integer.toString(ratio));
 				text.setTextLimit(5);
-				formProperties.put(key, new FormProperty(label, text));
+				formProperties.put(key, new FormProperty(label, text) );
 				index++;
 			}
 
