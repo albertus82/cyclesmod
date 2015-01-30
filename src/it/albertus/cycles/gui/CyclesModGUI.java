@@ -59,10 +59,10 @@ public class CyclesModGUI extends PropertyParser {
 		GridLayout shellLayout = new GridLayout();
 		shellLayout.numColumns = 1;
 		shell.setLayout(shellLayout);
+		shell.setSize(820, 680);
 
 		// Tab
 		final TabFolder tabFolder = new TabFolder(shell, SWT.BORDER);
-		// tabFolder.setSize(750, 500);
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		tabFolder.setLayout(gridLayout);
@@ -195,7 +195,7 @@ public class CyclesModGUI extends PropertyParser {
 			}
 		});
 
-		shell.pack();
+//		shell.pack();
 
 		return shell;
 	}
@@ -235,27 +235,39 @@ public class CyclesModGUI extends PropertyParser {
 			torqueGroup.setLayout(torqueGroupGridLayout);
 
 			// Settings
+			GridData gridData = new GridData();
+		    gridData.minimumWidth = 40;
+		    gridData.grabExcessHorizontalSpace=true;
 			Map<Setting, Integer> settings = bike.getSettings().getValues();
 			for (Setting setting : settings.keySet()) {
-				String key = BikesCfg.buildPropertyKey(bikeType, Settings.class, setting.toString() ); // TODO esternalizzare il pattern
+				String key = BikesCfg.buildPropertyKey(bikeType, Settings.class, setting.toString() );
 				Label label = new Label(settingsGroup, SWT.NULL);
 				label.setText(setting.toString());
+				label.setToolTipText( key );
 				Text text = new Text(settingsGroup, SWT.BORDER);
 				text.setText( settings.get(setting).toString());
 				text.setTextLimit(5);
+				// TODO tooltip con valore di default
+				text.setLayoutData(gridData);
 				formProperties.put(key, new FormProperty(label, text));
 			}
 
 			// Gearbox
 			Gearbox gearbox = bike.getGearbox();
 			int index = 0;
+			gridData = new GridData();
+		    gridData.minimumWidth = 40;
+		    gridData.grabExcessHorizontalSpace=true;
 			for (int ratio : gearbox.getRatios()) {
-				String key = BikesCfg.buildPropertyKey(bikeType, Gearbox.class, index ); // TODO esternalizzare il pattern
+				String key = BikesCfg.buildPropertyKey(bikeType, Gearbox.class, index );
 				Label label = new Label(gearboxGroup, SWT.NULL);
 				label.setText("Gear " + index);
+				label.setToolTipText( key );
 				Text text = new Text(gearboxGroup, SWT.BORDER);
 				text.setText(Integer.toString(ratio));
 				text.setTextLimit(5);
+				// TODO tooltip con valore di default
+			    text.setLayoutData(gridData);
 				formProperties.put(key, new FormProperty(label, text) );
 				index++;
 			}
@@ -263,13 +275,19 @@ public class CyclesModGUI extends PropertyParser {
 			// Torque
 			Torque torque = bike.getTorque();
 			index = 0;
+			gridData = new GridData();
+		    gridData.minimumWidth = 27;
+		    gridData.grabExcessHorizontalSpace=true;
 			for (int point : torque.getCurve()) {
-				String key = BikesCfg.buildPropertyKey( bikeType, Torque.class,  index); // TODO esternalizzare il pattern
+				String key = BikesCfg.buildPropertyKey( bikeType, Torque.class, index);
 				Label label = new Label(torqueGroup, SWT.NULL);
 				label.setText(Torque.getRpm(index) + " RPM");
+				label.setToolTipText( key );
 				Text text = new Text(torqueGroup, SWT.BORDER);
 				text.setText(Integer.toString(point));
 				text.setTextLimit(3);
+				// TODO tooltip con valore di default
+			    text.setLayoutData(gridData);
 				formProperties.put(key, new FormProperty(label, text));
 				index++;
 			}
