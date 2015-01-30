@@ -84,7 +84,7 @@ public class CyclesMod {
 		customize();
 		
 		log.info( Messages.get( "msg.preparing.new.file", BikesInf.FILE_NAME ) );
-		bikesInf.write( path );
+		bikesInf.write( path + BikesInf.FILE_NAME );
 	}
 	
 	private void customize() throws IOException {
