@@ -3,10 +3,13 @@ package it.albertus.cycles.model;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.util.ByteUtils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CRC32;
@@ -25,8 +28,12 @@ public class BikesInf {
 	
 	private final Bike[] bikes = new Bike[3];
 	
-	public BikesInf( final InputStream originalBikesInfInputStream ) throws IOException {
-		read( originalBikesInfInputStream );
+	public BikesInf( final InputStream bikesInfInputStream ) throws IOException {
+		read( bikesInfInputStream );
+	}
+	
+	public BikesInf( String fileName ) throws IOException {
+		read( new BufferedInputStream( new FileInputStream( fileName ) ) );
 	}
 	
 	private void read( final InputStream inf ) throws IOException {
@@ -45,17 +52,24 @@ public class BikesInf {
 		log.info( Messages.get( "msg.original.file.parsed", FILE_NAME ) );
 	}
 	
-	public void write( final String destinationPath ) throws IOException {
+	public void write( final String fileName ) throws IOException {
 		byte[] newBikesInf = this.toByteArray();
 		Checksum crc = new CRC32();
 		crc.update( newBikesInf, 0, newBikesInf.length );
 		log.info( Messages.get( "msg.configuration.changed", ( crc.getValue() == FILE_CRC ? ' ' + Messages.get( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
 	
-		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( destinationPath + FILE_NAME ), FILE_SIZE );
-		bos.write( newBikesInf );
-		bos.flush();
-		bos.close();
-		log.info( Messages.get( "msg.new.file.written.into.path", FILE_NAME, "".equals( destinationPath ) ? '.' : destinationPath, String.format( "%X", crc.getValue() ) ) );
+		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( fileName ), FILE_SIZE );
+		write( bos, newBikesInf );
+		log.info( Messages.get( "msg.new.file.written.into.path", FILE_NAME, "".equals( fileName ) ? '.' : fileName, String.format( "%X", crc.getValue() ) ) );
+	}
+
+	private void write(OutputStream outputStream, byte[] bikesInf) throws IOException {
+		if (bikesInf == null || outputStream == null) {
+			throw new IllegalArgumentException();
+		}
+		outputStream.write(bikesInf);
+		outputStream.flush();
+		outputStream.close();
 	}
 	
 	/**
