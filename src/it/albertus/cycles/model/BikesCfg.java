@@ -36,6 +36,11 @@ public class BikesCfg {
 		this.properties.load( reader );	
 		reader.close();
 	}
+	
+	public BikesCfg( final String fileName ) throws IOException {
+		populateProperties( new BufferedReader( new FileReader( fileName ) ) );
+		log.info( Messages.get( "msg.file.read", FILE_NAME ) );
+	}
 
 	public BikesCfg( final BikesInf originalBikesInf, final String path ) throws IOException {
 		log.info( Messages.get( "msg.reading.file", FILE_NAME ) );

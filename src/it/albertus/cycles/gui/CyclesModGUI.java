@@ -10,6 +10,7 @@ import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
+import it.albertus.cycles.resources.Messages;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,15 +37,15 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CyclesModW extends PropertyParser {
+public class CyclesModGUI extends PropertyParser {
 
-	private static final Logger log = LoggerFactory.getLogger(CyclesModW.class);
+	private static final Logger log = LoggerFactory.getLogger(CyclesModGUI.class);
 
 	private Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 
 	public static void main(String[] args) throws IOException {
 		Display display = new Display();
-		Shell shell = new CyclesModW().createShell(display);
+		Shell shell = new CyclesModGUI().createShell(display);
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -84,18 +85,42 @@ public class CyclesModW extends PropertyParser {
 		loadButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
 		loadButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 				FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
 				openDialog.setFilterPath(".");
-				openDialog.setFilterExtensions(new String[] { "*.inf" });
+				openDialog.setFilterExtensions(new String[] { "*.inf; *.cfg" });
 				String fileName = openDialog.open();
 				if (StringUtils.isNotBlank(fileName)) {
 					try {
-						bikesInf = new BikesInf(fileName);
+						if ( "inf".equalsIgnoreCase( StringUtils.substringAfterLast(fileName, ".") ) ) {
+							bikesInf = new BikesInf(fileName);
+						}
+						else if ( "cfg".equalsIgnoreCase( StringUtils.substringAfterLast(fileName, ".") ) ) {
+							bikesInf = new BikesInf(new BikesZip().getInputStream()); // Load defaults.
+							BikesCfg bikesCfg = new BikesCfg(fileName);
+							for ( Object objectKey : bikesCfg.getProperties().keySet() ) {
+								String key = (String) objectKey;
+								applyProperty( key, bikesCfg.getProperties().getProperty( key ) );
+							}
+						}
+						else {
+							MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+							messageBox.setText("Attenzione!");
+							messageBox.setMessage( "Tipo di file non supportato" );
+							messageBox.open();
+							return;
+						}
 						log.info("Loaded!");
 						updateFormValues();
-					} catch (IOException e1) {
-						e1.printStackTrace(); // TODO
+					} catch (Exception e) {
+						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+						messageBox.setText("Attenzione!");
+						StringBuilder message = new StringBuilder( Messages.get( "err.file.open" ) );
+						if ( StringUtils.isNotBlank( e.getLocalizedMessage() ) ) {
+							message.append( ' ' ).append(  e.getLocalizedMessage() );
+						}
+						messageBox.setMessage( message.toString() );
+						messageBox.open();
 					}
 				}
 			}

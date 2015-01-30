@@ -40,9 +40,11 @@ public class BikesInf {
 		byte[] inf125 = new byte[ Bike.LENGTH ];
 		byte[] inf250 = new byte[ Bike.LENGTH ];
 		byte[] inf500 = new byte[ Bike.LENGTH ];
-		inf.read( inf125 );
-		inf.read( inf250 );
-		inf.read( inf500 );
+		
+		if ( inf.read( inf125 ) != Bike.LENGTH || inf.read( inf250 ) != Bike.LENGTH || inf.read( inf500 ) != Bike.LENGTH || inf.read() != -1 ) {
+			inf.close();
+			throw new IllegalStateException( Messages.get( "err.wrong.file.size" ) );
+		}
 		inf.close();
 		log.info( Messages.get( "msg.original.file.read", FILE_NAME ) );
 		
@@ -83,7 +85,7 @@ public class BikesInf {
 			byteList.addAll( bike.toByteList() );
 		}
 		if ( byteList.size() != FILE_SIZE ) {
-			throw new IllegalStateException( Messages.get( "err.wrong.file.size", FILE_NAME, FILE_SIZE, byteList.size() ) );
+			throw new IllegalStateException( Messages.get( "err.wrong.file.size.detailed", FILE_NAME, FILE_SIZE, byteList.size() ) );
 		}
 		return ByteUtils.toByteArray( byteList );
 	}
