@@ -42,6 +42,7 @@ public class CyclesModGUI extends PropertyParser {
 	private static final Logger log = LoggerFactory.getLogger(CyclesModGUI.class);
 
 	private Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
+	private Properties defaultProperties;
 
 	public static void main(String[] args) throws IOException {
 		Display display = new Display();
@@ -59,7 +60,7 @@ public class CyclesModGUI extends PropertyParser {
 		GridLayout shellLayout = new GridLayout();
 		shellLayout.numColumns = 1;
 		shell.setLayout(shellLayout);
-		shell.setSize(820, 680);
+		shell.setSize(830, 680);
 
 		// Tab
 		final TabFolder tabFolder = new TabFolder(shell, SWT.BORDER);
@@ -78,11 +79,14 @@ public class CyclesModGUI extends PropertyParser {
 		footer.setLayout(footerLayout);
 		GridData footerGridData = new GridData(GridData.FILL, GridData.FILL, true, false);
 		footer.setLayoutData(footerGridData);
+		
+		GridData buttonLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		buttonLayoutData.widthHint = 100;
 
 		// Load...
 		Button loadButton = new Button(footer, SWT.PUSH);
-		loadButton.setText("Load");
-		loadButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+		loadButton.setText(Messages.get("btn.load"));
+		loadButton.setLayoutData(buttonLayoutData);
 		loadButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
@@ -102,6 +106,11 @@ public class CyclesModGUI extends PropertyParser {
 								String key = (String) objectKey;
 								applyProperty( key, bikesCfg.getProperties().getProperty( key ) );
 							}
+							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+							messageBox.setText("Operazione competata.");
+							messageBox.setMessage( changesCount +" modifiche apportate." );
+							changesCount = 0; // TODO gestire meglio
+							messageBox.open();
 						}
 						else {
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
@@ -128,8 +137,8 @@ public class CyclesModGUI extends PropertyParser {
 
 		// Save...
 		Button saveButton = new Button(footer, SWT.PUSH);
-		saveButton.setText("Save");
-		saveButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+		saveButton.setText(Messages.get("btn.save"));
+		saveButton.setLayoutData( buttonLayoutData );
 		saveButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -152,7 +161,7 @@ public class CyclesModGUI extends PropertyParser {
 					FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 					saveDialog.setFilterExtensions(new String[] { "*.inf" });
 					saveDialog.setFilterPath(".");
-					saveDialog.setFileName("BIKES.INF");
+					saveDialog.setFileName( BikesInf.FILE_NAME );
 					saveDialog.setOverwrite(true);
 					String fileName = saveDialog.open();
 
@@ -170,8 +179,8 @@ public class CyclesModGUI extends PropertyParser {
 
 		// Reset...
 		Button resetButton = new Button(footer, SWT.PUSH);
-		resetButton.setText("Reset");
-		resetButton.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
+		resetButton.setText(Messages.get("btn.reset"));
+		resetButton.setLayoutData( buttonLayoutData );
 		resetButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -189,19 +198,17 @@ public class CyclesModGUI extends PropertyParser {
 						updateFormValues();
 					} catch (IOException e1) {
 						e1.printStackTrace(); // TODO
-
 					}
 				}
 			}
 		});
-
-//		shell.pack();
 
 		return shell;
 	}
 
 	private void createForm(final TabFolder tabFolder) throws IOException {
 		bikesInf = new BikesInf(new BikesZip().getInputStream());
+		defaultProperties = new BikesCfg(bikesInf).getProperties();
 
 		for (Bike.Type bikeType : Bike.Type.values()) {
 			TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
@@ -236,7 +243,7 @@ public class CyclesModGUI extends PropertyParser {
 
 			// Settings
 			GridData gridData = new GridData();
-		    gridData.minimumWidth = 40;
+		    gridData.minimumWidth = 42;
 		    gridData.grabExcessHorizontalSpace=true;
 			Map<Setting, Integer> settings = bike.getSettings().getValues();
 			for (Setting setting : settings.keySet()) {
@@ -247,7 +254,7 @@ public class CyclesModGUI extends PropertyParser {
 				Text text = new Text(settingsGroup, SWT.BORDER);
 				text.setText( settings.get(setting).toString());
 				text.setTextLimit(5);
-				// TODO tooltip con valore di default
+				text.setToolTipText( Messages.get("msg.tooltip.default", defaultProperties.getProperty( key )) );
 				text.setLayoutData(gridData);
 				formProperties.put(key, new FormProperty(label, text));
 			}
@@ -256,7 +263,7 @@ public class CyclesModGUI extends PropertyParser {
 			Gearbox gearbox = bike.getGearbox();
 			int index = 0;
 			gridData = new GridData();
-		    gridData.minimumWidth = 40;
+		    gridData.minimumWidth = 42;
 		    gridData.grabExcessHorizontalSpace=true;
 			for (int ratio : gearbox.getRatios()) {
 				String key = BikesCfg.buildPropertyKey(bikeType, Gearbox.class, index );
@@ -266,7 +273,7 @@ public class CyclesModGUI extends PropertyParser {
 				Text text = new Text(gearboxGroup, SWT.BORDER);
 				text.setText(Integer.toString(ratio));
 				text.setTextLimit(5);
-				// TODO tooltip con valore di default
+				text.setToolTipText( Messages.get("msg.tooltip.default", defaultProperties.getProperty( key )) );
 			    text.setLayoutData(gridData);
 				formProperties.put(key, new FormProperty(label, text) );
 				index++;
@@ -276,17 +283,17 @@ public class CyclesModGUI extends PropertyParser {
 			Torque torque = bike.getTorque();
 			index = 0;
 			gridData = new GridData();
-		    gridData.minimumWidth = 27;
+		    gridData.minimumWidth = 30;
 		    gridData.grabExcessHorizontalSpace=true;
 			for (int point : torque.getCurve()) {
 				String key = BikesCfg.buildPropertyKey( bikeType, Torque.class, index);
 				Label label = new Label(torqueGroup, SWT.NULL);
-				label.setText(Torque.getRpm(index) + " RPM");
+				label.setText(Torque.getRpm(index) + " rpm");
 				label.setToolTipText( key );
 				Text text = new Text(torqueGroup, SWT.BORDER);
 				text.setText(Integer.toString(point));
 				text.setTextLimit(3);
-				// TODO tooltip con valore di default
+				text.setToolTipText( Messages.get("msg.tooltip.default", defaultProperties.getProperty( key )) );
 			    text.setLayoutData(gridData);
 				formProperties.put(key, new FormProperty(label, text));
 				index++;
