@@ -22,32 +22,44 @@ public abstract class PropertyParser {
 	
 	protected short changesCount = 0;
 	
-	protected void parseProperty(String key, String value) {
+	protected void applyProperty(String key, String value) {
 		if ( !StringUtils.isNumeric( value ) ) {
 			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 		}
 		
 		// Settings
-		if ( StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Settings.class.getSimpleName() ) ) ) {
-			parseSettingProperty( key, value );
+		if ( isSettingsProperty(key) ) {
+			applySettingProperty( key, value );
 		}
 		
 		// Gearbox
-		else if ( StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Gearbox.class.getSimpleName() ) ) ) {
-			parseGearboxProperty( key, value );
+		else if ( isGearboxProperty(key) ) {
+			applyGearboxProperty( key, value );
 		}
 		
 		// Torque
-		else if ( StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Torque.class.getSimpleName() ) ) ) {
-			parseTorqueProperty( key, value );
+		else if ( isTorqueProperty(key) ) {
+			applyTorqueProperty( key, value );
 		}
 		
 		else {
 			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 		}
 	}
+
+	protected boolean isTorqueProperty(String key) {
+		return StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Torque.class.getSimpleName() ) );
+	}
+
+	protected boolean isGearboxProperty(String key) {
+		return StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Gearbox.class.getSimpleName() ) );
+	}
+
+	protected boolean isSettingsProperty(String key) {
+		return StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Settings.class.getSimpleName() ) );
+	}
 	
-	private void parseTorqueProperty( final String key, final String value ) {
+	private void applyTorqueProperty( final String key, final String value ) {
 		short newValue = Torque.parse( key, value );
 		
 		Bike bike = getBike( key, value );
@@ -65,7 +77,7 @@ public abstract class PropertyParser {
 		}
 	}
 	
-	private void parseGearboxProperty( final String key, final String value ) {
+	private void applyGearboxProperty( final String key, final String value ) {
 		int newValue = Gearbox.parse( key, value );
 		
 		Bike bike = getBike( key, value );
@@ -83,7 +95,7 @@ public abstract class PropertyParser {
 		}
 	}
 	
-	private void parseSettingProperty( final String key, final String value ) {
+	private void applySettingProperty( final String key, final String value ) {
 		int newValue = Settings.parse( key, value );
 		
 		Bike bike = getBike( key, value );
