@@ -3,7 +3,12 @@ package it.albertus.cycles.gui;
 import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesInf;
+import it.albertus.cycles.model.Gearbox;
+import it.albertus.cycles.model.Setting;
+import it.albertus.cycles.model.Settings;
+import it.albertus.cycles.model.Torque;
 
+import java.beans.Introspector;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,9 +21,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -32,10 +37,10 @@ public class CyclesModW {
 	private static final Logger log = LoggerFactory.getLogger(CyclesModW.class);
 
 	private BikesInf bikesInf;
-	
-	private Map<Bike.Type, Map<String, Control>> controls;
 
-	public static void main(String[] args) {
+	private Map<String, Property> properties = new TreeMap<String, Property>();
+
+	public static void main(String[] args) throws IOException {
 		Display display = new Display();
 		Shell shell = new CyclesModW().createShell(display);
 		shell.open();
@@ -45,21 +50,7 @@ public class CyclesModW {
 		}
 	}
 	
-	private void populateControls() {
-		controls = new TreeMap<Bike.Type, Map<String, Control>>();
-//		if ( bikesInf != null ) {
-//			for ( Bike bike : bikesInf.getBikes() ) {
-//				Settings settings = bike.getSettings();
-//				for ( Setting setting : settings.getValues().keySet() ) {
-//					settings.getValues().get( setting );
-//				}
-//			}
-//		}
-	}
-
-	public Shell createShell(final Display display) {
-		populateControls();
-
+	public Shell createShell(final Display display) throws IOException {
 		final Shell shell = new Shell(display);
 		shell.setText("CyclesMod");
 		GridLayout shellLayout = new GridLayout();
@@ -75,7 +66,8 @@ public class CyclesModW {
 		GridData tabGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		tabFolder.setLayoutData(tabGridData);
 
-		
+		bikesInf = new BikesInf(new BikesZip().getInputStream());
+
 		for (Bike.Type bikeType : Bike.Type.values()) {
 			TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
 			tabItem.setText(bikeType.getDisplacement() + " cc");
@@ -83,24 +75,13 @@ public class CyclesModW {
 			Composite tabComposite = new Composite(tabFolder, SWT.NULL);
 			tabItem.setControl(tabComposite);
 			GridLayout compositeGridLayout = new GridLayout();
-			compositeGridLayout.numColumns = 6;
+			compositeGridLayout.numColumns = 12;
 			tabComposite.setLayout(compositeGridLayout);
 
 			// Inserire qui tutti i controlli di ogni tab
-			Text text = new Text(tabComposite, SWT.BORDER);
-			text.setText("This is page " + bikeType.toString());
-			
-			
-			Map<String, Control> map = new TreeMap<String, Control>();
-			
-			Text text1 = new Text(tabFolder, SWT.BORDER);
-			text1.setText( "moto " + bikeType.toString() );
-			map.put( "ciao", text1 ); 
-			controls.put(bikeType, map);
-//			tabItem.setControl( text1 );
+			createBikeForm(bikeType, tabComposite);
 		}
-		
-		
+
 		// Buttons...
 		Composite footer = new Composite(shell, SWT.NONE);
 		GridLayout footerLayout = new GridLayout();
@@ -194,5 +175,52 @@ public class CyclesModW {
 		return shell;
 	}
 
+	private void createBikeForm(Bike.Type bikeType, Composite tabComposite) {
+		Bike bike = bikesInf.getBike(bikeType.getDisplacement());
+
+		String prefix = Integer.toString(bike.getType().getDisplacement());
+
+		// Settings
+		Map<Setting, Integer> settings = bike.getSettings().getValues();
+		int index = 0;
+		for (Setting setting : settings.keySet()) {
+			String key = prefix + '.' + Introspector.decapitalize(Settings.class.getSimpleName()) + '.' + setting.toString();
+			Label label = new Label(tabComposite, SWT.NULL);
+			label.setText(setting.toString());
+			Text text = new Text(tabComposite, SWT.BORDER);
+			text.setText(settings.get(setting) != null ? settings.get(setting).toString() : "");
+			text.setTextLimit(5);
+			properties.put(key, new Property(label, text));
+			index++;
+		}
+
+		// Gearbox
+		Gearbox gearbox = bike.getGearbox();
+		index = 0;
+		for (int ratio : gearbox.getRatios()) {
+			String key = prefix + '.' + Introspector.decapitalize(Gearbox.class.getSimpleName()) + '.' + index;
+			Label label = new Label(tabComposite, SWT.NULL);
+			label.setText("Gear " + index);
+			Text text = new Text(tabComposite, SWT.BORDER);
+			text.setText(Integer.toString(ratio));
+			text.setTextLimit(5);
+			properties.put(key, new Property(label, text));
+			index++;
+		}
+
+		// Torque
+		Torque torque = bike.getTorque();
+		index = 0;
+		for (int point : torque.getCurve()) {
+			String key = prefix + '.' + Introspector.decapitalize(Torque.class.getSimpleName()) + '.' + index;
+			Label label = new Label(tabComposite, SWT.NULL);
+			label.setText(Torque.getRpm(index) + " RPM");
+			Text text = new Text(tabComposite, SWT.BORDER);
+			text.setText(Integer.toString(point));
+			text.setTextLimit(3);
+			properties.put(key, new Property(label, text));
+			index++;
+		}
+	}
 
 }
