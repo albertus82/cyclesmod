@@ -11,11 +11,10 @@ import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 
-import java.beans.Introspector;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
@@ -41,7 +40,7 @@ public class CyclesModW extends PropertyParser {
 
 	private static final Logger log = LoggerFactory.getLogger(CyclesModW.class);
 
-	private Map<String, FormProperty> formProperties = new TreeMap<String, FormProperty>();
+	private Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 
 	public static void main(String[] args) throws IOException {
 		Display display = new Display();
@@ -94,7 +93,7 @@ public class CyclesModW extends PropertyParser {
 					try {
 						bikesInf = new BikesInf(fileName);
 						log.info("Loaded!");
-						updateForm();
+						updateFormValues();
 					} catch (IOException e1) {
 						e1.printStackTrace(); // TODO
 					}
@@ -116,7 +115,7 @@ public class CyclesModW extends PropertyParser {
 					messageBox.open();
 				} else {
 					try {
-						updateModel();
+						updateModelValues();
 					}
 					catch ( InvalidPropertyException ipe ) {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
@@ -162,7 +161,7 @@ public class CyclesModW extends PropertyParser {
 					try {
 						bikesInf = new BikesInf(new BikesZip().getInputStream());
 						log.debug("Defaults loaded!");
-						updateForm();
+						updateFormValues();
 					} catch (IOException e1) {
 						e1.printStackTrace(); // TODO
 
@@ -178,13 +177,6 @@ public class CyclesModW extends PropertyParser {
 
 	private void createForm(final TabFolder tabFolder) throws IOException {
 		bikesInf = new BikesInf(new BikesZip().getInputStream());
-		BikesCfg bikesCfg = new BikesCfg( bikesInf ); 
-		Properties properties = bikesCfg.getProperties();
-		
-		Map<String, String> sortedProperties = new TreeMap<String, String>();
-		for (final String key: properties.stringPropertyNames()) {
-			sortedProperties.put(key, properties.getProperty(key));
-		}
 
 		for (Bike.Type bikeType : Bike.Type.values()) {
 			TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
@@ -198,75 +190,68 @@ public class CyclesModW extends PropertyParser {
 
 			// Inserire qui tutti i controlli di ogni tab
 			Bike bike = bikesInf.getBike(bikeType.getDisplacement());
-			String prefix = Integer.toString(bike.getType().getDisplacement());
+			
+			Group settingsGroup = new Group(tabComposite, SWT.NULL);
+			settingsGroup.setText("Settings");
+			GridLayout settingsGroupGridLayout = new GridLayout();
+			settingsGroupGridLayout.numColumns = 12;
+			settingsGroup.setLayout(settingsGroupGridLayout);
+			
+			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
+			gearboxGroup.setText("Gearbox");
+			GridLayout gearboxGroupGridLayout = new GridLayout();
+			gearboxGroupGridLayout.numColumns = 10;
+			gearboxGroup.setLayout(gearboxGroupGridLayout);
+			
+			Group torqueGroup = new Group(tabComposite, SWT.NULL);
+			torqueGroup.setText("Torque");
+			GridLayout torqueGroupGridLayout = new GridLayout();
+			torqueGroupGridLayout.numColumns = 16;
+			torqueGroup.setLayout(torqueGroupGridLayout);
 
 			// Settings
-			{
-				Group settingsGroup = new Group(tabComposite, SWT.NULL);
-				settingsGroup.setText("Settings");
-				GridLayout settingsGroupGridLayout = new GridLayout();
-				settingsGroupGridLayout.numColumns = 12;
-				settingsGroup.setLayout(settingsGroupGridLayout);
-
-				Map<Setting, Integer> settings = bike.getSettings().getValues();
-				for (Setting setting : settings.keySet()) {
-					String key = prefix + '.' + Introspector.decapitalize(Settings.class.getSimpleName()) + '.' + setting.toString(); // TODO esternalizzare il pattern
-					Label label = new Label(settingsGroup, SWT.NULL);
-					label.setText(setting.toString());
-					Text text = new Text(settingsGroup, SWT.BORDER);
-					text.setText( settings.get(setting).toString());
-					text.setTextLimit(5);
-					formProperties.put(key, new FormProperty(label, text));
-				}
+			Map<Setting, Integer> settings = bike.getSettings().getValues();
+			for (Setting setting : settings.keySet()) {
+				String key = BikesCfg.buildPropertyKey(bikeType, Settings.class, setting.toString() ); // TODO esternalizzare il pattern
+				Label label = new Label(settingsGroup, SWT.NULL);
+				label.setText(setting.toString());
+				Text text = new Text(settingsGroup, SWT.BORDER);
+				text.setText( settings.get(setting).toString());
+				text.setTextLimit(5);
+				formProperties.put(key, new FormProperty(label, text));
 			}
 
 			// Gearbox
-			{
-				Group gearboxGroup = new Group(tabComposite, SWT.NULL);
-				gearboxGroup.setText("Gearbox");
-				GridLayout gearboxGroupGridLayout = new GridLayout();
-				gearboxGroupGridLayout.numColumns = 10;
-				gearboxGroup.setLayout(gearboxGroupGridLayout);
-
-				Gearbox gearbox = bike.getGearbox();
-				int index = 0;
-				for (int ratio : gearbox.getRatios()) {
-					String key = prefix + '.' + Introspector.decapitalize(Gearbox.class.getSimpleName()) + '.' + index; // TODO esternalizzare il pattern
-					Label label = new Label(gearboxGroup, SWT.NULL);
-					label.setText("Gear " + index);
-					Text text = new Text(gearboxGroup, SWT.BORDER);
-					text.setText(Integer.toString(ratio));
-					text.setTextLimit(5);
-					formProperties.put(key, new FormProperty(label, text));
-					index++;
-				}
+			Gearbox gearbox = bike.getGearbox();
+			int index = 0;
+			for (int ratio : gearbox.getRatios()) {
+				String key = BikesCfg.buildPropertyKey(bikeType, Gearbox.class, index ); // TODO esternalizzare il pattern
+				Label label = new Label(gearboxGroup, SWT.NULL);
+				label.setText("Gear " + index);
+				Text text = new Text(gearboxGroup, SWT.BORDER);
+				text.setText(Integer.toString(ratio));
+				text.setTextLimit(5);
+				formProperties.put(key, new FormProperty(label, text));
+				index++;
 			}
 
 			// Torque
-			{
-				Group torqueGroup = new Group(tabComposite, SWT.NULL);
-				torqueGroup.setText("Torque");
-				GridLayout torqueGroupGridLayout = new GridLayout();
-				torqueGroupGridLayout.numColumns = 16;
-				torqueGroup.setLayout(torqueGroupGridLayout);
-
-				Torque torque = bike.getTorque();
-				int index = 0;
-				for (int point : torque.getCurve()) {
-					String key = prefix + '.' + Introspector.decapitalize(Torque.class.getSimpleName()) + '.' + index; // TODO esternalizzare il pattern
-					Label label = new Label(torqueGroup, SWT.NULL);
-					label.setText(Torque.getRpm(index) + " RPM");
-					Text text = new Text(torqueGroup, SWT.BORDER);
-					text.setText(Integer.toString(point));
-					text.setTextLimit(3);
-					formProperties.put(key, new FormProperty(label, text));
-					index++;
-				}
+			Torque torque = bike.getTorque();
+			index = 0;
+			for (int point : torque.getCurve()) {
+				String key = BikesCfg.buildPropertyKey( bikeType, Torque.class,  index); // TODO esternalizzare il pattern
+				Label label = new Label(torqueGroup, SWT.NULL);
+				label.setText(Torque.getRpm(index) + " RPM");
+				Text text = new Text(torqueGroup, SWT.BORDER);
+				text.setText(Integer.toString(point));
+				text.setTextLimit(3);
+				formProperties.put(key, new FormProperty(label, text));
+				index++;
 			}
 		}
 	}
 	
-	private void updateForm() {
+	private void updateFormValues() {
 		Properties properties = new BikesCfg(bikesInf).getProperties();
 		
 		// Consistency check...
@@ -283,11 +268,10 @@ public class CyclesModW extends PropertyParser {
 		}
 	}
 	
-	private void updateModel() {
+	private void updateModelValues() {
 		for ( String key : formProperties.keySet() ) {
 			applyProperty( key, formProperties.get( key ).getValue() );
 		}
 	}
-
 
 }

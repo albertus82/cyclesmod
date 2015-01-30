@@ -65,7 +65,7 @@ public class CyclesMod extends PropertyParser {
 		InputStream is = CyclesMod.class.getResourceAsStream( VERSION_FILE_PATH + VERSION_FILE_NAME );
 		version.load( is );
 		is.close();
-		return Messages.get( "msg.welcome", version.get( "version.number" ), version.get( "version.date" ) );
+		return Messages.get( "msg.welcome", version.get( "version.number" ), version.get( "version.date" ) ) + "\r\n";
 	}
 	
 	private void execute() throws IOException {

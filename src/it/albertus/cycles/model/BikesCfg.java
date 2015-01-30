@@ -68,8 +68,6 @@ public class BikesCfg {
 		final StringBuilder properties = new StringBuilder( Messages.get( "str.cfg.header" ) );
 		
 		for ( Bike bike : bikesInf.getBikes() ) {
-			String prefix = Integer.toString( bike.getType().getDisplacement() );
-
 			properties.append( lineSeparator ).append( lineSeparator );
 			properties.append( "### ").append( bike.getType().getDisplacement() ).append( " cc - " + Messages.get( "str.cfg.begin" ) + "... ###");
 			
@@ -78,7 +76,7 @@ public class BikesCfg {
 			properties.append( "# " ).append( Settings.class.getSimpleName() ).append( " #" );
 			properties.append( lineSeparator );
 			for ( Setting setting : bike.getSettings().getValues().keySet() ) {
-				properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Settings.class.getSimpleName() ) ).append( '.' ).append( setting.toString() );
+				properties.append( buildPropertyKey( bike.getType(), Settings.class, setting.toString() ) );
 				properties.append( '=' );
 				properties.append( bike.getSettings().getValues().get( setting ).intValue() );
 				properties.append( lineSeparator );
@@ -89,7 +87,7 @@ public class BikesCfg {
 			properties.append( "# " ).append( Gearbox.class.getSimpleName() ).append( " #" );
 			properties.append( lineSeparator );
 			for ( int index = 0; index < bike.getGearbox().getRatios().length; index++ ) {
-				properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Gearbox.class.getSimpleName() ) ).append( '.' ).append( index );
+				properties.append( buildPropertyKey( bike.getType(), Gearbox.class, index ) );
 				properties.append( '=' );
 				properties.append( bike.getGearbox().getRatios()[ index ] );
 				properties.append( lineSeparator );
@@ -104,7 +102,7 @@ public class BikesCfg {
 					properties.append( "# " + Torque.getRpm( index ) + " RPM");
 					properties.append( lineSeparator );
 				}
-				properties.append( prefix ).append( '.' ).append( Introspector.decapitalize( Torque.class.getSimpleName() ) ).append( '.' ).append( index );
+				properties.append( buildPropertyKey( bike.getType(), Torque.class, index ) );
 				properties.append( '=' );
 				properties.append( bike.getTorque().getCurve()[ index ] );
 				properties.append( lineSeparator );
@@ -116,6 +114,14 @@ public class BikesCfg {
 		properties.append( lineSeparator ).append( lineSeparator );
 		properties.append( Messages.get( "str.cfg.footer" ) );
 		return properties.toString();
+	}
+	
+	public static String buildPropertyKey( final Bike.Type bikeType, final Class<? extends BikesInfElement> propertyType, final String suffix ) {
+		return Integer.toString(bikeType.getDisplacement()) + '.' + Introspector.decapitalize(propertyType.getSimpleName()) + '.' + suffix;
+	}
+	
+	public static String buildPropertyKey( final Bike.Type bikeType, final Class<? extends BikesInfElement> propertyType, final int suffix ) {
+		return buildPropertyKey( bikeType, propertyType, Integer.toString( suffix ) );
 	}
 	
 	public Properties getProperties() {
