@@ -20,31 +20,33 @@ public abstract class PropertyParser {
 	
 	protected BikesInf bikesInf;
 	
-	protected short changesCount = 0;
-	
-	protected void applyProperty(String key, String value) {
-		if ( !StringUtils.isNumeric( value ) ) {
+	protected boolean applyProperty(String key, String value) {
+		if ( StringUtils.isBlank( value ) || !StringUtils.isNumeric( value ) ) {
 			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 		}
 		
+		boolean applied = false;
+		
 		// Settings
 		if ( isSettingsProperty(key) ) {
-			applySettingProperty( key, value );
+			applied = applySettingProperty( key, value );
 		}
 		
 		// Gearbox
 		else if ( isGearboxProperty(key) ) {
-			applyGearboxProperty( key, value );
+			applied = applyGearboxProperty( key, value );
 		}
 		
 		// Torque
 		else if ( isTorqueProperty(key) ) {
-			applyTorqueProperty( key, value );
+			applied = applyTorqueProperty( key, value );
 		}
 		
 		else {
 			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 		}
+		
+		return applied;
 	}
 
 	protected boolean isTorqueProperty(String key) {
@@ -59,7 +61,8 @@ public abstract class PropertyParser {
 		return StringUtils.substringAfter( key, "." ).startsWith( Introspector.decapitalize( Settings.class.getSimpleName() ) );
 	}
 	
-	private void applyTorqueProperty( final String key, final String value ) {
+	private boolean applyTorqueProperty( final String key, final String value ) {
+		boolean applied = false;
 		short newValue = Torque.parse( key, value );
 		
 		Bike bike = getBike( key, value );
@@ -69,15 +72,18 @@ public abstract class PropertyParser {
 			short defaultValue = bike.getTorque().getCurve()[ index ];
 			if ( defaultValue != newValue ) {
 				bike.getTorque().getCurve()[ index ] = newValue;
+				applied = true;
 				logChange( key, defaultValue, newValue );
 			}
 		}
 		else {
 			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 		}
+		return applied;
 	}
 	
-	private void applyGearboxProperty( final String key, final String value ) {
+	private boolean applyGearboxProperty( final String key, final String value ) {
+		boolean applied = false;
 		int newValue = Gearbox.parse( key, value );
 		
 		Bike bike = getBike( key, value );
@@ -87,15 +93,18 @@ public abstract class PropertyParser {
 			int defaultValue = bike.getGearbox().getRatios()[ index ];
 			if ( defaultValue != newValue ) {
 				bike.getGearbox().getRatios()[ index ] = newValue;
+				applied = true;
 				logChange( key, defaultValue, newValue );
 			}
 		}
 		else {
 			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 		}
+		return applied;
 	}
 	
-	private void applySettingProperty( final String key, final String value ) {
+	private boolean applySettingProperty( final String key, final String value ) {
+		boolean applied = false;
 		int newValue = Settings.parse( key, value );
 		
 		Bike bike = getBike( key, value );
@@ -105,17 +114,18 @@ public abstract class PropertyParser {
 			int defaultValue = bike.getSettings().getValues().get( setting );
 			if ( newValue != defaultValue ) {
 				bike.getSettings().getValues().put( setting, newValue );
+				applied = true;
 				logChange( key, defaultValue, newValue );
 			}
 		}
 		else {
 			throw new InvalidPropertyException( Messages.get( "err.unsupported.property", key, value ) );
 		}
+		return applied;
 	}
 	
 	private void logChange( final String key, final int defaultValue, final int newValue ) {
 		log.info( Messages.get( "msg.custom.value.detected", key, newValue, String.format( "%X", newValue ), defaultValue, String.format( "%X", defaultValue ) ) );
-		changesCount++;
 	}
 	
 	protected Bike getBike( final String key, final String value ) {

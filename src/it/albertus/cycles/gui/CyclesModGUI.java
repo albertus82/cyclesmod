@@ -56,7 +56,7 @@ public class CyclesModGUI extends PropertyParser {
 
 	public Shell createShell(final Display display) throws IOException {
 		final Shell shell = new Shell(display);
-		shell.setText("CyclesMod");
+		shell.setText(Messages.get("win.title"));
 		GridLayout shellLayout = new GridLayout();
 		shellLayout.numColumns = 1;
 		shell.setLayout(shellLayout);
@@ -102,31 +102,32 @@ public class CyclesModGUI extends PropertyParser {
 						else if ( "cfg".equalsIgnoreCase( StringUtils.substringAfterLast(fileName, ".") ) ) {
 							bikesInf = new BikesInf(new BikesZip().getInputStream()); // Load defaults.
 							BikesCfg bikesCfg = new BikesCfg(fileName);
+							short changesCount = 0;
 							for ( Object objectKey : bikesCfg.getProperties().keySet() ) {
 								String key = (String) objectKey;
-								applyProperty( key, bikesCfg.getProperties().getProperty( key ) );
+								if ( applyProperty( key, bikesCfg.getProperties().getProperty( key ) ) ) {
+									changesCount++;
+								}
 							}
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-							messageBox.setText("Operazione competata.");
-							messageBox.setMessage( changesCount +" modifiche apportate." );
-							changesCount = 0; // TODO gestire meglio
+							messageBox.setText( Messages.get( "msg.completed"));
+							messageBox.setMessage( Messages.get( "msg.customizations.applied", changesCount ) );
 							messageBox.open();
 						}
 						else {
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-							messageBox.setText("Attenzione!");
-							messageBox.setMessage( "Tipo di file non supportato" );
+							messageBox.setText( Messages.get("msg.warning"));
+							messageBox.setMessage( Messages.get( "err.file.invalid" ));
 							messageBox.open();
 							return;
 						}
-						log.info("Loaded!");
 						updateFormValues();
 					} catch (Exception e) {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-						messageBox.setText("Attenzione!");
-						StringBuilder message = new StringBuilder( Messages.get( "err.file.open" ) );
+						messageBox.setText(Messages.get("msg.warning"));
+						StringBuilder message = new StringBuilder( Messages.get( "err.generic" ) );
 						if ( StringUtils.isNotBlank( e.getLocalizedMessage() ) ) {
-							message.append( ' ' ).append(  e.getLocalizedMessage() );
+							message.append( ' ' ).append( e.getLocalizedMessage() );
 						}
 						messageBox.setMessage( message.toString() );
 						messageBox.open();
@@ -224,37 +225,37 @@ public class CyclesModGUI extends PropertyParser {
 			Bike bike = bikesInf.getBike(bikeType.getDisplacement());
 			
 			Group settingsGroup = new Group(tabComposite, SWT.NULL);
-			settingsGroup.setText("Settings");
+			settingsGroup.setText(Messages.get("lbl.settings"));
 			GridLayout settingsGroupGridLayout = new GridLayout();
 			settingsGroupGridLayout.numColumns = 12;
 			settingsGroup.setLayout(settingsGroupGridLayout);
 			
 			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
-			gearboxGroup.setText("Gearbox");
+			gearboxGroup.setText(Messages.get("lbl.gearbox"));
 			GridLayout gearboxGroupGridLayout = new GridLayout();
 			gearboxGroupGridLayout.numColumns = 10;
 			gearboxGroup.setLayout(gearboxGroupGridLayout);
 			
 			Group torqueGroup = new Group(tabComposite, SWT.NULL);
-			torqueGroup.setText("Torque");
+			torqueGroup.setText(Messages.get("lbl.torque"));
 			GridLayout torqueGroupGridLayout = new GridLayout();
 			torqueGroupGridLayout.numColumns = 16;
 			torqueGroup.setLayout(torqueGroupGridLayout);
 
 			// Settings
 			GridData gridData = new GridData();
-		    gridData.minimumWidth = 42;
-		    gridData.grabExcessHorizontalSpace=true;
+			gridData.minimumWidth = 42;
+			gridData.grabExcessHorizontalSpace = true;
 			Map<Setting, Integer> settings = bike.getSettings().getValues();
 			for (Setting setting : settings.keySet()) {
-				String key = BikesCfg.buildPropertyKey(bikeType, Settings.class, setting.toString() );
+				String key = BikesCfg.buildPropertyKey(bikeType, Settings.class, setting.toString());
 				Label label = new Label(settingsGroup, SWT.NULL);
 				label.setText(setting.toString());
-				label.setToolTipText( key );
+				label.setToolTipText(key);
 				Text text = new Text(settingsGroup, SWT.BORDER);
-				text.setText( settings.get(setting).toString());
+				text.setText(settings.get(setting).toString());
 				text.setTextLimit(5);
-				text.setToolTipText( Messages.get("msg.tooltip.default", defaultProperties.getProperty( key )) );
+				text.setToolTipText(Messages.get("msg.tooltip.default", defaultProperties.getProperty(key)));
 				text.setLayoutData(gridData);
 				formProperties.put(key, new FormProperty(label, text));
 			}
@@ -263,19 +264,19 @@ public class CyclesModGUI extends PropertyParser {
 			Gearbox gearbox = bike.getGearbox();
 			int index = 0;
 			gridData = new GridData();
-		    gridData.minimumWidth = 42;
-		    gridData.grabExcessHorizontalSpace=true;
+			gridData.minimumWidth = 42;
+			gridData.grabExcessHorizontalSpace = true;
 			for (int ratio : gearbox.getRatios()) {
-				String key = BikesCfg.buildPropertyKey(bikeType, Gearbox.class, index );
+				String key = BikesCfg.buildPropertyKey(bikeType, Gearbox.class, index);
 				Label label = new Label(gearboxGroup, SWT.NULL);
-				label.setText("Gear " + index);
-				label.setToolTipText( key );
+				label.setText(Messages.get("lbl.gear", index != 0 ? index : "N"));
+				label.setToolTipText(key);
 				Text text = new Text(gearboxGroup, SWT.BORDER);
 				text.setText(Integer.toString(ratio));
 				text.setTextLimit(5);
-				text.setToolTipText( Messages.get("msg.tooltip.default", defaultProperties.getProperty( key )) );
-			    text.setLayoutData(gridData);
-				formProperties.put(key, new FormProperty(label, text) );
+				text.setToolTipText(Messages.get("msg.tooltip.default", defaultProperties.getProperty(key)));
+				text.setLayoutData(gridData);
+				formProperties.put(key, new FormProperty(label, text));
 				index++;
 			}
 
@@ -283,18 +284,18 @@ public class CyclesModGUI extends PropertyParser {
 			Torque torque = bike.getTorque();
 			index = 0;
 			gridData = new GridData();
-		    gridData.minimumWidth = 30;
-		    gridData.grabExcessHorizontalSpace=true;
+			gridData.minimumWidth = 30;
+			gridData.grabExcessHorizontalSpace = true;
 			for (int point : torque.getCurve()) {
-				String key = BikesCfg.buildPropertyKey( bikeType, Torque.class, index);
+				String key = BikesCfg.buildPropertyKey(bikeType, Torque.class, index);
 				Label label = new Label(torqueGroup, SWT.NULL);
-				label.setText(Torque.getRpm(index) + " rpm");
-				label.setToolTipText( key );
+				label.setText(Messages.get("lbl.rpm", Torque.getRpm(index)));
+				label.setToolTipText(key);
 				Text text = new Text(torqueGroup, SWT.BORDER);
 				text.setText(Integer.toString(point));
 				text.setTextLimit(3);
-				text.setToolTipText( Messages.get("msg.tooltip.default", defaultProperties.getProperty( key )) );
-			    text.setLayoutData(gridData);
+				text.setToolTipText(Messages.get("msg.tooltip.default", defaultProperties.getProperty(key)));
+				text.setLayoutData(gridData);
 				formProperties.put(key, new FormProperty(label, text));
 				index++;
 			}
