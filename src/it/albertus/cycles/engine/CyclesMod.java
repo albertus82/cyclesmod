@@ -7,7 +7,6 @@ import it.albertus.cycles.resources.Messages;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -57,7 +56,6 @@ public class CyclesMod extends CyclesModEngine {
 	}
 
 	private static String getWelcomeMessage() throws IOException {
-		Properties version = getVersionInfo();
 		return Messages.get( "msg.welcome", version.get( "version.number" ), version.get( "version.date" ) ) + "\r\n";
 	}
 	

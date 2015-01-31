@@ -1,8 +1,8 @@
 package it.albertus.cycles.gui;
 
 import it.albertus.cycles.data.BikesZip;
-import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.engine.CyclesModEngine;
+import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -79,7 +79,7 @@ public class CyclesModGUI extends CyclesModEngine {
 		footer.setLayout(footerLayout);
 		GridData footerGridData = new GridData(GridData.FILL, GridData.FILL, true, false);
 		footer.setLayoutData(footerGridData);
-		
+
 		GridData buttonLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		buttonLayoutData.widthHint = 100;
 
@@ -96,40 +96,42 @@ public class CyclesModGUI extends CyclesModEngine {
 				String fileName = openDialog.open();
 				if (StringUtils.isNotBlank(fileName)) {
 					try {
-						if ( "inf".equalsIgnoreCase( StringUtils.substringAfterLast(fileName, ".") ) ) {
+						if ("inf".equalsIgnoreCase(StringUtils.substringAfterLast(fileName, "."))) {
 							bikesInf = new BikesInf(fileName);
 						}
-						else if ( "cfg".equalsIgnoreCase( StringUtils.substringAfterLast(fileName, ".") ) ) {
-							bikesInf = new BikesInf(new BikesZip().getInputStream()); // Load defaults.
+						else if ("cfg".equalsIgnoreCase(StringUtils.substringAfterLast(fileName, "."))) {
+							bikesInf = new BikesInf(new BikesZip().getInputStream()); // Load
+																						// defaults.
 							BikesCfg bikesCfg = new BikesCfg(fileName);
 							short changesCount = 0;
-							for ( Object objectKey : bikesCfg.getProperties().keySet() ) {
+							for (Object objectKey : bikesCfg.getProperties().keySet()) {
 								String key = (String) objectKey;
-								if ( applyProperty( key, bikesCfg.getProperties().getProperty( key ) ) ) {
+								if (applyProperty(key, bikesCfg.getProperties().getProperty(key))) {
 									changesCount++;
 								}
 							}
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-							messageBox.setText( Messages.get( "msg.completed"));
-							messageBox.setMessage( Messages.get( "msg.customizations.applied", changesCount ) );
+							messageBox.setText(Messages.get("msg.completed"));
+							messageBox.setMessage(Messages.get("msg.customizations.applied", changesCount));
 							messageBox.open();
 						}
 						else {
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-							messageBox.setText( Messages.get("msg.warning"));
-							messageBox.setMessage( Messages.get( "err.file.invalid" ));
+							messageBox.setText(Messages.get("msg.warning"));
+							messageBox.setMessage(Messages.get("err.file.invalid"));
 							messageBox.open();
 							return;
 						}
 						updateFormValues();
-					} catch (Exception e) {
+					}
+					catch (Exception e) {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 						messageBox.setText(Messages.get("msg.warning"));
-						StringBuilder message = new StringBuilder( Messages.get( "err.generic" ) );
-						if ( StringUtils.isNotBlank( e.getLocalizedMessage() ) ) {
-							message.append( ' ' ).append( e.getLocalizedMessage() );
+						StringBuilder message = new StringBuilder(Messages.get("err.generic"));
+						if (StringUtils.isNotBlank(e.getLocalizedMessage())) {
+							message.append(' ').append(e.getLocalizedMessage());
 						}
-						messageBox.setMessage( message.toString() );
+						messageBox.setMessage(message.toString());
 						messageBox.open();
 					}
 				}
@@ -139,7 +141,7 @@ public class CyclesModGUI extends CyclesModEngine {
 		// Save...
 		Button saveButton = new Button(footer, SWT.PUSH);
 		saveButton.setText(Messages.get("btn.save"));
-		saveButton.setLayoutData( buttonLayoutData );
+		saveButton.setLayoutData(buttonLayoutData);
 		saveButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -148,29 +150,30 @@ public class CyclesModGUI extends CyclesModEngine {
 					messageBox.setText("Attenzione!");
 					messageBox.setMessage("Non ci sono dati da salvare. Caricare prima un file BIKES.INF valido.");
 					messageBox.open();
-				} else {
+				}
+				else {
 					try {
 						updateModelValues();
 					}
-					catch ( InvalidPropertyException ipe ) {
+					catch (InvalidPropertyException ipe) {
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 						messageBox.setText("Attenzione!");
-						messageBox.setMessage( ipe.getMessage() );
+						messageBox.setMessage(ipe.getMessage());
 						messageBox.open();
 						return;
 					}
 					FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 					saveDialog.setFilterExtensions(new String[] { "*.inf" });
 					saveDialog.setFilterPath(".");
-					saveDialog.setFileName( BikesInf.FILE_NAME );
+					saveDialog.setFileName(BikesInf.FILE_NAME);
 					saveDialog.setOverwrite(true);
 					String fileName = saveDialog.open();
 
 					if (StringUtils.isNotBlank(fileName)) {
 						try {
 							bikesInf.write(fileName);
-							log.debug("Saved!");
-						} catch (IOException e1) {
+						}
+						catch (IOException e1) {
 							e1.printStackTrace(); // TODO
 						}
 					}
@@ -181,7 +184,7 @@ public class CyclesModGUI extends CyclesModEngine {
 		// Reset...
 		Button resetButton = new Button(footer, SWT.PUSH);
 		resetButton.setText(Messages.get("btn.reset"));
-		resetButton.setLayoutData( buttonLayoutData );
+		resetButton.setLayoutData(buttonLayoutData);
 		resetButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -197,7 +200,8 @@ public class CyclesModGUI extends CyclesModEngine {
 						bikesInf = new BikesInf(new BikesZip().getInputStream());
 						log.debug("Defaults loaded!");
 						updateFormValues();
-					} catch (IOException e1) {
+					}
+					catch (IOException e1) {
 						e1.printStackTrace(); // TODO
 					}
 				}
@@ -223,19 +227,19 @@ public class CyclesModGUI extends CyclesModEngine {
 
 			// Inserire qui tutti i controlli di ogni tab
 			Bike bike = bikesInf.getBike(bikeType.getDisplacement());
-			
+
 			Group settingsGroup = new Group(tabComposite, SWT.NULL);
 			settingsGroup.setText(Messages.get("lbl.settings"));
 			GridLayout settingsGroupGridLayout = new GridLayout();
 			settingsGroupGridLayout.numColumns = 12;
 			settingsGroup.setLayout(settingsGroupGridLayout);
-			
+
 			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
 			gearboxGroup.setText(Messages.get("lbl.gearbox"));
 			GridLayout gearboxGroupGridLayout = new GridLayout();
 			gearboxGroupGridLayout.numColumns = 10;
 			gearboxGroup.setLayout(gearboxGroupGridLayout);
-			
+
 			Group torqueGroup = new Group(tabComposite, SWT.NULL);
 			torqueGroup.setText(Messages.get("lbl.torque"));
 			GridLayout torqueGroupGridLayout = new GridLayout();
@@ -301,27 +305,27 @@ public class CyclesModGUI extends CyclesModEngine {
 			}
 		}
 	}
-	
+
 	private void updateFormValues() {
 		Properties properties = new BikesCfg(bikesInf).getProperties();
-		
+
 		// Consistency check...
-		if( properties.size() != formProperties.size() ) {
+		if (properties.size() != formProperties.size()) {
 			throw new IllegalStateException("Numerosita' properties inconsistente");
 		}
-		
+
 		// Update screen values...
-		for ( String key : formProperties.keySet() ) {
-			if ( !properties.containsKey( key ) ) {
-				throw new RuntimeException("Property non presente: " + key );
+		for (String key : formProperties.keySet()) {
+			if (!properties.containsKey(key)) {
+				throw new RuntimeException("Property non presente: " + key);
 			}
-			formProperties.get(key).getText().setText( (String) properties.get(key) );
+			formProperties.get(key).getText().setText((String) properties.get(key));
 		}
 	}
-	
+
 	private void updateModelValues() {
-		for ( String key : formProperties.keySet() ) {
-			applyProperty( key, formProperties.get( key ).getValue() );
+		for (String key : formProperties.keySet()) {
+			applyProperty(key, formProperties.get(key).getValue());
 		}
 	}
 
