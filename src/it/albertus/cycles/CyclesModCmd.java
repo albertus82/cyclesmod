@@ -23,7 +23,7 @@ public class CyclesModCmd extends CyclesModEngine {
 	private BikesCfg bikesCfg;
 	private final String path;
 
-	public CyclesModCmd(String path) {
+	private CyclesModCmd(String path) {
 		this.path = path;
 	}
 

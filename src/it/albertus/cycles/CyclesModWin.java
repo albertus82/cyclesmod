@@ -46,10 +46,16 @@ public class CyclesModWin extends CyclesModEngine {
 
 	private static final Point WINDOW_SIZE = new Point(830, 700);
 
-	private Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
-	private Properties defaultProperties;
+	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
+	private final Properties defaultProperties;
 
-	public static void main(String[] args) throws IOException {
+	private CyclesModWin() throws IOException {
+		// Loading default properties...
+		bikesInf = new BikesInf(new BikesZip().getInputStream());
+		defaultProperties = new BikesCfg(bikesInf).getProperties();
+	}
+
+	public static void main(final String... args) throws IOException {
 		Display display = new Display();
 		Shell shell = new CyclesModWin().createShell(display);
 		shell.open();
@@ -224,12 +230,9 @@ public class CyclesModWin extends CyclesModEngine {
 	}
 
 	private void createForm(final TabFolder tabFolder) throws IOException {
-		bikesInf = new BikesInf(new BikesZip().getInputStream());
-		defaultProperties = new BikesCfg(bikesInf).getProperties();
-
-		for (Bike.Type bikeType : Bike.Type.values()) {
+		for (Bike bike : bikesInf.getBikes()) {
 			TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
-			tabItem.setText(bikeType.getDisplacement() + " cc");
+			tabItem.setText(bike.getType().getDisplacement() + " cc");
 
 			Composite tabComposite = new Composite(tabFolder, SWT.NULL);
 			tabItem.setControl(tabComposite);
@@ -255,15 +258,13 @@ public class CyclesModWin extends CyclesModEngine {
 			torqueGroupGridLayout.numColumns = 16;
 			torqueGroup.setLayout(torqueGroupGridLayout);
 
-			Bike bike = bikesInf.getBike(bikeType.getDisplacement());
-
 			// Settings
 			GridData gridData = new GridData();
 			gridData.minimumWidth = 42;
 			gridData.grabExcessHorizontalSpace = true;
 			Map<Setting, Integer> settings = bike.getSettings().getValues();
 			for (Setting setting : settings.keySet()) {
-				String key = BikesCfg.buildPropertyKey(bikeType, Settings.class, setting.toString());
+				String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
 				Label label = new Label(settingsGroup, SWT.NULL);
 				label.setText(Messages.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
@@ -282,7 +283,7 @@ public class CyclesModWin extends CyclesModEngine {
 			gridData.minimumWidth = 42;
 			gridData.grabExcessHorizontalSpace = true;
 			for (int ratio : gearbox.getRatios()) {
-				String key = BikesCfg.buildPropertyKey(bikeType, Gearbox.class, index);
+				String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
 				Label label = new Label(gearboxGroup, SWT.NULL);
 				label.setText(Messages.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
@@ -302,7 +303,7 @@ public class CyclesModWin extends CyclesModEngine {
 			gridData.minimumWidth = 30;
 			gridData.grabExcessHorizontalSpace = true;
 			for (int point : torque.getCurve()) {
-				String key = BikesCfg.buildPropertyKey(bikeType, Torque.class, index);
+				String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
 				Label label = new Label(torqueGroup, SWT.NULL);
 				label.setText(Messages.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
