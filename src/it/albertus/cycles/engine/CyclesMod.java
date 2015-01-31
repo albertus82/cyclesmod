@@ -84,9 +84,12 @@ public class CyclesMod extends PropertyParser {
 		bikesCfg = new BikesCfg( bikesInf, path );
 		
 		// Elaborazione delle properties...
+		short changesCount = 0;
 		for ( Object objectKey : bikesCfg.getProperties().keySet() ) {
 			String key = (String) objectKey;
-			applyProperty( key, bikesCfg.getProperties().getProperty( key ) );
+			if ( applyProperty( key, bikesCfg.getProperties().getProperty( key ) ) ) {
+				changesCount++;
+			}
 		}
 		log.info( Messages.get( "msg.customizations.applied", changesCount ) );
 	}
