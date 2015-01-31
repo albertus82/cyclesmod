@@ -44,7 +44,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 	private static final Logger log = LoggerFactory.getLogger(CyclesModWin.class);
 
-	private static final Point WINDOW_SIZE = new Point(830, 700);
+	private static final Point WINDOW_SIZE = new Point(815, 700);
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private final Properties defaultProperties;
@@ -87,7 +87,7 @@ public class CyclesModWin extends CyclesModEngine {
 		// Buttons...
 		Composite footer = new Composite(shell, SWT.NONE);
 		GridLayout footerLayout = new GridLayout();
-		footerLayout.numColumns = 3;
+		footerLayout.numColumns = 4;
 		footer.setLayout(footerLayout);
 		GridData footerGridData = new GridData(GridData.FILL, GridData.FILL, true, false);
 		footer.setLayoutData(footerGridData);
@@ -223,6 +223,22 @@ public class CyclesModWin extends CyclesModEngine {
 						messageBox.open();
 					}
 				}
+			}
+		});
+
+		// Info...
+		Button infoButton = new Button(footer, SWT.PUSH);
+		infoButton.setText(Messages.get("btn.info"));
+		GridData infoButtonLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
+		infoButtonLayoutData.widthHint = 30;
+		infoButton.setLayoutData(infoButtonLayoutData);
+		infoButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+				messageBox.setText(Messages.get("msg.info.title"));
+				messageBox.setMessage(Messages.get("msg.info.body", version.get("version.number"), version.get("version.date")));
+				messageBox.open();
 			}
 		});
 
