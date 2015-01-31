@@ -12,7 +12,7 @@ public class Messages {
 	public static String get( final String key, final Object... params ) {
 		List<String> stringParams = new ArrayList<String>( params.length );
 		for ( Object param : params ) {
-			stringParams.add( param.toString() );
+			stringParams.add( param != null ? param.toString() : "" );
 		}
 		return MessageFormat.format( messages.getString( key ), stringParams.toArray() );
 	}
