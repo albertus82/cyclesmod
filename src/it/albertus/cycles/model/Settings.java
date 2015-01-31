@@ -18,17 +18,17 @@ public class Settings extends BikesInfElement {
 	private final Map<Setting, Integer> values = new TreeMap<Setting, Integer>();
 	
 	public Settings( int gearsCount, int rpmRedline, int rpmLimit, int overspeedGracePeriod, int grip, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int rpmDownshift ) {
-		values.put( Setting.GEARS_COUNT, gearsCount );
-		values.put( Setting.RPM_REDLINE, rpmRedline );
-		values.put( Setting.RPM_LIMIT, rpmLimit );
-		values.put( Setting.OVERSPEED_GRACE_PERIOD, overspeedGracePeriod );
-		values.put( Setting.GRIP, grip );
-		values.put( Setting.UNKNOWN_1, unknown1 );
-		values.put( Setting.BRAKING_SPEED, brakingSpeed );
-		values.put( Setting.UNKNOWN_2, unknown2 );
-		values.put( Setting.SPIN_THRESHOLD, spinThreshold );
-		values.put( Setting.UNKNOWN_3, unknown3 );
-		values.put( Setting.RPM_DOWNSHIFT, rpmDownshift );
+		values.put( Setting.gearsCount, gearsCount );
+		values.put( Setting.rpmRedline, rpmRedline );
+		values.put( Setting.rpmLimit, rpmLimit );
+		values.put( Setting.overspeedGracePeriod, overspeedGracePeriod );
+		values.put( Setting.grip, grip );
+		values.put( Setting.unknown1, unknown1 );
+		values.put( Setting.brakingSpeed, brakingSpeed );
+		values.put( Setting.unknown2, unknown2 );
+		values.put( Setting.spinThreshold, spinThreshold );
+		values.put( Setting.unknown3, unknown3 );
+		values.put( Setting.rpmDownshift, rpmDownshift );
 	}
 	
 	@Override
