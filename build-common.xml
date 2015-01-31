@@ -5,7 +5,8 @@
 	
 	<property file="src/version.properties" />
 	
-	<property name="main.class" value="it.albertus.cycles.gui.CyclesModGUI" />
+	<property name="main.class.win" value="it.albertus.cycles.CyclesModWin" />
+	<property name="main.class.cmd" value="it.albertus.cycles.CyclesModCmd" />
 	
 	<scriptdef language="javascript" name="lower">
 		<attribute name="string" />
@@ -31,7 +32,8 @@
 	</target>
 		
 	<target name="bat">
-		<echo file="${build.dir}/dist/${project.name.lowercase}.bat">@start javaw -classpath "${project.name.lowercase}.jar;lib/*" ${main.class} %1 %2</echo>
+		<echo file="${build.dir}/dist/${project.name.lowercase}-win.bat">@start javaw -classpath "${project.name.lowercase}.jar;lib/*" ${main.class.win}</echo>
+		<echo file="${build.dir}/dist/${project.name.lowercase}-cmd.bat">@java -classpath "${project.name.lowercase}.jar;lib/*" ${main.class.cmd} %1 %2</echo>
 	</target>
 	
 </project>

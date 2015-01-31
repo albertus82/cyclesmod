@@ -1,8 +1,9 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles;
 
 import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
+import it.albertus.cycles.gui.FormProperty;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -39,10 +40,10 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CyclesModGUI extends CyclesModEngine {
+public class CyclesModWin extends CyclesModEngine {
 
-	private static final Logger log = LoggerFactory.getLogger(CyclesModGUI.class);
-	
+	private static final Logger log = LoggerFactory.getLogger(CyclesModWin.class);
+
 	private static final Point WINDOW_SIZE = new Point(830, 700);
 
 	private Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
@@ -50,7 +51,7 @@ public class CyclesModGUI extends CyclesModEngine {
 
 	public static void main(String[] args) throws IOException {
 		Display display = new Display();
-		Shell shell = new CyclesModGUI().createShell(display);
+		Shell shell = new CyclesModWin().createShell(display);
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -58,7 +59,7 @@ public class CyclesModGUI extends CyclesModEngine {
 		}
 	}
 
-	public Shell createShell(final Display display) throws IOException {
+	private Shell createShell(final Display display) throws IOException {
 		final Shell shell = new Shell(display);
 		shell.setText(Messages.get("win.title"));
 		GridLayout shellLayout = new GridLayout();
@@ -157,8 +158,8 @@ public class CyclesModGUI extends CyclesModEngine {
 				catch (InvalidPropertyException ipe) {
 					log.error(ExceptionUtils.getLogMessage(ipe));
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-					messageBox.setText("Attenzione!");
-					messageBox.setMessage(ipe.getLocalizedMessage());
+					messageBox.setText(Messages.get("msg.warning"));
+					messageBox.setMessage(ExceptionUtils.getGUIMessage(ipe));
 					messageBox.open();
 					return;
 				}
@@ -253,7 +254,7 @@ public class CyclesModGUI extends CyclesModEngine {
 			GridLayout torqueGroupGridLayout = new GridLayout();
 			torqueGroupGridLayout.numColumns = 16;
 			torqueGroup.setLayout(torqueGroupGridLayout);
-			
+
 			Bike bike = bikesInf.getBike(bikeType.getDisplacement());
 
 			// Settings
@@ -264,7 +265,7 @@ public class CyclesModGUI extends CyclesModEngine {
 			for (Setting setting : settings.keySet()) {
 				String key = BikesCfg.buildPropertyKey(bikeType, Settings.class, setting.toString());
 				Label label = new Label(settingsGroup, SWT.NULL);
-				label.setText(Messages.get( "lbl." + setting.toString()));
+				label.setText(Messages.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				Text text = new Text(settingsGroup, SWT.BORDER);
 				text.setText(settings.get(setting).toString());
