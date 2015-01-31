@@ -145,7 +145,7 @@ public class CyclesModWin extends CyclesModEngine {
 						log.error(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 						messageBox.setText(Messages.get("msg.warning"));
-						messageBox.setMessage(Messages.get("err.file.load", ExceptionUtils.getGUIMessage(e)));
+						messageBox.setMessage(Messages.get("err.file.load", ExceptionUtils.getUIMessage(e)));
 						messageBox.open();
 					}
 				}
@@ -166,7 +166,7 @@ public class CyclesModWin extends CyclesModEngine {
 					log.error(ExceptionUtils.getLogMessage(ipe));
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 					messageBox.setText(Messages.get("msg.warning"));
-					messageBox.setMessage(ExceptionUtils.getGUIMessage(ipe));
+					messageBox.setMessage(ExceptionUtils.getUIMessage(ipe));
 					messageBox.open();
 					return;
 				}
@@ -185,7 +185,7 @@ public class CyclesModWin extends CyclesModEngine {
 						log.error(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 						messageBox.setText(Messages.get("msg.warning"));
-						messageBox.setMessage(Messages.get("err.file.save", ExceptionUtils.getGUIMessage(e)));
+						messageBox.setMessage(Messages.get("err.file.save", ExceptionUtils.getUIMessage(e)));
 						messageBox.open();
 						return;
 					}
@@ -220,7 +220,7 @@ public class CyclesModWin extends CyclesModEngine {
 						log.error(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 						messageBox.setText(Messages.get("msg.warning"));
-						messageBox.setMessage(Messages.get("err.reset", ExceptionUtils.getGUIMessage(e)));
+						messageBox.setMessage(Messages.get("err.reset", ExceptionUtils.getUIMessage(e)));
 						messageBox.open();
 					}
 				}
@@ -263,7 +263,7 @@ public class CyclesModWin extends CyclesModEngine {
 			GridLayout settingsGroupGridLayout = new GridLayout();
 			settingsGroupGridLayout.numColumns = 8;
 			settingsGroup.setLayout(settingsGroupGridLayout);
-			
+
 			GridData gridData = new GridData();
 			gridData.minimumWidth = 48;
 			gridData.grabExcessHorizontalSpace = true;
@@ -289,7 +289,7 @@ public class CyclesModWin extends CyclesModEngine {
 			GridLayout gearboxGroupGridLayout = new GridLayout();
 			gearboxGroupGridLayout.numColumns = 10;
 			gearboxGroup.setLayout(gearboxGroupGridLayout);
-			
+
 			Gearbox gearbox = bike.getGearbox();
 			int index = 0;
 			gridData = new GridData();
@@ -317,7 +317,7 @@ public class CyclesModWin extends CyclesModEngine {
 			GridLayout torqueGroupGridLayout = new GridLayout();
 			torqueGroupGridLayout.numColumns = 16;
 			torqueGroup.setLayout(torqueGroupGridLayout);
-			
+
 			Torque torque = bike.getTorque();
 			index = 0;
 			gridData = new GridData();

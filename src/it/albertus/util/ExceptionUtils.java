@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 public class ExceptionUtils {
 
-	public static String getGUIMessage(Throwable throwable) {
+	public static String getUIMessage(Throwable throwable) {
 		String message = "";
 		if (throwable != null) {
 			if (StringUtils.isNotBlank(throwable.getLocalizedMessage())) {
@@ -37,4 +37,5 @@ public class ExceptionUtils {
 		}
 		return message;
 	}
+
 }
