@@ -2,7 +2,7 @@ package it.albertus.cycles.gui;
 
 import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.InvalidPropertyException;
-import it.albertus.cycles.engine.PropertyParser;
+import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CyclesModGUI extends PropertyParser {
+public class CyclesModGUI extends CyclesModEngine {
 
 	private static final Logger log = LoggerFactory.getLogger(CyclesModGUI.class);
 
