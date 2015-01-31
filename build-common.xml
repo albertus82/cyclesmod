@@ -1,0 +1,37 @@
+<project name="CyclesMod">
+	
+	<property file="build.properties" />
+	<property file="build.properties.default" />
+	
+	<property file="src/version.properties" />
+	
+	<property name="main.class" value="it.albertus.cycles.gui.CyclesModGUI" />
+	
+	<scriptdef language="javascript" name="lower">
+		<attribute name="string" />
+		<attribute name="to" />
+		project.setProperty( attributes.get( "to" ), attributes.get( "string" ).toLowerCase() );
+	</scriptdef>
+	
+	<lower string="${ant.project.name}" to="project.name.lowercase" />
+	
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="compile" depends="clean">
+		<mkdir dir="${build.dir}/classes" />
+		<javac srcdir="src" destdir="${build.dir}/classes" source="1.5" target="1.5">
+			<classpath>
+				<fileset dir="lib">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+		
+	<target name="bat">
+		<echo file="${build.dir}/dist/${project.name.lowercase}.bat">@start javaw -classpath "${project.name.lowercase}.jar;lib/*" ${main.class} %1 %2</echo>
+	</target>
+	
+</project>
