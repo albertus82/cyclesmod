@@ -4,6 +4,7 @@ import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Messages;
+import it.albertus.util.ExceptionUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,12 +46,12 @@ public class CyclesMod extends CyclesModEngine {
 			
 			new CyclesMod( path ).execute();
 		}
-		catch ( Exception e ) {
-			if ( StringUtils.isNotBlank( e.getLocalizedMessage() ) || StringUtils.isNotBlank( e.getMessage() ) ) {
-				log.error( e.getClass().getSimpleName() + ": " + ( StringUtils.isNotBlank( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() ) );
+		catch (Exception e) {
+			if (StringUtils.isNotBlank(e.getLocalizedMessage()) || StringUtils.isNotBlank(e.getMessage())) {
+				log.error(ExceptionUtils.getLogMessage(e));
 			}
 			else {
-				throw e; // Le eccezioni prive di messaggio vengono semplicemente rilanciate.
+				throw e; // Exceptions without message are thrown by default.
 			}
 		}
 	}
