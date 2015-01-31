@@ -4,6 +4,7 @@ import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.gui.FormProperty;
+import it.albertus.cycles.gui.PropertyFocusListener;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -44,7 +45,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 	private static final Logger log = LoggerFactory.getLogger(CyclesModWin.class);
 
-	private static final Point WINDOW_SIZE = new Point(815, 700);
+	private static final Point WINDOW_SIZE = new Point(840, 700);
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private final Properties defaultProperties;
@@ -276,19 +277,21 @@ public class CyclesModWin extends CyclesModEngine {
 
 			// Settings
 			GridData gridData = new GridData();
-			gridData.minimumWidth = 42;
+			gridData.minimumWidth = 48;
 			gridData.grabExcessHorizontalSpace = true;
 			Map<Setting, Integer> settings = bike.getSettings().getValues();
 			for (Setting setting : settings.keySet()) {
 				String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
+				String defaultValue = defaultProperties.getProperty(key);
 				Label label = new Label(settingsGroup, SWT.NULL);
 				label.setText(Messages.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				Text text = new Text(settingsGroup, SWT.BORDER);
 				text.setText(settings.get(setting).toString());
 				text.setTextLimit(5);
-				text.setToolTipText(Messages.get("msg.tooltip.default", defaultProperties.getProperty(key)));
+				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
+				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				formProperties.put(key, new FormProperty(label, text));
 			}
 
@@ -296,18 +299,20 @@ public class CyclesModWin extends CyclesModEngine {
 			Gearbox gearbox = bike.getGearbox();
 			int index = 0;
 			gridData = new GridData();
-			gridData.minimumWidth = 42;
+			gridData.minimumWidth = 48;
 			gridData.grabExcessHorizontalSpace = true;
 			for (int ratio : gearbox.getRatios()) {
 				String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
+				String defaultValue = defaultProperties.getProperty(key);
 				Label label = new Label(gearboxGroup, SWT.NULL);
 				label.setText(Messages.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
 				Text text = new Text(gearboxGroup, SWT.BORDER);
 				text.setText(Integer.toString(ratio));
 				text.setTextLimit(5);
-				text.setToolTipText(Messages.get("msg.tooltip.default", defaultProperties.getProperty(key)));
+				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
+				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				formProperties.put(key, new FormProperty(label, text));
 				index++;
 			}
@@ -316,18 +321,20 @@ public class CyclesModWin extends CyclesModEngine {
 			Torque torque = bike.getTorque();
 			index = 0;
 			gridData = new GridData();
-			gridData.minimumWidth = 30;
+			gridData.minimumWidth = 33;
 			gridData.grabExcessHorizontalSpace = true;
 			for (int point : torque.getCurve()) {
 				String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
+				String defaultValue = defaultProperties.getProperty(key);
 				Label label = new Label(torqueGroup, SWT.NULL);
 				label.setText(Messages.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				Text text = new Text(torqueGroup, SWT.BORDER);
 				text.setText(Integer.toString(point));
 				text.setTextLimit(3);
-				text.setToolTipText(Messages.get("msg.tooltip.default", defaultProperties.getProperty(key)));
+				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
+				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				formProperties.put(key, new FormProperty(label, text));
 				index++;
 			}
@@ -347,7 +354,12 @@ public class CyclesModWin extends CyclesModEngine {
 			if (!properties.containsKey(key)) {
 				throw new RuntimeException(Messages.get("err.property.missing", key));
 			}
-			formProperties.get(key).getText().setText((String) properties.get(key));
+			Text field = formProperties.get(key).getText();
+			field.setText((String) properties.get(key)); // Update field value.
+
+			// Update font style...
+			String defaultValue = (String) defaultProperties.get(key);
+			PropertyFocusListener.updateFontStyle(field, defaultValue);
 		}
 	}
 
