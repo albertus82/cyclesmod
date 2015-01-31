@@ -257,25 +257,13 @@ public class CyclesModWin extends CyclesModEngine {
 			compositeGridLayout.numColumns = 1;
 			tabComposite.setLayout(compositeGridLayout);
 
+			// Settings
 			Group settingsGroup = new Group(tabComposite, SWT.NULL);
 			settingsGroup.setText(Messages.get("lbl.settings"));
 			GridLayout settingsGroupGridLayout = new GridLayout();
 			settingsGroupGridLayout.numColumns = 8;
 			settingsGroup.setLayout(settingsGroupGridLayout);
-
-			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
-			gearboxGroup.setText(Messages.get("lbl.gearbox"));
-			GridLayout gearboxGroupGridLayout = new GridLayout();
-			gearboxGroupGridLayout.numColumns = 10;
-			gearboxGroup.setLayout(gearboxGroupGridLayout);
-
-			Group torqueGroup = new Group(tabComposite, SWT.NULL);
-			torqueGroup.setText(Messages.get("lbl.torque"));
-			GridLayout torqueGroupGridLayout = new GridLayout();
-			torqueGroupGridLayout.numColumns = 16;
-			torqueGroup.setLayout(torqueGroupGridLayout);
-
-			// Settings
+			
 			GridData gridData = new GridData();
 			gridData.minimumWidth = 48;
 			gridData.grabExcessHorizontalSpace = true;
@@ -296,6 +284,12 @@ public class CyclesModWin extends CyclesModEngine {
 			}
 
 			// Gearbox
+			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
+			gearboxGroup.setText(Messages.get("lbl.gearbox"));
+			GridLayout gearboxGroupGridLayout = new GridLayout();
+			gearboxGroupGridLayout.numColumns = 10;
+			gearboxGroup.setLayout(gearboxGroupGridLayout);
+			
 			Gearbox gearbox = bike.getGearbox();
 			int index = 0;
 			gridData = new GridData();
@@ -318,6 +312,12 @@ public class CyclesModWin extends CyclesModEngine {
 			}
 
 			// Torque
+			Group torqueGroup = new Group(tabComposite, SWT.NULL);
+			torqueGroup.setText(Messages.get("lbl.torque"));
+			GridLayout torqueGroupGridLayout = new GridLayout();
+			torqueGroupGridLayout.numColumns = 16;
+			torqueGroup.setLayout(torqueGroupGridLayout);
+			
 			Torque torque = bike.getTorque();
 			index = 0;
 			gridData = new GridData();
