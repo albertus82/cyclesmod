@@ -22,6 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -41,6 +42,8 @@ import org.slf4j.LoggerFactory;
 public class CyclesModGUI extends CyclesModEngine {
 
 	private static final Logger log = LoggerFactory.getLogger(CyclesModGUI.class);
+	
+	private static final Point WINDOW_SIZE = new Point(830, 700);
 
 	private Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private Properties defaultProperties;
@@ -61,7 +64,7 @@ public class CyclesModGUI extends CyclesModEngine {
 		GridLayout shellLayout = new GridLayout();
 		shellLayout.numColumns = 1;
 		shell.setLayout(shellLayout);
-		shell.setSize(830, 680);
+		shell.setSize(WINDOW_SIZE);
 
 		// Tabs...
 		final TabFolder tabFolder = new TabFolder(shell, SWT.NULL);
@@ -100,6 +103,11 @@ public class CyclesModGUI extends CyclesModEngine {
 					try {
 						if ("inf".equalsIgnoreCase(StringUtils.substringAfterLast(fileName, "."))) {
 							bikesInf = new BikesInf(fileName);
+							updateFormValues();
+							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+							messageBox.setText(Messages.get("msg.completed"));
+							messageBox.setMessage(Messages.get("msg.file.loaded", fileName));
+							messageBox.open();
 						}
 						else if ("cfg".equalsIgnoreCase(StringUtils.substringAfterLast(fileName, "."))) {
 							bikesInf = new BikesInf(new BikesZip().getInputStream());
@@ -112,6 +120,7 @@ public class CyclesModGUI extends CyclesModEngine {
 									changesCount++;
 								}
 							}
+							updateFormValues();
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 							messageBox.setText(Messages.get("msg.completed"));
 							messageBox.setMessage(Messages.get("msg.customizations.applied", changesCount));
@@ -122,9 +131,7 @@ public class CyclesModGUI extends CyclesModEngine {
 							messageBox.setText(Messages.get("msg.warning"));
 							messageBox.setMessage(Messages.get("err.file.invalid"));
 							messageBox.open();
-							return;
 						}
-						updateFormValues();
 					}
 					catch (Exception e) {
 						log.error(ExceptionUtils.getLogMessage(e));
@@ -172,7 +179,12 @@ public class CyclesModGUI extends CyclesModEngine {
 						messageBox.setText(Messages.get("msg.warning"));
 						messageBox.setMessage(Messages.get("err.file.save", ExceptionUtils.getGUIMessage(e)));
 						messageBox.open();
+						return;
 					}
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+					messageBox.setText(Messages.get("msg.completed"));
+					messageBox.setMessage(Messages.get("msg.file.saved", fileName));
+					messageBox.open();
 				}
 			}
 		});
@@ -188,7 +200,7 @@ public class CyclesModGUI extends CyclesModEngine {
 				if (bikesInf != null) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 					messageBox.setText(Messages.get("msg.warning"));
-					messageBox.setMessage("Sovrascrivere i valori correnti con quelli predefiniti?");
+					messageBox.setMessage(Messages.get("msg.reset.overwrite"));
 					choose = messageBox.open();
 				}
 				if (choose == SWT.YES) {
@@ -227,7 +239,7 @@ public class CyclesModGUI extends CyclesModEngine {
 			Group settingsGroup = new Group(tabComposite, SWT.NULL);
 			settingsGroup.setText(Messages.get("lbl.settings"));
 			GridLayout settingsGroupGridLayout = new GridLayout();
-			settingsGroupGridLayout.numColumns = 12;
+			settingsGroupGridLayout.numColumns = 8;
 			settingsGroup.setLayout(settingsGroupGridLayout);
 
 			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
@@ -252,7 +264,7 @@ public class CyclesModGUI extends CyclesModEngine {
 			for (Setting setting : settings.keySet()) {
 				String key = BikesCfg.buildPropertyKey(bikeType, Settings.class, setting.toString());
 				Label label = new Label(settingsGroup, SWT.NULL);
-				label.setText(setting.toString());
+				label.setText(Messages.get( "lbl." + setting.toString()));
 				label.setToolTipText(key);
 				Text text = new Text(settingsGroup, SWT.BORDER);
 				text.setText(settings.get(setting).toString());
