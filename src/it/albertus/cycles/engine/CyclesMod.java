@@ -7,19 +7,15 @@ import it.albertus.cycles.resources.Messages;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CyclesMod extends PropertyParser {
+public class CyclesMod extends CyclesModEngine {
 	
 	private static final Logger log = LoggerFactory.getLogger( CyclesMod.class );
-	
-	private static final String VERSION_FILE_PATH = "/";
-	private static final String VERSION_FILE_NAME = "version.properties";
 	
 	private static final String DEFAULT_DESTINATION_PATH = "";
 	
@@ -51,8 +47,8 @@ public class CyclesMod extends PropertyParser {
 			new CyclesMod( path ).execute();
 		}
 		catch ( Exception e ) {
-			if ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) || StringUtils.isNotEmpty( e.getMessage() ) ) {
-				log.error( e.getClass().getSimpleName() + ": " + ( StringUtils.isNotEmpty( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() ) );
+			if ( StringUtils.isNotBlank( e.getLocalizedMessage() ) || StringUtils.isNotBlank( e.getMessage() ) ) {
+				log.error( e.getClass().getSimpleName() + ": " + ( StringUtils.isNotBlank( e.getLocalizedMessage() ) ? e.getLocalizedMessage() : e.getMessage() ) );
 			}
 			else {
 				throw e; // Le eccezioni prive di messaggio vengono semplicemente rilanciate.
@@ -61,10 +57,7 @@ public class CyclesMod extends PropertyParser {
 	}
 
 	private static String getWelcomeMessage() throws IOException {
-		Properties version = new Properties();
-		InputStream is = CyclesMod.class.getResourceAsStream( VERSION_FILE_PATH + VERSION_FILE_NAME );
-		version.load( is );
-		is.close();
+		Properties version = getVersionInfo();
 		return Messages.get( "msg.welcome", version.get( "version.number" ), version.get( "version.date" ) ) + "\r\n";
 	}
 	

@@ -9,16 +9,30 @@ import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 
 import java.beans.Introspector;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class PropertyParser {
+public abstract class CyclesModEngine {
 	
-	private static final Logger log = LoggerFactory.getLogger( PropertyParser.class );
+	private static final Logger log = LoggerFactory.getLogger( CyclesModEngine.class );
+	
+	private static final String VERSION_FILE_PATH = "/";
+	private static final String VERSION_FILE_NAME = "version.properties";
 	
 	protected BikesInf bikesInf;
+	
+	protected static Properties getVersionInfo() throws IOException {
+		Properties version = new Properties();
+		InputStream is = CyclesModEngine.class.getResourceAsStream( VERSION_FILE_PATH + VERSION_FILE_NAME );
+		version.load( is );
+		is.close();
+		return version;
+	}
 	
 	protected boolean applyProperty(String key, String value) {
 		if ( StringUtils.isBlank( value ) || !StringUtils.isNumeric( value ) ) {
