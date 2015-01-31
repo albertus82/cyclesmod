@@ -46,12 +46,12 @@ public class BikesInf {
 			throw new IllegalStateException( Messages.get( "err.wrong.file.size" ) );
 		}
 		inf.close();
-		log.info( Messages.get( "msg.original.file.read", FILE_NAME ) );
+		log.info( Messages.get( "msg.file.read", FILE_NAME ) );
 		
 		bikes[0] = new Bike( Bike.Type.CLASS_125, inf125 );
 		bikes[1] = new Bike( Bike.Type.CLASS_250, inf250 );
 		bikes[2] = new Bike( Bike.Type.CLASS_500, inf500 );
-		log.info( Messages.get( "msg.original.file.parsed", FILE_NAME ) );
+		log.info( Messages.get( "msg.file.parsed", FILE_NAME ) );
 	}
 	
 	public void write( final String fileName ) throws IOException {

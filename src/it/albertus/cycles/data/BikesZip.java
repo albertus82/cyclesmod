@@ -32,7 +32,7 @@ public class BikesZip {
 	}
 	
 	private ZipInputStream openBikesInfInputStream() throws IOException {
-		log.info( Messages.get( "msg.opening.file", BikesInf.FILE_NAME ) );
+		log.info( Messages.get( "msg.opening.original.file", BikesInf.FILE_NAME ) );
 		ZipInputStream zis = null;
 		try {
 			zis = new ZipInputStream( getClass().getResourceAsStream( FILE_NAME ) );

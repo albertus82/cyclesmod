@@ -11,6 +11,7 @@ import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
+import it.albertus.util.ExceptionUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -62,14 +63,15 @@ public class CyclesModGUI extends CyclesModEngine {
 		shell.setLayout(shellLayout);
 		shell.setSize(830, 680);
 
-		// Tab
-		final TabFolder tabFolder = new TabFolder(shell, SWT.BORDER);
+		// Tabs...
+		final TabFolder tabFolder = new TabFolder(shell, SWT.NULL);
 		GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 1;
 		tabFolder.setLayout(gridLayout);
 		GridData tabGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		tabFolder.setLayoutData(tabGridData);
 
+		// Fields...
 		createForm(tabFolder);
 
 		// Buttons...
@@ -100,8 +102,8 @@ public class CyclesModGUI extends CyclesModEngine {
 							bikesInf = new BikesInf(fileName);
 						}
 						else if ("cfg".equalsIgnoreCase(StringUtils.substringAfterLast(fileName, "."))) {
-							bikesInf = new BikesInf(new BikesZip().getInputStream()); // Load
-																						// defaults.
+							bikesInf = new BikesInf(new BikesZip().getInputStream());
+
 							BikesCfg bikesCfg = new BikesCfg(fileName);
 							short changesCount = 0;
 							for (Object objectKey : bikesCfg.getProperties().keySet()) {
@@ -125,13 +127,10 @@ public class CyclesModGUI extends CyclesModEngine {
 						updateFormValues();
 					}
 					catch (Exception e) {
+						log.error(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 						messageBox.setText(Messages.get("msg.warning"));
-						StringBuilder message = new StringBuilder(Messages.get("err.generic"));
-						if (StringUtils.isNotBlank(e.getLocalizedMessage())) {
-							message.append(' ').append(e.getLocalizedMessage());
-						}
-						messageBox.setMessage(message.toString());
+						messageBox.setMessage(Messages.get("err.file.load", ExceptionUtils.getGUIMessage(e)));
 						messageBox.open();
 					}
 				}
@@ -144,38 +143,35 @@ public class CyclesModGUI extends CyclesModEngine {
 		saveButton.setLayoutData(buttonLayoutData);
 		saveButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if (bikesInf == null) {
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-					messageBox.setText("Attenzione!");
-					messageBox.setMessage("Non ci sono dati da salvare. Caricare prima un file BIKES.INF valido.");
-					messageBox.open();
+			public void widgetSelected(SelectionEvent event) {
+				try {
+					updateModelValues();
 				}
-				else {
-					try {
-						updateModelValues();
-					}
-					catch (InvalidPropertyException ipe) {
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-						messageBox.setText("Attenzione!");
-						messageBox.setMessage(ipe.getMessage());
-						messageBox.open();
-						return;
-					}
-					FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-					saveDialog.setFilterExtensions(new String[] { "*.inf" });
-					saveDialog.setFilterPath(".");
-					saveDialog.setFileName(BikesInf.FILE_NAME);
-					saveDialog.setOverwrite(true);
-					String fileName = saveDialog.open();
+				catch (InvalidPropertyException ipe) {
+					log.error(ExceptionUtils.getLogMessage(ipe));
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+					messageBox.setText("Attenzione!");
+					messageBox.setMessage(ipe.getLocalizedMessage());
+					messageBox.open();
+					return;
+				}
+				FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
+				saveDialog.setFilterExtensions(new String[] { "*.inf" });
+				saveDialog.setFilterPath(".");
+				saveDialog.setFileName(BikesInf.FILE_NAME);
+				saveDialog.setOverwrite(true);
+				String fileName = saveDialog.open();
 
-					if (StringUtils.isNotBlank(fileName)) {
-						try {
-							bikesInf.write(fileName);
-						}
-						catch (IOException e1) {
-							e1.printStackTrace(); // TODO
-						}
+				if (StringUtils.isNotBlank(fileName)) {
+					try {
+						bikesInf.write(fileName);
+					}
+					catch (Exception e) {
+						log.error(ExceptionUtils.getLogMessage(e));
+						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+						messageBox.setText(Messages.get("msg.warning"));
+						messageBox.setMessage(Messages.get("err.file.save", ExceptionUtils.getGUIMessage(e)));
+						messageBox.open();
 					}
 				}
 			}
@@ -187,22 +183,25 @@ public class CyclesModGUI extends CyclesModEngine {
 		resetButton.setLayoutData(buttonLayoutData);
 		resetButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 				int choose = SWT.YES;
 				if (bikesInf != null) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-					messageBox.setText("Attenzione!");
+					messageBox.setText(Messages.get("msg.warning"));
 					messageBox.setMessage("Sovrascrivere i valori correnti con quelli predefiniti?");
 					choose = messageBox.open();
 				}
 				if (choose == SWT.YES) {
 					try {
 						bikesInf = new BikesInf(new BikesZip().getInputStream());
-						log.debug("Defaults loaded!");
 						updateFormValues();
 					}
-					catch (IOException e1) {
-						e1.printStackTrace(); // TODO
+					catch (Exception e) {
+						log.error(ExceptionUtils.getLogMessage(e));
+						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+						messageBox.setText(Messages.get("msg.warning"));
+						messageBox.setMessage(Messages.get("err.reset", ExceptionUtils.getGUIMessage(e)));
+						messageBox.open();
 					}
 				}
 			}
@@ -225,9 +224,6 @@ public class CyclesModGUI extends CyclesModEngine {
 			compositeGridLayout.numColumns = 1;
 			tabComposite.setLayout(compositeGridLayout);
 
-			// Inserire qui tutti i controlli di ogni tab
-			Bike bike = bikesInf.getBike(bikeType.getDisplacement());
-
 			Group settingsGroup = new Group(tabComposite, SWT.NULL);
 			settingsGroup.setText(Messages.get("lbl.settings"));
 			GridLayout settingsGroupGridLayout = new GridLayout();
@@ -245,6 +241,8 @@ public class CyclesModGUI extends CyclesModEngine {
 			GridLayout torqueGroupGridLayout = new GridLayout();
 			torqueGroupGridLayout.numColumns = 16;
 			torqueGroup.setLayout(torqueGroupGridLayout);
+			
+			Bike bike = bikesInf.getBike(bikeType.getDisplacement());
 
 			// Settings
 			GridData gridData = new GridData();
@@ -311,13 +309,13 @@ public class CyclesModGUI extends CyclesModEngine {
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
-			throw new IllegalStateException("Numerosita' properties inconsistente");
+			throw new IllegalStateException(Messages.get("err.properties.number"));
 		}
 
 		// Update screen values...
 		for (String key : formProperties.keySet()) {
 			if (!properties.containsKey(key)) {
-				throw new RuntimeException("Property non presente: " + key);
+				throw new RuntimeException(Messages.get("err.property.missing", key));
 			}
 			formProperties.get(key).getText().setText((String) properties.get(key));
 		}
