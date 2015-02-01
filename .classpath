@@ -7,5 +7,12 @@
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/swt-4.427-win64.jar"/>
+	<classpathentry kind="lib" path="lib/org.csstudio.swt.widgets_2.1.0.201209121549.jar"/>
+	<classpathentry kind="lib" path="lib/org.csstudio.swt.xygraph_2.1.0.201209121540.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.core.commands_3.6.100.v20140528-1422.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.draw2d_3.9.101.201408150207.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.jface_3.10.1.v20140813-1009.jar"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.nebula.visualization.xygraph_1.0.0.201501260813.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
