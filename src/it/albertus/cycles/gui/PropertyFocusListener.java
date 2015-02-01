@@ -2,6 +2,8 @@ package it.albertus.cycles.gui;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.graphics.Font;
@@ -29,17 +31,29 @@ public class PropertyFocusListener extends FocusAdapter {
 
 	public static void updateFontStyle(Text field, String defaultValue) {
 		if (field != null && field.getFont() != null && ArrayUtils.isNotEmpty(field.getFont().getFontData()) && defaultValue != null) {
-			FontData fontData = field.getFont().getFontData()[0];
+			final FontData fontData = field.getFont().getFontData()[0];
 			if (!defaultValue.equalsIgnoreCase(field.getText())) {
 				if (fontData.getStyle() != SWT.BOLD) {
 					fontData.setStyle(SWT.BOLD);
-					field.setFont(new Font(Display.getCurrent(), fontData));
+					final Font newFont = new Font(Display.getCurrent(), fontData);
+					field.setFont(newFont);
+					field.addDisposeListener(new DisposeListener() {
+						public void widgetDisposed(DisposeEvent e) {
+							newFont.dispose();
+						}
+					});
 				}
 			}
 			else {
 				if (fontData.getStyle() != SWT.NORMAL) {
 					fontData.setStyle(SWT.NORMAL);
-					field.setFont(new Font(Display.getCurrent(), fontData));
+					final Font newFont = new Font(Display.getCurrent(), fontData);
+					field.setFont(newFont);
+					field.addDisposeListener(new DisposeListener() {
+						public void widgetDisposed(DisposeEvent e) {
+							newFont.dispose();
+						}
+					});
 				}
 			}
 		}
