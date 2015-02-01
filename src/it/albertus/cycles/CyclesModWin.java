@@ -29,9 +29,12 @@ import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
+import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -311,9 +314,6 @@ public class CyclesModWin extends CyclesModEngine {
 			xyGraph.primaryXAxis.setShowMajorGrid(true);
 			xyGraph.primaryYAxis.setShowMajorGrid(true);
 
-			CircularBufferDataProvider traceDataProvider = new CircularBufferDataProvider(false);
-			traceDataProvider.setBufferSize(100);
-
 			double[] x = new double[Torque.LENGTH], y = new double[Torque.LENGTH];
 
 			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
@@ -321,16 +321,22 @@ public class CyclesModWin extends CyclesModEngine {
 				y[i] = bike.getTorque().getCurve()[i];
 			}
 
+			CircularBufferDataProvider traceDataProvider = new CircularBufferDataProvider(false);
+			traceDataProvider.setBufferSize(x.length);
 			traceDataProvider.setCurrentXDataArray(x);
 			traceDataProvider.setCurrentYDataArray(y);
 
+			Font sysFont = Display.getCurrent().getSystemFont();
+			
 			Axis abscissae = xyGraph.primaryXAxis;
 			abscissae.setAutoScale(true);
 			abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
+			abscissae.setTitleFont(XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD)));
 
 			Axis ordinates = xyGraph.primaryYAxis;
 			ordinates.setAutoScale(true);
 			ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
+			ordinates.setTitleFont(XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD)));
 
 			Trace trace = new Trace("Torque", abscissae, ordinates, traceDataProvider);
 			trace.setPointStyle(PointStyle.NONE);
@@ -338,6 +344,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 			xyGraph.addTrace(trace);
 			xyGraph.setShowLegend(false);
+			xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 11, SWT.BOLD)));
 
 			TorqueGraph graph = new TorqueGraph(trace, y);
 			torqueGraphs.put(bike.getType(), graph);
