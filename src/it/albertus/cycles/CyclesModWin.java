@@ -31,8 +31,11 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
@@ -324,7 +327,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 			Font sysFont = Display.getCurrent().getSystemFont();
 			Font axisTitleFont = XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD));
-			
+
 			Axis abscissae = xyGraph.primaryXAxis;
 			abscissae.setAutoScale(true);
 			abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
@@ -340,6 +343,27 @@ public class CyclesModWin extends CyclesModEngine {
 			Trace trace = new Trace("Torque", abscissae, ordinates, traceDataProvider);
 			trace.setPointStyle(PointStyle.NONE);
 			trace.setLineWidth(3);
+			final Color traceColor;
+			switch (bike.getType()) {
+			case CLASS_125:
+				traceColor = new Color(Display.getCurrent(), 0xFF, 0, 0);
+				break;
+			case CLASS_250:
+				traceColor = new Color(Display.getCurrent(), 0, 0, 0xFF);
+				break;
+			case CLASS_500:
+				traceColor = new Color(Display.getCurrent(), 0x1F, 0x1F, 0x1F);
+				break;
+			default:
+				traceColor = trace.getTraceColor();
+			}
+			graphCanvas.addDisposeListener(new DisposeListener() {
+				public void widgetDisposed(DisposeEvent e) {
+					traceColor.dispose();
+				}
+			});
+
+			trace.setTraceColor(traceColor);
 
 			xyGraph.addTrace(trace);
 			xyGraph.setShowLegend(false);
