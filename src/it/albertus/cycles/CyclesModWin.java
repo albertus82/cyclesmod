@@ -5,6 +5,8 @@ import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.gui.FormProperty;
 import it.albertus.cycles.gui.PropertyFocusListener;
+import it.albertus.cycles.gui.TorqueGraph;
+import it.albertus.cycles.gui.TorquePropertyFocusListener;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -21,6 +23,12 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
+import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
+import org.eclipse.nebula.visualization.xygraph.figures.Axis;
+import org.eclipse.nebula.visualization.xygraph.figures.Trace;
+import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
+import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -28,6 +36,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -45,9 +54,10 @@ public class CyclesModWin extends CyclesModEngine {
 
 	private static final Logger log = LoggerFactory.getLogger(CyclesModWin.class);
 
-	private static final Point WINDOW_SIZE = new Point(840, 700);
+	private static final Point WINDOW_SIZE = new Point(840, 725);
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
+	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new HashMap<Bike.Type, TorqueGraph>();
 	private final Properties defaultProperties;
 
 	private CyclesModWin() throws IOException {
@@ -254,15 +264,18 @@ public class CyclesModWin extends CyclesModEngine {
 			Composite tabComposite = new Composite(tabFolder, SWT.NULL);
 			tabItem.setControl(tabComposite);
 			GridLayout compositeGridLayout = new GridLayout();
-			compositeGridLayout.numColumns = 1;
+			compositeGridLayout.numColumns = 2;
 			tabComposite.setLayout(compositeGridLayout);
 
 			// Settings
 			Group settingsGroup = new Group(tabComposite, SWT.NULL);
 			settingsGroup.setText(Messages.get("lbl.settings"));
 			GridLayout settingsGroupGridLayout = new GridLayout();
-			settingsGroupGridLayout.numColumns = 8;
+			settingsGroupGridLayout.numColumns = 6;
 			settingsGroup.setLayout(settingsGroupGridLayout);
+			GridData settingsGroupGridLayoutData = new GridData();
+			settingsGroupGridLayoutData.widthHint = 525;
+			settingsGroup.setLayoutData(settingsGroupGridLayoutData);
 
 			GridData gridData = new GridData();
 			gridData.minimumWidth = 48;
@@ -283,12 +296,61 @@ public class CyclesModWin extends CyclesModEngine {
 				formProperties.put(key, new FormProperty(label, text));
 			}
 
+			// Torque graph
+			Canvas graphCanvas = new Canvas(tabComposite, SWT.NULL);
+			GridData graphGridLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+			graphGridLayoutData.verticalSpan = 2;
+			graphCanvas.setLayoutData(graphGridLayoutData);
+
+			final LightweightSystem lws = new LightweightSystem(graphCanvas);
+
+			XYGraph xyGraph = new XYGraph();
+			xyGraph.setTitle(Messages.get("lbl.graph.title"));
+			lws.setContents(xyGraph);
+
+			xyGraph.primaryXAxis.setShowMajorGrid(true);
+			xyGraph.primaryYAxis.setShowMajorGrid(true);
+
+			CircularBufferDataProvider traceDataProvider = new CircularBufferDataProvider(false);
+			traceDataProvider.setBufferSize(100);
+
+			double[] x = new double[Torque.LENGTH], y = new double[Torque.LENGTH];
+
+			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
+				x[i] = ((double) Torque.getRpm(i)) / 1000;
+				y[i] = bike.getTorque().getCurve()[i];
+			}
+
+			traceDataProvider.setCurrentXDataArray(x);
+			traceDataProvider.setCurrentYDataArray(y);
+
+			Axis abscissae = xyGraph.primaryXAxis;
+			abscissae.setAutoScale(true);
+			abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
+
+			Axis ordinates = xyGraph.primaryYAxis;
+			ordinates.setAutoScale(true);
+			ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
+
+			Trace trace = new Trace("Torque", abscissae, ordinates, traceDataProvider);
+			trace.setPointStyle(PointStyle.NONE);
+			trace.setLineWidth(3);
+
+			xyGraph.addTrace(trace);
+			xyGraph.setShowLegend(false);
+
+			TorqueGraph graph = new TorqueGraph(trace, y);
+			torqueGraphs.put(bike.getType(), graph);
+
 			// Gearbox
 			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
 			gearboxGroup.setText(Messages.get("lbl.gearbox"));
 			GridLayout gearboxGroupGridLayout = new GridLayout();
 			gearboxGroupGridLayout.numColumns = 10;
+			GridData gearboxGroupGridLayoutData = new GridData();
+			gearboxGroupGridLayoutData.widthHint = 525;
 			gearboxGroup.setLayout(gearboxGroupGridLayout);
+			gearboxGroup.setLayoutData(gearboxGroupGridLayoutData);
 
 			Gearbox gearbox = bike.getGearbox();
 			int index = 0;
@@ -317,13 +379,16 @@ public class CyclesModWin extends CyclesModEngine {
 			GridLayout torqueGroupGridLayout = new GridLayout();
 			torqueGroupGridLayout.numColumns = 16;
 			torqueGroup.setLayout(torqueGroupGridLayout);
+			GridData torqueGroupGridLayoutData = new GridData(SWT.FILL, SWT.TOP, true, true);
+			torqueGroupGridLayoutData.horizontalSpan = 2;
+			torqueGroup.setLayoutData(torqueGroupGridLayoutData);
 
 			Torque torque = bike.getTorque();
 			index = 0;
 			gridData = new GridData();
 			gridData.minimumWidth = 33;
 			gridData.grabExcessHorizontalSpace = true;
-			for (int point : torque.getCurve()) {
+			for (short point : torque.getCurve()) {
 				String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
 				String defaultValue = defaultProperties.getProperty(key);
 				Label label = new Label(torqueGroup, SWT.NULL);
@@ -334,7 +399,7 @@ public class CyclesModWin extends CyclesModEngine {
 				text.setTextLimit(3);
 				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
-				text.addFocusListener(new PropertyFocusListener(defaultValue));
+				text.addFocusListener(new TorquePropertyFocusListener(defaultValue, key, graph));
 				formProperties.put(key, new FormProperty(label, text));
 				index++;
 			}
@@ -360,6 +425,15 @@ public class CyclesModWin extends CyclesModEngine {
 			// Update font style...
 			String defaultValue = (String) defaultProperties.get(key);
 			PropertyFocusListener.updateFontStyle(field, defaultValue);
+		}
+
+		// Update torque graphs...
+		for (Bike bike : bikesInf.getBikes()) {
+			TorqueGraph graph = torqueGraphs.get(bike.getType());
+			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
+				graph.getValues()[i] = bike.getTorque().getCurve()[i];
+			}
+			graph.refresh();
 		}
 	}
 
