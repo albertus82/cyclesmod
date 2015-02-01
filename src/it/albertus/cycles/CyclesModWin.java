@@ -311,11 +311,7 @@ public class CyclesModWin extends CyclesModEngine {
 			xyGraph.setTitle(Messages.get("lbl.graph.title"));
 			lws.setContents(xyGraph);
 
-			xyGraph.primaryXAxis.setShowMajorGrid(true);
-			xyGraph.primaryYAxis.setShowMajorGrid(true);
-
-			double[] x = new double[Torque.LENGTH], y = new double[Torque.LENGTH];
-
+			final double[] x = new double[Torque.LENGTH], y = new double[Torque.LENGTH];
 			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
 				x[i] = ((double) Torque.getRpm(i)) / 1000;
 				y[i] = bike.getTorque().getCurve()[i];
@@ -327,16 +323,19 @@ public class CyclesModWin extends CyclesModEngine {
 			traceDataProvider.setCurrentYDataArray(y);
 
 			Font sysFont = Display.getCurrent().getSystemFont();
+			Font axisTitleFont = XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD));
 			
 			Axis abscissae = xyGraph.primaryXAxis;
 			abscissae.setAutoScale(true);
 			abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
-			abscissae.setTitleFont(XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD)));
+			abscissae.setTitleFont(axisTitleFont);
+			abscissae.setShowMajorGrid(true);
 
 			Axis ordinates = xyGraph.primaryYAxis;
 			ordinates.setAutoScale(true);
 			ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
-			ordinates.setTitleFont(XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD)));
+			ordinates.setTitleFont(axisTitleFont);
+			ordinates.setShowMajorGrid(true);
 
 			Trace trace = new Trace("Torque", abscissae, ordinates, traceDataProvider);
 			trace.setPointStyle(PointStyle.NONE);

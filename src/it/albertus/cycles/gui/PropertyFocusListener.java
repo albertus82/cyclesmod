@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class PropertyFocusListener extends FocusAdapter {
 
-	private String defaultValue;
+	private final String defaultValue;
 
 	public PropertyFocusListener(String defaultValue) {
 		this.defaultValue = defaultValue;

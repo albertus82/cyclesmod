@@ -6,8 +6,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class FormProperty {
 
-	private Label label;
-	private Text text;
+	private final Label label;
+	private final Text text;
 
 	public FormProperty(Label label, Text text) {
 		this.label = label;

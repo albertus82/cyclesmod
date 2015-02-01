@@ -14,9 +14,9 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 
 	private static final Logger log = LoggerFactory.getLogger(TorquePropertyFocusListener.class);
 
-	private String key;
-	private TorqueGraph graph;
-	private short index;
+	private final String key;
+	private final TorqueGraph graph;
+	private final short index;
 
 	public TorquePropertyFocusListener(String defaultValue, String key, TorqueGraph graph) {
 		super(defaultValue);
