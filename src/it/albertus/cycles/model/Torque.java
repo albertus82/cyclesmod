@@ -1,7 +1,7 @@
 package it.albertus.cycles.model;
 
 import it.albertus.cycles.engine.InvalidPropertyException;
-import it.albertus.cycles.resources.Messages;
+import it.albertus.cycles.resources.Resources;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Torque extends BikesInfElement {
 
 	public Torque(final short[] curve) {
 		if (curve.length > LENGTH) {
-			throw new IllegalArgumentException(Messages.get("err.torque", LENGTH, curve.length));
+			throw new IllegalArgumentException(Resources.get("err.torque", LENGTH, curve.length));
 		}
 		for (int i = 0; i < curve.length; i++) {
 			this.curve[i] = curve[i];
@@ -47,7 +47,7 @@ public class Torque extends BikesInfElement {
 			return (short) newValue;
 		}
 		catch (Exception e) {
-			throw new InvalidPropertyException(Messages.get("err.illegal.value", MIN_VALUE, MAX_VALUE, key, value));
+			throw new InvalidPropertyException(Resources.get("err.illegal.value", MIN_VALUE, MAX_VALUE, key, value));
 		}
 	}
 

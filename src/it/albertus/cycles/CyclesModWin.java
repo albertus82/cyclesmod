@@ -16,7 +16,7 @@ import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
-import it.albertus.cycles.resources.Messages;
+import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
 
 import java.io.IOException;
@@ -87,7 +87,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 	private Shell createShell(final Display display) throws IOException {
 		final Shell shell = new Shell(display);
-		shell.setText(Messages.get("win.title"));
+		shell.setText(Resources.get("win.title"));
 		GridLayout shellLayout = new GridLayout();
 		shellLayout.numColumns = 1;
 		shell.setLayout(shellLayout);
@@ -117,7 +117,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 		// Load...
 		Button loadButton = new Button(footer, SWT.PUSH);
-		loadButton.setText(Messages.get("btn.load"));
+		loadButton.setText(Resources.get("btn.load"));
 		loadButton.setLayoutData(buttonLayoutData);
 		loadButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -132,8 +132,8 @@ public class CyclesModWin extends CyclesModEngine {
 							bikesInf = new BikesInf(fileName);
 							updateFormValues();
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-							messageBox.setText(Messages.get("msg.completed"));
-							messageBox.setMessage(Messages.get("msg.file.loaded", fileName));
+							messageBox.setText(Resources.get("msg.completed"));
+							messageBox.setMessage(Resources.get("msg.file.loaded", fileName));
 							messageBox.open();
 						}
 						else if ("cfg".equalsIgnoreCase(StringUtils.substringAfterLast(fileName, "."))) {
@@ -149,22 +149,22 @@ public class CyclesModWin extends CyclesModEngine {
 							}
 							updateFormValues();
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-							messageBox.setText(Messages.get("msg.completed"));
-							messageBox.setMessage(Messages.get("msg.customizations.applied", changesCount));
+							messageBox.setText(Resources.get("msg.completed"));
+							messageBox.setMessage(Resources.get("msg.customizations.applied", changesCount));
 							messageBox.open();
 						}
 						else {
 							MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-							messageBox.setText(Messages.get("msg.warning"));
-							messageBox.setMessage(Messages.get("err.file.invalid"));
+							messageBox.setText(Resources.get("msg.warning"));
+							messageBox.setMessage(Resources.get("err.file.invalid"));
 							messageBox.open();
 						}
 					}
 					catch (Exception e) {
 						log.error(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-						messageBox.setText(Messages.get("msg.warning"));
-						messageBox.setMessage(Messages.get("err.file.load", ExceptionUtils.getUIMessage(e)));
+						messageBox.setText(Resources.get("msg.warning"));
+						messageBox.setMessage(Resources.get("err.file.load", ExceptionUtils.getUIMessage(e)));
 						messageBox.open();
 					}
 				}
@@ -173,7 +173,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 		// Save...
 		Button saveButton = new Button(footer, SWT.PUSH);
-		saveButton.setText(Messages.get("btn.save"));
+		saveButton.setText(Resources.get("btn.save"));
 		saveButton.setLayoutData(buttonLayoutData);
 		saveButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -184,7 +184,7 @@ public class CyclesModWin extends CyclesModEngine {
 				catch (InvalidPropertyException ipe) {
 					log.error(ExceptionUtils.getLogMessage(ipe));
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-					messageBox.setText(Messages.get("msg.warning"));
+					messageBox.setText(Resources.get("msg.warning"));
 					messageBox.setMessage(ExceptionUtils.getUIMessage(ipe));
 					messageBox.open();
 					return;
@@ -203,14 +203,14 @@ public class CyclesModWin extends CyclesModEngine {
 					catch (Exception e) {
 						log.error(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-						messageBox.setText(Messages.get("msg.warning"));
-						messageBox.setMessage(Messages.get("err.file.save", ExceptionUtils.getUIMessage(e)));
+						messageBox.setText(Resources.get("msg.warning"));
+						messageBox.setMessage(Resources.get("err.file.save", ExceptionUtils.getUIMessage(e)));
 						messageBox.open();
 						return;
 					}
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-					messageBox.setText(Messages.get("msg.completed"));
-					messageBox.setMessage(Messages.get("msg.file.saved", fileName));
+					messageBox.setText(Resources.get("msg.completed"));
+					messageBox.setMessage(Resources.get("msg.file.saved", fileName));
 					messageBox.open();
 				}
 			}
@@ -218,7 +218,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 		// Reset...
 		Button resetButton = new Button(footer, SWT.PUSH);
-		resetButton.setText(Messages.get("btn.reset"));
+		resetButton.setText(Resources.get("btn.reset"));
 		resetButton.setLayoutData(buttonLayoutData);
 		resetButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -226,8 +226,8 @@ public class CyclesModWin extends CyclesModEngine {
 				int choose = SWT.YES;
 				if (bikesInf != null) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-					messageBox.setText(Messages.get("msg.warning"));
-					messageBox.setMessage(Messages.get("msg.reset.overwrite"));
+					messageBox.setText(Resources.get("msg.warning"));
+					messageBox.setMessage(Resources.get("msg.reset.overwrite"));
 					choose = messageBox.open();
 				}
 				if (choose == SWT.YES) {
@@ -238,8 +238,8 @@ public class CyclesModWin extends CyclesModEngine {
 					catch (Exception e) {
 						log.error(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-						messageBox.setText(Messages.get("msg.warning"));
-						messageBox.setMessage(Messages.get("err.reset", ExceptionUtils.getUIMessage(e)));
+						messageBox.setText(Resources.get("msg.warning"));
+						messageBox.setMessage(Resources.get("err.reset", ExceptionUtils.getUIMessage(e)));
 						messageBox.open();
 					}
 				}
@@ -248,7 +248,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 		// Info...
 		Button infoButton = new Button(footer, SWT.PUSH);
-		infoButton.setText(Messages.get("btn.info"));
+		infoButton.setText(Resources.get("btn.info"));
 		GridData infoButtonLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		infoButtonLayoutData.widthHint = 30;
 		infoButton.setLayoutData(infoButtonLayoutData);
@@ -256,8 +256,8 @@ public class CyclesModWin extends CyclesModEngine {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-				messageBox.setText(Messages.get("msg.info.title"));
-				messageBox.setMessage(Messages.get("msg.info.body", version.get("version.number"), version.get("version.date")));
+				messageBox.setText(Resources.get("msg.info.title"));
+				messageBox.setMessage(Resources.get("msg.info.body", version.get("version.number"), version.get("version.date")));
 				messageBox.open();
 			}
 		});
@@ -278,7 +278,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 			// Settings
 			Group settingsGroup = new Group(tabComposite, SWT.NULL);
-			settingsGroup.setText(Messages.get("lbl.settings"));
+			settingsGroup.setText(Resources.get("lbl.settings"));
 			GridLayout settingsGroupGridLayout = new GridLayout();
 			settingsGroupGridLayout.numColumns = 6;
 			settingsGroup.setLayout(settingsGroupGridLayout);
@@ -294,12 +294,12 @@ public class CyclesModWin extends CyclesModEngine {
 				String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
 				String defaultValue = defaultProperties.getProperty(key);
 				Label label = new Label(settingsGroup, SWT.NULL);
-				label.setText(Messages.get("lbl." + setting.toString()));
+				label.setText(Resources.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				Text text = new Text(settingsGroup, SWT.BORDER);
 				text.setText(settings.get(setting).toString());
 				text.setTextLimit(5);
-				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
+				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
@@ -315,7 +315,7 @@ public class CyclesModWin extends CyclesModEngine {
 			final LightweightSystem lws = new LightweightSystem(graphCanvas);
 
 			XYGraph xyGraph = new XYGraph();
-			xyGraph.setTitle(Messages.get("lbl.graph.title"));
+			xyGraph.setTitle(Resources.get("lbl.graph.title"));
 			lws.setContents(xyGraph);
 
 			final double[] x = new double[Torque.LENGTH], y = new double[Torque.LENGTH];
@@ -338,13 +338,13 @@ public class CyclesModWin extends CyclesModEngine {
 
 			Axis abscissae = xyGraph.primaryXAxis;
 			abscissae.setAutoScale(true);
-			abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
+			abscissae.setTitle(Resources.get("lbl.graph.axis.x"));
 			abscissae.setTitleFont(axisTitleFont);
 			abscissae.setShowMajorGrid(true);
 
 			Axis ordinates = xyGraph.primaryYAxis;
 			ordinates.setAutoScale(true);
-			ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
+			ordinates.setTitle(Resources.get("lbl.graph.axis.y"));
 			ordinates.setTitleFont(axisTitleFont);
 			ordinates.setShowMajorGrid(true);
 
@@ -387,7 +387,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 			// Gearbox
 			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
-			gearboxGroup.setText(Messages.get("lbl.gearbox"));
+			gearboxGroup.setText(Resources.get("lbl.gearbox"));
 			GridLayout gearboxGroupGridLayout = new GridLayout();
 			gearboxGroupGridLayout.numColumns = 10;
 			GridData gearboxGroupGridLayoutData = new GridData();
@@ -404,12 +404,12 @@ public class CyclesModWin extends CyclesModEngine {
 				String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
 				String defaultValue = defaultProperties.getProperty(key);
 				Label label = new Label(gearboxGroup, SWT.NULL);
-				label.setText(Messages.get("lbl.gear", index != 0 ? index : "N"));
+				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
 				Text text = new Text(gearboxGroup, SWT.BORDER);
 				text.setText(Integer.toString(ratio));
 				text.setTextLimit(5);
-				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
+				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
@@ -419,7 +419,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 			// Torque
 			Group torqueGroup = new Group(tabComposite, SWT.NULL);
-			torqueGroup.setText(Messages.get("lbl.torque"));
+			torqueGroup.setText(Resources.get("lbl.torque"));
 			GridLayout torqueGroupGridLayout = new GridLayout();
 			torqueGroupGridLayout.numColumns = 16;
 			torqueGroup.setLayout(torqueGroupGridLayout);
@@ -436,12 +436,12 @@ public class CyclesModWin extends CyclesModEngine {
 				String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
 				String defaultValue = defaultProperties.getProperty(key);
 				Label label = new Label(torqueGroup, SWT.NULL);
-				label.setText(Messages.get("lbl.rpm", Torque.getRpm(index)));
+				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				Text text = new Text(torqueGroup, SWT.BORDER);
 				text.setText(Integer.toString(point));
 				text.setTextLimit(3);
-				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
+				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
 				text.addFocusListener(new TorquePropertyFocusListener(defaultValue, key, graph));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
@@ -456,13 +456,13 @@ public class CyclesModWin extends CyclesModEngine {
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
-			throw new IllegalStateException(Messages.get("err.properties.number"));
+			throw new IllegalStateException(Resources.get("err.properties.number"));
 		}
 
 		// Update screen values...
 		for (String key : formProperties.keySet()) {
 			if (!properties.containsKey(key)) {
-				throw new RuntimeException(Messages.get("err.property.missing", key));
+				throw new RuntimeException(Resources.get("err.property.missing", key));
 			}
 			Text field = formProperties.get(key).getText();
 			field.setText((String) properties.get(key)); // Update field value.
