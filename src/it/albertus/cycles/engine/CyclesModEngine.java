@@ -6,7 +6,7 @@ import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
-import it.albertus.cycles.resources.Messages;
+import it.albertus.cycles.resources.Resources;
 
 import java.beans.Introspector;
 import java.io.IOException;
@@ -35,25 +35,25 @@ public abstract class CyclesModEngine {
 				version.load(is);
 			}
 			catch (IOException e) {
-				log.error(Messages.get("err.file.read", VERSION_FILE_NAME));
+				log.error(Resources.get("err.file.read", VERSION_FILE_NAME));
 			}
 			finally {
 				try {
 					is.close();
 				}
 				catch (IOException e) {
-					log.error(Messages.get("err.file.read", VERSION_FILE_NAME));
+					log.error(Resources.get("err.file.read", VERSION_FILE_NAME));
 				}
 			}
 		}
 		else {
-			log.error(Messages.get("msg.file.not.found", VERSION_FILE_NAME));
+			log.error(Resources.get("msg.file.not.found", VERSION_FILE_NAME));
 		}
 	}
 
 	protected boolean applyProperty(String key, String value) {
 		if (StringUtils.isBlank(value) || !StringUtils.isNumeric(value)) {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 		}
 
 		boolean applied = false;
@@ -74,7 +74,7 @@ public abstract class CyclesModEngine {
 		}
 
 		else {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 		}
 
 		return applied;
@@ -108,7 +108,7 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 		}
 		return applied;
 	}
@@ -129,7 +129,7 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 		}
 		return applied;
 	}
@@ -150,19 +150,19 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 		}
 		return applied;
 	}
 
 	private void logChange(final String key, final int defaultValue, final int newValue) {
-		log.info(Messages.get("msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
+		log.info(Resources.get("msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
 	}
 
 	private Bike getBike(final String key, final String value) {
 		Bike bike = bikesInf.getBike(Integer.parseInt(StringUtils.substringBefore(key, ".")));
 		if (bike == null) {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 		}
 		return bike;
 	}

@@ -1,7 +1,7 @@
 package it.albertus.cycles.model;
 
 import it.albertus.cycles.engine.InvalidPropertyException;
-import it.albertus.cycles.resources.Messages;
+import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ByteUtils;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class Gearbox extends BikesInfElement {
 	
 	public Gearbox( final int[] ratios ) {
 		if ( ratios.length > LENGTH / 2 ) {
-			throw new IllegalArgumentException( Messages.get( "err.gearbox", LENGTH / 2, ratios.length ) );
+			throw new IllegalArgumentException( Resources.get( "err.gearbox", LENGTH / 2, ratios.length ) );
 		}
 		for ( int i = 0; i < ratios.length; i++ ) {
 			this.ratios[i] = ratios[i];
@@ -36,7 +36,7 @@ public class Gearbox extends BikesInfElement {
 	public static int parse( final String key, final String value ) {
 		long newValue = Long.parseLong( value );
 		if ( newValue < MIN_VALUE || newValue > MAX_VALUE ) {
-			throw new InvalidPropertyException( Messages.get( "err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue ) );
+			throw new InvalidPropertyException( Resources.get( "err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue ) );
 		}
 		return (int) newValue;
 	}

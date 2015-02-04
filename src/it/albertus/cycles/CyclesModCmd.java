@@ -4,7 +4,7 @@ import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
-import it.albertus.cycles.resources.Messages;
+import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
 
 import java.io.File;
@@ -33,12 +33,12 @@ public class CyclesModCmd extends CyclesModEngine {
 
 			// Gestione parametri da riga di comando...
 			if (args.length > 1) {
-				throw new IllegalArgumentException(Messages.get("err.too.many.parameters") + ' ' + Messages.get("msg.command.line.help", CyclesModCmd.class.getSimpleName()));
+				throw new IllegalArgumentException(Resources.get("err.too.many.parameters") + ' ' + Resources.get("msg.command.line.help", CyclesModCmd.class.getSimpleName()));
 			}
 			String path = args.length == 1 ? args[0] : DEFAULT_DESTINATION_PATH;
 
 			if (path.contains("?") || StringUtils.startsWithIgnoreCase(path, "-help") || StringUtils.startsWithIgnoreCase(path, "/help")) {
-				log.info(Messages.get("msg.command.line.help", CyclesModCmd.class.getSimpleName()));
+				log.info(Resources.get("msg.command.line.help", CyclesModCmd.class.getSimpleName()));
 				return;
 			}
 			if (!"".equals(path) && !path.endsWith("/") && !path.endsWith("\\") && !path.endsWith(File.separator)) {
@@ -58,17 +58,17 @@ public class CyclesModCmd extends CyclesModEngine {
 	}
 
 	private static String getWelcomeMessage() throws IOException {
-		return Messages.get("msg.welcome", version.get("version.number"), version.get("version.date")) + "\r\n";
+		return Resources.get("msg.welcome", version.get("version.number"), version.get("version.date")) + "\r\n";
 	}
 
 	private void execute() throws IOException {
-		log.info(Messages.get("msg.reading.original.file", BikesInf.FILE_NAME));
+		log.info(Resources.get("msg.reading.original.file", BikesInf.FILE_NAME));
 		bikesInf = new BikesInf(new BikesZip().getInputStream());
 
-		log.info(Messages.get("msg.applying.customizations"));
+		log.info(Resources.get("msg.applying.customizations"));
 		customize();
 
-		log.info(Messages.get("msg.preparing.new.file", BikesInf.FILE_NAME));
+		log.info(Resources.get("msg.preparing.new.file", BikesInf.FILE_NAME));
 		bikesInf.write(path + BikesInf.FILE_NAME);
 	}
 
@@ -84,7 +84,7 @@ public class CyclesModCmd extends CyclesModEngine {
 				changesCount++;
 			}
 		}
-		log.info(Messages.get("msg.customizations.applied", changesCount));
+		log.info(Resources.get("msg.customizations.applied", changesCount));
 	}
 
 }

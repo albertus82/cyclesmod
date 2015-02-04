@@ -1,6 +1,6 @@
 package it.albertus.cycles.model;
 
-import it.albertus.cycles.resources.Messages;
+import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ByteUtils;
 
 import java.io.BufferedInputStream;
@@ -43,26 +43,26 @@ public class BikesInf {
 		
 		if ( inf.read( inf125 ) != Bike.LENGTH || inf.read( inf250 ) != Bike.LENGTH || inf.read( inf500 ) != Bike.LENGTH || inf.read() != -1 ) {
 			inf.close();
-			throw new IllegalStateException( Messages.get( "err.wrong.file.size" ) );
+			throw new IllegalStateException( Resources.get( "err.wrong.file.size" ) );
 		}
 		inf.close();
-		log.info( Messages.get( "msg.file.read", FILE_NAME ) );
+		log.info( Resources.get( "msg.file.read", FILE_NAME ) );
 		
 		bikes[0] = new Bike( Bike.Type.CLASS_125, inf125 );
 		bikes[1] = new Bike( Bike.Type.CLASS_250, inf250 );
 		bikes[2] = new Bike( Bike.Type.CLASS_500, inf500 );
-		log.info( Messages.get( "msg.file.parsed", FILE_NAME ) );
+		log.info( Resources.get( "msg.file.parsed", FILE_NAME ) );
 	}
 	
 	public void write( final String fileName ) throws IOException {
 		byte[] newBikesInf = this.toByteArray();
 		Checksum crc = new CRC32();
 		crc.update( newBikesInf, 0, newBikesInf.length );
-		log.info( Messages.get( "msg.configuration.changed", ( crc.getValue() == FILE_CRC ? ' ' + Messages.get( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
+		log.info( Resources.get( "msg.configuration.changed", ( crc.getValue() == FILE_CRC ? ' ' + Resources.get( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
 	
 		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( fileName ), FILE_SIZE );
 		write( bos, newBikesInf );
-		log.info( Messages.get( "msg.new.file.written.into.path", FILE_NAME, "".equals( fileName ) ? '.' : fileName, String.format( "%X", crc.getValue() ) ) );
+		log.info( Resources.get( "msg.new.file.written.into.path", FILE_NAME, "".equals( fileName ) ? '.' : fileName, String.format( "%X", crc.getValue() ) ) );
 	}
 
 	private void write(OutputStream outputStream, byte[] bikesInf) throws IOException {
@@ -85,7 +85,7 @@ public class BikesInf {
 			byteList.addAll( bike.toByteList() );
 		}
 		if ( byteList.size() != FILE_SIZE ) {
-			throw new IllegalStateException( Messages.get( "err.wrong.file.size.detailed", FILE_NAME, FILE_SIZE, byteList.size() ) );
+			throw new IllegalStateException( Resources.get( "err.wrong.file.size.detailed", FILE_NAME, FILE_SIZE, byteList.size() ) );
 		}
 		return ByteUtils.toByteArray( byteList );
 	}
