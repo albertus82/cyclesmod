@@ -24,12 +24,13 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.jface.resource.FontRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
-import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -325,8 +326,12 @@ public class CyclesModWin extends CyclesModEngine {
 			traceDataProvider.setCurrentXDataArray(x);
 			traceDataProvider.setCurrentYDataArray(y);
 
-			Font sysFont = Display.getCurrent().getSystemFont();
-			Font axisTitleFont = XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD));
+			FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+			if (!fontRegistry.hasValueFor("axisTitle")) {
+				Font sysFont = Display.getCurrent().getSystemFont();
+				fontRegistry.put("axisTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD) });
+			}
+			Font axisTitleFont = fontRegistry.get("axisTitle");
 
 			Axis abscissae = xyGraph.primaryXAxis;
 			abscissae.setAutoScale(true);
@@ -367,7 +372,12 @@ public class CyclesModWin extends CyclesModEngine {
 
 			xyGraph.addTrace(trace);
 			xyGraph.setShowLegend(false);
-			xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(new FontData(sysFont.getFontData()[0].getName(), 11, SWT.BOLD)));
+			
+			if (!fontRegistry.hasValueFor("graphTitle")) {
+				Font sysFont = Display.getCurrent().getSystemFont();
+				fontRegistry.put("graphTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), 11, SWT.BOLD) });
+			}
+			xyGraph.setTitleFont(fontRegistry.get("graphTitle"));
 
 			TorqueGraph graph = new TorqueGraph(trace, y);
 			torqueGraphs.put(bike.getType(), graph);
