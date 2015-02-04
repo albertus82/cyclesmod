@@ -5,6 +5,8 @@ import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.gui.FormProperty;
 import it.albertus.cycles.gui.PropertyFocusListener;
+import it.albertus.cycles.gui.PropertyFormatter;
+import it.albertus.cycles.gui.PropertyVerifyListener;
 import it.albertus.cycles.gui.TorqueGraph;
 import it.albertus.cycles.gui.TorquePropertyFocusListener;
 import it.albertus.cycles.model.Bike;
@@ -300,6 +302,7 @@ public class CyclesModWin extends CyclesModEngine {
 				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
+				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				formProperties.put(key, new FormProperty(label, text));
 			}
 
@@ -372,7 +375,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 			xyGraph.addTrace(trace);
 			xyGraph.setShowLegend(false);
-			
+
 			if (!fontRegistry.hasValueFor("graphTitle")) {
 				Font sysFont = Display.getCurrent().getSystemFont();
 				fontRegistry.put("graphTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), 11, SWT.BOLD) });
@@ -409,6 +412,7 @@ public class CyclesModWin extends CyclesModEngine {
 				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
+				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				formProperties.put(key, new FormProperty(label, text));
 				index++;
 			}
@@ -440,6 +444,7 @@ public class CyclesModWin extends CyclesModEngine {
 				text.setToolTipText(Messages.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gridData);
 				text.addFocusListener(new TorquePropertyFocusListener(defaultValue, key, graph));
+				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				formProperties.put(key, new FormProperty(label, text));
 				index++;
 			}
@@ -464,7 +469,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 			// Update font style...
 			String defaultValue = (String) defaultProperties.get(key);
-			PropertyFocusListener.updateFontStyle(field, defaultValue);
+			PropertyFormatter.getInstance().updateFontStyle(field, defaultValue);
 		}
 
 		// Update torque graphs...
