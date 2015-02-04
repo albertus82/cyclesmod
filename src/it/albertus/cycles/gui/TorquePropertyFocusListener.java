@@ -29,7 +29,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 	public void focusLost(FocusEvent e) {
 		super.focusLost(e);
 
-		// Aggiornare grafico
+		// Update torque graph...
 		Text field = (Text) e.widget;
 		try {
 			short value = Torque.parse(key, field.getText());
