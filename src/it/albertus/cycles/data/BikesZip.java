@@ -42,12 +42,12 @@ public class BikesZip {
 		}
 		ZipEntry ze = zis.getNextEntry();
 		if ( ze.getCrc() != BikesInf.FILE_CRC ) {
-			throw new StreamCorruptedException( Resources.get( "err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format( "%X", BikesInf.FILE_CRC ), String.format( "%X", ze.getCrc() ) ) );
+			throw new StreamCorruptedException( Resources.get( "err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format( "%08X", BikesInf.FILE_CRC ), String.format( "%08X", ze.getCrc() ) ) );
 		}
 		if ( ze.getSize() != BikesInf.FILE_SIZE ) {
 			throw new StreamCorruptedException( Resources.get( "err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, ze.getSize() ) );
 		}
-		log.info( Resources.get( "msg.original.file.opened", BikesInf.FILE_NAME, String.format( "%X", ze.getCrc() ) ) );
+		log.info( Resources.get( "msg.original.file.opened", BikesInf.FILE_NAME, String.format( "%08X", ze.getCrc() ) ) );
 		return zis;
 	}
 	
