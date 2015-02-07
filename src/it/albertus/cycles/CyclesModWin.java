@@ -63,7 +63,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 	public static void main(final String... args) throws IOException {
 		Display display = new Display();
-		Shell shell = new CyclesModWin().createShell(display);
+		final Shell shell = new CyclesModWin().createShell(display, args.length != 0 ? args[0] : null);
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -71,7 +71,7 @@ public class CyclesModWin extends CyclesModEngine {
 		}
 	}
 
-	private Shell createShell(final Display display) throws IOException {
+	private Shell createShell(final Display display, final String fileName) throws IOException {
 		final Shell shell = new Shell(display);
 		shell.setText(Resources.get("win.title"));
 		GridLayout shellLayout = new GridLayout();
@@ -99,7 +99,7 @@ public class CyclesModWin extends CyclesModEngine {
 		footer.setLayoutData(footerGridData);
 
 		GridData buttonLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		buttonLayoutData.widthHint = 100;
+		buttonLayoutData.widthHint = 120;
 
 		// Load...
 		Button loadButton = new Button(footer, SWT.PUSH);
@@ -113,46 +113,7 @@ public class CyclesModWin extends CyclesModEngine {
 				openDialog.setFilterExtensions(new String[] { "*.inf; *.cfg" });
 				String fileName = openDialog.open();
 				if (StringUtils.isNotBlank(fileName)) {
-					try {
-						if ("inf".equalsIgnoreCase(StringUtils.substringAfterLast(fileName, "."))) {
-							bikesInf = new BikesInf(fileName);
-							updateFormValues();
-							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-							messageBox.setText(Resources.get("msg.completed"));
-							messageBox.setMessage(Resources.get("msg.file.loaded", fileName));
-							messageBox.open();
-						}
-						else if ("cfg".equalsIgnoreCase(StringUtils.substringAfterLast(fileName, "."))) {
-							bikesInf = new BikesInf(new BikesZip().getInputStream());
-
-							BikesCfg bikesCfg = new BikesCfg(fileName);
-							short changesCount = 0;
-							for (Object objectKey : bikesCfg.getProperties().keySet()) {
-								String key = (String) objectKey;
-								if (applyProperty(key, bikesCfg.getProperties().getProperty(key))) {
-									changesCount++;
-								}
-							}
-							updateFormValues();
-							MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-							messageBox.setText(Resources.get("msg.completed"));
-							messageBox.setMessage(Resources.get("msg.customizations.applied", changesCount));
-							messageBox.open();
-						}
-						else {
-							MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-							messageBox.setText(Resources.get("msg.warning"));
-							messageBox.setMessage(Resources.get("err.file.invalid"));
-							messageBox.open();
-						}
-					}
-					catch (Exception e) {
-						log.error(ExceptionUtils.getLogMessage(e));
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-						messageBox.setText(Resources.get("msg.warning"));
-						messageBox.setMessage(Resources.get("err.file.load", ExceptionUtils.getUIMessage(e)));
-						messageBox.open();
-					}
+					loadFromFile(shell, fileName, true);
 				}
 			}
 		});
@@ -247,6 +208,10 @@ public class CyclesModWin extends CyclesModEngine {
 				messageBox.open();
 			}
 		});
+
+		if (StringUtils.isNotBlank(fileName)) {
+			loadFromFile(shell, fileName, false);
+		}
 
 		return shell;
 	}
@@ -396,6 +361,53 @@ public class CyclesModWin extends CyclesModEngine {
 	private void updateModelValues() {
 		for (String key : formProperties.keySet()) {
 			applyProperty(key, formProperties.get(key).getValue());
+		}
+	}
+
+	protected void loadFromFile(final Shell shell, final String fileName, final boolean successMessage) {
+		try {
+			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
+				bikesInf = new BikesInf(fileName);
+				updateFormValues();
+				if (successMessage) {
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+					messageBox.setText(Resources.get("msg.completed"));
+					messageBox.setMessage(Resources.get("msg.file.loaded", fileName));
+					messageBox.open();
+				}
+			}
+			else if (StringUtils.endsWithIgnoreCase(fileName, ".cfg")) {
+				bikesInf = new BikesInf(new BikesZip().getInputStream());
+
+				BikesCfg bikesCfg = new BikesCfg(fileName);
+				short changesCount = 0;
+				for (Object objectKey : bikesCfg.getProperties().keySet()) {
+					String key = (String) objectKey;
+					if (applyProperty(key, bikesCfg.getProperties().getProperty(key))) {
+						changesCount++;
+					}
+				}
+				updateFormValues();
+				if (successMessage) {
+					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+					messageBox.setText(Resources.get("msg.completed"));
+					messageBox.setMessage(Resources.get("msg.customizations.applied", changesCount));
+					messageBox.open();
+				}
+			}
+			else {
+				MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+				messageBox.setText(Resources.get("msg.warning"));
+				messageBox.setMessage(Resources.get("err.file.invalid"));
+				messageBox.open();
+			}
+		}
+		catch (Exception e) {
+			log.error(ExceptionUtils.getLogMessage(e));
+			MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+			messageBox.setText(Resources.get("msg.warning"));
+			messageBox.setMessage(Resources.get("err.file.load", ExceptionUtils.getUIMessage(e)));
+			messageBox.open();
 		}
 	}
 
