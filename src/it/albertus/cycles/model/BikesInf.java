@@ -58,11 +58,11 @@ public class BikesInf {
 		byte[] newBikesInf = this.toByteArray();
 		Checksum crc = new CRC32();
 		crc.update( newBikesInf, 0, newBikesInf.length );
-		log.info( Resources.get( "msg.configuration.changed", ( crc.getValue() == FILE_CRC ? ' ' + Resources.get( "msg.not" ) + ' ' : ' ' ), String.format( "%X", crc.getValue() ) ) );
+		log.info( Resources.get( "msg.configuration.changed", ( crc.getValue() == FILE_CRC ? ' ' + Resources.get( "msg.not" ) + ' ' : ' ' ), String.format( "%08X", crc.getValue() ) ) );
 	
 		BufferedOutputStream bos = new BufferedOutputStream( new FileOutputStream( fileName ), FILE_SIZE );
 		write( bos, newBikesInf );
-		log.info( Resources.get( "msg.new.file.written.into.path", FILE_NAME, "".equals( fileName ) ? '.' : fileName, String.format( "%X", crc.getValue() ) ) );
+		log.info( Resources.get( "msg.new.file.written.into.path", FILE_NAME, "".equals( fileName ) ? '.' : fileName, String.format( "%08X", crc.getValue() ) ) );
 	}
 
 	private void write(OutputStream outputStream, byte[] bikesInf) throws IOException {
