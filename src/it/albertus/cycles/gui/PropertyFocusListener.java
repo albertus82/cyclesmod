@@ -12,10 +12,6 @@ public class PropertyFocusListener extends FocusAdapter {
 		this.defaultValue = defaultValue;
 	}
 
-	public String getDefaultValue() {
-		return defaultValue;
-	}
-
 	@Override
 	public void focusLost(FocusEvent event) {
 		Text field = (Text) event.widget;

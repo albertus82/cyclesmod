@@ -113,7 +113,7 @@ public class CyclesModWin extends CyclesModEngine {
 				openDialog.setFilterExtensions(new String[] { "*.inf; *.cfg" });
 				String fileName = openDialog.open();
 				if (StringUtils.isNotBlank(fileName)) {
-					loadFromFile(shell, fileName, true);
+					load(shell, fileName, true);
 				}
 			}
 		});
@@ -210,7 +210,7 @@ public class CyclesModWin extends CyclesModEngine {
 		});
 
 		if (StringUtils.isNotBlank(fileName)) {
-			loadFromFile(shell, fileName, false);
+			load(shell, fileName, false);
 		}
 
 		return shell;
@@ -364,7 +364,7 @@ public class CyclesModWin extends CyclesModEngine {
 		}
 	}
 
-	protected void loadFromFile(final Shell shell, final String fileName, final boolean successMessage) {
+	protected void load(final Shell shell, final String fileName, final boolean successMessage) {
 		try {
 			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
 				bikesInf = new BikesInf(fileName);
