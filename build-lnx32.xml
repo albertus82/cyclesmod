@@ -1,0 +1,11 @@
+<project name="CyclesMod-lnx32" default="jar">
+	
+	<import file="build-common-lnx.xml" />
+	
+	<target name="copy" depends="common.copy">
+		<copy todir="${build.dir}/dist/lib">
+			<fileset dir="lib/os/lnx32" />
+		</copy>
+	</target>
+	
+</project>
