@@ -20,12 +20,4 @@
 		<copy todir="${build.dir}/dist" file="readme.txt" />
 	</target>
 	
-	<target name="jar" depends="compile, copy, bat">
-		<jar destfile="${build.dir}/dist/${project.name.lowercase}.jar" basedir="${build.dir}/classes" level="9" />
-	</target>
-	
-	<target name="zip" depends="jar">
-		<zip destfile="${build.dir}/release/${project.name.lowercase}-${version.number}-bin.zip" basedir="${build.dir}/dist" level="9" />
-	</target>
-	
 </project>
