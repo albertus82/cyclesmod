@@ -1,6 +1,6 @@
 <project name="CyclesMod-win32" default="jar">
 	
-	<import file="build-common.xml" />
+	<import file="build-common-win.xml" />
 	
 	<target name="copy" depends="common.copy">
 		<copy todir="${build.dir}/dist/lib">

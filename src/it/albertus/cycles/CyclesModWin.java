@@ -109,7 +109,7 @@ public class CyclesModWin extends CyclesModEngine {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 				FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
-				openDialog.setFilterExtensions(new String[] { "*.inf; *.cfg" });
+				openDialog.setFilterExtensions(new String[] { "*.INF; *.inf; *.CFG; *.cfg" });
 				String fileName = openDialog.open();
 				if (StringUtils.isNotBlank(fileName)) {
 					load(shell, fileName, true);
@@ -136,7 +136,7 @@ public class CyclesModWin extends CyclesModEngine {
 					return;
 				}
 				FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-				saveDialog.setFilterExtensions(new String[] { "*.inf" });
+				saveDialog.setFilterExtensions(new String[] { "*.INF; *.inf" });
 				saveDialog.setFileName(BikesInf.FILE_NAME);
 				saveDialog.setOverwrite(true);
 				String fileName = saveDialog.open();

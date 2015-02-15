@@ -6,7 +6,7 @@
 	<classpathentry kind="lib" path="lib/logback-core-1.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/os/win64/swt-4.427-win64.jar"/>
+	<classpathentry kind="lib" path="lib/os/win64/swt.jar"/>
 	<classpathentry kind="lib" path="lib/org.csstudio.swt.widgets_2.1.0.201209121549.jar"/>
 	<classpathentry kind="lib" path="lib/org.csstudio.swt.xygraph_2.1.0.201209121540.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.core.commands_3.6.100.v20140528-1422.jar"/>
