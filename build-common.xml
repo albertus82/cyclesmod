@@ -44,6 +44,22 @@
 		<zip destfile="${build.dir}/release/${project.name.lowercase}-${version.number}-bin.zip" basedir="${build.dir}/dist" level="9" />
 	</target>
 
-	<target name="copy" description="Must be overridden" />
+	<target name="copy">
+		<copy todir="${build.dir}/classes">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.dir}/dist/lib" >
+			<fileset dir="lib">
+				<exclude name="**/os/**" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.dir}/dist" file="src/license.txt" />
+		
+		<copy todir="${build.dir}/dist" file="readme.txt" />
+	</target>
 	
 </project>
