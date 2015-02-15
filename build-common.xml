@@ -1,4 +1,4 @@
-<project name="CyclesMod">
+<project name="common">
 	
 	<property file="build.properties" />
 	<property file="build.properties.default" />
@@ -35,5 +35,15 @@
 		<echo file="${build.dir}/dist/${project.name.lowercase}-win.bat">@start javaw -classpath "%~dp0${project.name.lowercase}.jar;%~dp0lib/*" ${main.class.win} %1</echo>
 		<echo file="${build.dir}/dist/${project.name.lowercase}-cmd.bat">@java -classpath "${project.name.lowercase}.jar;lib/*" ${main.class.cmd} %1 %2</echo>
 	</target>
+	
+	<target name="jar" depends="compile, copy, bat">
+		<jar destfile="${build.dir}/dist/${project.name.lowercase}.jar" basedir="${build.dir}/classes" level="9" />
+	</target>
+	
+	<target name="zip" depends="jar">
+		<zip destfile="${build.dir}/release/${project.name.lowercase}-${version.number}-bin.zip" basedir="${build.dir}/dist" level="9" />
+	</target>
+
+	<target name="copy" description="Must be overridden" />
 	
 </project>
