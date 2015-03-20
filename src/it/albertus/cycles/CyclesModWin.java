@@ -49,7 +49,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 	private static final Logger log = LoggerFactory.getLogger(CyclesModWin.class);
 
-	private static final Point WINDOW_SIZE = new Point(840, 725);
+	private static final Point WINDOW_SIZE = new Point(980, 680);
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new HashMap<Bike.Type, TorqueGraph>();
@@ -232,11 +232,11 @@ public class CyclesModWin extends CyclesModEngine {
 			settingsGroupGridLayout.numColumns = 6;
 			settingsGroup.setLayout(settingsGroupGridLayout);
 			GridData settingsGroupGridLayoutData = new GridData();
-			settingsGroupGridLayoutData.widthHint = 525;
+			settingsGroupGridLayoutData.widthHint = 575;
 			settingsGroup.setLayoutData(settingsGroupGridLayoutData);
 
 			GridData gridData = new GridData();
-			gridData.minimumWidth = 48;
+			gridData.minimumWidth = 65;
 			gridData.grabExcessHorizontalSpace = true;
 			Map<Setting, Integer> settings = bike.getSettings().getValues();
 			for (Setting setting : settings.keySet()) {
@@ -265,14 +265,14 @@ public class CyclesModWin extends CyclesModEngine {
 			GridLayout gearboxGroupGridLayout = new GridLayout();
 			gearboxGroupGridLayout.numColumns = 10;
 			GridData gearboxGroupGridLayoutData = new GridData();
-			gearboxGroupGridLayoutData.widthHint = 525;
+			gearboxGroupGridLayoutData.widthHint = 575;
 			gearboxGroup.setLayout(gearboxGroupGridLayout);
 			gearboxGroup.setLayoutData(gearboxGroupGridLayoutData);
 
 			Gearbox gearbox = bike.getGearbox();
 			int index = 0;
 			gridData = new GridData();
-			gridData.minimumWidth = 48;
+			gridData.minimumWidth = 50;
 			gridData.grabExcessHorizontalSpace = true;
 			for (int ratio : gearbox.getRatios()) {
 				String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
@@ -295,7 +295,7 @@ public class CyclesModWin extends CyclesModEngine {
 			Group torqueGroup = new Group(tabComposite, SWT.NULL);
 			torqueGroup.setText(Resources.get("lbl.torque"));
 			GridLayout torqueGroupGridLayout = new GridLayout();
-			torqueGroupGridLayout.numColumns = 16;
+			torqueGroupGridLayout.numColumns = 18;
 			torqueGroup.setLayout(torqueGroupGridLayout);
 			GridData torqueGroupGridLayoutData = new GridData(SWT.FILL, SWT.TOP, true, true);
 			torqueGroupGridLayoutData.horizontalSpan = 2;
