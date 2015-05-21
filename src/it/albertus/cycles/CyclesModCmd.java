@@ -6,6 +6,7 @@ import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
+import it.albertus.util.Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +59,7 @@ public class CyclesModCmd extends CyclesModEngine {
 	}
 
 	private static String getWelcomeMessage() throws IOException {
-		return Resources.get("msg.welcome", version.get("version.number"), version.get("version.date")) + "\r\n";
+		return Resources.get("msg.welcome", Version.getInstance().getNumber(), Version.getInstance().getDate()) + "\r\n";
 	}
 
 	private void execute() throws IOException {
