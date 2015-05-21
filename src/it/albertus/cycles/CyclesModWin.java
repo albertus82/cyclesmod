@@ -18,6 +18,7 @@ import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
+import it.albertus.util.Version;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -202,7 +203,7 @@ public class CyclesModWin extends CyclesModEngine {
 			public void widgetSelected(SelectionEvent event) {
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 				messageBox.setText(Resources.get("msg.info.title"));
-				messageBox.setMessage(Resources.get("msg.info.body", version.get("version.number"), version.get("version.date")));
+				messageBox.setMessage(Resources.get("msg.info.body", Version.getInstance().getNumber(), Version.getInstance().getDate()));
 				messageBox.open();
 			}
 		});

@@ -9,9 +9,6 @@ import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 
 import java.beans.Introspector;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -21,35 +18,7 @@ public abstract class CyclesModEngine {
 
 	private static final Logger log = LoggerFactory.getLogger(CyclesModEngine.class);
 
-	private static final String VERSION_FILE_PATH = "/";
-	private static final String VERSION_FILE_NAME = "version.properties";
-
-	protected static final Properties version = new Properties();
-
 	protected BikesInf bikesInf;
-
-	static {
-		InputStream is = CyclesModEngine.class.getResourceAsStream(VERSION_FILE_PATH + VERSION_FILE_NAME);
-		if (is != null) {
-			try {
-				version.load(is);
-			}
-			catch (IOException e) {
-				log.error(Resources.get("err.file.read", VERSION_FILE_NAME));
-			}
-			finally {
-				try {
-					is.close();
-				}
-				catch (IOException e) {
-					log.error(Resources.get("err.file.read", VERSION_FILE_NAME));
-				}
-			}
-		}
-		else {
-			log.error(Resources.get("msg.file.not.found", VERSION_FILE_NAME));
-		}
-	}
 
 	protected boolean applyProperty(String key, String value) {
 		if (StringUtils.isBlank(value) || !StringUtils.isNumeric(value)) {
