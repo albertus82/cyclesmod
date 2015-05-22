@@ -6,7 +6,9 @@
 	
 	<target name="copy" depends="common.copy">
 		<copy todir="${build.dir}/dist/lib">
-			<fileset dir="lib/os/win32" />
+			<fileset dir="lib/os/win32">
+				<include name="*.jar" />
+			</fileset>
 		</copy>
 	</target>
 	
