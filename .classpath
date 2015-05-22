@@ -2,10 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/logback-classic-1.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/logback-core-1.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.7.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/logback-classic-1.1.3.jar" sourcepath="lib/src/logback-classic-1.1.3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/logback-core-1.1.3.jar" sourcepath="lib/src/logback-core-1.1.3-sources.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.12.jar" sourcepath="lib/src/slf4j-api-1.7.12-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar" sourcepath="lib/src/commons-lang-2.6-src.zip"/>
 	<classpathentry kind="lib" path="lib/os/win64/swt.jar"/>
 	<classpathentry kind="lib" path="lib/org.csstudio.swt.widgets_2.1.0.201209121549.jar"/>
 	<classpathentry kind="lib" path="lib/org.csstudio.swt.xygraph_2.1.0.201209121540.jar"/>
@@ -14,6 +14,6 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.jface_3.10.1.v20140813-1009.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.nebula.visualization.xygraph_1.0.0.201501260813.jar"/>
-	<classpathentry kind="lib" path="lib/albertus-utils-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/albertus-utils-1.0.1.jar" sourcepath="lib/src/albertus-utils-1.0.1-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
