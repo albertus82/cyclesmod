@@ -50,11 +50,10 @@
 			</fileset>
 		</copy>
 		
-		<!-- Da rifattorizzare: includere solo "lib/*.jar" e "lib/license/*.txt" -->
-		<copy todir="${build.dir}/dist/lib" >
+		<copy todir="${build.dir}/dist/lib">
 			<fileset dir="lib">
-				<exclude name="**/os/**" />
-				<exclude name="**/src/**" />
+				<include name="*.jar" />
+				<include name="license/*.txt" />
 			</fileset>
 		</copy>
 		
