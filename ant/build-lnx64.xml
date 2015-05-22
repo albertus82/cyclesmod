@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="CyclesMod-win64" default="jar">
+<project name="CyclesMod-lnx64" default="jar" basedir="..">
 	
-	<import file="build-common-win.xml" />
+	<import file="build-common-lnx.xml" />
 	
 	<target name="copy" depends="common.copy">
 		<copy todir="${build.dir}/dist/lib">
-			<fileset dir="lib/os/win64">
+			<fileset dir="lib/os/lnx64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
