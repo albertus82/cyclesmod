@@ -59,7 +59,7 @@
 		
 		<copy todir="${build.dir}/dist" file="src/license.txt" />
 		
-		<copy todir="${build.dir}/dist" file="readme.txt" />
+		<copy todir="${build.dir}/dist" file="readme.md" />
 	</target>
 	
 </project>
