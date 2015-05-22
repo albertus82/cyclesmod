@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="CyclesMod-lnx32" default="jar">
+<project name="CyclesMod-win32" default="jar" basedir="..">
 	
-	<import file="build-common-lnx.xml" />
+	<import file="build-common-win.xml" />
 	
 	<target name="copy" depends="common.copy">
 		<copy todir="${build.dir}/dist/lib">
-			<fileset dir="lib/os/lnx32">
+			<fileset dir="lib/os/win32">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
