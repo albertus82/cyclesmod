@@ -1,10 +1,8 @@
 CyclesMod
 =========
 
-Disclaimer: I will be in no way liable for any loss or damage caused by the use of this software. Please make a backup of the original game before using this software.
+CyclesMod &egrave; un'utility per il vecchio videogioco per DOS **The Cycles: International Grand Prix Racing** (DSI/Accolade, 1989), che consente di modificare e personalizzare le configurazione delle moto, di norma non modificabili dall'utente.
 
-CyclesMod is a utility for the DOS game "The Cycles: International Grand Prix Racing" (DSI/Accolade, 1989) that allows you to edit the configuration of the motorbikes, overriding their default settings.
+The Cycles permette al giocatore di scegliere una tra tre moto disponibili: 125, 250 o 500 cc. I parametri di funzionamento delle moto sono contenuti nel file binario *BIKES.INF*. CyclesMod interpreta questo file e mette a disposizione del giocatore un'interfaccia grafica mediante la quale &egrave; possibile esaminare e modificare la configurazione delle tre moto. Al salvataggio, il programma rigenera un BIKES.INF utilizzabile da The Cycles, contenente la configurazione modificata. Si raccomanda di effettuare una copia di backup del videogioco perch&egrave; pu&ograve; sempre capitare di sovrascrivere inavvertitamente il file sbagliato.
 
-The game allows the player to choose one of three bikes: 125, 250 or 500cc. The functional parameters of these ones are contained in a binary file named BIKES.INF. CyclesMod translates this file into a human-manageable form, so that you can understand and edit these parameters; then the program reconverts this text file into a new BIKES.INF binary file so that you can play with your modded motorcycles.
-
-This utility is written in Java and requires the JRE 6.
+Quest'applicazione &egrave; scritta in Java e, per funzionare, richiede Java Runtime Environment (JRE) versione 6 (1.6) o successiva.
