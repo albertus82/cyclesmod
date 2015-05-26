@@ -11,13 +11,13 @@ CyclesMod &egrave; un'utility per il vecchio videogioco per DOS **The Cycles: In
 **Si raccomanda di effettuare una copia di backup del gioco prima di utilizzare il presente programma, perch&egrave; pu&ograve; sempre capitare di sovrascrivere inavvertitamente uno dei file originali del gioco.**
 
 1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato ZIP adatta al proprio sistema operativo. La scelta &egrave; tra Windows x86 (32 e 64 bit) e Linux x86 (32 e 64 bit);
-2. scompattare il file ZIP in una cartella a piacimento;
+2. scompattare il file ZIP in una cartella a piacimento.
 
 Per avviare l'applicazione &egrave; richiesta la presenza della variabile di ambiente `JAVA_HOME` e di [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva.
 
-In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesmod-win??-win.bat`** (dove `??` equivale a `32` o a `64` a seconda della versione scaricata) senza specificare altro; analogamente su **Linux** basta richiamare lo script shell **`cyclesmod-lnx??-win.sh`**, avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-lnx??-win.sh`.
+In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesmod-gui.bat`** senza specificare altro; analogamente su **Linux** basta richiamare lo script shell **`cyclesmod-gui.sh`**, avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-gui.sh`.
 
-All'apertura del programma sar&agrave; mostrata una finestra contenente i valori predefiniti delle moto. 
+All'apertura del programma comparir&agrave; una finestra contenente i valori predefiniti delle moto. 
 
 
 ### Configurazione delle moto
