@@ -1,7 +1,7 @@
 CyclesMod
 =========
 
-CyclesMod &egrave; un'utility per **The Cycles - International Grand Prix Racing**, vecchio videogioco per DOS (DSI/Accolade, 1989), che consente di modificare e personalizzare le configurazioni delle moto, di norma non accessibili dall'utente.
+CyclesMod &egrave; un'utility per **The Cycles - International Grand Prix Racing**, vecchio videogioco per DOS (DSI/Accolade, 1989), che consente di modificare e personalizzare le configurazioni delle moto, di norma non accessibili all'utente.
 
 *The Cycles* permette al giocatore di scegliere una tra tre moto disponibili: 125, 250 o 500 cc, dunque una per categoria. I parametri di funzionamento delle moto sono contenuti nel file binario **`BIKES.INF`** fornito col gioco stesso. CyclesMod interpreta questo file e mette a disposizione del giocatore un'interfaccia grafica con quale potr&agrave; esaminare e modificare la configurazione delle tre moto. Al salvataggio del file, il programma rigenera un `BIKES.INF` utilizzabile da *The Cycles*, contenente la configurazione modificata.
 
