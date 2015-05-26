@@ -34,7 +34,7 @@ La finestra principale dell'applicazione presenta tre schede, una per categoria 
 #### Impostazioni
 Ogni moto dispone di otto impostazioni generali che determinano le seguenti caratteristiche:
 * **Numero marce**: il numero di rapporti del cambio di velocit&agrave;. Intervallo di valori validi: da `0` a `9`.
-* **Regime inizio zona rossa**: regime oltre il quale, dopo un tempo variabile determinato dall'impostazione *Tolleranza fuorigiri*, si verifica la rottura del motore. Intervallo di valori validi: `8500`-`32767`.
+* **Regime inizio zona rossa**: regime oltre il quale, dopo un tempo variabile determinato dall'impostazione *Tolleranza fuorigiri* e dal livello di difficolt&agrave; impostato, si verifica la rottura del motore. Ai livelli di difficolt&agrave; 1 e 2 (i pi&ugrave; bassi), questo valore determina anche il regime di cambiata. Intervallo di valori validi: `8500`-`32767`.
 * **Regime massimo**: regime massimo raggiungibile dal motore (limitatore). Intervallo di valori validi: `768`-`14335`.
 * **Tolleranza fuorigiri**: periodo di grazia durante il quale il motore non si guasta nonostante giri ad un regime maggiore del *Regime inizio zona rossa*; il valore &egrave; espresso in unit&agrave; di misura temporale variabile a seconda del livello di difficolt&agrave;.
 * **Aderenza**: soglia di slittamento della moto, che determina la velocit&agrave; con cui &egrave; possibile affrontare le curve.
