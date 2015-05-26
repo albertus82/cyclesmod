@@ -47,10 +47,11 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
 * **Velocit&agrave; di frenata**: determina il tempo di arresto della moto. Valori validi compresi tra `0` (la moto non frena, anzi si azzerano addirittura gli attriti e la resistenza aerodinamica) e `65535` (la moto si arresta istantaneamente alla minima frenata).
 * **Soglia testacoda**: facilit&agrave; con cui la moto va in testacoda mentre si percorre una curva slittando. Valori validi compresi tra `0` (la moto va in testacoda al primo accenno di slittamento) e `65535` (la moto non va mai in testacoda).
 * **Regime di scalata**: significativo solo nei livelli di difficolt&agrave; pi&ugrave; bassi che prevedono il cambio automatico, determina il regime al di sotto del quale il cambio automatico innesta la marcia inferiore, se disponibile. Valori validi compresi tra `0` (non scala mai) e `32767` giri/min. (scala in continuazione, di fatto rende impossibile la cambiata).
+* 
 Sono inoltre presenti tre valori di significato sconosciuto, probabilmente irrilevanti, che &egrave; comunque possibile modificare a scopo sperimentale.
 
 #### Cambio
 &Egrave; possibile configurare i rapporti del cambio di velocit&agrave; per ogni singola marcia. A valori pi&ugrave; elevati corrispondono rapporti pi&ugrave; corti. I valori ammessi sono compresi tra `0` e `65535`.
 
 #### Coppia
-La curva di coppia utilizzata dal gioco viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la coppia del motore in Nm a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255`.
+La curva di coppia utilizzata dal gioco viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la coppia del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m.
