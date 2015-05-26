@@ -39,7 +39,7 @@ Ogni moto dispone di otto impostazioni generali che determinano le seguenti cara
 * **Tolleranza fuorigiri**: periodo di grazia durante il quale il motore non si guasta nonostante giri ad un regime maggiore del *Regime inizio zona rossa*; il valore &egrave; espresso in un'unit&agrave; di misura del tempo *lineare* variabile a seconda del livello di difficolt&agrave;. Intervallo di valori validi: `0`-`32767`.
 Segue un elenco per la determinazione del valore in base ai secondi di tolleranza desiderati a seconda del livello di difficolt&agrave;:
   * Livello 1/5 (Beg.): il motore non si guasta mai, a meno di non impostare `0`.
-  * Livello 2/5: 1 sec. = `50` (ma &egrave; attivo il cambio automatico).
+  * Livello 2/5: 1 sec. = `50` (&egrave; comunque attivo il cambio automatico).
   * Livello 3/5: 1 sec. = `80`.
   * Livello 4/5: 1 sec. = `120`.
   * Livello 5/5 (Pro): 1 sec. = `160`.
