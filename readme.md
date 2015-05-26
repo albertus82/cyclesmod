@@ -20,13 +20,13 @@ Per avviare l'applicazione &egrave; richiesta la presenza della variabile di amb
 In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesmod-gui.bat`** senza specificare altro; analogamente su **Linux** basta richiamare lo script shell **`cyclesmod-gui.sh`**, avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-gui.sh`.
 
 
-### Utilizzo dell'applicazione
+### Utilizzo
 
 La finestra principale dell'applicazione presenta tre schede, una per categoria di moto: 125, 250 e 500 cc. Ogni scheda &egrave; suddivisa in tre sezioni:
 * **Impostazioni** generali
 * **Cambio** di velocit&agrave;
 * **Coppia** motrice
-* 
+
 &Egrave; inoltre presente un grafico della curva di coppia, generato in tempo reale in base ai valori di coppia motrice presenti nella relativa sezione.
 
 All'apertura del programma, tutte le maschere vengono precaricate con i valori predefiniti per tutte moto.
@@ -34,7 +34,7 @@ All'apertura del programma, tutte le maschere vengono precaricate con i valori p
 Nella parte bassa della finestra sono presenti quattro pulsanti:
 * **Carica**: carica un file BIKES.INF esistente.
 * **Salva con nome...**: salva le impostazioni correnti in un file BIKES.INF.
-* **Reimposta**: ripristina le impostazioni predefinite per tutte le moto. Qualsiasi personalizzazione viene cancellata.
+* **Reimposta**: ripristina le impostazioni predefinite per tutte le moto; qualsiasi personalizzazione non salvata viene cancellata.
 * **?**: Visualizza informazioni sulla versione di *CyclesMod*.
 
 
