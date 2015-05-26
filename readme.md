@@ -51,7 +51,7 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
 >Sono inoltre presenti tre valori di significato sconosciuto, probabilmente irrilevanti, che &egrave; comunque possibile modificare a scopo sperimentale.
 
 #### Cambio di velocit&agrave;
-&Egrave; possibile configurare i rapporti del cambio di velocit&agrave; per ogni singola marcia. A valori pi&ugrave; elevati corrispondono rapporti pi&ugrave; corti. I valori ammessi sono compresi tra `0` e `65535`.
+&Egrave; possibile configurare i rapporti del cambio di velocit&agrave; per ogni singola marcia. A valori pi&ugrave; elevati corrispondono rapporti pi&ugrave; corti. I valori ammessi sono compresi tra `0` e `65535` per le marce da 1 a 9, mentre per marcia *N* (folle) il valore &egrave; irrilevante.
 
 #### Coppia motrice
 La curva di coppia utilizzata dal gioco viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la coppia del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m.
