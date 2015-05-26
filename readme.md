@@ -1,14 +1,16 @@
 CyclesMod
 =========
 
-CyclesMod &egrave; un'utility per **The Cycles - International Grand Prix Racing**, vecchio videogioco per DOS (DSI/Accolade, 1989), che consente di modificare e personalizzare le configurazioni delle moto, di norma non accessibili all'utente.
+**The Cycles - International Grand Prix Racing** &egrave; un videogioco di simulazione motociclistica. Risalente al 1989, fu distribuito per tutte le pi&ugrave; diffuse piattaforme dell'epoca, dal Commodore 64 al PC IBM (DOS), ed &egrave; oggi facilmente reperibile come *Abandonware*.
 
-*The Cycles* permette al giocatore di scegliere una tra tre moto disponibili: 125, 250 o 500 cc, dunque una per categoria. I parametri di funzionamento delle moto sono contenuti nel file binario **`BIKES.INF`** fornito col gioco stesso. CyclesMod interpreta questo file e mette a disposizione del giocatore un'interfaccia grafica con quale potr&agrave; esaminare e modificare la configurazione delle tre moto. Al salvataggio del file, il programma rigenera un `BIKES.INF` utilizzabile da *The Cycles*, contenente la configurazione modificata.
+CyclesMod &egrave; un *mod* per la versione DOS di questo gioco, che consente di **modificare le configurazioni delle moto**, di norma non accessibili all'utente.
+
+Il gioco permette di scegliere tre diverse moto: 125, 250 o 500 cc. I parametri di funzionamento delle moto sono contenuti nel file binario **`BIKES.INF`** che &egrave; uno dei file del gioco stesso. **CyclesMod** carica e interpreta questo file, e mette a disposizione del giocatore un'interfaccia grafica con quale pu&ograve; esaminare e modificare la configurazione delle tre moto. Al salvataggio del file, il programma genera un nuovo `BIKES.INF` utilizzabile da *The Cycles*, contenente la configurazione modificata.
 
 
-### Installazione e configurazione di base
+### Installazione
 
-**Si raccomanda di effettuare una copia di backup del gioco prima di utilizzare il presente programma, perch&egrave; pu&ograve; sempre capitare di sovrascrivere inavvertitamente uno dei file originali del gioco.**
+**Si raccomanda di effettuare una copia di backup del gioco prima di utilizzare questo programma!**
 
 1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato ZIP adatta al proprio sistema operativo. La scelta &egrave; tra Windows x86 (32 e 64 bit) e Linux x86 (32 e 64 bit);
 2. scompattare il file ZIP in una cartella a piacimento.
