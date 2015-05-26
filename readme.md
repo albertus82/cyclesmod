@@ -32,8 +32,8 @@ La finestra principale dell'applicazione presenta tre schede, una per categoria 
 All'apertura del programma, tutte le maschere vengono precaricate con i valori predefiniti per tutte moto.
 
 Nella parte bassa della finestra sono presenti quattro pulsanti:
-* **Carica**: carica un file BIKES.INF esistente.
-* **Salva con nome...**: salva le impostazioni correnti in un file BIKES.INF.
+* **Carica**: carica un file `BIKES.INF` esistente.
+* **Salva con nome...**: salva le impostazioni correnti in un file `BIKES.INF`.
 * **Reimposta**: ripristina le impostazioni predefinite per tutte le moto; qualsiasi personalizzazione non salvata viene cancellata.
 * **?**: Visualizza informazioni sulla versione di *CyclesMod*.
 
