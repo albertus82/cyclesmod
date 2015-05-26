@@ -14,6 +14,6 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.jface_3.10.1.v20140813-1009.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.nebula.visualization.xygraph_1.0.0.201501260813.jar"/>
-	<classpathentry kind="lib" path="lib/albertus-utils-1.0.1.jar" sourcepath="lib/src/albertus-utils-1.0.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/albertus-utils-1.0.2.jar" sourcepath="lib/src/albertus-utils-1.0.2-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
