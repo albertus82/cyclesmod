@@ -34,8 +34,8 @@ La finestra principale dell'applicazione presenta tre schede, una per categoria 
 #### Impostazioni
 Ogni moto dispone di otto impostazioni generali che determinano le seguenti caratteristiche:
 * **Numero marce**: il numero di rapporti del cambio di velocit&agrave;. Intervallo di valori validi: da `0` a `9`.
-* **Regime inizio zona rossa**: regime oltre il quale, dopo un tempo variabile determinato dall'impostazione *Tolleranza fuorigiri* e dal livello di difficolt&agrave; impostato, si verifica la rottura del motore. Ai livelli di difficolt&agrave; 1 e 2 (i pi&ugrave; bassi), questo valore determina anche il regime di cambiata. Intervallo di valori validi: `8500`-`32767`.
-* **Regime massimo**: regime massimo raggiungibile dal motore (limitatore). Intervallo di valori validi: `768`-`14335`.
+* **Regime inizio zona rossa**: regime oltre il quale, dopo un tempo variabile determinato dall'impostazione *Tolleranza fuorigiri* e dal livello di difficolt&agrave; impostato, si verifica la rottura del motore. Ai livelli di difficolt&agrave; 1 e 2 (i pi&ugrave; bassi), questo valore determina anche il regime di cambiata. Intervallo di valori validi: `8500`-`32767` giri/min.
+* **Regime massimo**: regime massimo raggiungibile dal motore (limitatore). Intervallo di valori validi: `768`-`14335` giri/min.
 * **Tolleranza fuorigiri**: periodo di grazia durante il quale il motore non si guasta nonostante giri ad un regime maggiore del *Regime inizio zona rossa*; il valore &egrave; espresso in un'unit&agrave; di misura del tempo *lineare* variabile a seconda del livello di difficolt&agrave;. Intervallo di valori validi: `0`-`32767`.
 Segue un elenco per la determinazione del valore in base ai secondi di tolleranza desiderati a seconda del livello di difficolt&agrave;:
   * Livello 1/5 (Beg.): il motore non si guasta mai, a meno di non impostare `0`.
@@ -43,9 +43,9 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
   * Livello 3/5: 1 sec. = `80`.
   * Livello 4/5: 1 sec. = `120`.
   * Livello 5/5 (Pro): 1 sec. = `160`.
-* **Aderenza**: soglia di slittamento della moto, che determina la velocit&agrave; con cui &egrave; possibile affrontare le curve.
-* **Velocit&agrave; di frenata**: determina il tempo di arresto della moto.
-* **Soglia testacoda**: facilit&agrave; con cui la moto va in testacoda mentre si percorre una curva.
+* **Aderenza**: soglia di slittamento della moto, che determina la velocit&agrave; con cui &egrave; possibile affrontare le curve. Valori validi compresi tra `0` (la moto non slitta mai) e `65535` (la moto slitta immediatamente e non curva affatto).
+* **Velocit&agrave; di frenata**: determina il tempo di arresto della moto. Valori validi compresi tra `0` (la moto non frena, anzi si azzera anche il rallentamento dovuto alla resistenza dell'aria) e `65535` (la moto si arresta istantaneamente alla minima frenata).
+* **Soglia testacoda**: facilit&agrave; con cui la moto va in testacoda mentre si percorre una curva slittando. Valori validi compresi tra `0` (la moto va in testacoda al primo accenno di slittamento) e `65535` (la moto non va mai in testacoda).
 * **Regime di scalata**: significativo solo nei livelli di difficolt&agrave; pi&ugrave; bassi che prevedono il cambio automatico, determina il regime al di sotto del quale il cambio automatico innesta la marcia inferiore, se disponibile.
 Sono inoltre presenti tre valori di significato sconosciuto, probabilmente irrilevanti, che &egrave; comunque possibile modificare a scopo sperimentale.
 
