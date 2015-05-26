@@ -17,22 +17,27 @@ Per avviare l'applicazione &egrave; richiesta la presenza della variabile di amb
 
 In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesmod-win??-win.bat`** (dove `??` equivale a `32` o a `64` a seconda della versione scaricata) senza specificare altro; analogamente su **Linux** basta richiamare lo script shell **`cyclesmod-lnx??-win.sh`**, avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-lnx??-win.sh`.
 
-All'apertura del programma sar&agrave; mostrata una finestra contenente i valori predefiniti delle moto. Sono disponibili tre schede, una per categoria (125, 250 e 500 cc). Ogni scheda &egrave; suddivisa in tre sezioni:
-* Impostazioni
-* Cambio
-* Coppia
-&Egrave; inoltre presente un grafico della curva di coppia generato in tempo reale in base ai valori di coppia presenti nella relativa sezione.
+All'apertura del programma sar&agrave; mostrata una finestra contenente i valori predefiniti delle moto. 
 
+
+### Configurazione delle moto
+
+La finestra principale dell'applicazione presenta tre schede, una per categoria di moto: 125, 250 e 500 cc. Ogni scheda &egrave; suddivisa in tre sezioni:
+* **Impostazioni** generali
+* **Cambio** di velocit&agrave;
+* **Coppia** motrice
+
+&Egrave; inoltre presente un grafico della curva di coppia, generato in tempo reale in base ai valori di coppia motrice presenti nella relativa sezione.
 
 #### Impostazioni
 Ogni moto dispone di otto impostazioni generali che determinano le seguenti caratteristiche:
 * **Numero marce**: il numero di rapporti del cambio di velocit&agrave; (sono ammessi valori compresi tra `0` e `9`).
-* **Regime inizio zona rossa**: 
-* **Regime massimo**: 
-* **Tolleranza fuorigiri**: 
-* **Aderenza**: 
-* **Velocit&agrave; di frenata**: 
-* **Soglia testacoda**: 
+* **Regime inizio zona rossa**: regime oltre il quale, dopo un tempo variabile configurabile, si verifica la rottura del motore.
+* **Regime massimo**: regime massimo raggiungibile dal motore (limitatore).
+* **Tolleranza fuorigiri**: periodo di grazia durante il quale il motore non si guasta nonostante giri ad un regime maggiore del *Regime inizio zona rossa*; il valore &egrave; espresso in unit&agrave; di misura temporale variabile a seconda del livello di difficolt&agrave;.
+* **Aderenza**: soglia di slittamento della moto, che determina la velocit&agrave; con cui &egrave; possibile affrontare le curve.
+* **Velocit&agrave; di frenata**: determina il tempo di arresto della moto.
+* **Soglia testacoda**: facilit&agrave; con cui la moto va in testacoda mentre si percorre una curva.
 * **Regime di scalata**: significativo solo nei livelli di difficolt&agrave; pi&ugrave; bassi che prevedono il cambio automatico, determina il regime al di sotto del quale il cambio automatico innesta la marcia inferiore, se disponibile.
 Sono inoltre presenti tre valori di significato sconosciuto, probabilmente irrilevanti, che &egrave; comunque possibile modificare a scopo sperimentale.
 
