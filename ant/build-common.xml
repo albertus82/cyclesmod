@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
 <project name="common">
-	
+
 	<property file="build.properties" />
 	<property file="build.properties.default" />
-	
+
 	<property file="src/version.properties" />
-	
+
 	<property name="main.class.win" value="it.albertus.cycles.CyclesModWin" />
 	<property name="main.class.cmd" value="it.albertus.cycles.CyclesModCmd" />
-	
+
 	<scriptdef language="javascript" name="lower">
 		<attribute name="string" />
 		<attribute name="to" />
 		project.setProperty( attributes.get( "to" ), attributes.get( "string" ).toLowerCase() );
 	</scriptdef>
-	
+
 	<lower string="${ant.project.name}" to="project.name.lowercase" />
-	
+
 	<target name="clean">
 		<delete dir="${build.dir}" />
 	</target>
-	
+
 	<target name="compile" depends="clean">
 		<mkdir dir="${build.dir}/classes" />
 		<javac srcdir="src" destdir="${build.dir}/classes" source="1.5" target="1.5">
@@ -32,15 +32,15 @@
 			</classpath>
 		</javac>
 	</target>
-		
+
 	<target name="batch" description="Must be overridden" />
-	
+
 	<target name="jar" depends="compile, copy, batch">
 		<jar destfile="${build.dir}/dist/${project.name.lowercase}.jar" basedir="${build.dir}/classes" level="9" />
 	</target>
-	
+
 	<target name="zip" depends="jar">
-		<zip destfile="${build.dir}/release/${project.name.lowercase}-${version.number}-bin.zip" basedir="${build.dir}/dist" level="9" />
+		<zip destfile="${build.dir}/release/${project.name.lowercase}-${version.number}-${os}-bin.zip" basedir="${build.dir}/dist" level="9" />
 	</target>
 
 	<target name="copy">
@@ -49,17 +49,17 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		
+
 		<copy todir="${build.dir}/dist/lib">
 			<fileset dir="lib">
 				<include name="*.jar" />
 				<include name="license/*.txt" />
 			</fileset>
 		</copy>
-		
+
 		<copy todir="${build.dir}/dist" file="src/license.txt" />
-		
+
 		<copy todir="${build.dir}/dist" file="readme.md" />
 	</target>
-	
+
 </project>
