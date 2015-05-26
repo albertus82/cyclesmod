@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="CyclesMod-win64" default="jar" basedir="..">
+<project name="CyclesMod" default="jar" basedir="..">
 	
 	<import file="build-common-win.xml" />
 	
