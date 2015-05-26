@@ -44,7 +44,7 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
   * Livello 4/5: 1 sec. = `120`.
   * Livello 5/5 (Pro): 1 sec. = `160`.
 * **Aderenza**: soglia di slittamento della moto, che determina la velocit&agrave; con cui &egrave; possibile affrontare le curve. Valori validi compresi tra `0` (la moto non slitta mai) e `65535` (la moto slitta immediatamente e non curva affatto).
-* **Velocit&agrave; di frenata**: determina il tempo di arresto della moto. Valori validi compresi tra `0` (la moto non frena, anzi si azzera anche il rallentamento dovuto alla resistenza dell'aria) e `65535` (la moto si arresta istantaneamente alla minima frenata).
+* **Velocit&agrave; di frenata**: determina il tempo di arresto della moto. Valori validi compresi tra `0` (la moto non frena, anzi si azzera addirittura la resistenza dell'aria) e `65535` (la moto si arresta istantaneamente alla minima frenata).
 * **Soglia testacoda**: facilit&agrave; con cui la moto va in testacoda mentre si percorre una curva slittando. Valori validi compresi tra `0` (la moto va in testacoda al primo accenno di slittamento) e `65535` (la moto non va mai in testacoda).
 * **Regime di scalata**: significativo solo nei livelli di difficolt&agrave; pi&ugrave; bassi che prevedono il cambio automatico, determina il regime al di sotto del quale il cambio automatico innesta la marcia inferiore, se disponibile.
 Sono inoltre presenti tre valori di significato sconosciuto, probabilmente irrilevanti, che &egrave; comunque possibile modificare a scopo sperimentale.
