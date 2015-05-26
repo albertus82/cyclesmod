@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
 <project name="CyclesMod" default="jar" basedir="..">
-	
+
 	<import file="build-common-lnx.xml" />
-	
+
+	<property name="os" value="lnx32" />
+
 	<target name="copy" depends="common.copy">
 		<copy todir="${build.dir}/dist/lib">
 			<fileset dir="lib/os/lnx32">
@@ -11,5 +13,5 @@
 			</fileset>
 		</copy>
 	</target>
-	
+
 </project>
