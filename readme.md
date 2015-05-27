@@ -12,8 +12,6 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 
 ### Installazione
 
-**Si raccomanda di effettuare una copia di backup del gioco prima di utilizzare questo programma!**
-
 1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato ZIP adatta al proprio sistema operativo. La scelta &egrave; tra Windows x86 (32 e 64 bit) e Linux x86 (32 e 64 bit);
 2. scompattare il file ZIP in una cartella a piacimento.
 
@@ -23,6 +21,8 @@ In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesm
 
 
 ### Utilizzo
+
+**Si raccomanda di effettuare una copia di backup del gioco prima di utilizzare questo programma!**
 
 La finestra principale dell'applicazione presenta tre schede, una per categoria di moto: 125, 250 e 500 cc. Ogni scheda &egrave; suddivisa in tre sezioni:
 * **Impostazioni** generali
