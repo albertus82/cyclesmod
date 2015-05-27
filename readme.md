@@ -41,6 +41,8 @@ Nella parte bassa della finestra sono presenti quattro pulsanti:
 
 Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente fare clic sul pulsante *Salva con nome...* e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene caricata ogni volta che si inizia una nuova gara, pertanto non occorre uscire completamente dal gioco per vedere le modifiche apportate.
 
+Nel caso in cui si volessero ripristinare le configurazioni originali di tutte le moto, &egrave; sufficiente fare clic sul pulsante *Reimposta*, che provveder&agrave; a ricaricare le impostazioni del `BIKES.INF` originale fornito insieme al gioco. Baster&agrave; quindi fare clic su *Salva con nome...* per poter sovrascrivere qualsiasi `BIKES.INF` personalizzato con la versione originale.
+
 
 ### Configurazione delle moto
 
