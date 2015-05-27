@@ -74,3 +74,16 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
 
 #### Coppia motrice
 La curva di coppia del motore viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la coppia del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m. La curva risultante viene rappresentata graficamente nel relativo riquadro.
+
+### Versione da riga di comando
+
+Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, infinitamente pi&ugrave; scomoda della versione con interfaccia grafica, ma comunque pienamente funzionante.
+
+In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesmod-con.bat`** senza specificare altro; analogamente su **Linux** basta richiamare lo script shell **`cyclesmod-con.sh`**, avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-con.sh`.
+
+Una volta eseguito, per prima cosa il programma verifica l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *coppia motrice* (torque). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
+
+A seguire, il programma rileva l'esistenza del file `BIKES.CFG`, ne legge il contenuto e infine produce un nuovo file `BIKES.INF`, sovracrivendo quello eventualmente preesistente. A questo punto &egrave; sufficiente copiare il file `BIKES.INF` generato nella directory del gioco sovrascrivendo il file preesistente, **avendone fatto prima una copia di backup**. Avviando il gioco sar&agrave; quindi possibile sperimentare le eventuali modifiche apportate alla configurazione.
+>In realt&agrave; una copia compressa del file `BIKES.INF` originale &egrave; contenuta anche nel JAR di *CyclesMod*, quindi sarebbe comunque possibile recuperarlo sia estraendolo direttamente da l&igrave;, che cancellando il file `CFG` e facendo girare nuovamente il programma "a vuoto", il quale quindi generer&agrave; automaticamente un `CFG` predefinito e un `INF` analogo a quello originale.
+
+Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `CFG`, modificare i parametri di interesse, salvare il file e far girare CyclesMod. Il programma rilever&agrave; l'esistenza del file BIKES.CFG e produrr&agrave; un nuovo BIKES.INF contenente le modifiche apportate. In caso di errori saranno mostrati opportuni messaggi in console.
