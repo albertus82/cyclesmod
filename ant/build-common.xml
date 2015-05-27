@@ -7,8 +7,8 @@
 
 	<property file="src/version.properties" />
 
-	<property name="main.class.win" value="it.albertus.cycles.CyclesModWin" />
-	<property name="main.class.cmd" value="it.albertus.cycles.CyclesModCmd" />
+	<property name="main.class.gui" value="it.albertus.cycles.CyclesModGui" />
+	<property name="main.class.con" value="it.albertus.cycles.CyclesModCon" />
 
 	<scriptdef language="javascript" name="lower">
 		<attribute name="string" />

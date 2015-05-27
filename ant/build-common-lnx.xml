@@ -5,8 +5,8 @@
 	<import file="build-common.xml" />
 	
 	<target name="batch">
-		<echo file="${build.dir}/dist/${project.name.lowercase}-gui.sh">"$JAVA_HOME/bin/java" -classpath "${project.name.lowercase}.jar:lib/*" ${main.class.win} $1</echo>
-		<echo file="${build.dir}/dist/${project.name.lowercase}-con.sh">"$JAVA_HOME/bin/java" -classpath "${project.name.lowercase}.jar:lib/*" ${main.class.cmd} $1 $2</echo>
+		<echo file="${build.dir}/dist/${project.name.lowercase}-gui.sh">"$JAVA_HOME/bin/java" -classpath "${project.name.lowercase}.jar:lib/*" ${main.class.gui} $1</echo>
+		<echo file="${build.dir}/dist/${project.name.lowercase}-con.sh">"$JAVA_HOME/bin/java" -classpath "${project.name.lowercase}.jar:lib/*" ${main.class.con} $1 $2</echo>
 	</target>
 	
 </project>
