@@ -7,6 +7,8 @@ CyclesMod
 
 Il gioco permette di scegliere tre diverse moto: 125, 250 o 500 cc. I parametri di funzionamento delle moto sono contenuti nel file binario **`BIKES.INF`** che &egrave; uno dei file del gioco stesso. **CyclesMod** carica e interpreta questo file, e mette a disposizione del giocatore un'interfaccia grafica con quale pu&ograve; esaminare e modificare la configurazione delle tre moto. Al salvataggio del file, il programma genera un nuovo `BIKES.INF` utilizzabile da *The Cycles*, contenente la configurazione modificata.
 
+Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere eseguito nativamente dai sistemi operativi correnti, ma con l'aiuto di macchine virtuali o, meglio ancora, di appositi emulatori come [**DOSBox**](http://www.dosbox.com), &egrave; possibile comunque eseguirlo con ottimi risultati.
+
 
 ### Installazione
 
@@ -36,6 +38,8 @@ Nella parte bassa della finestra sono presenti quattro pulsanti:
 * **Salva con nome...**: salva le impostazioni correnti in un file `BIKES.INF`.
 * **Reimposta**: ripristina le impostazioni predefinite per tutte le moto; qualsiasi personalizzazione non salvata viene cancellata.
 * **?**: Visualizza informazioni sulla versione di *CyclesMod*.
+
+Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente fare clic sul pulsante *Salva con nome...* e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene caricata ogni volta che si inizia una nuova gara, pertanto non occorre uscire completamente dal gioco per vedere le modifiche apportate.
 
 
 ### Configurazione delle moto
