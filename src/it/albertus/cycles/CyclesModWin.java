@@ -21,6 +21,7 @@ import it.albertus.util.ExceptionUtils;
 import it.albertus.util.Version;
 
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -53,7 +54,7 @@ public class CyclesModWin extends CyclesModEngine {
 	private static final Point WINDOW_SIZE = new Point(980, 680);
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
-	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new HashMap<Bike.Type, TorqueGraph>();
+	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 	private final Properties defaultProperties;
 
 	private CyclesModWin() throws IOException {
