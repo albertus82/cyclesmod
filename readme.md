@@ -31,6 +31,8 @@ La finestra principale dell'applicazione presenta tre schede, una per categoria 
 
 &Egrave; inoltre presente un grafico della curva di coppia, generato in tempo reale in base ai valori di coppia motrice presenti nella relativa sezione.
 
+Ogni sezione presenta diverse propriet&egrave;, tutte rigorosamente numeriche e corredate da etichette descrittive. Quando si modifica il valore di una propriet&agrave;, esso viene mostrato in grassetto per evidenziare che &egrave; diverso dal valore predefinito. Volendo conoscere il valore predefinito di un singola propriet&agrave;, &egrave; sufficiente portare il mouse sul campo desiderato e attendere la comparsa del suggerimento.
+
 All'apertura del programma, tutte le maschere vengono precaricate con i valori predefiniti per tutte moto.
 
 Nella parte bassa della finestra sono presenti quattro pulsanti:
