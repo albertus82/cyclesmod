@@ -47,9 +47,9 @@ import org.eclipse.swt.widgets.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CyclesModWin extends CyclesModEngine {
+public class CyclesModGui extends CyclesModEngine {
 
-	private static final Logger log = LoggerFactory.getLogger(CyclesModWin.class);
+	private static final Logger log = LoggerFactory.getLogger(CyclesModGui.class);
 
 	private static final Point WINDOW_SIZE = new Point(980, 680);
 
@@ -57,7 +57,7 @@ public class CyclesModWin extends CyclesModEngine {
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 	private final Properties defaultProperties;
 
-	private CyclesModWin() throws IOException {
+	private CyclesModGui() throws IOException {
 		// Loading default properties...
 		bikesInf = new BikesInf(new BikesZip().getInputStream());
 		defaultProperties = new BikesCfg(bikesInf).getProperties();
@@ -65,7 +65,7 @@ public class CyclesModWin extends CyclesModEngine {
 
 	public static void main(final String... args) throws IOException {
 		Display display = new Display();
-		final Shell shell = new CyclesModWin().createShell(display, args.length != 0 ? args[0] : null);
+		final Shell shell = new CyclesModGui().createShell(display, args.length != 0 ? args[0] : null);
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
