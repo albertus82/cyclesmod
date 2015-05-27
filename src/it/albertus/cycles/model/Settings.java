@@ -5,9 +5,9 @@ import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ByteUtils;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Settings extends BikesInfElement {
 	
@@ -15,7 +15,7 @@ public class Settings extends BikesInfElement {
 	public static final int MIN_VALUE = 0;
 	public static final int MAX_VALUE = 65535;
 	
-	private final Map<Setting, Integer> values = new TreeMap<Setting, Integer>();
+	private final Map<Setting, Integer> values = new EnumMap<Setting, Integer>(Setting.class);
 	
 	public Settings( int gearsCount, int rpmRedline, int rpmLimit, int overspeedGracePeriod, int grip, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int rpmDownshift ) {
 		values.put( Setting.gearsCount, gearsCount );
