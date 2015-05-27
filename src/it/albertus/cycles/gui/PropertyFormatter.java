@@ -9,11 +9,11 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Text;
 
 public class PropertyFormatter {
-	
+
 	private static final PropertyFormatter instance = new PropertyFormatter();
-	
+
 	private PropertyFormatter() {}
-	
+
 	public static PropertyFormatter getInstance() {
 		return instance;
 	}

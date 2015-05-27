@@ -21,10 +21,10 @@ public class FormProperty {
 	public Text getText() {
 		return text;
 	}
-	
+
 	public String getValue() {
-		if ( text != null ) {
-			return StringUtils.trimToEmpty( text.getText() );
+		if (text != null) {
+			return StringUtils.trimToEmpty(text.getText());
 		}
 		else {
 			return "";
