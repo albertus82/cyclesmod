@@ -77,7 +77,7 @@ La curva di coppia del motore viene costruita a partire dai valori presenti in q
 
 ### Versione da riga di comando
 
-Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, infinitamente pi&ugrave; scomoda della versione con interfaccia grafica, ma comunque pienamente funzionante.
+Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
 
 In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesmod-con.bat`** senza specificare altro; analogamente su **Linux** basta richiamare lo script shell **`cyclesmod-con.sh`**, avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-con.sh`.
 
