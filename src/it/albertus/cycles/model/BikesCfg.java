@@ -1,6 +1,7 @@
 package it.albertus.cycles.model;
 
 import it.albertus.cycles.resources.Resources;
+import it.albertus.util.NewLine;
 
 import java.beans.Introspector;
 import java.io.BufferedReader;
@@ -19,6 +20,8 @@ import org.slf4j.LoggerFactory;
 public class BikesCfg {
 
 	private static final Logger log = LoggerFactory.getLogger(BikesCfg.class);
+
+	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 	private static final String FILE_NAME = "BIKES.CFG";
 
@@ -69,7 +72,7 @@ public class BikesCfg {
 	}
 
 	private String createProperties(final BikesInf bikesInf) {
-		final String lineSeparator = System.getProperty("line.separator");
+		final String lineSeparator = LINE_SEPARATOR != null ? LINE_SEPARATOR : NewLine.CRLF.toString();
 		final StringBuilder properties = new StringBuilder(Resources.get("str.cfg.header"));
 
 		for (Bike bike : bikesInf.getBikes()) {
