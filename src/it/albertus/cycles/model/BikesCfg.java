@@ -69,7 +69,7 @@ public class BikesCfg {
 	}
 
 	private String createProperties(final BikesInf bikesInf) {
-		final String lineSeparator = java.security.AccessController.doPrivileged(new sun.security.action.GetPropertyAction("line.separator"));
+		final String lineSeparator = System.getProperty("line.separator");
 		final StringBuilder properties = new StringBuilder(Resources.get("str.cfg.header"));
 
 		for (Bike bike : bikesInf.getBikes()) {
