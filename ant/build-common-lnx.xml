@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
 <project name="common-lnx">
-	
+
 	<import file="build-common.xml" />
-	
-	<target name="batch">
-		<echo file="${build.dir}/dist/${project.name.lowercase}-gui.sh">"$JAVA_HOME/bin/java" -classpath "${project.name.lowercase}.jar:lib/*" ${main.class.gui} $1</echo>
-		<echo file="${build.dir}/dist/${project.name.lowercase}-con.sh">"$JAVA_HOME/bin/java" -classpath "${project.name.lowercase}.jar:lib/*" ${main.class.con} $1 $2</echo>
+
+	<target name="scripts">
+		<copy todir="${build.distDirectory}">
+			<fileset dir="${build.scriptSourceDirectory}">
+				<include name="*.sh" />
+			</fileset>
+		</copy>
 	</target>
-	
+
 </project>

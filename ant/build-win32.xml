@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="CyclesMod" default="jar" basedir="..">
+<project name="CyclesMod" default="zip" basedir="..">
 
 	<import file="build-common-win.xml" />
 
 	<property name="os" value="win32" />
 
-	<target name="copy" depends="common.copy">
-		<copy todir="${build.dir}/dist/lib">
+	<target name="lib" depends="common.lib">
+		<copy todir="${build.distDirectory}/lib">
 			<fileset dir="lib/os/win32">
 				<include name="*.jar" />
 			</fileset>
