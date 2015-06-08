@@ -1,0 +1,1 @@
+@start "" "%JAVA_HOME%"\bin\javaw -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModGui %1 ""

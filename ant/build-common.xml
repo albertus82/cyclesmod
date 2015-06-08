@@ -2,64 +2,61 @@
 <!DOCTYPE project>
 <project name="common">
 
-	<property file="build.properties" />
-	<property file="build.properties.default" />
+	<property file="ant/build.properties" />
 
-	<property file="src/version.properties" />
+	<property file="${build.resourcesDirectory}/version.properties" />
 
 	<property name="main.class.gui" value="it.albertus.cycles.CyclesModGui" />
 	<property name="main.class.con" value="it.albertus.cycles.CyclesModCon" />
 
-	<scriptdef language="javascript" name="lower">
-		<attribute name="string" />
-		<attribute name="to" />
-		project.setProperty( attributes.get( "to" ), attributes.get( "string" ).toLowerCase() );
-	</scriptdef>
-
-	<lower string="${ant.project.name}" to="project.name.lowercase" />
-
 	<target name="clean">
-		<delete dir="${build.dir}" />
+		<delete dir="${build.directory}" />
 	</target>
 
 	<target name="compile" depends="clean">
-		<mkdir dir="${build.dir}/classes" />
-		<javac srcdir="src" destdir="${build.dir}/classes" source="1.5" target="1.5">
+		<mkdir dir="${build.outputDirectory}" />
+		<javac srcdir="${build.sourceDirectory}" destdir="${build.outputDirectory}" source="1.6" target="1.6">
 			<classpath>
-				<fileset dir="lib">
-					<include name="**/*.jar"/>
+				<fileset dir="${dependencies.directory}">
+					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
 		</javac>
 	</target>
 
-	<target name="batch" description="Must be overridden" />
-
-	<target name="jar" depends="compile, copy, batch">
-		<jar destfile="${build.dir}/dist/${project.name.lowercase}.jar" basedir="${build.dir}/classes" level="9" />
-	</target>
-
-	<target name="zip" depends="jar">
-		<zip destfile="${build.dir}/release/${project.name.lowercase}-${version.number}-${os}-bin.zip" basedir="${build.dir}/dist" level="9" />
-	</target>
-
-	<target name="copy">
-		<copy todir="${build.dir}/classes">
-			<fileset dir="src">
-				<exclude name="**/*.java" />
-			</fileset>
+	<target name="resources">
+		<copy todir="${build.outputDirectory}">
+			<fileset dir="${build.resourcesDirectory}" />
 		</copy>
+	</target>
 
-		<copy todir="${build.dir}/dist/lib">
+	<target name="lib">
+		<copy todir="${build.distDirectory}/lib">
 			<fileset dir="lib">
 				<include name="*.jar" />
 				<include name="license/*.txt" />
 			</fileset>
 		</copy>
+	</target>
 
-		<copy todir="${build.dir}/dist" file="src/license.txt" />
+	<target name="docs">
+		<copy todir="${build.distDirectory}">
+			<fileset dir="">
+				<include name="README*" />
+				<include name="LICENSE*" />
+				<include name="NOTICE*" />
+			</fileset>
+		</copy>
+	</target>
 
-		<copy todir="${build.dir}/dist" file="readme.md" />
+	<target name="scripts" description="Must be overridden" />
+
+	<target name="jar" depends="compile, resources, scripts, docs, lib">
+		<jar destfile="${build.distDirectory}/cyclesmod.jar" basedir="${build.outputDirectory}" level="9" />
+	</target>
+
+	<target name="zip" depends="jar">
+		<zip destfile="${build.releaseDirectory}/cyclesmod-${version.number}-${os}-bin.zip" basedir="${build.distDirectory}" level="9" />
 	</target>
 
 </project>
