@@ -71,6 +71,7 @@ public class CyclesModGui extends CyclesModEngine {
 			if (!display.readAndDispatch())
 				display.sleep();
 		}
+		display.dispose();
 	}
 
 	private Shell createShell(final Display display, final String fileName) throws IOException {
