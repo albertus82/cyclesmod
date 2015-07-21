@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="CyclesMod" default="zip">
+
+	<property file="build.properties" />
+
+	<property file="${build.resourcesDirectory}/version.properties" />
+
+	<target name="clean">
+		<delete dir="${build.directory}" />
+	</target>
+
+	<target name="compile" depends="clean">
+		<mkdir dir="${build.outputDirectory}" />
+		<javac srcdir="${build.sourceDirectory}" destdir="${build.outputDirectory}" source="1.6" target="1.6" debug="true">
+			<classpath>
+				<fileset dir="${dependencies.directory}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="resources">
+		<copy todir="${build.outputDirectory}">
+			<fileset dir="${build.resourcesDirectory}" />
+		</copy>
+	</target>
+
+
+	<fileset id="lib" dir="${dependencies.directory}">
+		<include name="*.jar" />
+		<include name="license/*.txt" />
+	</fileset>
+
+	<target name="lib">
+		<copy todir="${build.distDirectory}/win32-win32-x86/lib">
+			<fileset refid="lib" />
+			<fileset dir="${dependencies.directory}/os/win32-win32-x86">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${build.distDirectory}/win32-win32-x86_64/lib">
+			<fileset refid="lib" />
+			<fileset dir="${dependencies.directory}/os/win32-win32-x86_64">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${build.distDirectory}/gtk-linux-x86/lib">
+			<fileset refid="lib" />
+			<fileset dir="${dependencies.directory}/os/gtk-linux-x86">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64/lib">
+			<fileset refid="lib" />
+			<fileset dir="${dependencies.directory}/os/gtk-linux-x86_64">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<fileset id="bat" dir="${build.scriptSourceDirectory}">
+		<include name="*.bat" />
+	</fileset>
+
+	<fileset id="sh" dir="${build.scriptSourceDirectory}">
+		<include name="*.sh" />
+	</fileset>
+
+	<target name="scripts">
+		<copy todir="${build.distDirectory}/win32-win32-x86">
+			<fileset refid="bat" />
+		</copy>
+		<copy todir="${build.distDirectory}/win32-win32-x86_64">
+			<fileset refid="bat" />
+		</copy>
+		<copy todir="${build.distDirectory}/gtk-linux-x86">
+			<fileset refid="sh" />
+		</copy>
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64">
+			<fileset refid="sh" />
+		</copy>
+	</target>
+
+
+	<fileset id="docs" dir="">
+		<include name="README*" />
+		<include name="LICENSE*" />
+		<include name="NOTICE*" />
+	</fileset>
+
+	<target name="docs">
+		<copy todir="${build.distDirectory}/win32-win32-x86">
+			<fileset refid="docs" />
+		</copy>
+		<copy todir="${build.distDirectory}/win32-win32-x86_64">
+			<fileset refid="docs" />
+		</copy>
+		<copy todir="${build.distDirectory}/gtk-linux-x86">
+			<fileset refid="docs" />
+		</copy>
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64">
+			<fileset refid="docs" />
+		</copy>
+	</target>
+
+
+	<target name="jar" depends="compile, resources, scripts, docs, lib">
+		<jar destfile="${build.distDirectory}/win32-win32-x86/cyclesmod.jar" basedir="${build.outputDirectory}" level="9" />
+		<jar destfile="${build.distDirectory}/win32-win32-x86_64/cyclesmod.jar" basedir="${build.outputDirectory}" level="9" />
+		<jar destfile="${build.distDirectory}/gtk-linux-x86/cyclesmod.jar" basedir="${build.outputDirectory}" level="9" />
+		<jar destfile="${build.distDirectory}/gtk-linux-x86_64/cyclesmod.jar" basedir="${build.outputDirectory}" level="9" />
+	</target>
+
+
+	<target name="zip" depends="jar">
+		<zip destfile="${build.releaseDirectory}/cyclesmod-${version.number}-win32-win32-x86-bin.zip" basedir="${build.distDirectory}/win32-win32-x86" level="9" />
+		<zip destfile="${build.releaseDirectory}/cyclesmod-${version.number}-win32-win32-x86_64-bin.zip" basedir="${build.distDirectory}/win32-win32-x86_64" level="9" />
+		<zip destfile="${build.releaseDirectory}/cyclesmod-${version.number}-gtk-linux-x86-bin.zip" basedir="${build.distDirectory}/gtk-linux-x86" level="9" />
+		<zip destfile="${build.releaseDirectory}/cyclesmod-${version.number}-gtk-linux-x86_64-bin.zip" basedir="${build.distDirectory}/gtk-linux-x86_64" level="9" />
+	</target>
+
+</project>
