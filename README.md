@@ -17,7 +17,7 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 
 Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva. Se la variabile di ambiente `JAVA_HOME` viene rilevata, essa sar&agrave; utilizzata come riferimento per avviare la Java Virtual Machine, in caso contrario sar&agrave; richiamato direttamente l'eseguibile `java` (o `javaw`).
 
-In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesmod-gui.bat`** senza specificare altro; analogamente su **Linux** basta richiamare lo script shell **`cyclesmod-gui.sh`**, avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-gui.sh`.
+In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cyclesmod-gui.bat`**](src/main/scripts/cyclesmod-gui.bat) senza specificare altro; analogamente su **Linux** basta richiamare lo script shell [**`cyclesmod-gui.sh`**](src/main/scripts/cyclesmod-gui.sh), avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-gui.sh`.
 
 
 ### Utilizzo
@@ -79,7 +79,7 @@ La curva di coppia del motore viene costruita a partire dai valori presenti in q
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
 
-In ambiente **Windows** &egrave; sufficiente richiamare il file batch **`cyclesmod-con.bat`** senza specificare altro; analogamente su **Linux** basta richiamare lo script shell **`cyclesmod-con.sh`**, avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-con.sh`.
+In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cyclesmod-con.bat`**](src/main/scripts/cyclesmod-con.bat) senza specificare altro; analogamente su **Linux** basta richiamare lo script shell [**`cyclesmod-con.sh`**](src/main/scripts/cyclesmod-con.sh), avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-con.sh`.
 
 Una volta eseguito, per prima cosa il programma verifica l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *coppia motrice* (torque). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
 
