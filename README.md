@@ -17,7 +17,7 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 
 Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva. Se la variabile di ambiente `JAVA_HOME` viene rilevata, essa sar&agrave; utilizzata come riferimento per avviare la Java Virtual Machine, in caso contrario sar&agrave; richiamato direttamente l'eseguibile `java` (o `javaw`).
 
-In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cyclesmod-gui.bat`**](src/main/scripts/cyclesmod-gui.bat) senza specificare altro; analogamente su **Linux** basta richiamare lo script shell [**`cyclesmod-gui.sh`**](src/main/scripts/cyclesmod-gui.sh), avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-gui.sh`.
+In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat) senza specificare altro; analogamente su **Linux** basta richiamare lo script shell [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh), avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod.sh`.
 
 
 ### Utilizzo
@@ -78,10 +78,11 @@ La curva di coppia del motore viene costruita a partire dai valori presenti in q
 ### Versione da riga di comando
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
+Gli script di avvio [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat) e [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) prevedono un apposito parametro facoltativo per avviare l'applicazione in questa modalit&agrave; "console":
+* Windows: **`cyclesmod.bat /c`**
+* Linux: **`cyclesmod.sh -c`**
 
-In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cyclesmod-con.bat`**](src/main/scripts/cyclesmod-con.bat) senza specificare altro; analogamente su **Linux** basta richiamare lo script shell [**`cyclesmod-con.sh`**](src/main/scripts/cyclesmod-con.sh), avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod-con.sh`.
-
-Una volta eseguito, per prima cosa il programma verifica l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *coppia motrice* (torque). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
+Una volta eseguito, il programma verifica per prima cosa l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *coppia motrice* (torque). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
 
 A seguire, il programma rileva l'esistenza del file `BIKES.CFG`, ne legge il contenuto e infine produce un nuovo file `BIKES.INF`, sovrascrivendo quello eventualmente preesistente. A questo punto &egrave; sufficiente copiare nella directory del gioco il file `BIKES.INF` generato, sovrascrivendo il file preesistente, **avendone fatto prima una copia di backup**. Avviando il gioco sar&agrave; quindi possibile sperimentare le modifiche apportate alla configurazione.
 >In realt&agrave; una copia compressa del file [`BIKES.INF`](/src/main/resources/it/albertus/cycles/data/bikes.zip) originale &egrave; contenuta anche nel JAR di *CyclesMod*, quindi sarebbe comunque possibile recuperarlo sia estraendolo direttamente da l&igrave;, che cancellando il file `CFG` e facendo girare nuovamente il programma "a vuoto", il quale quindi generer&agrave; automaticamente un `CFG` predefinito e un `INF` analogo a quello originale.
