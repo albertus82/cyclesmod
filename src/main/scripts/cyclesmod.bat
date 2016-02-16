@@ -18,9 +18,10 @@ GOTO END
 :HLP
 ECHO.Launches CyclesMod application.
 ECHO.
-ECHO.Usage: CYCLESMOD [/C] [/?] [destination path]
+ECHO.Usage: CYCLESMOD [[sourcefile] | /C [destination]]
 ECHO.
-ECHO.  /C    Runs in console mode
-ECHO.  /?    Shows this help
+ECHO   sourcefile     CFG or INF file to load.
+ECHO   /C             Runs in console mode.
+ECHO   destination    Destination path for generated BIKES.CFG and BIKES.INF.
 ECHO.
 :END
