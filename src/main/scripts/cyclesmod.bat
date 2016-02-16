@@ -4,12 +4,12 @@ IF NOT "%3" == "" GOTO ERR
 IF /I "%1" == "/C" GOTO CON
 GOTO GUI
 :CON
-IF "%JAVA_HOME%" == "" java.exe -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModCon %2
-IF NOT "%JAVA_HOME%" == "" "%JAVA_HOME%\bin\java.exe" -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModCon %2
+IF "%JAVA_HOME%" == "" java.exe -Xms4m -Xmx8m -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModCon %2
+IF NOT "%JAVA_HOME%" == "" "%JAVA_HOME%\bin\java.exe" -Xms4m -Xmx8m -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModCon %2
 GOTO END
 :GUI
-IF "%JAVA_HOME%" == "" START "" javaw.exe -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModGui %1
-IF NOT "%JAVA_HOME%" == "" START "" "%JAVA_HOME%\bin\javaw.exe" -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModGui %1
+IF "%JAVA_HOME%" == "" START "" javaw.exe -Xms8m -Xmx32m -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModGui %1
+IF NOT "%JAVA_HOME%" == "" START "" "%JAVA_HOME%\bin\javaw.exe" -Xms8m -Xmx32m -classpath "%~dp0cyclesmod.jar;%~dp0lib/*" it.albertus.cycles.CyclesModGui %1
 GOTO END
 :ERR
 ECHO.CyclesMod: too many parameters - %3

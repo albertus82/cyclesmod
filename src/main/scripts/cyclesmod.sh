@@ -14,12 +14,12 @@ elif [ "$3" != "" ]
   echo "Try 'cyclesmod.sh --help' for more information."
 elif [ "$1" = "-c" ] || [ "$1" = "-C" ]
   then if [ "$JAVA_HOME" != "" ]
-  then "$JAVA_HOME/bin/java" -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModCon $2
-  else java -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModCon $2
+  then "$JAVA_HOME/bin/java" -Xms4m -Xmx8m -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModCon $2
+  else java -Xms4m -Xmx8m -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModCon $2
   fi
 else
   if [ "$JAVA_HOME" != "" ]
-  then "$JAVA_HOME/bin/java" -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModGui $1
-  else java -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModGui $1
+  then "$JAVA_HOME/bin/java" -Xms8m -Xmx32m -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModGui $1
+  else java -Xms8m -Xmx32m -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModGui $1
   fi
 fi
