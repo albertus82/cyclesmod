@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Display;
 public class GuiImages {
 
 	/* Icona principale dell'applicazione (in vari formati) */
-	public static final Image[] ICONS_BIKE = loadIcons("bike.ico");
+	public static final Image[] ICONS_WHEEL = loadIcons("wheel.ico");
 
 	private static Image[] loadIcons(final String fileName) {
 		final InputStream is = GuiImages.class.getResourceAsStream(fileName);
