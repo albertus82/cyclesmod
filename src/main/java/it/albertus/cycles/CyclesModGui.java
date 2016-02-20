@@ -78,7 +78,7 @@ public class CyclesModGui extends CyclesModEngine {
 	private Shell createShell(final Display display, final String fileName) throws IOException {
 		final Shell shell = new Shell(display);
 		shell.setText(Resources.get("win.title"));
-		shell.setImages(GuiImages.ICONS_BIKE);
+		shell.setImages(GuiImages.ICONS_WHEEL);
 		GridLayout shellLayout = new GridLayout();
 		shellLayout.numColumns = 1;
 		shell.setLayout(shellLayout);
