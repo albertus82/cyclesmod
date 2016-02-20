@@ -4,6 +4,7 @@ import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.gui.FormProperty;
+import it.albertus.cycles.gui.GuiImages;
 import it.albertus.cycles.gui.PropertyFocusListener;
 import it.albertus.cycles.gui.PropertyFormatter;
 import it.albertus.cycles.gui.PropertyVerifyListener;
@@ -77,6 +78,7 @@ public class CyclesModGui extends CyclesModEngine {
 	private Shell createShell(final Display display, final String fileName) throws IOException {
 		final Shell shell = new Shell(display);
 		shell.setText(Resources.get("win.title"));
+		shell.setImages(GuiImages.ICONS_BIKE);
 		GridLayout shellLayout = new GridLayout();
 		shellLayout.numColumns = 1;
 		shell.setLayout(shellLayout);
