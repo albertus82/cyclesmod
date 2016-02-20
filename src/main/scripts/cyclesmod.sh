@@ -19,7 +19,7 @@ elif [ "$1" = "-c" ] || [ "$1" = "-C" ]
   fi
 else
   if [ "$JAVA_HOME" != "" ]
-  then "$JAVA_HOME/bin/java" -Xms8m -Xmx32m -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModGui $1
-  else java -Xms8m -Xmx32m -classpath "cyclesmod.jar:lib/*" it.albertus.cycles.CyclesModGui $1
+  then "$JAVA_HOME/bin/java" -Xms8m -Xmx32m -jar cyclesmod.jar $1
+  else java -Xms8m -Xmx32m -jar cyclesmod.jar $1
   fi
 fi
