@@ -65,9 +65,9 @@ public class CyclesModGui extends CyclesModEngine {
 		defaultProperties = new BikesCfg(bikesInf).getProperties();
 	}
 
-	public static void main(final String... args) throws IOException {
+	public static void start(final String filename) throws IOException {
 		Display display = new Display();
-		final Shell shell = new CyclesModGui().createShell(display, args.length != 0 ? args[0] : null);
+		final Shell shell = new CyclesModGui().createShell(display, filename);
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
