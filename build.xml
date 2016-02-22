@@ -6,7 +6,7 @@
 	<property file="${build.resourcesDirectory}/version.properties" />
 
 	<property name="artifactId" value="cyclesmod" />
-	<property name="mainClass" value="it.albertus.cycles.CyclesModGui" />
+	<property name="mainClass" value="it.albertus.cycles.CyclesMod" />
 
 	<target name="clean">
 		<delete dir="${build.directory}" />

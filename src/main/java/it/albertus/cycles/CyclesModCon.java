@@ -28,20 +28,14 @@ public class CyclesModCon extends CyclesModEngine {
 		this.path = path;
 	}
 
-	public static void main(final String... args) throws Exception {
+	public static void start(String path) throws Exception {
 		try {
 			log.info(getWelcomeMessage());
 
-			// Gestione parametri da riga di comando...
-			if (args.length > 1) {
-				throw new IllegalArgumentException(Resources.get("err.too.many.parameters") + ' ' + Resources.get("msg.command.line.help", CyclesModCon.class.getSimpleName()));
+			if (path == null) {
+				path = DEFAULT_DESTINATION_PATH;
 			}
-			String path = args.length == 1 ? args[0] : DEFAULT_DESTINATION_PATH;
 
-			if (path.contains("?") || StringUtils.startsWithIgnoreCase(path, "-help") || StringUtils.startsWithIgnoreCase(path, "/help")) {
-				log.info(Resources.get("msg.command.line.help", CyclesModCon.class.getSimpleName()));
-				return;
-			}
 			if (!"".equals(path) && !path.endsWith("/") && !path.endsWith("\\") && !path.endsWith(File.separator)) {
 				path += File.separator;
 			}

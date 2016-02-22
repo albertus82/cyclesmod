@@ -81,7 +81,7 @@ La curva di coppia del motore viene costruita a partire dai valori presenti in q
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
 Gli script di avvio [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat) e [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
-* Windows: **`cyclesmod.bat /c`**
+* Windows: **`cyclesmod.bat -c`**
 * Linux: **`cyclesmod.sh -c`**
 
 Una volta eseguito, il programma verifica per prima cosa l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *coppia motrice* (torque). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
