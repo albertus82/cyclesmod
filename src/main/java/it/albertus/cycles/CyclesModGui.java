@@ -208,7 +208,7 @@ public class CyclesModGui extends CyclesModEngine {
 			public void widgetSelected(SelectionEvent event) {
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 				messageBox.setText(Resources.get("msg.info.title"));
-				messageBox.setMessage(Resources.get("msg.info.body", Version.getInstance().getNumber(), Version.getInstance().getDate()) + NewLine.SYSTEM_LINE_SEPARATOR + Resources.get("msg.info.icon"));
+				messageBox.setMessage(Resources.get("msg.info.body", Version.getInstance().getNumber(), Version.getInstance().getDate()) + NewLine.SYSTEM_LINE_SEPARATOR + Resources.get("msg.info.site") + NewLine.SYSTEM_LINE_SEPARATOR + Resources.get("msg.info.icon"));
 				messageBox.open();
 			}
 		});
