@@ -1,5 +1,7 @@
 package it.albertus.cycles;
 
+import it.albertus.cycles.console.CyclesModConsole;
+import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.Version;
 
@@ -27,7 +29,7 @@ public class CyclesMod {
 				System.out.println(Resources.get("err.try.help", ARG_HELP));
 			}
 			else if (args[0].trim().equalsIgnoreCase(ARG_CONSOLE)) {
-				CyclesModCon.start(args.length == 2 ? args[1] : null);
+				CyclesModConsole.start(args.length == 2 ? args[1] : null);
 			}
 			else {
 				CyclesModGui.start(args.length != 0 ? args[0] : null);

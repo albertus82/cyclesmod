@@ -1,4 +1,4 @@
-package it.albertus.cycles;
+package it.albertus.cycles.console;
 
 import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
@@ -15,16 +15,16 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CyclesModCon extends CyclesModEngine {
+public class CyclesModConsole extends CyclesModEngine {
 
-	private static final Logger log = LoggerFactory.getLogger(CyclesModCon.class);
+	private static final Logger log = LoggerFactory.getLogger(CyclesModConsole.class);
 
 	private static final String DEFAULT_DESTINATION_PATH = "";
 
 	private BikesCfg bikesCfg;
 	private final String path;
 
-	private CyclesModCon(String path) {
+	private CyclesModConsole(String path) {
 		this.path = path;
 	}
 
@@ -40,7 +40,7 @@ public class CyclesModCon extends CyclesModEngine {
 				path += File.separator;
 			}
 
-			new CyclesModCon(path).execute();
+			new CyclesModConsole(path).execute();
 		}
 		catch (Exception e) {
 			if (StringUtils.isNotBlank(e.getLocalizedMessage()) || StringUtils.isNotBlank(e.getMessage())) {

@@ -1,15 +1,8 @@
-package it.albertus.cycles;
+package it.albertus.cycles.gui;
 
 import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
-import it.albertus.cycles.gui.FormProperty;
-import it.albertus.cycles.gui.GuiImages;
-import it.albertus.cycles.gui.PropertyFocusListener;
-import it.albertus.cycles.gui.PropertyFormatter;
-import it.albertus.cycles.gui.PropertyVerifyListener;
-import it.albertus.cycles.gui.TorqueGraph;
-import it.albertus.cycles.gui.TorquePropertyFocusListener;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
