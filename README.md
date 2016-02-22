@@ -9,7 +9,7 @@ Il gioco permette di scegliere tre diverse moto: 125, 250 o 500 cc. I parametri 
 
 Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere eseguito nativamente con i sistemi operativi correnti, ma con l'aiuto di macchine virtuali o, meglio ancora, di appositi emulatori come [**DOSBox**](http://www.dosbox.com), &egrave; possibile comunque eseguirlo con ottimi risultati.
 
->L'icona dell'applicazione &egrave; stata realizzata da [Oxygen Icons](http://www.oxygen-icons.org) (licenza [Creative Commons](https://creativecommons.org/licenses/by-nc-nd/2.5/)), e prelevata da [Iconfinder](http://www.iconfinder.com). 
+>L'icona dell'applicazione &egrave; stata realizzata da [Everaldo Coelho](http://www.everaldo.com) (licenza [LGPL](http://www.gnu.org/licenses/lgpl.html)), e prelevata da [Iconfinder](http://www.iconfinder.com).
 
 
 ### Installazione
