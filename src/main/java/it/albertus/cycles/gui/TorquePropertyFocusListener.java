@@ -2,17 +2,12 @@ package it.albertus.cycles.gui;
 
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.model.Torque;
-import it.albertus.util.ExceptionUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TorquePropertyFocusListener extends PropertyFocusListener {
-
-	private static final Logger log = LoggerFactory.getLogger(TorquePropertyFocusListener.class);
 
 	private final String key;
 	private final TorqueGraph graph;
@@ -37,7 +32,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 			graph.refresh();
 		}
 		catch (InvalidPropertyException ipe) {
-			log.debug(ExceptionUtils.getLogMessage(ipe));
+//			log.debug(ExceptionUtils.getLogMessage(ipe));
 		}
 	}
 

@@ -39,12 +39,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CyclesModGui extends CyclesModEngine {
-
-	private static final Logger log = LoggerFactory.getLogger(CyclesModGui.class);
 
 	private static final Point WINDOW_SIZE = new Point(980, 680);
 
@@ -127,7 +123,7 @@ public class CyclesModGui extends CyclesModEngine {
 					updateModelValues();
 				}
 				catch (InvalidPropertyException ipe) {
-					log.error(ExceptionUtils.getLogMessage(ipe));
+					System.err.println(ExceptionUtils.getLogMessage(ipe));
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 					messageBox.setText(Resources.get("msg.warning"));
 					messageBox.setMessage(ExceptionUtils.getUIMessage(ipe));
@@ -145,7 +141,7 @@ public class CyclesModGui extends CyclesModEngine {
 						bikesInf.write(fileName);
 					}
 					catch (Exception e) {
-						log.error(ExceptionUtils.getLogMessage(e));
+						System.err.println(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 						messageBox.setText(Resources.get("msg.warning"));
 						messageBox.setMessage(Resources.get("err.file.save", ExceptionUtils.getUIMessage(e)));
@@ -180,7 +176,7 @@ public class CyclesModGui extends CyclesModEngine {
 						updateFormValues();
 					}
 					catch (Exception e) {
-						log.error(ExceptionUtils.getLogMessage(e));
+						System.err.println(ExceptionUtils.getLogMessage(e));
 						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 						messageBox.setText(Resources.get("msg.warning"));
 						messageBox.setMessage(Resources.get("err.reset", ExceptionUtils.getUIMessage(e)));
@@ -400,7 +396,7 @@ public class CyclesModGui extends CyclesModEngine {
 			}
 		}
 		catch (Exception e) {
-			log.error(ExceptionUtils.getLogMessage(e));
+			System.err.println(ExceptionUtils.getLogMessage(e));
 			MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 			messageBox.setText(Resources.get("msg.warning"));
 			messageBox.setMessage(Resources.get("err.file.load", ExceptionUtils.getUIMessage(e)));

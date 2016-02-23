@@ -12,12 +12,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CyclesModConsole extends CyclesModEngine {
-
-	private static final Logger log = LoggerFactory.getLogger(CyclesModConsole.class);
 
 	private static final String DEFAULT_DESTINATION_PATH = "";
 
@@ -30,7 +26,7 @@ public class CyclesModConsole extends CyclesModEngine {
 
 	public static void start(String path) throws Exception {
 		try {
-			log.info(getWelcomeMessage());
+			System.out.println(getWelcomeMessage());
 
 			if (path == null) {
 				path = DEFAULT_DESTINATION_PATH;
@@ -44,7 +40,7 @@ public class CyclesModConsole extends CyclesModEngine {
 		}
 		catch (Exception e) {
 			if (StringUtils.isNotBlank(e.getLocalizedMessage()) || StringUtils.isNotBlank(e.getMessage())) {
-				log.error(ExceptionUtils.getLogMessage(e));
+				System.err.println(ExceptionUtils.getLogMessage(e));
 			}
 			else {
 				throw e; // Exceptions without message are thrown by default.
@@ -57,13 +53,13 @@ public class CyclesModConsole extends CyclesModEngine {
 	}
 
 	private void execute() throws IOException {
-		log.info(Resources.get("msg.reading.original.file", BikesInf.FILE_NAME));
+		System.out.println(Resources.get("msg.reading.original.file", BikesInf.FILE_NAME));
 		bikesInf = new BikesInf(new BikesZip().getInputStream());
 
-		log.info(Resources.get("msg.applying.customizations"));
+		System.out.println(Resources.get("msg.applying.customizations"));
 		customize();
 
-		log.info(Resources.get("msg.preparing.new.file", BikesInf.FILE_NAME));
+		System.out.println(Resources.get("msg.preparing.new.file", BikesInf.FILE_NAME));
 		bikesInf.write(path + BikesInf.FILE_NAME);
 	}
 
@@ -79,7 +75,7 @@ public class CyclesModConsole extends CyclesModEngine {
 				changesCount++;
 			}
 		}
-		log.info(Resources.get("msg.customizations.applied", changesCount));
+		System.out.println(Resources.get("msg.customizations.applied", changesCount));
 	}
 
 }
