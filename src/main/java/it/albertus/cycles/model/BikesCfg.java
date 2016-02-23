@@ -14,12 +14,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class BikesCfg {
-
-	private static final Logger log = LoggerFactory.getLogger(BikesCfg.class);
 
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
@@ -42,23 +37,23 @@ public class BikesCfg {
 
 	public BikesCfg(final String fileName) throws IOException {
 		populateProperties(new BufferedReader(new FileReader(fileName)));
-		log.info(Resources.get("msg.file.read", FILE_NAME));
+		System.out.println(Resources.get("msg.file.read", FILE_NAME));
 	}
 
 	public BikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
-		log.info(Resources.get("msg.reading.file", FILE_NAME));
+		System.out.println(Resources.get("msg.reading.file", FILE_NAME));
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(path + FILE_NAME));
 		}
 		catch (FileNotFoundException fnfe) {
-			log.info(Resources.get("msg.file.not.found.creating.default", FILE_NAME));
+			System.out.println(Resources.get("msg.file.not.found.creating.default", FILE_NAME));
 			writeDefaultBikesCfg(originalBikesInf, path);
-			log.info(Resources.get("msg.default.file.created", FILE_NAME));
+			System.out.println(Resources.get("msg.default.file.created", FILE_NAME));
 			reader = new BufferedReader(new FileReader(path + FILE_NAME));
 		}
 		populateProperties(reader);
-		log.info(Resources.get("msg.file.read", FILE_NAME));
+		System.out.println(Resources.get("msg.file.read", FILE_NAME));
 	}
 
 	private void writeDefaultBikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {

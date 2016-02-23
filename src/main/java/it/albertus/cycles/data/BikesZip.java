@@ -9,12 +9,7 @@ import java.io.StreamCorruptedException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class BikesZip {
-
-	private static final Logger log = LoggerFactory.getLogger(BikesZip.class);
 
 	private static final char PACKAGE_SEPARATOR = '\u002E';
 	private static final char FILE_SEPARATOR = '\u002F';
@@ -32,7 +27,7 @@ public class BikesZip {
 	}
 
 	private ZipInputStream openBikesInfInputStream() throws IOException {
-		log.info(Resources.get("msg.opening.original.file", BikesInf.FILE_NAME));
+		System.out.println(Resources.get("msg.opening.original.file", BikesInf.FILE_NAME));
 		ZipInputStream zis = null;
 		try {
 			zis = new ZipInputStream(getClass().getResourceAsStream(FILE_NAME));
@@ -47,7 +42,7 @@ public class BikesZip {
 		if (ze.getSize() != BikesInf.FILE_SIZE) {
 			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, ze.getSize()));
 		}
-		log.info(Resources.get("msg.original.file.opened", BikesInf.FILE_NAME, String.format("%08X", ze.getCrc())));
+		System.out.println(Resources.get("msg.original.file.opened", BikesInf.FILE_NAME, String.format("%08X", ze.getCrc())));
 		return zis;
 	}
 

@@ -11,12 +11,8 @@ import it.albertus.cycles.resources.Resources;
 import java.beans.Introspector;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class CyclesModEngine {
-
-	private static final Logger log = LoggerFactory.getLogger(CyclesModEngine.class);
 
 	protected BikesInf bikesInf;
 
@@ -125,7 +121,7 @@ public abstract class CyclesModEngine {
 	}
 
 	private void logChange(final String key, final int defaultValue, final int newValue) {
-		log.info(Resources.get("msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
+		System.out.println(Resources.get("msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
 	}
 
 	private Bike getBike(final String key, final String value) {

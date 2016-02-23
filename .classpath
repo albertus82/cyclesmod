@@ -3,9 +3,6 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/logback-classic-1.1.4.jar" sourcepath="lib/src/logback-classic-1.1.4-sources.jar"/>
-	<classpathentry kind="lib" path="lib/logback-core-1.1.4.jar" sourcepath="lib/src/logback-core-1.1.4-sources.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j-api-1.7.16.jar" sourcepath="lib/src/slf4j-api-1.7.16-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar" sourcepath="lib/src/commons-lang-2.6-src.zip"/>
 	<classpathentry kind="lib" path="lib/os/win32-win32-x86_64/swt-4.4.2-win32-win32-x86_64.jar" sourcepath="lib/os/win32-win32-x86_64/src/swt-4.4.2-win32-win32-x86_64-src.zip"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.nebula.visualization.widgets_1.0.0.201501260813.jar" sourcepath="lib/src/org.eclipse.nebula.visualization.widgets.source_1.0.0.201501260813.jar"/>
