@@ -8,13 +8,13 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
 
-public class GuiImages {
+public class Images {
 
 	/* Icona principale dell'applicazione (in vari formati) */
-	public static final Image[] ICONS_WHEEL = loadIcons("tools.ico");
+	public static final Image[] ICONS_TOOLS = loadIcons("tools.ico");
 
 	private static Image[] loadIcons(final String fileName) {
-		final InputStream is = GuiImages.class.getResourceAsStream(fileName);
+		final InputStream is = Images.class.getResourceAsStream(fileName);
 		final ImageData[] images = new ImageLoader().load(is);
 		try {
 			is.close();
