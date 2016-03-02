@@ -54,18 +54,18 @@ public class CyclesModConsole extends CyclesModEngine {
 
 	private void execute() throws IOException {
 		System.out.println(Resources.get("msg.reading.original.file", BikesInf.FILE_NAME));
-		bikesInf = new BikesInf(new BikesZip().getInputStream());
+		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
 
 		System.out.println(Resources.get("msg.applying.customizations"));
 		customize();
 
 		System.out.println(Resources.get("msg.preparing.new.file", BikesInf.FILE_NAME));
-		bikesInf.write(path + BikesInf.FILE_NAME);
+		getBikesInf().write(path + BikesInf.FILE_NAME);
 	}
 
 	private void customize() throws IOException {
 		// Lettura del file di properties BIKES.CFG...
-		bikesCfg = new BikesCfg(bikesInf, path);
+		bikesCfg = new BikesCfg(getBikesInf(), path);
 
 		// Elaborazione delle properties...
 		short changesCount = 0;

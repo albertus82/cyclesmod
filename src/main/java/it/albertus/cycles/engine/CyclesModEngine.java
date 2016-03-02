@@ -14,7 +14,15 @@ import org.apache.commons.lang.StringUtils;
 
 public abstract class CyclesModEngine {
 
-	protected BikesInf bikesInf;
+	private BikesInf bikesInf;
+
+	public BikesInf getBikesInf() {
+		return bikesInf;
+	}
+
+	public void setBikesInf(BikesInf bikesInf) {
+		this.bikesInf = bikesInf;
+	}
 
 	protected boolean applyProperty(String key, String value) {
 		if (StringUtils.isBlank(value) || !StringUtils.isNumeric(value)) {
