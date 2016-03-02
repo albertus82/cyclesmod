@@ -36,7 +36,7 @@ public class CyclesMod {
 			}
 		}
 		else {
-			CyclesModGui.start(args.length != 0 ? args[0] : null);
+			CyclesModGui.start(null);
 		}
 	}
 

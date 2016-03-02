@@ -2,7 +2,6 @@ package it.albertus.cycles.gui;
 
 import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
-import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -47,11 +46,12 @@ public class CyclesModGui extends CyclesModEngine {
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 	private final Properties defaultProperties;
+	private Shell shell;
 
 	private CyclesModGui() throws IOException {
 		// Loading default properties...
-		bikesInf = new BikesInf(new BikesZip().getInputStream());
-		defaultProperties = new BikesCfg(bikesInf).getProperties();
+		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
+		defaultProperties = new BikesCfg(getBikesInf()).getProperties();
 	}
 
 	public static void start(final String filename) throws IOException {
@@ -66,7 +66,7 @@ public class CyclesModGui extends CyclesModEngine {
 	}
 
 	private Shell createShell(final Display display, final String fileName) throws IOException {
-		final Shell shell = new Shell(display);
+		shell = new Shell(display);
 		shell.setText(Resources.get("win.title"));
 		shell.setImages(Images.ICONS_TOOLS);
 		GridLayout shellLayout = new GridLayout();
@@ -116,75 +116,13 @@ public class CyclesModGui extends CyclesModEngine {
 		Button saveButton = new Button(footer, SWT.PUSH);
 		saveButton.setText(Resources.get("btn.save"));
 		saveButton.setLayoutData(buttonLayoutData);
-		saveButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				try {
-					updateModelValues();
-				}
-				catch (InvalidPropertyException ipe) {
-					System.err.println(ExceptionUtils.getLogMessage(ipe));
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-					messageBox.setText(Resources.get("msg.warning"));
-					messageBox.setMessage(ExceptionUtils.getUIMessage(ipe));
-					messageBox.open();
-					return;
-				}
-				FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-				saveDialog.setFilterExtensions(new String[] { "*.INF; *.inf" });
-				saveDialog.setFileName(BikesInf.FILE_NAME);
-				saveDialog.setOverwrite(true);
-				String fileName = saveDialog.open();
-
-				if (StringUtils.isNotBlank(fileName)) {
-					try {
-						bikesInf.write(fileName);
-					}
-					catch (Exception e) {
-						System.err.println(ExceptionUtils.getLogMessage(e));
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-						messageBox.setText(Resources.get("msg.warning"));
-						messageBox.setMessage(Resources.get("err.file.save", ExceptionUtils.getUIMessage(e)));
-						messageBox.open();
-						return;
-					}
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-					messageBox.setText(Resources.get("msg.completed"));
-					messageBox.setMessage(Resources.get("msg.file.saved", fileName));
-					messageBox.open();
-				}
-			}
-		});
+		saveButton.addSelectionListener(new SaveButtonSelectionListener(this));
 
 		// Reset...
 		Button resetButton = new Button(footer, SWT.PUSH);
 		resetButton.setText(Resources.get("btn.reset"));
 		resetButton.setLayoutData(buttonLayoutData);
-		resetButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				int choose = SWT.YES;
-				if (bikesInf != null) {
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-					messageBox.setText(Resources.get("msg.warning"));
-					messageBox.setMessage(Resources.get("msg.reset.overwrite"));
-					choose = messageBox.open();
-				}
-				if (choose == SWT.YES) {
-					try {
-						bikesInf = new BikesInf(new BikesZip().getInputStream());
-						updateFormValues();
-					}
-					catch (Exception e) {
-						System.err.println(ExceptionUtils.getLogMessage(e));
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-						messageBox.setText(Resources.get("msg.warning"));
-						messageBox.setMessage(Resources.get("err.reset", ExceptionUtils.getUIMessage(e)));
-						messageBox.open();
-					}
-				}
-			}
-		});
+		resetButton.addSelectionListener(new ResetButtonSelectionListener(this));
 
 		// Info...
 		Button infoButton = new Button(footer, SWT.PUSH);
@@ -210,7 +148,7 @@ public class CyclesModGui extends CyclesModEngine {
 	}
 
 	private void createForm(final TabFolder tabFolder) throws IOException {
-		for (Bike bike : bikesInf.getBikes()) {
+		for (Bike bike : getBikesInf().getBikes()) {
 			TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
 			tabItem.setText(bike.getType().getDisplacement() + " cc");
 
@@ -320,8 +258,8 @@ public class CyclesModGui extends CyclesModEngine {
 		}
 	}
 
-	private void updateFormValues() {
-		Properties properties = new BikesCfg(bikesInf).getProperties();
+	public void updateFormValues() {
+		Properties properties = new BikesCfg(getBikesInf()).getProperties();
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
@@ -342,7 +280,7 @@ public class CyclesModGui extends CyclesModEngine {
 		}
 
 		// Update torque graphs...
-		for (Bike bike : bikesInf.getBikes()) {
+		for (Bike bike : getBikesInf().getBikes()) {
 			TorqueGraph graph = torqueGraphs.get(bike.getType());
 			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
 				graph.getValues()[i] = bike.getTorque().getCurve()[i];
@@ -351,7 +289,7 @@ public class CyclesModGui extends CyclesModEngine {
 		}
 	}
 
-	private void updateModelValues() {
+	public void updateModelValues() {
 		for (String key : formProperties.keySet()) {
 			applyProperty(key, formProperties.get(key).getValue());
 		}
@@ -360,7 +298,7 @@ public class CyclesModGui extends CyclesModEngine {
 	protected void load(final Shell shell, final String fileName, final boolean successMessage) {
 		try {
 			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
-				bikesInf = new BikesInf(fileName);
+				setBikesInf(new BikesInf(fileName));
 				updateFormValues();
 				if (successMessage) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
@@ -370,7 +308,7 @@ public class CyclesModGui extends CyclesModEngine {
 				}
 			}
 			else if (StringUtils.endsWithIgnoreCase(fileName, ".cfg")) {
-				bikesInf = new BikesInf(new BikesZip().getInputStream());
+				setBikesInf(new BikesInf(new BikesZip().getInputStream()));
 
 				BikesCfg bikesCfg = new BikesCfg(fileName);
 				short changesCount = 0;
@@ -402,6 +340,10 @@ public class CyclesModGui extends CyclesModEngine {
 			messageBox.setMessage(Resources.get("err.file.load", ExceptionUtils.getUIMessage(e)));
 			messageBox.open();
 		}
+	}
+
+	public Shell getShell() {
+		return shell;
 	}
 
 }
