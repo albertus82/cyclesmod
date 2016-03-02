@@ -30,7 +30,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
@@ -100,17 +99,7 @@ public class CyclesModGui extends CyclesModEngine {
 		Button loadButton = new Button(footer, SWT.PUSH);
 		loadButton.setText(Resources.get("btn.load"));
 		loadButton.setLayoutData(buttonLayoutData);
-		loadButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
-				openDialog.setFilterExtensions(new String[] { "*.INF; *.inf; *.CFG; *.cfg" });
-				String fileName = openDialog.open();
-				if (StringUtils.isNotBlank(fileName)) {
-					load(shell, fileName, true);
-				}
-			}
-		});
+		loadButton.addSelectionListener(new LoadButtonSelectionListener(this));
 
 		// Save...
 		Button saveButton = new Button(footer, SWT.PUSH);
@@ -141,7 +130,7 @@ public class CyclesModGui extends CyclesModEngine {
 		});
 
 		if (StringUtils.isNotBlank(fileName)) {
-			load(shell, fileName, false);
+			load(fileName, false);
 		}
 
 		return shell;
@@ -295,7 +284,7 @@ public class CyclesModGui extends CyclesModEngine {
 		}
 	}
 
-	protected void load(final Shell shell, final String fileName, final boolean successMessage) {
+	public void load(final String fileName, final boolean successMessage) {
 		try {
 			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
 				setBikesInf(new BikesInf(fileName));
