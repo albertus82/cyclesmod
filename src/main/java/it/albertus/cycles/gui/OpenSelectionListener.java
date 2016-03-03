@@ -6,11 +6,11 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.FileDialog;
 
-public class LoadSelectionListener extends SelectionAdapter {
+public class OpenSelectionListener extends SelectionAdapter {
 
 	private final CyclesModGui gui;
 
-	public LoadSelectionListener(CyclesModGui gui) {
+	public OpenSelectionListener(CyclesModGui gui) {
 		this.gui = gui;
 	}
 
