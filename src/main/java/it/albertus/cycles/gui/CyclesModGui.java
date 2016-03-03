@@ -20,7 +20,6 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -35,8 +34,6 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 public class CyclesModGui extends CyclesModEngine implements Gui {
-
-	private static final Point WINDOW_SIZE = new Point(980, 680);
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
@@ -59,6 +56,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 			gui.load(fileName, false);
 		}
 
+		shell.pack();
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -72,56 +70,37 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		shell.setText(Resources.get("win.title"));
 		shell.setImages(Images.ICONS_TOOLS);
 		GridLayout shellLayout = new GridLayout();
-		shellLayout.numColumns = 1;
+		shellLayout.numColumns = 4; // Sotto ho 4 pulsanti!
 		shell.setLayout(shellLayout);
-		shell.setSize(WINDOW_SIZE);
+
+		// TODO Aggiungere barra dei menu'!
 
 		// Tabs...
 		final TabFolder tabFolder = new TabFolder(shell, SWT.NULL);
-		GridLayout gridLayout = new GridLayout();
-		gridLayout.numColumns = 1;
-		tabFolder.setLayout(gridLayout);
-		GridData tabGridData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		GridData tabGridData = new GridData(GridData.FILL,GridData.FILL,true,true);
+		tabGridData.horizontalSpan = 4;
 		tabFolder.setLayoutData(tabGridData);
+		// TODO Aggiungere scrollbar verticale!
 
 		// Fields...
 		createForm(tabFolder);
 
 		// Buttons...
-		Composite footer = new Composite(shell, SWT.NONE);
-		GridLayout footerLayout = new GridLayout();
-		footerLayout.numColumns = 4;
-		footer.setLayout(footerLayout);
-		GridData footerGridData = new GridData(GridData.FILL, GridData.FILL, true, false);
-		footer.setLayoutData(footerGridData);
-
-		GridData buttonLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		buttonLayoutData.widthHint = 120;
-
-		// Load...
-		Button loadButton = new Button(footer, SWT.PUSH);
+		Button loadButton = new Button(shell, SWT.PUSH);
 		loadButton.setText(Resources.get("btn.load"));
-		loadButton.setLayoutData(buttonLayoutData);
 		loadButton.addSelectionListener(new LoadSelectionListener(this));
 
-		// Save...
-		Button saveButton = new Button(footer, SWT.PUSH);
+		Button saveButton = new Button(shell, SWT.PUSH);
 		saveButton.setText(Resources.get("btn.save"));
-		saveButton.setLayoutData(buttonLayoutData);
 		saveButton.addSelectionListener(new SaveSelectionListener(this));
 
-		// Reset...
-		Button resetButton = new Button(footer, SWT.PUSH);
+		Button resetButton = new Button(shell, SWT.PUSH);
 		resetButton.setText(Resources.get("btn.reset"));
-		resetButton.setLayoutData(buttonLayoutData);
 		resetButton.addSelectionListener(new ResetSelectionListener(this));
 
 		// Info...
-		Button infoButton = new Button(footer, SWT.PUSH);
+		Button infoButton = new Button(shell, SWT.PUSH);
 		infoButton.setText(Resources.get("btn.info"));
-		GridData infoButtonLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
-		infoButtonLayoutData.widthHint = 30;
-		infoButton.setLayoutData(infoButtonLayoutData);
 		infoButton.addSelectionListener(new AboutSelectionListener(this));
 
 		return shell;
