@@ -11,8 +11,6 @@ import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
-import it.albertus.util.NewLine;
-import it.albertus.util.Version;
 
 import java.io.IOException;
 import java.util.EnumMap;
@@ -22,8 +20,6 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -38,7 +34,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
-public class CyclesModGui extends CyclesModEngine {
+public class CyclesModGui extends CyclesModEngine implements Gui {
 
 	private static final Point WINDOW_SIZE = new Point(980, 680);
 
@@ -99,19 +95,19 @@ public class CyclesModGui extends CyclesModEngine {
 		Button loadButton = new Button(footer, SWT.PUSH);
 		loadButton.setText(Resources.get("btn.load"));
 		loadButton.setLayoutData(buttonLayoutData);
-		loadButton.addSelectionListener(new LoadButtonSelectionListener(this));
+		loadButton.addSelectionListener(new LoadSelectionListener(this));
 
 		// Save...
 		Button saveButton = new Button(footer, SWT.PUSH);
 		saveButton.setText(Resources.get("btn.save"));
 		saveButton.setLayoutData(buttonLayoutData);
-		saveButton.addSelectionListener(new SaveButtonSelectionListener(this));
+		saveButton.addSelectionListener(new SaveSelectionListener(this));
 
 		// Reset...
 		Button resetButton = new Button(footer, SWT.PUSH);
 		resetButton.setText(Resources.get("btn.reset"));
 		resetButton.setLayoutData(buttonLayoutData);
-		resetButton.addSelectionListener(new ResetButtonSelectionListener(this));
+		resetButton.addSelectionListener(new ResetSelectionListener(this));
 
 		// Info...
 		Button infoButton = new Button(footer, SWT.PUSH);
@@ -119,15 +115,7 @@ public class CyclesModGui extends CyclesModEngine {
 		GridData infoButtonLayoutData = new GridData(SWT.LEFT, SWT.CENTER, false, false);
 		infoButtonLayoutData.widthHint = 30;
 		infoButton.setLayoutData(infoButtonLayoutData);
-		infoButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent event) {
-				MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-				messageBox.setText(Resources.get("msg.info.title"));
-				messageBox.setMessage(Resources.get("msg.info.body", Version.getInstance().getNumber(), Version.getInstance().getDate()) + NewLine.SYSTEM_LINE_SEPARATOR + Resources.get("msg.info.site") + NewLine.SYSTEM_LINE_SEPARATOR + Resources.get("msg.info.icon"));
-				messageBox.open();
-			}
-		});
+		infoButton.addSelectionListener(new AboutSelectionListener(this));
 
 		if (StringUtils.isNotBlank(fileName)) {
 			load(fileName, false);
@@ -331,6 +319,7 @@ public class CyclesModGui extends CyclesModEngine {
 		}
 	}
 
+	@Override
 	public Shell getShell() {
 		return shell;
 	}
