@@ -49,9 +49,16 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		defaultProperties = new BikesCfg(getBikesInf()).getProperties();
 	}
 
-	public static void start(final String filename) throws IOException {
+	public static void start(final String fileName) throws IOException {
 		Display display = new Display();
-		final Shell shell = new CyclesModGui().createShell(display, filename);
+		final CyclesModGui gui = new CyclesModGui();
+		final Shell shell = gui.createShell(display);
+
+		// Loading custom properties...
+		if (StringUtils.isNotBlank(fileName)) {
+			gui.load(fileName, false);
+		}
+
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -60,7 +67,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		display.dispose();
 	}
 
-	private Shell createShell(final Display display, final String fileName) throws IOException {
+	private Shell createShell(final Display display) throws IOException {
 		shell = new Shell(display);
 		shell.setText(Resources.get("win.title"));
 		shell.setImages(Images.ICONS_TOOLS);
@@ -116,10 +123,6 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		infoButtonLayoutData.widthHint = 30;
 		infoButton.setLayoutData(infoButtonLayoutData);
 		infoButton.addSelectionListener(new AboutSelectionListener(this));
-
-		if (StringUtils.isNotBlank(fileName)) {
-			load(fileName, false);
-		}
 
 		return shell;
 	}
