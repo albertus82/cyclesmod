@@ -12,11 +12,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 
-public class SaveButtonSelectionListener extends SelectionAdapter {
+public class SaveSelectionListener extends SelectionAdapter {
 
 	private final CyclesModGui gui;
 
-	public SaveButtonSelectionListener(final CyclesModGui gui) {
+	public SaveSelectionListener(final CyclesModGui gui) {
 		this.gui = gui;
 	}
 

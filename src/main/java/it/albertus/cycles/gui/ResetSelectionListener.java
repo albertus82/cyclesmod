@@ -10,11 +10,11 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
 
-public class ResetButtonSelectionListener extends SelectionAdapter {
+public class ResetSelectionListener extends SelectionAdapter {
 
 	private final CyclesModGui gui;
 
-	public ResetButtonSelectionListener(final CyclesModGui gui) {
+	public ResetSelectionListener(final CyclesModGui gui) {
 		this.gui = gui;
 	}
 
