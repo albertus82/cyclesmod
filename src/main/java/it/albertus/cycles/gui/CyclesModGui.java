@@ -20,13 +20,15 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -38,7 +40,20 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 	private final Properties defaultProperties;
+
 	private Shell shell;
+	private Menu menuBar;
+	private Menu fileMenu;
+	private MenuItem fileMenuHeader;
+	private Menu helpMenu;
+	private MenuItem helpMenuHeader;
+	private MenuItem fileExitMenuItem;
+	private MenuItem helpAboutMenuItem;
+	private MenuItem fileOpenMenuItem;
+	private Menu editMenu;
+	private MenuItem editMenuHeader;
+	private MenuItem editResetMenuItem;
+	private TabFolder tabFolder;
 
 	private CyclesModGui() throws IOException {
 		// Loading default properties...
@@ -56,7 +71,6 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 			gui.load(fileName, false);
 		}
 
-		shell.pack();
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -67,43 +81,70 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 
 	private Shell createShell(final Display display) throws IOException {
 		shell = new Shell(display);
-		shell.setText(Resources.get("win.title"));
 		shell.setImages(Images.ICONS_TOOLS);
-		GridLayout shellLayout = new GridLayout();
-		shellLayout.numColumns = 4; // Sotto ho 4 pulsanti!
-		shell.setLayout(shellLayout);
+		shell.setText(Resources.get("win.title"));
+		shell.setLayout(new FillLayout());
 
-		// TODO Aggiungere barra dei menu'!
+		createMenuBar();
 
 		// Tabs...
-		final TabFolder tabFolder = new TabFolder(shell, SWT.NULL);
-		GridData tabGridData = new GridData(GridData.FILL,GridData.FILL,true,true);
-		tabGridData.horizontalSpan = 4;
-		tabFolder.setLayoutData(tabGridData);
+		tabFolder = new TabFolder(shell, SWT.NULL);
 		// TODO Aggiungere scrollbar verticale!
 
 		// Fields...
 		createForm(tabFolder);
 
-		// Buttons...
-		Button loadButton = new Button(shell, SWT.PUSH);
-		loadButton.setText(Resources.get("btn.load"));
-		loadButton.addSelectionListener(new LoadSelectionListener(this));
-
-		Button saveButton = new Button(shell, SWT.PUSH);
-		saveButton.setText(Resources.get("btn.save"));
-		saveButton.addSelectionListener(new SaveSelectionListener(this));
-
-		Button resetButton = new Button(shell, SWT.PUSH);
-		resetButton.setText(Resources.get("btn.reset"));
-		resetButton.addSelectionListener(new ResetSelectionListener(this));
-
-		// Info...
-		Button infoButton = new Button(shell, SWT.PUSH);
-		infoButton.setText(Resources.get("btn.info"));
-		infoButton.addSelectionListener(new AboutSelectionListener(this));
+		// Size...
+		shell.pack();
+		shell.setMinimumSize(shell.getSize());
 
 		return shell;
+	}
+
+	private void createMenuBar() {
+		menuBar = new Menu(shell, SWT.BAR); // Barra
+
+		// File
+		fileMenu = new Menu(shell, SWT.DROP_DOWN);
+		fileMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
+		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
+		fileMenuHeader.setMenu(fileMenu);
+
+		fileOpenMenuItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileOpenMenuItem.setText(Resources.get("lbl.menu.item.open"));
+		fileOpenMenuItem.addSelectionListener(new OpenSelectionListener(this));
+
+		fileOpenMenuItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileOpenMenuItem.setText(Resources.get("lbl.menu.item.saveas"));
+		fileOpenMenuItem.addSelectionListener(new SaveSelectionListener(this));
+
+		new MenuItem(fileMenu, SWT.SEPARATOR);
+
+		fileExitMenuItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileExitMenuItem.setText(Resources.get("lbl.menu.item.exit"));
+		fileExitMenuItem.addSelectionListener(new ExitSelectionListener(this));
+
+		// Edit
+		editMenu = new Menu(shell, SWT.DROP_DOWN);
+		editMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
+		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
+		editMenuHeader.setMenu(editMenu);
+
+		editResetMenuItem = new MenuItem(editMenu, SWT.PUSH);
+		editResetMenuItem.setText(Resources.get("lbl.menu.item.reset"));
+		editResetMenuItem.addSelectionListener(new ResetSelectionListener(this));
+
+		// Help
+		helpMenu = new Menu(shell, SWT.DROP_DOWN);
+		helpMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
+		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
+		helpMenuHeader.setMenu(helpMenu);
+
+		helpAboutMenuItem = new MenuItem(helpMenu, SWT.PUSH);
+		helpAboutMenuItem.setText(Resources.get("lbl.menu.item.about"));
+		helpAboutMenuItem.addSelectionListener(new AboutSelectionListener(this));
+
+		shell.setMenuBar(menuBar);
 	}
 
 	private void createForm(final TabFolder tabFolder) throws IOException {
@@ -121,7 +162,6 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 			settingsGroup.setText(Resources.get("lbl.settings"));
 			// Posizionamento dell'elemento all'interno del contenitore
 			GridData settingsGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
-			settingsGroupGridLayoutData.horizontalSpan = 1;
 			settingsGroup.setLayoutData(settingsGroupGridLayoutData);
 			// Definizione di come saranno disposti gli elementi contenuti
 			GridLayout settingsGroupGridLayout = new GridLayout();
@@ -159,7 +199,6 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 			gearboxGroupGridLayout.numColumns = 10;
 			gearboxGroup.setLayout(gearboxGroupGridLayout);
 			GridData gearboxGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
-			gearboxGroupGridLayoutData.horizontalSpan=1;
 			gearboxGroup.setLayoutData(gearboxGroupGridLayoutData);
 
 			Gearbox gearbox = bike.getGearbox();
@@ -305,6 +344,66 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 	@Override
 	public Shell getShell() {
 		return shell;
+	}
+
+	public Map<String, FormProperty> getFormProperties() {
+		return formProperties;
+	}
+
+	public Map<Bike.Type, TorqueGraph> getTorqueGraphs() {
+		return torqueGraphs;
+	}
+
+	public Properties getDefaultProperties() {
+		return defaultProperties;
+	}
+
+	public Menu getMenuBar() {
+		return menuBar;
+	}
+
+	public Menu getFileMenu() {
+		return fileMenu;
+	}
+
+	public MenuItem getFileMenuHeader() {
+		return fileMenuHeader;
+	}
+
+	public Menu getHelpMenu() {
+		return helpMenu;
+	}
+
+	public MenuItem getHelpMenuHeader() {
+		return helpMenuHeader;
+	}
+
+	public MenuItem getFileExitMenuItem() {
+		return fileExitMenuItem;
+	}
+
+	public MenuItem getHelpAboutMenuItem() {
+		return helpAboutMenuItem;
+	}
+
+	public MenuItem getFileOpenMenuItem() {
+		return fileOpenMenuItem;
+	}
+
+	public Menu getEditMenu() {
+		return editMenu;
+	}
+
+	public MenuItem getEditMenuHeader() {
+		return editMenuHeader;
+	}
+
+	public MenuItem getEditResetMenuItem() {
+		return editResetMenuItem;
+	}
+
+	public TabFolder getTabFolder() {
+		return tabFolder;
 	}
 
 }
