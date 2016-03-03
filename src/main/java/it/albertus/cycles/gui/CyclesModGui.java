@@ -92,6 +92,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		shell.setImages(Images.ICONS_TOOLS);
 		shell.setText(Resources.get("win.title"));
 		shell.setLayout(new FillLayout());
+		shell.addListener(SWT.Close, new CloseButtonListener(this));
 
 		createMenuBar();
 
