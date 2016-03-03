@@ -92,7 +92,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		shell.setImages(Images.ICONS_TOOLS);
 		shell.setText(Resources.get("win.title"));
 		shell.setLayout(new FillLayout());
-		shell.addListener(SWT.Close, new CloseButtonListener(this));
+		shell.addListener(SWT.Close, new CloseListener(this));
 
 		createMenuBar();
 
@@ -131,7 +131,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 
 		fileExitMenuItem = new MenuItem(fileMenu, SWT.PUSH);
 		fileExitMenuItem.setText(Resources.get("lbl.menu.item.exit"));
-		fileExitMenuItem.addSelectionListener(new ExitSelectionListener(this));
+		fileExitMenuItem.addSelectionListener(new CloseListener(this));
 
 		// Edit
 		editMenu = new Menu(shell, SWT.DROP_DOWN);
