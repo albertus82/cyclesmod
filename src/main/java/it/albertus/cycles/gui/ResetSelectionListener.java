@@ -1,7 +1,6 @@
 package it.albertus.cycles.gui;
 
-import it.albertus.cycles.data.BikesZip;
-import it.albertus.cycles.model.BikesInf;
+import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
 
@@ -29,7 +28,8 @@ public class ResetSelectionListener extends SelectionAdapter {
 		}
 		if (choose == SWT.YES) {
 			try {
-				gui.setBikesInf(new BikesInf(new BikesZip().getInputStream()));
+				gui.updateModelValues(true);
+				gui.getBikesInf().reset(Bike.Type.values()[gui.getTabFolder().getSelectionIndex()]);
 				gui.updateFormValues();
 			}
 			catch (Exception e) {

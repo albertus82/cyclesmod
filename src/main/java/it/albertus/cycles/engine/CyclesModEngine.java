@@ -24,32 +24,37 @@ public abstract class CyclesModEngine {
 		this.bikesInf = bikesInf;
 	}
 
-	protected boolean applyProperty(String key, String value) {
-		if (StringUtils.isBlank(value) || !StringUtils.isNumeric(value)) {
-			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
-		}
-
+	protected boolean applyProperty(String key, String value, boolean lenient) {
 		boolean applied = false;
+		try {
+			if (StringUtils.isBlank(value) || !StringUtils.isNumeric(value)) {
+				throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
+			}
 
-		// Settings
-		if (isSettingsProperty(key)) {
-			applied = applySettingProperty(key, value);
+			// Settings
+			if (isSettingsProperty(key)) {
+				applied = applySettingProperty(key, value);
+			}
+
+			// Gearbox
+			else if (isGearboxProperty(key)) {
+				applied = applyGearboxProperty(key, value);
+			}
+
+			// Torque
+			else if (isTorqueProperty(key)) {
+				applied = applyTorqueProperty(key, value);
+			}
+
+			else {
+				throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
+			}
 		}
-
-		// Gearbox
-		else if (isGearboxProperty(key)) {
-			applied = applyGearboxProperty(key, value);
+		catch (InvalidPropertyException ipe) {
+			if (!lenient) {
+				throw ipe;
+			}
 		}
-
-		// Torque
-		else if (isTorqueProperty(key)) {
-			applied = applyTorqueProperty(key, value);
-		}
-
-		else {
-			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
-		}
-
 		return applied;
 	}
 

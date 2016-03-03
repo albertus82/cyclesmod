@@ -61,6 +61,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		defaultProperties = new BikesCfg(getBikesInf()).getProperties();
 	}
 
+	/* Entry point */
 	public static void start(final String fileName) throws IOException {
 		Display display = new Display();
 		final CyclesModGui gui = new CyclesModGui();
@@ -288,9 +289,9 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		}
 	}
 
-	public void updateModelValues() {
+	public void updateModelValues(boolean lenient) {
 		for (String key : formProperties.keySet()) {
-			applyProperty(key, formProperties.get(key).getValue());
+			applyProperty(key, formProperties.get(key).getValue(), lenient);
 		}
 	}
 
@@ -313,7 +314,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 				short changesCount = 0;
 				for (Object objectKey : bikesCfg.getProperties().keySet()) {
 					String key = (String) objectKey;
-					if (applyProperty(key, bikesCfg.getProperties().getProperty(key))) {
+					if (applyProperty(key, bikesCfg.getProperties().getProperty(key), false)) {
 						changesCount++;
 					}
 				}

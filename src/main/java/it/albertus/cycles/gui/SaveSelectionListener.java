@@ -23,7 +23,7 @@ public class SaveSelectionListener extends SelectionAdapter {
 	@Override
 	public void widgetSelected(SelectionEvent event) {
 		try {
-			gui.updateModelValues();
+			gui.updateModelValues(false);
 		}
 		catch (InvalidPropertyException ipe) {
 			System.err.println(ExceptionUtils.getLogMessage(ipe));
