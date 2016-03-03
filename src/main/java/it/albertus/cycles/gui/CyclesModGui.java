@@ -54,6 +54,13 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 	private MenuItem editMenuHeader;
 	private MenuItem editResetMenuItem;
 	private TabFolder tabFolder;
+	private MenuItem editFullResetMenuItem;
+	private MenuItem editSingleResetMenuItem;
+	private Menu editResetMenu;
+	private MenuItem editResetSubMenuItem;
+	private Menu editResetSubMenu;
+	private MenuItem editResetSingleMenuItem;
+	private MenuItem editResetAllMenuItem;
 
 	private CyclesModGui() throws IOException {
 		// Loading default properties...
@@ -131,9 +138,19 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
 
-		editResetMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editResetMenuItem.setText(Resources.get("lbl.menu.item.reset"));
-		editResetMenuItem.addSelectionListener(new ResetSelectionListener(this));
+		editResetSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
+		editResetSubMenuItem.setText(Resources.get("lbl.menu.item.reset"));
+
+		editResetSubMenu = new Menu(shell, SWT.DROP_DOWN);
+		editResetSubMenuItem.setMenu(editResetSubMenu);
+
+		editResetSingleMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
+		editResetSingleMenuItem.setText(Resources.get("lbl.menu.item.reset.single"));
+		editResetSingleMenuItem.addSelectionListener(new ResetSingleSelectionListener(this));
+
+		editResetAllMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
+		editResetAllMenuItem.setText(Resources.get("lbl.menu.item.reset.all"));
+		editResetAllMenuItem.addSelectionListener(new ResetAllSelectionListener(this));
 
 		// Help
 		helpMenu = new Menu(shell, SWT.DROP_DOWN);
@@ -405,6 +422,34 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 
 	public TabFolder getTabFolder() {
 		return tabFolder;
+	}
+
+	public MenuItem getEditFullResetMenuItem() {
+		return editFullResetMenuItem;
+	}
+
+	public MenuItem getEditSingleResetMenuItem() {
+		return editSingleResetMenuItem;
+	}
+
+	public Menu getEditResetMenu() {
+		return editResetMenu;
+	}
+
+	public MenuItem getEditResetSubMenuItem() {
+		return editResetSubMenuItem;
+	}
+
+	public Menu getEditResetSubMenu() {
+		return editResetSubMenu;
+	}
+
+	public MenuItem getEditResetSingleMenuItem() {
+		return editResetSingleMenuItem;
+	}
+
+	public MenuItem getEditResetAllMenuItem() {
+		return editResetAllMenuItem;
 	}
 
 }
