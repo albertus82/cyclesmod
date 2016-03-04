@@ -27,6 +27,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 	private final Properties defaultProperties;
+	private Properties lastPersistedProperties;
 
 	private Shell shell;
 
@@ -38,6 +39,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		// Loading default properties...
 		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
 		defaultProperties = new BikesCfg(getBikesInf()).getProperties();
+		lastPersistedProperties = defaultProperties;
 	}
 
 	/** GUI entry point. */
@@ -121,6 +123,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
 				setBikesInf(new BikesInf(fileName));
 				updateFormValues();
+				setLastPersistedProperties(new BikesCfg(getBikesInf()).getProperties());
 				if (successMessage) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 					messageBox.setText(Resources.get("msg.completed"));
@@ -140,6 +143,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 					}
 				}
 				updateFormValues();
+				setLastPersistedProperties(new BikesCfg(getBikesInf()).getProperties());
 				if (successMessage) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 					messageBox.setText(Resources.get("msg.completed"));
@@ -186,6 +190,14 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 
 	public Tabs getTabs() {
 		return tabs;
+	}
+
+	public Properties getLastPersistedProperties() {
+		return lastPersistedProperties;
+	}
+
+	public void setLastPersistedProperties(Properties lastPersistedProperties) {
+		this.lastPersistedProperties = lastPersistedProperties;
 	}
 
 }

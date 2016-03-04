@@ -1,5 +1,6 @@
 package it.albertus.cycles.gui;
 
+import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.resources.Resources;
 
 import org.eclipse.swt.SWT;
@@ -11,9 +12,9 @@ import org.eclipse.swt.widgets.MessageBox;
 
 public class CloseListener extends SelectionAdapter implements Listener {
 
-	private final Gui gui;
+	private final CyclesModGui gui;
 
-	public CloseListener(Gui gui) {
+	public CloseListener(CyclesModGui gui) {
 		this.gui = gui;
 	}
 
@@ -32,10 +33,16 @@ public class CloseListener extends SelectionAdapter implements Listener {
 	}
 
 	private boolean confirmClose() {
-		final MessageBox messageBox = new MessageBox(gui.getShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
-		messageBox.setText(Resources.get("msg.confirm.close.text"));
-		messageBox.setMessage(Resources.get("msg.confirm.close.message"));
-		return messageBox.open() == SWT.YES;
+		gui.updateModelValues(true);
+		if (!new BikesCfg(gui.getBikesInf()).getProperties().equals(gui.getLastPersistedProperties())) {
+			final MessageBox messageBox = new MessageBox(gui.getShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
+			messageBox.setText(Resources.get("msg.confirm.close.text"));
+			messageBox.setMessage(Resources.get("msg.confirm.close.message"));
+			return messageBox.open() == SWT.YES;
+		}
+		else {
+			return true;
+		}
 	}
 
 }
