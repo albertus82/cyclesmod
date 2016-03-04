@@ -27,8 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -43,23 +41,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 
 	private Shell shell;
 
-	private Menu menuBar;
-
-	private Menu fileMenu;
-	private MenuItem fileMenuHeader;
-	private MenuItem fileOpenMenuItem;
-	private MenuItem fileExitMenuItem;
-
-	private Menu editMenu;
-	private MenuItem editMenuHeader;
-	private Menu editResetSubMenu;
-	private MenuItem editResetSubMenuItem;
-	private MenuItem editResetSingleMenuItem;
-	private MenuItem editResetAllMenuItem;
-
-	private Menu helpMenu;
-	private MenuItem helpMenuHeader;
-	private MenuItem helpAboutMenuItem;
+	private MenuBar menuBar;
 
 	private TabFolder tabFolder;
 
@@ -95,7 +77,8 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		shell.setLayout(new FillLayout());
 		shell.addListener(SWT.Close, new CloseListener(this));
 
-		createMenuBar();
+		// Menu...
+		menuBar = new MenuBar(this);
 
 		// Tabs...
 		tabFolder = new TabFolder(shell, SWT.NULL);
@@ -109,62 +92,6 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		shell.setMinimumSize(shell.getSize());
 
 		return shell;
-	}
-
-	private void createMenuBar() {
-		menuBar = new Menu(shell, SWT.BAR); // Barra
-
-		// File
-		fileMenu = new Menu(shell, SWT.DROP_DOWN);
-		fileMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
-		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
-		fileMenuHeader.setMenu(fileMenu);
-
-		fileOpenMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileOpenMenuItem.setText(Resources.get("lbl.menu.item.open"));
-		fileOpenMenuItem.addSelectionListener(new OpenSelectionListener(this));
-
-		fileOpenMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileOpenMenuItem.setText(Resources.get("lbl.menu.item.saveas"));
-		fileOpenMenuItem.addSelectionListener(new SaveSelectionListener(this));
-
-		new MenuItem(fileMenu, SWT.SEPARATOR);
-
-		fileExitMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileExitMenuItem.setText(Resources.get("lbl.menu.item.exit"));
-		fileExitMenuItem.addSelectionListener(new CloseListener(this));
-
-		// Edit
-		editMenu = new Menu(shell, SWT.DROP_DOWN);
-		editMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
-		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
-		editMenuHeader.setMenu(editMenu);
-
-		editResetSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
-		editResetSubMenuItem.setText(Resources.get("lbl.menu.item.reset"));
-
-		editResetSubMenu = new Menu(shell, SWT.DROP_DOWN);
-		editResetSubMenuItem.setMenu(editResetSubMenu);
-
-		editResetSingleMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
-		editResetSingleMenuItem.setText(Resources.get("lbl.menu.item.reset.single"));
-		editResetSingleMenuItem.addSelectionListener(new ResetSingleSelectionListener(this));
-
-		editResetAllMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
-		editResetAllMenuItem.setText(Resources.get("lbl.menu.item.reset.all"));
-		editResetAllMenuItem.addSelectionListener(new ResetAllSelectionListener(this));
-
-		// Help
-		helpMenu = new Menu(shell, SWT.DROP_DOWN);
-		helpMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
-		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
-		helpMenuHeader.setMenu(helpMenu);
-
-		helpAboutMenuItem = new MenuItem(helpMenu, SWT.PUSH);
-		helpAboutMenuItem.setText(Resources.get("lbl.menu.item.about"));
-		helpAboutMenuItem.addSelectionListener(new AboutSelectionListener(this));
-
-		shell.setMenuBar(menuBar);
 	}
 
 	private void createForm(final TabFolder tabFolder) throws IOException {
@@ -378,64 +305,12 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		return defaultProperties;
 	}
 
-	public Menu getMenuBar() {
+	public MenuBar getMenuBar() {
 		return menuBar;
-	}
-
-	public Menu getFileMenu() {
-		return fileMenu;
-	}
-
-	public MenuItem getFileMenuHeader() {
-		return fileMenuHeader;
-	}
-
-	public Menu getHelpMenu() {
-		return helpMenu;
-	}
-
-	public MenuItem getHelpMenuHeader() {
-		return helpMenuHeader;
-	}
-
-	public MenuItem getFileExitMenuItem() {
-		return fileExitMenuItem;
-	}
-
-	public MenuItem getHelpAboutMenuItem() {
-		return helpAboutMenuItem;
-	}
-
-	public MenuItem getFileOpenMenuItem() {
-		return fileOpenMenuItem;
-	}
-
-	public Menu getEditMenu() {
-		return editMenu;
-	}
-
-	public MenuItem getEditMenuHeader() {
-		return editMenuHeader;
 	}
 
 	public TabFolder getTabFolder() {
 		return tabFolder;
-	}
-
-	public MenuItem getEditResetSubMenuItem() {
-		return editResetSubMenuItem;
-	}
-
-	public Menu getEditResetSubMenu() {
-		return editResetSubMenu;
-	}
-
-	public MenuItem getEditResetSingleMenuItem() {
-		return editResetSingleMenuItem;
-	}
-
-	public MenuItem getEditResetAllMenuItem() {
-		return editResetAllMenuItem;
 	}
 
 }
