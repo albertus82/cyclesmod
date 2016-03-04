@@ -46,6 +46,8 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		final CyclesModGui gui = new CyclesModGui();
 		final Shell shell = gui.createShell(display);
 
+		gui.updateFormValues();
+
 		// Loading custom properties...
 		if (StringUtils.isNotBlank(fileName)) {
 			gui.load(fileName, false);
@@ -78,7 +80,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 	}
 
 	public void updateFormValues() {
-		Properties properties = new BikesCfg(getBikesInf()).getProperties();
+		final Properties properties = new BikesCfg(getBikesInf()).getProperties();
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
@@ -86,21 +88,21 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		}
 
 		// Update screen values...
-		for (String key : formProperties.keySet()) {
+		for (final String key : formProperties.keySet()) {
 			if (!properties.containsKey(key)) {
 				throw new RuntimeException(Resources.get("err.property.missing", key));
 			}
-			Text field = formProperties.get(key).getText();
+			final Text field = formProperties.get(key).getText();
 			field.setText((String) properties.get(key)); // Update field value.
 
 			// Update font style...
-			String defaultValue = (String) defaultProperties.get(key);
+			final String defaultValue = (String) defaultProperties.get(key);
 			PropertyFormatter.getInstance().updateFontStyle(field, defaultValue);
 		}
 
 		// Update torque graphs...
-		for (Bike bike : getBikesInf().getBikes()) {
-			TorqueGraph graph = torqueGraphs.get(bike.getType());
+		for (final Bike bike : getBikesInf().getBikes()) {
+			final TorqueGraph graph = torqueGraphs.get(bike.getType());
 			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
 				graph.getValues()[i] = bike.getTorque().getCurve()[i];
 			}
@@ -109,7 +111,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 	}
 
 	public void updateModelValues(boolean lenient) {
-		for (String key : formProperties.keySet()) {
+		for (final String key : formProperties.keySet()) {
 			applyProperty(key, formProperties.get(key).getValue(), lenient);
 		}
 	}
