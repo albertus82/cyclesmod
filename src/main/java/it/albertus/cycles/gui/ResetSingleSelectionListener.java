@@ -19,7 +19,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		final Bike.Type type = Bike.Type.values()[gui.getTabFolder().getSelectionIndex()];
+		final Bike.Type type = Bike.Type.values()[gui.getTabs().getTabFolder().getSelectionIndex()];
 		MessageBox messageBox = new MessageBox(gui.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText(Resources.get("msg.warning"));
 		messageBox.setMessage(Resources.get("msg.reset.overwrite.single", type.getDisplacement()));
