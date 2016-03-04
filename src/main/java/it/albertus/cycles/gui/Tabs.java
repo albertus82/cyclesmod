@@ -8,8 +8,6 @@ import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 
-import java.util.Map;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -46,21 +44,19 @@ public class Tabs {
 			settingsGroupGridLayout.numColumns = 6;
 			settingsGroup.setLayout(settingsGroupGridLayout);
 
-			GridData gridData = new GridData();
-			gridData.minimumWidth = 65;
-			gridData.grabExcessHorizontalSpace = true;
-			final Map<Setting, Integer> settings = bike.getSettings().getValues();
-			for (final Setting setting : settings.keySet()) {
+			final GridData settingGridData = new GridData();
+			settingGridData.grabExcessHorizontalSpace = true;
+			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				label.setText(Resources.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
-				text.setText(settings.get(setting).toString());
+				text.setText(Integer.toString(Settings.MAX_VALUE));
 				text.setTextLimit(5);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setLayoutData(gridData);
+				text.setLayoutData(settingGridData);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
@@ -79,26 +75,22 @@ public class Tabs {
 			final GridData gearboxGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
 			gearboxGroup.setLayoutData(gearboxGroupGridLayoutData);
 
-			final Gearbox gearbox = bike.getGearbox();
-			int index = 0;
-			gridData = new GridData();
-			gridData.minimumWidth = 50;
-			gridData.grabExcessHorizontalSpace = true;
-			for (final int ratio : gearbox.getRatios()) {
+			final GridData gearGridData = new GridData();
+			gearGridData.grabExcessHorizontalSpace = true;
+			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
 				final Label label = new Label(gearboxGroup, SWT.NULL);
 				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
-				text.setText(Integer.toString(ratio));
+				text.setText(Integer.toString(Gearbox.MAX_VALUE));
 				text.setTextLimit(5);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setLayoutData(gridData);
+				text.setLayoutData(gearGridData);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
-				index++;
 			}
 
 			// Torque
@@ -111,26 +103,22 @@ public class Tabs {
 			torqueGroupGridLayoutData.horizontalSpan = 2;
 			torqueGroup.setLayoutData(torqueGroupGridLayoutData);
 
-			final Torque torque = bike.getTorque();
-			index = 0;
-			gridData = new GridData();
-			gridData.minimumWidth = 33;
-			gridData.grabExcessHorizontalSpace = true;
-			for (final short point : torque.getCurve()) {
+			final GridData torqueGridData = new GridData();
+			torqueGridData.grabExcessHorizontalSpace = true;
+			for (int index = 0; index < bike.getTorque().getCurve().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
 				final Label label = new Label(torqueGroup, SWT.NULL);
 				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
-				text.setText(Integer.toString(point));
+				text.setText(Short.toString(Torque.MAX_VALUE));
 				text.setTextLimit(3);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setLayoutData(gridData);
+				text.setLayoutData(torqueGridData);
 				text.addFocusListener(new TorquePropertyFocusListener(defaultValue, key, graph));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
-				index++;
 			}
 		}
 	}
