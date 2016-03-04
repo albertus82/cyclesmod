@@ -1,5 +1,8 @@
 package it.albertus.cycles.gui;
 
+import it.albertus.cycles.gui.listener.PropertyFocusListener;
+import it.albertus.cycles.gui.listener.PropertyVerifyListener;
+import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.Gearbox;

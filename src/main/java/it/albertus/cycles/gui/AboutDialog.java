@@ -1,5 +1,6 @@
 package it.albertus.cycles.gui;
 
+import it.albertus.cycles.gui.listener.LinkSelectionListener;
 import it.albertus.cycles.resources.Resources;
 
 import org.eclipse.swt.SWT;
