@@ -14,7 +14,7 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 
 ### Installazione
 
-1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato ZIP adatta al proprio sistema operativo. La scelta &egrave; tra Windows, Linux e Mac OS X (sia 32 che 64 bit);
+1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato ZIP adatta al proprio sistema operativo. La scelta &egrave; tra Windows, Linux e OS X (sia 32 che 64 bit);
 2. scompattare il file ZIP in una cartella a piacimento.
 
 Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva. Se la variabile di ambiente `JAVA_HOME` viene rilevata, essa sar&agrave; utilizzata come riferimento per avviare la Java Virtual Machine, in caso contrario sar&agrave; richiamato direttamente l'eseguibile `java` (o `javaw`).
