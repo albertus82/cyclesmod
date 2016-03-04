@@ -61,6 +61,18 @@
 				<include name="*.jar" />
 			</fileset>
 		</copy>
+		<copy todir="${build.distDirectory}/cocoa-macosx/lib">
+			<fileset refid="lib" />
+			<fileset dir="${dependencies.directory}/os/cocoa-macosx">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/lib">
+			<fileset refid="lib" />
+			<fileset dir="${dependencies.directory}/os/cocoa-macosx-x86_64">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
 
 		<!-- Preparazione dei file MANIFEST.MF -->
 		<manifestclasspath property="classpath.win32-win32-x86" jarfile="${build.distDirectory}/win32-win32-x86/${artifactId}.jar" maxParentLevels="0">
@@ -94,6 +106,23 @@
 				</fileset>
 			</classpath>
 		</manifestclasspath>
+
+		<manifestclasspath property="classpath.cocoa-macosx" jarfile="${build.distDirectory}/cocoa-macosx/${artifactId}.jar" maxParentLevels="0">
+			<classpath>
+				<fileset dir="${build.distDirectory}/cocoa-macosx/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</manifestclasspath>
+
+		<manifestclasspath property="classpath.cocoa-macosx-x86_64" jarfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.jar" maxParentLevels="0">
+			<classpath>
+				<fileset dir="${build.distDirectory}/cocoa-macosx-x86_64/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</manifestclasspath>
+
 	</target>
 
 
@@ -103,6 +132,10 @@
 
 	<fileset id="sh" dir="${build.scriptSourceDirectory}">
 		<include name="*.sh" />
+	</fileset>
+
+	<fileset id="command" dir="${build.scriptSourceDirectory}">
+		<include name="*.command" />
 	</fileset>
 
 	<target name="scripts">
@@ -117,6 +150,12 @@
 		</copy>
 		<copy todir="${build.distDirectory}/gtk-linux-x86_64">
 			<fileset refid="sh" />
+		</copy>
+		<copy todir="${build.distDirectory}/cocoa-macosx">
+			<fileset refid="command" />
+		</copy>
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64">
+			<fileset refid="command" />
 		</copy>
 	</target>
 
@@ -140,6 +179,12 @@
 		<copy todir="${build.distDirectory}/gtk-linux-x86_64">
 			<fileset refid="docs" />
 		</copy>
+		<copy todir="${build.distDirectory}/cocoa-macosx">
+			<fileset refid="docs" />
+		</copy>
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64">
+			<fileset refid="docs" />
+		</copy>
 	</target>
 
 
@@ -148,6 +193,8 @@
 		<copy file="${build.resourcesDirectory}/it/albertus/cycles/gui/tools.ico" tofile="${build.distDirectory}/win32-win32-x86_64/${artifactId}.ico" />
 		<copy file="${build.resourcesDirectory}/it/albertus/cycles/gui/tools.ico" tofile="${build.distDirectory}/gtk-linux-x86/${artifactId}.icns" />
 		<copy file="${build.resourcesDirectory}/it/albertus/cycles/gui/tools.ico" tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}.icns" />
+		<copy file="${build.resourcesDirectory}/it/albertus/cycles/gui/tools.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}.icns" />
+		<copy file="${build.resourcesDirectory}/it/albertus/cycles/gui/tools.icns" tofile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.icns" />
 	</target>
 
 
@@ -176,6 +223,18 @@
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86_64}" />
 			</manifest>
 		</jar>
+		<jar destfile="${build.distDirectory}/cocoa-macosx/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+			<manifest>
+				<attribute name="Main-Class" value="${mainClass}" />
+				<attribute name="Class-Path" value="${classpath.cocoa-macosx}" />
+			</manifest>
+		</jar>
+		<jar destfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+			<manifest>
+				<attribute name="Main-Class" value="${mainClass}" />
+				<attribute name="Class-Path" value="${classpath.cocoa-macosx-x86_64}" />
+			</manifest>
+		</jar>
 	</target>
 
 
@@ -184,6 +243,8 @@
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86_64-bin.zip" basedir="${build.distDirectory}/win32-win32-x86_64" level="9" />
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86-bin.zip" basedir="${build.distDirectory}/gtk-linux-x86" level="9" />
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86_64-bin.zip" basedir="${build.distDirectory}/gtk-linux-x86_64" level="9" />
+		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-bin.zip" basedir="${build.distDirectory}/cocoa-macosx" level="9" />
+		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.zip" basedir="${build.distDirectory}/cocoa-macosx-x86_64" level="9" />
 	</target>
 
 </project>
