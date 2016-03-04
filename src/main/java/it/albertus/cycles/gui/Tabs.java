@@ -20,6 +20,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class Tabs {
 
+	private static final char SAMPLE_CHAR = '8';
+
 	private final TabFolder tabFolder;
 
 	public Tabs(CyclesModGui gui) {
@@ -53,8 +55,9 @@ public class Tabs {
 				label.setText(Resources.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
-				text.setText(Integer.toString(Settings.MAX_VALUE));
-				text.setTextLimit(5);
+				final int maxFieldSize = Integer.toString(Settings.MAX_VALUE).length();
+				setSampleNumber(text, maxFieldSize);
+				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(settingGridData);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
@@ -84,8 +87,9 @@ public class Tabs {
 				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
-				text.setText(Integer.toString(Gearbox.MAX_VALUE));
-				text.setTextLimit(5);
+				final int maxFieldSize = Integer.toString(Gearbox.MAX_VALUE).length();
+				setSampleNumber(text, maxFieldSize);
+				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(gearGridData);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
@@ -112,8 +116,9 @@ public class Tabs {
 				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
-				text.setText(Short.toString(Torque.MAX_VALUE));
-				text.setTextLimit(3);
+				final int maxFieldSize = Short.toString(Torque.MAX_VALUE).length();
+				setSampleNumber(text, maxFieldSize);
+				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
 				text.setLayoutData(torqueGridData);
 				text.addFocusListener(new TorquePropertyFocusListener(defaultValue, key, graph));
@@ -121,6 +126,16 @@ public class Tabs {
 				gui.getFormProperties().put(key, new FormProperty(label, text));
 			}
 		}
+	}
+
+	/** Consente la determinazione automatica della larghezza del campo. */
+	private void setSampleNumber(final Text text, final int size) {
+		final char[] sample = new char[size];
+		for (int i = 0; i < size; i++) {
+			sample[i] = SAMPLE_CHAR;
+		}
+		text.setText(String.valueOf(sample));
+		PropertyFormatter.getInstance().setBoldFontStyle(text);
 	}
 
 	public TabFolder getTabFolder() {

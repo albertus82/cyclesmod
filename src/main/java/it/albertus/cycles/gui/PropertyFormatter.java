@@ -10,13 +10,17 @@ import org.eclipse.swt.widgets.Text;
 
 public class PropertyFormatter {
 
-	private static final PropertyFormatter instance = new PropertyFormatter();
+	private static final PropertyFormatter INSTANCE = new PropertyFormatter();
 
-	private PropertyFormatter() {}
+	private PropertyFormatter() {
+		fontRegistry = JFaceResources.getFontRegistry();
+	}
 
 	public static PropertyFormatter getInstance() {
-		return instance;
+		return INSTANCE;
 	}
+
+	private final FontRegistry fontRegistry;
 
 	public void clean(Text field) {
 		if (field != null && StringUtils.isNumeric(field.getText()) && StringUtils.isNotEmpty(field.getText())) {
@@ -25,28 +29,36 @@ public class PropertyFormatter {
 	}
 
 	public void updateFontStyle(Text field, String defaultValue) {
-		FontRegistry fontRegistry = JFaceResources.getFontRegistry();
 		if (field != null && field.getFont() != null && ArrayUtils.isNotEmpty(field.getFont().getFontData()) && defaultValue != null) {
-			final FontData fontData = field.getFont().getFontData()[0];
 			if (!defaultValue.equalsIgnoreCase(field.getText())) {
-				if (fontData.getStyle() != SWT.BOLD) {
-					if (!fontRegistry.hasValueFor("customProperty")) {
-						fontData.setStyle(SWT.BOLD);
-						fontRegistry.put("customProperty", new FontData[] { fontData });
-					}
-					field.setFont(fontRegistry.get("customProperty"));
+				if (field.getFont().getFontData()[0].getStyle() != SWT.BOLD) {
+					setBoldFontStyle(field);
 				}
 			}
 			else {
-				if (fontData.getStyle() != SWT.NORMAL) {
-					if (!fontRegistry.hasValueFor("defaultProperty")) {
-						fontData.setStyle(SWT.NORMAL);
-						fontRegistry.put("defaultProperty", new FontData[] { fontData });
-					}
-					field.setFont(fontRegistry.get("defaultProperty"));
+				if (field.getFont().getFontData()[0].getStyle() != SWT.NORMAL) {
+					setNormalFontStyle(field);
 				}
 			}
 		}
+	}
+
+	public void setNormalFontStyle(Text field) {
+		final FontData fontData = field.getFont().getFontData()[0];
+		if (!fontRegistry.hasValueFor("defaultProperty")) {
+			fontData.setStyle(SWT.NORMAL);
+			fontRegistry.put("defaultProperty", new FontData[] { fontData });
+		}
+		field.setFont(fontRegistry.get("defaultProperty"));
+	}
+
+	public void setBoldFontStyle(Text field) {
+		final FontData fontData = field.getFont().getFontData()[0];
+		if (!fontRegistry.hasValueFor("customProperty")) {
+			fontData.setStyle(SWT.BOLD);
+			fontRegistry.put("customProperty", new FontData[] { fontData });
+		}
+		field.setFont(fontRegistry.get("customProperty"));
 	}
 
 }
