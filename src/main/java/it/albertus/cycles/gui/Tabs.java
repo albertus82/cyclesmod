@@ -26,37 +26,37 @@ public class Tabs {
 
 	public Tabs(CyclesModGui gui) {
 		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
-		for (Bike bike : gui.getBikesInf().getBikes()) {
-			TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
+		for (final Bike bike : gui.getBikesInf().getBikes()) {
+			final TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
 			tabItem.setText(bike.getType().getDisplacement() + " cc");
 
-			Composite tabComposite = new Composite(tabFolder, SWT.NULL);
+			final Composite tabComposite = new Composite(tabFolder, SWT.NULL);
 			tabItem.setControl(tabComposite);
 			GridLayout compositeGridLayout = new GridLayout(2, false);
 			tabComposite.setLayout(compositeGridLayout);
 
 			// Settings
-			Group settingsGroup = new Group(tabComposite, SWT.NULL);
+			final Group settingsGroup = new Group(tabComposite, SWT.NULL);
 			settingsGroup.setText(Resources.get("lbl.settings"));
 			// Posizionamento dell'elemento all'interno del contenitore
-			GridData settingsGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
+			final GridData settingsGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
 			settingsGroup.setLayoutData(settingsGroupGridLayoutData);
 			// Definizione di come saranno disposti gli elementi contenuti
-			GridLayout settingsGroupGridLayout = new GridLayout();
+			final GridLayout settingsGroupGridLayout = new GridLayout();
 			settingsGroupGridLayout.numColumns = 6;
 			settingsGroup.setLayout(settingsGroupGridLayout);
 
 			GridData gridData = new GridData();
 			gridData.minimumWidth = 65;
 			gridData.grabExcessHorizontalSpace = true;
-			Map<Setting, Integer> settings = bike.getSettings().getValues();
-			for (Setting setting : settings.keySet()) {
-				String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
-				String defaultValue = gui.getDefaultProperties().getProperty(key);
-				Label label = new Label(settingsGroup, SWT.NULL);
+			final Map<Setting, Integer> settings = bike.getSettings().getValues();
+			for (final Setting setting : settings.keySet()) {
+				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
+				final String defaultValue = gui.getDefaultProperties().getProperty(key);
+				final Label label = new Label(settingsGroup, SWT.NULL);
 				label.setText(Resources.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
-				Text text = new Text(settingsGroup, SWT.BORDER);
+				final Text text = new Text(settingsGroup, SWT.BORDER);
 				text.setText(settings.get(setting).toString());
 				text.setTextLimit(5);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
@@ -67,30 +67,30 @@ public class Tabs {
 			}
 
 			// Torque graph
-			TorqueGraph graph = new TorqueGraph(tabComposite, bike);
+			final TorqueGraph graph = new TorqueGraph(tabComposite, bike);
 			gui.getTorqueGraphs().put(bike.getType(), graph);
 
 			// Gearbox
-			Group gearboxGroup = new Group(tabComposite, SWT.NULL);
+			final Group gearboxGroup = new Group(tabComposite, SWT.NULL);
 			gearboxGroup.setText(Resources.get("lbl.gearbox"));
-			GridLayout gearboxGroupGridLayout = new GridLayout();
+			final GridLayout gearboxGroupGridLayout = new GridLayout();
 			gearboxGroupGridLayout.numColumns = 10;
 			gearboxGroup.setLayout(gearboxGroupGridLayout);
-			GridData gearboxGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
+			final GridData gearboxGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
 			gearboxGroup.setLayoutData(gearboxGroupGridLayoutData);
 
-			Gearbox gearbox = bike.getGearbox();
+			final Gearbox gearbox = bike.getGearbox();
 			int index = 0;
 			gridData = new GridData();
 			gridData.minimumWidth = 50;
 			gridData.grabExcessHorizontalSpace = true;
-			for (int ratio : gearbox.getRatios()) {
-				String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
-				String defaultValue = gui.getDefaultProperties().getProperty(key);
-				Label label = new Label(gearboxGroup, SWT.NULL);
+			for (final int ratio : gearbox.getRatios()) {
+				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
+				final String defaultValue = gui.getDefaultProperties().getProperty(key);
+				final Label label = new Label(gearboxGroup, SWT.NULL);
 				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
-				Text text = new Text(gearboxGroup, SWT.BORDER);
+				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				text.setText(Integer.toString(ratio));
 				text.setTextLimit(5);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
@@ -102,27 +102,27 @@ public class Tabs {
 			}
 
 			// Torque
-			Group torqueGroup = new Group(tabComposite, SWT.NULL);
+			final Group torqueGroup = new Group(tabComposite, SWT.NULL);
 			torqueGroup.setText(Resources.get("lbl.torque"));
-			GridLayout torqueGroupGridLayout = new GridLayout();
+			final GridLayout torqueGroupGridLayout = new GridLayout();
 			torqueGroupGridLayout.numColumns = 18;
 			torqueGroup.setLayout(torqueGroupGridLayout);
-			GridData torqueGroupGridLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false);
+			final GridData torqueGroupGridLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false);
 			torqueGroupGridLayoutData.horizontalSpan = 2;
 			torqueGroup.setLayoutData(torqueGroupGridLayoutData);
 
-			Torque torque = bike.getTorque();
+			final Torque torque = bike.getTorque();
 			index = 0;
 			gridData = new GridData();
 			gridData.minimumWidth = 33;
 			gridData.grabExcessHorizontalSpace = true;
-			for (short point : torque.getCurve()) {
-				String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
-				String defaultValue = gui.getDefaultProperties().getProperty(key);
-				Label label = new Label(torqueGroup, SWT.NULL);
+			for (final short point : torque.getCurve()) {
+				final String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
+				final String defaultValue = gui.getDefaultProperties().getProperty(key);
+				final Label label = new Label(torqueGroup, SWT.NULL);
 				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
-				Text text = new Text(torqueGroup, SWT.BORDER);
+				final Text text = new Text(torqueGroup, SWT.BORDER);
 				text.setText(Integer.toString(point));
 				text.setTextLimit(3);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
