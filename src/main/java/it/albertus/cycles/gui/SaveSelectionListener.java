@@ -1,6 +1,7 @@
 package it.albertus.cycles.gui;
 
 import it.albertus.cycles.engine.InvalidPropertyException;
+import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
@@ -51,6 +52,7 @@ public class SaveSelectionListener extends SelectionAdapter {
 				messageBox.open();
 				return;
 			}
+			gui.setLastPersistedProperties(new BikesCfg(gui.getBikesInf()).getProperties());
 			MessageBox messageBox = new MessageBox(gui.getShell(), SWT.ICON_INFORMATION);
 			messageBox.setText(Resources.get("msg.completed"));
 			messageBox.setMessage(Resources.get("msg.file.saved", fileName));
