@@ -47,24 +47,24 @@ public class AboutDialog extends Dialog {
 
 		final Label icon = new Label(shell, SWT.NONE);
 		icon.setImage(Images.ICONS_TOOLS[5]);
-		GridData gridData = new GridData(GridData.CENTER, GridData.CENTER, false, false, 0, 3);
+		GridData gridData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 0, 3);
 		icon.setLayoutData(gridData);
 
 		final Label info = new Label(shell, SWT.NONE);
 		info.setText(this.message);
-		gridData = new GridData(SWT.LEFT, SWT.CENTER, false, true);
+		gridData = new GridData(SWT.LEAD, SWT.CENTER, false, true);
 		info.setLayoutData(gridData);
 
 		final Link linkProject = new Link(shell, SWT.NONE);
 		linkProject.setText("<a href=\"" + getLinkProject() + "\">" + getLinkProject() + "</a>");
-		gridData = new GridData(SWT.LEFT, SWT.CENTER, false, true);
+		gridData = new GridData(SWT.LEAD, SWT.CENTER, false, true);
 		linkProject.setLayoutData(gridData);
 		linkProject.addSelectionListener(new LinkSelectionListener());
-		
+
 		final Link linkIcon = new Link(shell, SWT.NONE);
 		String url = getLinkIcon().startsWith("http") ? getLinkIcon() : "http://" + getLinkIcon();
 		linkIcon.setText(Resources.get("msg.info.icon") + " <a href=\"" + url + "\">" + getLinkIcon() + "</a>");
-		gridData = new GridData(SWT.LEFT, SWT.CENTER, false, true);
+		gridData = new GridData(SWT.LEAD, SWT.CENTER, false, true);
 		linkIcon.setLayoutData(gridData);
 		linkIcon.addSelectionListener(new LinkSelectionListener());
 
