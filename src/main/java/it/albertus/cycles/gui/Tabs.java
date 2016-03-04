@@ -39,7 +39,7 @@ public class Tabs {
 			final Group settingsGroup = new Group(tabComposite, SWT.NULL);
 			settingsGroup.setText(Resources.get("lbl.settings"));
 			// Posizionamento dell'elemento all'interno del contenitore
-			final GridData settingsGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
+			final GridData settingsGroupGridLayoutData = new GridData(SWT.FILL, SWT.FILL, false, true);
 			settingsGroup.setLayoutData(settingsGroupGridLayoutData);
 			// Definizione di come saranno disposti gli elementi contenuti
 			final GridLayout settingsGroupGridLayout = new GridLayout();
@@ -75,7 +75,7 @@ public class Tabs {
 			final GridLayout gearboxGroupGridLayout = new GridLayout();
 			gearboxGroupGridLayout.numColumns = 10;
 			gearboxGroup.setLayout(gearboxGroupGridLayout);
-			final GridData gearboxGroupGridLayoutData = new GridData(GridData.FILL, GridData.FILL, false, true);
+			final GridData gearboxGroupGridLayoutData = new GridData(SWT.FILL, SWT.FILL, false, true);
 			gearboxGroup.setLayoutData(gearboxGroupGridLayoutData);
 
 			final GridData gearGridData = new GridData();
