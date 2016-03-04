@@ -122,7 +122,6 @@
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-
 	</target>
 
 
