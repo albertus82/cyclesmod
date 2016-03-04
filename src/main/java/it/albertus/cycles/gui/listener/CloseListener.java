@@ -1,5 +1,6 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.listener;
 
+import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.resources.Resources;
 

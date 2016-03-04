@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.listener;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.widgets.Event;

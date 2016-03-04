@@ -1,4 +1,6 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.listener;
+
+import it.albertus.cycles.gui.PropertyFormatter;
 
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;

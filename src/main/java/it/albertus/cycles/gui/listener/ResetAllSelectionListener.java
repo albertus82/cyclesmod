@@ -1,6 +1,7 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.listener;
 
 import it.albertus.cycles.data.BikesZip;
+import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;

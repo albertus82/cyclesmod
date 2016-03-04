@@ -1,6 +1,7 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.listener;
 
 import it.albertus.cycles.engine.InvalidPropertyException;
+import it.albertus.cycles.gui.TorqueGraph;
 import it.albertus.cycles.model.Torque;
 
 import org.apache.commons.lang.StringUtils;
