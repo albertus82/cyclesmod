@@ -35,14 +35,19 @@ public class CloseListener extends SelectionAdapter implements Listener {
 	private boolean confirmClose() {
 		gui.updateModelValues(true);
 		if (!new BikesCfg(gui.getBikesInf()).getProperties().equals(gui.getLastPersistedProperties())) {
-			final MessageBox messageBox = new MessageBox(gui.getShell(), SWT.YES | SWT.NO | SWT.ICON_QUESTION);
+			final MessageBox messageBox = new MessageBox(gui.getShell(), SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
 			messageBox.setText(Resources.get("msg.confirm.close.text"));
 			messageBox.setMessage(Resources.get("msg.confirm.close.message"));
-			return messageBox.open() == SWT.YES;
+			switch (messageBox.open()) {
+			case SWT.YES:
+				return gui.save(false);
+			case SWT.NO:
+				return true;
+			case SWT.CANCEL:
+				return false;
+			}
 		}
-		else {
-			return true;
-		}
+		return true;
 	}
 
 }
