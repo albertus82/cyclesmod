@@ -68,7 +68,7 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		defaultProperties = new BikesCfg(getBikesInf()).getProperties();
 	}
 
-	/* Entry point */
+	/** GUI entry point. */
 	public static void start(final String fileName) throws IOException {
 		Display display = new Display();
 		final CyclesModGui gui = new CyclesModGui();
