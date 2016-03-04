@@ -17,6 +17,7 @@ public class CloseListener extends SelectionAdapter implements Listener {
 		this.gui = gui;
 	}
 
+	/** Comando di chiusura da men&ugrave;. */
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 		if (confirmClose()) {
@@ -24,6 +25,7 @@ public class CloseListener extends SelectionAdapter implements Listener {
 		}
 	}
 
+	/** Pulsante di chiusura. */
 	@Override
 	public void handleEvent(Event event) {
 		event.doit = confirmClose();
