@@ -2,6 +2,7 @@ package it.albertus.cycles.gui;
 
 import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
+import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -18,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -164,6 +166,50 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 			messageBox.setText(Resources.get("msg.warning"));
 			messageBox.setMessage(Resources.get("err.file.load", ExceptionUtils.getUIMessage(e)));
 			messageBox.open();
+		}
+	}
+
+	public boolean save(final boolean successMessage) {
+		try {
+			updateModelValues(false);
+		}
+		catch (InvalidPropertyException ipe) {
+			System.err.println(ExceptionUtils.getLogMessage(ipe));
+			MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
+			messageBox.setText(Resources.get("msg.warning"));
+			messageBox.setMessage(ExceptionUtils.getUIMessage(ipe));
+			messageBox.open();
+			return false;
+		}
+		FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
+		saveDialog.setFilterExtensions(new String[] { "*.INF; *.inf" });
+		saveDialog.setFileName(BikesInf.FILE_NAME);
+		saveDialog.setOverwrite(true);
+		String fileName = saveDialog.open();
+
+		if (StringUtils.isNotBlank(fileName)) {
+			try {
+				getBikesInf().write(fileName);
+			}
+			catch (Exception e) {
+				System.err.println(ExceptionUtils.getLogMessage(e));
+				MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
+				messageBox.setText(Resources.get("msg.warning"));
+				messageBox.setMessage(Resources.get("err.file.save", ExceptionUtils.getUIMessage(e)));
+				messageBox.open();
+				return false;
+			}
+			setLastPersistedProperties(new BikesCfg(getBikesInf()).getProperties());
+			if (successMessage) {
+				MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_INFORMATION);
+				messageBox.setText(Resources.get("msg.completed"));
+				messageBox.setMessage(Resources.get("msg.file.saved", fileName));
+				messageBox.open();
+			}
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
