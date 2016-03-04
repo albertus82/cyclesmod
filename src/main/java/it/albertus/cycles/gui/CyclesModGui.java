@@ -42,25 +42,26 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 	private final Properties defaultProperties;
 
 	private Shell shell;
+
 	private Menu menuBar;
+
 	private Menu fileMenu;
 	private MenuItem fileMenuHeader;
-	private Menu helpMenu;
-	private MenuItem helpMenuHeader;
-	private MenuItem fileExitMenuItem;
-	private MenuItem helpAboutMenuItem;
 	private MenuItem fileOpenMenuItem;
+	private MenuItem fileExitMenuItem;
+
 	private Menu editMenu;
 	private MenuItem editMenuHeader;
-	private MenuItem editResetMenuItem;
-	private TabFolder tabFolder;
-	private MenuItem editFullResetMenuItem;
-	private MenuItem editSingleResetMenuItem;
-	private Menu editResetMenu;
-	private MenuItem editResetSubMenuItem;
 	private Menu editResetSubMenu;
+	private MenuItem editResetSubMenuItem;
 	private MenuItem editResetSingleMenuItem;
 	private MenuItem editResetAllMenuItem;
+
+	private Menu helpMenu;
+	private MenuItem helpMenuHeader;
+	private MenuItem helpAboutMenuItem;
+
+	private TabFolder tabFolder;
 
 	private CyclesModGui() throws IOException {
 		// Loading default properties...
@@ -417,24 +418,8 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		return editMenuHeader;
 	}
 
-	public MenuItem getEditResetMenuItem() {
-		return editResetMenuItem;
-	}
-
 	public TabFolder getTabFolder() {
 		return tabFolder;
-	}
-
-	public MenuItem getEditFullResetMenuItem() {
-		return editFullResetMenuItem;
-	}
-
-	public MenuItem getEditSingleResetMenuItem() {
-		return editSingleResetMenuItem;
-	}
-
-	public Menu getEditResetMenu() {
-		return editResetMenu;
 	}
 
 	public MenuItem getEditResetSubMenuItem() {
