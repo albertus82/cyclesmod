@@ -5,6 +5,7 @@ import it.albertus.cycles.gui.listener.CloseListener;
 import it.albertus.cycles.gui.listener.CopySelectionListener;
 import it.albertus.cycles.gui.listener.EditArmListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
+import it.albertus.cycles.gui.listener.PasteSelectionListener;
 import it.albertus.cycles.gui.listener.ResetAllSelectionListener;
 import it.albertus.cycles.gui.listener.ResetSingleSelectionListener;
 import it.albertus.cycles.gui.listener.SaveSelectionListener;
@@ -27,6 +28,7 @@ public class MenuBar {
 	private final Menu editMenu;
 	private final MenuItem editMenuHeader;
 	private final MenuItem editCopyMenuItem;
+	private final MenuItem editPasteMenuItem;
 	private final Menu editResetSubMenu;
 	private final MenuItem editResetSubMenuItem;
 	private final MenuItem editResetSingleMenuItem;
@@ -71,6 +73,12 @@ public class MenuBar {
 		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
 		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + GuiUtils.getMod1KeyLabel() + Character.toUpperCase(GuiUtils.KEY_COPY));
 		editCopyMenuItem.addSelectionListener(new CopySelectionListener(gui));
+		editCopyMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_COPY);
+
+		editPasteMenuItem = new MenuItem(editMenu, SWT.PUSH);
+		editPasteMenuItem.setText(Resources.get("lbl.menu.item.paste") + GuiUtils.getMod1KeyLabel() + Character.toUpperCase(GuiUtils.KEY_PASTE));
+		editPasteMenuItem.addSelectionListener(new PasteSelectionListener(gui));
+		editPasteMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_PASTE);
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
@@ -135,6 +143,10 @@ public class MenuBar {
 
 	public MenuItem getEditCopyMenuItem() {
 		return editCopyMenuItem;
+	}
+
+	public MenuItem getEditPasteMenuItem() {
+		return editPasteMenuItem;
 	}
 
 	public Menu getEditResetSubMenu() {

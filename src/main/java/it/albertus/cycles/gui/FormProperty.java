@@ -31,4 +31,9 @@ public class FormProperty {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "FormProperty [label=" + label + ", text=" + text + "]";
+	}
+
 }

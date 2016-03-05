@@ -6,26 +6,25 @@ import it.albertus.cycles.gui.FormProperty;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-public class CopySelectionListener extends SelectionAdapter {
+public class PasteSelectionListener extends SelectionAdapter {
 
 	private final CyclesModGui gui;
 
-	public CopySelectionListener(final CyclesModGui gui) {
+	public PasteSelectionListener(final CyclesModGui gui) {
 		this.gui = gui;
 	}
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		copy();
+		paste();
 	}
 
-	public void copy() {
+	public void paste() {
 		for (final FormProperty fp : gui.getFormProperties().values()) {
-			if (fp != null && fp.getText() != null && fp.getText().getSelectionText() != null && fp.getText().getSelectionText().length() != 0) {
-				fp.getText().copy();
+			if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
+				fp.getText().paste();
 				break;
 			}
 		}
 	}
-
 }
