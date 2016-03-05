@@ -18,6 +18,8 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -212,6 +214,33 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 		else {
 			return false;
 		}
+	}
+
+	public boolean canCut() {
+		return canCopy();
+	}
+
+	public boolean canCopy() {
+		for (final FormProperty fp : this.getFormProperties().values()) {
+			if (fp != null && fp.getText() != null && fp.getText().getSelectionText() != null && fp.getText().getSelectionText().length() != 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean canPaste() {
+		final Clipboard clipboard = new Clipboard(this.getShell().getDisplay());
+		final Object contents = clipboard.getContents(TextTransfer.getInstance());
+		clipboard.dispose();
+		if (contents != null) {
+			for (final FormProperty fp : this.getFormProperties().values()) {
+				if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override

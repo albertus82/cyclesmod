@@ -16,7 +16,9 @@ public class PasteSelectionListener extends SelectionAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		paste();
+		if (gui.canPaste()) {
+			paste();
+		}
 	}
 
 	public void paste() {
@@ -27,4 +29,5 @@ public class PasteSelectionListener extends SelectionAdapter {
 			}
 		}
 	}
+
 }
