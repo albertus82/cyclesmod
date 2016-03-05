@@ -3,6 +3,7 @@ package it.albertus.cycles.gui;
 import it.albertus.cycles.gui.listener.AboutSelectionListener;
 import it.albertus.cycles.gui.listener.CloseListener;
 import it.albertus.cycles.gui.listener.CopySelectionListener;
+import it.albertus.cycles.gui.listener.CutSelectionListener;
 import it.albertus.cycles.gui.listener.EditArmListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
 import it.albertus.cycles.gui.listener.PasteSelectionListener;
@@ -17,7 +18,7 @@ import org.eclipse.swt.widgets.MenuItem;
 
 public class MenuBar {
 
-	private final Menu menuBar;
+	private final Menu bar;
 
 	private final Menu fileMenu;
 	private final MenuItem fileMenuHeader;
@@ -27,6 +28,7 @@ public class MenuBar {
 
 	private final Menu editMenu;
 	private final MenuItem editMenuHeader;
+	private final MenuItem editCutMenuItem;
 	private final MenuItem editCopyMenuItem;
 	private final MenuItem editPasteMenuItem;
 	private final Menu editResetSubMenu;
@@ -39,11 +41,11 @@ public class MenuBar {
 	private final MenuItem helpAboutMenuItem;
 
 	public MenuBar(final CyclesModGui gui) {
-		menuBar = new Menu(gui.getShell(), SWT.BAR); // Barra
+		bar = new Menu(gui.getShell(), SWT.BAR); // Barra
 
 		// File
 		fileMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		fileMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
+		fileMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
 		fileMenuHeader.setMenu(fileMenu);
 
@@ -65,10 +67,15 @@ public class MenuBar {
 
 		// Edit
 		editMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		editMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
+		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
 		editMenuHeader.addArmListener(new EditArmListener(gui));
+
+		editCutMenuItem = new MenuItem(editMenu, SWT.PUSH);
+		editCutMenuItem.setText(Resources.get("lbl.menu.item.cut") + GuiUtils.getMod1KeyLabel() + Character.toUpperCase(GuiUtils.KEY_CUT));
+		editCutMenuItem.addSelectionListener(new CutSelectionListener(gui));
+		editCutMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_CUT);
 
 		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
 		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + GuiUtils.getMod1KeyLabel() + Character.toUpperCase(GuiUtils.KEY_COPY));
@@ -98,7 +105,7 @@ public class MenuBar {
 
 		// Help
 		helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		helpMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
+		helpMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
 		helpMenuHeader.setMenu(helpMenu);
 
@@ -106,11 +113,11 @@ public class MenuBar {
 		helpAboutMenuItem.setText(Resources.get("lbl.menu.item.about"));
 		helpAboutMenuItem.addSelectionListener(new AboutSelectionListener(gui));
 
-		gui.getShell().setMenuBar(menuBar);
+		gui.getShell().setMenuBar(bar);
 	}
 
-	public Menu getMenuBar() {
-		return menuBar;
+	public Menu getBar() {
+		return bar;
 	}
 
 	public Menu getFileMenu() {
@@ -139,6 +146,10 @@ public class MenuBar {
 
 	public MenuItem getEditMenuHeader() {
 		return editMenuHeader;
+	}
+
+	public MenuItem getEditCutMenuItem() {
+		return editCutMenuItem;
 	}
 
 	public MenuItem getEditCopyMenuItem() {
