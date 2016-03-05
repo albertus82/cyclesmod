@@ -2,6 +2,7 @@ package it.albertus.cycles.gui;
 
 import it.albertus.cycles.gui.listener.AboutSelectionListener;
 import it.albertus.cycles.gui.listener.CloseListener;
+import it.albertus.cycles.gui.listener.CopySelectionListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
 import it.albertus.cycles.gui.listener.ResetAllSelectionListener;
 import it.albertus.cycles.gui.listener.ResetSingleSelectionListener;
@@ -24,6 +25,7 @@ public class MenuBar {
 
 	private final Menu editMenu;
 	private final MenuItem editMenuHeader;
+	private final MenuItem editCopyMenuItem;
 	private final Menu editResetSubMenu;
 	private final MenuItem editResetSubMenuItem;
 	private final MenuItem editResetSingleMenuItem;
@@ -63,6 +65,13 @@ public class MenuBar {
 		editMenuHeader = new MenuItem(menuBar, SWT.CASCADE);
 		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
+
+		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
+		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + GuiUtils.getMod1KeyLabel() + Character.toUpperCase(GuiUtils.KEY_COPY));
+		editCopyMenuItem.addSelectionListener(new CopySelectionListener(gui));
+		editCopyMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_COPY);
+
+		new MenuItem(editMenu, SWT.SEPARATOR);
 
 		editResetSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
 		editResetSubMenuItem.setText(Resources.get("lbl.menu.item.reset"));
