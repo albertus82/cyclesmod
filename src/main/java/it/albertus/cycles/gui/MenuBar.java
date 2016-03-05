@@ -69,7 +69,6 @@ public class MenuBar {
 		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
 		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + GuiUtils.getMod1KeyLabel() + Character.toUpperCase(GuiUtils.KEY_COPY));
 		editCopyMenuItem.addSelectionListener(new CopySelectionListener(gui));
-		editCopyMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_COPY);
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
