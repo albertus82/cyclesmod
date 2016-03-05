@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.Shell;
 public class AboutDialog extends Dialog {
 
 	private String message = "";
-	private String linkProject = "";
-	private String linkIcon = "";
+	private String applicationUrl = "";
+	private String iconUrl = "";
 
 	public AboutDialog(Shell parent) {
 		this(parent, SWT.SHEET); // SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL
@@ -57,14 +57,14 @@ public class AboutDialog extends Dialog {
 		info.setLayoutData(gridData);
 
 		final Link linkProject = new Link(shell, SWT.NONE);
-		linkProject.setText("<a href=\"" + getLinkProject() + "\">" + getLinkProject() + "</a>");
+		linkProject.setText("<a href=\"" + getApplicationUrl() + "\">" + getApplicationUrl() + "</a>");
 		gridData = new GridData(SWT.LEAD, SWT.CENTER, false, true);
 		linkProject.setLayoutData(gridData);
 		linkProject.addSelectionListener(new LinkSelectionListener());
 
 		final Link linkIcon = new Link(shell, SWT.NONE);
-		String url = getLinkIcon().startsWith("http") ? getLinkIcon() : "http://" + getLinkIcon();
-		linkIcon.setText(Resources.get("msg.info.icon") + " <a href=\"" + url + "\">" + getLinkIcon() + "</a>");
+		String url = getIconUrl().startsWith("http") ? getIconUrl() : "http://" + getIconUrl();
+		linkIcon.setText(Resources.get("msg.info.icon") + " <a href=\"" + url + "\">" + getIconUrl() + "</a>");
 		gridData = new GridData(SWT.LEAD, SWT.CENTER, false, true);
 		linkIcon.setLayoutData(gridData);
 		linkIcon.addSelectionListener(new LinkSelectionListener());
@@ -91,20 +91,20 @@ public class AboutDialog extends Dialog {
 		this.message = message;
 	}
 
-	public String getLinkProject() {
-		return linkProject;
+	public String getApplicationUrl() {
+		return applicationUrl;
 	}
 
-	public void setLinkProject(String linkProject) {
-		this.linkProject = linkProject;
+	public void setApplicationUrl(String applicationUrl) {
+		this.applicationUrl = applicationUrl;
 	}
 
-	public String getLinkIcon() {
-		return linkIcon;
+	public String getIconUrl() {
+		return iconUrl;
 	}
 
-	public void setLinkIcon(String linkIcon) {
-		this.linkIcon = linkIcon;
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
 	}
 
 }
