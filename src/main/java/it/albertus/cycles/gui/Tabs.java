@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class Tabs {
 
-	private static final char SAMPLE_CHAR = '8';
+	private static final char SAMPLE_CHAR = '9';
 
 	private final TabFolder tabFolder;
 
