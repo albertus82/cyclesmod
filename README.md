@@ -80,7 +80,7 @@ La curva di coppia del motore viene costruita a partire dai valori presenti in q
 ### Versione da riga di comando
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
-Gli script di avvio [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat) e [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
+Gli script di avvio ([**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat), [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) e [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
 * Windows: **`cyclesmod.bat -c`**
 * Linux: **`cyclesmod.sh -c`**
 * OS X: **`cyclesmod.command -c`**
