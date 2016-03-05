@@ -43,12 +43,14 @@ public class MenuBar {
 		fileMenuHeader.setMenu(fileMenu);
 
 		fileOpenMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileOpenMenuItem.setText(Resources.get("lbl.menu.item.open"));
+		fileOpenMenuItem.setText(Resources.get("lbl.menu.item.open") + GuiUtils.getMod1KeyLabel() + Character.toUpperCase(GuiUtils.KEY_OPEN));
 		fileOpenMenuItem.addSelectionListener(new OpenSelectionListener(gui));
+		fileOpenMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_OPEN);
 
 		fileSaveMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileSaveMenuItem.setText(Resources.get("lbl.menu.item.saveas"));
+		fileSaveMenuItem.setText(Resources.get("lbl.menu.item.saveas") + GuiUtils.getMod1KeyLabel() + Character.toUpperCase(GuiUtils.KEY_SAVE));
 		fileSaveMenuItem.addSelectionListener(new SaveSelectionListener(gui));
+		fileSaveMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_SAVE);
 
 		new MenuItem(fileMenu, SWT.SEPARATOR);
 
