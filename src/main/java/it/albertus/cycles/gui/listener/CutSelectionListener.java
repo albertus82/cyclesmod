@@ -16,7 +16,9 @@ public class CutSelectionListener extends SelectionAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		cut();
+		if (gui.canCut()) {
+			cut();
+		}
 	}
 
 	public void cut() {

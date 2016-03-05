@@ -4,7 +4,7 @@ import it.albertus.cycles.gui.listener.AboutSelectionListener;
 import it.albertus.cycles.gui.listener.CloseListener;
 import it.albertus.cycles.gui.listener.CopySelectionListener;
 import it.albertus.cycles.gui.listener.CutSelectionListener;
-import it.albertus.cycles.gui.listener.EditArmListener;
+import it.albertus.cycles.gui.listener.EditMenuBarArmListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
 import it.albertus.cycles.gui.listener.PasteSelectionListener;
 import it.albertus.cycles.gui.listener.ResetAllSelectionListener;
@@ -70,7 +70,7 @@ public class MenuBar {
 		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
-		editMenuHeader.addArmListener(new EditArmListener(gui));
+		editMenuHeader.addArmListener(new EditMenuBarArmListener(gui));
 
 		editCutMenuItem = new MenuItem(editMenu, SWT.PUSH);
 		editCutMenuItem.setText(Resources.get("lbl.menu.item.cut") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_CUT));

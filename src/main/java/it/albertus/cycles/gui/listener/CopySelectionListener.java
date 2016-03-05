@@ -16,7 +16,9 @@ public class CopySelectionListener extends SelectionAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		copy();
+		if (gui.canCopy()) {
+			copy();
+		}
 	}
 
 	public void copy() {
