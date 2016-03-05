@@ -21,8 +21,8 @@ public class AboutSelectionListener extends SelectionAdapter {
 		final AboutDialog aboutDialog = new AboutDialog(gui.getShell());
 		aboutDialog.setText(Resources.get("msg.info.title"));
 		aboutDialog.setMessage(Resources.get("msg.info.body", Version.getInstance().getNumber(), Version.getInstance().getDate()));
-		aboutDialog.setLinkProject(Resources.get("msg.info.site"));
-		aboutDialog.setLinkIcon(Resources.get("msg.info.icon.site"));
+		aboutDialog.setApplicationUrl(Resources.get("msg.info.site"));
+		aboutDialog.setIconUrl(Resources.get("msg.info.icon.site"));
 		aboutDialog.open();
 	}
 
