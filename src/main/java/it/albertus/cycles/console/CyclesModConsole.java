@@ -49,7 +49,7 @@ public class CyclesModConsole extends CyclesModEngine {
 	}
 
 	private static String getWelcomeMessage() throws IOException {
-		return Resources.get("msg.welcome", Version.getInstance().getNumber(), Version.getInstance().getDate()) + "\r\n";
+		return Resources.get("msg.welcome", Version.getInstance().getNumber(), Version.getInstance().getDate(), Resources.get("msg.info.site")) + "\r\n";
 	}
 
 	private void execute() throws IOException {
