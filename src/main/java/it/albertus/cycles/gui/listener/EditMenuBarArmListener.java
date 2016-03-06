@@ -6,6 +6,10 @@ import org.eclipse.swt.events.ArmEvent;
 import org.eclipse.swt.events.ArmListener;
 import org.eclipse.swt.widgets.MenuItem;
 
+/**
+ * Attenzione: disabilitando gli elementi dei menu, vengono automaticamente
+ * disabilitati anche i relativi acceleratori.
+ */
 public class EditMenuBarArmListener implements ArmListener {
 
 	private final CyclesModGui gui;
