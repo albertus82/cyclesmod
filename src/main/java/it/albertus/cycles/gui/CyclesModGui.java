@@ -20,6 +20,7 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -231,9 +232,16 @@ public class CyclesModGui extends CyclesModEngine implements Gui {
 
 	public boolean canPaste() {
 		final Clipboard clipboard = new Clipboard(this.getShell().getDisplay());
-		final Object contents = clipboard.getContents(TextTransfer.getInstance());
+		final TransferData[] clipboardAvailableTypes = clipboard.getAvailableTypes();
 		clipboard.dispose();
-		if (contents != null) {
+		boolean enabled = false;
+		for (final TransferData clipboardType : clipboardAvailableTypes) {
+			if (TextTransfer.getInstance().isSupportedType(clipboardType)) {
+				enabled = true;
+				break;
+			}
+		}
+		if (enabled) {
 			for (final FormProperty fp : this.getFormProperties().values()) {
 				if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
 					return true;
