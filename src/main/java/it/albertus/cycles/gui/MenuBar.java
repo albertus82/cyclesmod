@@ -16,6 +16,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+/**
+ * Solo i <tt>MenuItem</tt> che fanno parte di una barra dei men&ugrave; con
+ * stile <tt>SWT.BAR</tt> hanno gli acceleratori funzionanti; negli altri casi
+ * (ad es. <tt>SWT.POP_UP</tt>), bench&eacute; vengano visualizzate le
+ * combinazioni di tasti, gli acceleratori non funzioneranno e le relative
+ * combinazioni di tasti saranno ignorate.
+ */
 public class MenuBar {
 
 	private final Menu bar;
