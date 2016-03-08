@@ -2,6 +2,8 @@
 <!DOCTYPE project>
 <project name="CyclesMod" default="zip">
 
+	<property environment="env" />
+
 	<property file="build.properties" />
 	<property file="${build.resourcesDirectory}/version.properties" />
 
@@ -20,6 +22,8 @@
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
+			<!-- Compilazione per JRE 6 -->
+			<bootclasspath location="${env.JAVA_HOME}/../jdk1.6.0_45/jre/lib/rt.jar" />
 		</javac>
 	</target>
 
