@@ -7,9 +7,6 @@
 	<property file="build.properties" />
 	<property file="${build.resourcesDirectory}/version.properties" />
 
-	<property name="artifactId" value="cyclesmod" />
-	<property name="mainClass" value="it.albertus.cycles.CyclesMod" />
-
 	<target name="clean">
 		<delete dir="${build.directory}" />
 	</target>
@@ -23,7 +20,7 @@
 				</fileset>
 			</classpath>
 			<!-- Compilazione per JRE 6 -->
-			<bootclasspath location="${env.JAVA_HOME}/../jdk1.6.0_45/jre/lib/rt.jar" />
+			<bootclasspath location="${build.compiler.compilerArguments.bootclasspath}" />
 		</javac>
 	</target>
 
@@ -86,7 +83,6 @@
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-
 		<manifestclasspath property="classpath.win32-win32-x86_64" jarfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
 				<fileset dir="${build.distDirectory}/win32-win32-x86_64/lib">
@@ -94,7 +90,6 @@
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-
 		<manifestclasspath property="classpath.gtk-linux-x86" jarfile="${build.distDirectory}/gtk-linux-x86/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
 				<fileset dir="${build.distDirectory}/gtk-linux-x86/lib">
@@ -102,7 +97,6 @@
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-
 		<manifestclasspath property="classpath.gtk-linux-x86_64" jarfile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
 				<fileset dir="${build.distDirectory}/gtk-linux-x86_64/lib">
@@ -110,7 +104,6 @@
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-
 		<manifestclasspath property="classpath.cocoa-macosx" jarfile="${build.distDirectory}/cocoa-macosx/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
 				<fileset dir="${build.distDirectory}/cocoa-macosx/lib">
@@ -118,7 +111,6 @@
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-
 		<manifestclasspath property="classpath.cocoa-macosx-x86_64" jarfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
 				<fileset dir="${build.distDirectory}/cocoa-macosx-x86_64/lib">
@@ -204,37 +196,37 @@
 	<target name="jar" depends="compile, resources, scripts, docs, icons, lib">
 		<jar destfile="${build.distDirectory}/win32-win32-x86/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${mainClass}" />
+				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86}" />
 			</manifest>
 		</jar>
 		<jar destfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${mainClass}" />
+				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86_64}" />
 			</manifest>
 		</jar>
 		<jar destfile="${build.distDirectory}/gtk-linux-x86/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${mainClass}" />
+				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86}" />
 			</manifest>
 		</jar>
 		<jar destfile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${mainClass}" />
+				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86_64}" />
 			</manifest>
 		</jar>
 		<jar destfile="${build.distDirectory}/cocoa-macosx/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${mainClass}" />
+				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx}" />
 			</manifest>
 		</jar>
 		<jar destfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${mainClass}" />
+				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx-x86_64}" />
 			</manifest>
 		</jar>
