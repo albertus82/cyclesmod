@@ -13,7 +13,7 @@
 
 	<target name="compile" depends="clean">
 		<mkdir dir="${build.outputDirectory}" />
-		<javac srcdir="${build.sourceDirectory}" destdir="${build.outputDirectory}" source="1.6" target="1.6" debug="true" includeantruntime="false">
+		<javac srcdir="${build.sourceDirectory}" destdir="${build.outputDirectory}" source="${build.compiler.source}" target="${build.compiler.target}" debug="true" includeantruntime="false">
 			<classpath>
 				<fileset dir="${dependencies.directory}">
 					<include name="**/*.jar" />
