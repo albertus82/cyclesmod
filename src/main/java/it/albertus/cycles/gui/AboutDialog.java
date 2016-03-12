@@ -69,11 +69,12 @@ public class AboutDialog extends Dialog {
 		linkIcon.setLayoutData(gridData);
 		linkIcon.addSelectionListener(new LinkSelectionListener());
 
-		Button okButton = new Button(shell, SWT.PUSH);
+		final Button okButton = new Button(shell, SWT.PUSH);
 		okButton.setText(Resources.get("lbl.button.ok"));
 		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 0);
 		gridData.minimumWidth = 64;
 		okButton.setLayoutData(gridData);
+		okButton.setFocus();
 		okButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
