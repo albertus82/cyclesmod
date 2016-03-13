@@ -30,12 +30,12 @@ public class AboutDialog extends Dialog {
 	}
 
 	public void open() {
-		Shell shell = new Shell(getParent(), getStyle());
+		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
 		createContents(shell);
 		shell.pack();
 		shell.open();
-		Display display = getParent().getDisplay();
+		final Display display = getParent().getDisplay();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
