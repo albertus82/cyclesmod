@@ -1,18 +1,18 @@
 package it.albertus.cycles.gui.listener;
 
 import it.albertus.cycles.gui.AboutDialog;
-import it.albertus.cycles.gui.Gui;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.Version;
 
+import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 public class AboutSelectionListener extends SelectionAdapter {
 
-	private final Gui gui;
+	private final IShellProvider gui;
 
-	public AboutSelectionListener(Gui gui) {
+	public AboutSelectionListener(IShellProvider gui) {
 		this.gui = gui;
 	}
 
