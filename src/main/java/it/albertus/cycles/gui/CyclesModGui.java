@@ -72,7 +72,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private Shell createShell(final Display display) throws IOException {
 		shell = new Shell(display);
-		shell.setImages(Images.ICONS_TOOLS);
+		shell.setImages(Images.MAIN_ICONS);
 		shell.setText(Resources.get("win.title"));
 		shell.setLayout(new FillLayout());
 		shell.addListener(SWT.Close, new CloseListener(this));
