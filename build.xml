@@ -30,13 +30,12 @@
 		</copy>
 	</target>
 
-
-	<fileset id="lib" dir="${dependencies.directory}">
-		<include name="*.jar" />
-		<include name="license/*.txt" />
-	</fileset>
-
 	<target name="lib">
+		<fileset id="lib" dir="${dependencies.directory}">
+			<include name="*.jar" />
+			<include name="license/*.txt" />
+		</fileset>
+
 		<!-- Copia dei file JAR delle librerie -->
 		<copy todir="${build.distDirectory}/win32-win32-x86/lib">
 			<fileset refid="lib" />
@@ -120,20 +119,40 @@
 		</manifestclasspath>
 	</target>
 
+	<target name="config">
+		<fileset id="config" dir="${build.configDirectory}" />
 
-	<fileset id="bat" dir="${build.scriptSourceDirectory}">
-		<include name="*.bat" />
-	</fileset>
-
-	<fileset id="sh" dir="${build.scriptSourceDirectory}">
-		<include name="*.sh" />
-	</fileset>
-
-	<fileset id="command" dir="${build.scriptSourceDirectory}">
-		<include name="*.command" />
-	</fileset>
+		<copy todir="${build.distDirectory}/win32-win32-x86">
+			<fileset refid="config" />
+		</copy>
+		<copy todir="${build.distDirectory}/win32-win32-x86_64">
+			<fileset refid="config" />
+		</copy>
+		<copy todir="${build.distDirectory}/gtk-linux-x86">
+			<fileset refid="config" />
+		</copy>
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64">
+			<fileset refid="config" />
+		</copy>
+		<copy todir="${build.distDirectory}/cocoa-macosx">
+			<fileset refid="config" />
+		</copy>
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64">
+			<fileset refid="config" />
+		</copy>
+	</target>
 
 	<target name="scripts">
+		<fileset id="bat" dir="${build.scriptSourceDirectory}">
+			<include name="*.bat" />
+		</fileset>
+		<fileset id="sh" dir="${build.scriptSourceDirectory}">
+			<include name="*.sh" />
+		</fileset>
+		<fileset id="command" dir="${build.scriptSourceDirectory}">
+			<include name="*.command" />
+		</fileset>
+
 		<copy todir="${build.distDirectory}/win32-win32-x86">
 			<fileset refid="bat" />
 		</copy>
@@ -153,15 +172,14 @@
 			<fileset refid="command" />
 		</copy>
 	</target>
-
-
-	<fileset id="docs" dir="">
-		<include name="README*" />
-		<include name="LICENSE*" />
-		<include name="NOTICE*" />
-	</fileset>
 
 	<target name="docs">
+		<fileset id="docs" dir="">
+			<include name="README*" />
+			<include name="LICENSE*" />
+			<include name="NOTICE*" />
+		</fileset>
+
 		<copy todir="${build.distDirectory}/win32-win32-x86">
 			<fileset refid="docs" />
 		</copy>
@@ -181,7 +199,6 @@
 			<fileset refid="docs" />
 		</copy>
 	</target>
-
 
 	<target name="icons">
 		<copy file="${icons.directory}/main.ico"  tofile="${build.distDirectory}/win32-win32-x86/${artifactId}.ico" />
@@ -191,7 +208,6 @@
 		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}.icns" />
 		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.icns" />
 	</target>
-
 
 	<target name="jar" depends="compile, resources, scripts, docs, icons, lib">
 		<jar destfile="${build.distDirectory}/win32-win32-x86/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
@@ -231,7 +247,6 @@
 			</manifest>
 		</jar>
 	</target>
-
 
 	<target name="zip" depends="jar">
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86-bin.zip" basedir="${build.distDirectory}/win32-win32-x86" level="9" />
