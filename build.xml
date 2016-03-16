@@ -19,7 +19,7 @@
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-			<!-- Compilazione per JRE 6 -->
+			<!-- Compilazione per JRE specifico -->
 			<bootclasspath location="${build.compiler.compilerArguments.bootclasspath}" />
 		</javac>
 	</target>
