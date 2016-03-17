@@ -21,11 +21,11 @@ public class AboutDialog extends Dialog {
 	private String applicationUrl = "";
 	private String iconUrl = "";
 
-	public AboutDialog(Shell parent) {
+	public AboutDialog(final Shell parent) {
 		this(parent, SWT.SHEET); // SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL
 	}
 
-	public AboutDialog(Shell parent, int style) {
+	public AboutDialog(final Shell parent, final int style) {
 		super(parent, style);
 	}
 
