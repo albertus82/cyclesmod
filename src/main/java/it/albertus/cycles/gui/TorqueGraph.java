@@ -5,6 +5,7 @@ import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
@@ -19,7 +20,6 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -39,7 +39,7 @@ public class TorqueGraph extends Canvas {
 
 	public boolean refresh() {
 		boolean success = false;
-		IDataProvider dataProvider = this.trace.getDataProvider();
+		final IDataProvider dataProvider = this.trace.getDataProvider();
 		if (dataProvider instanceof CircularBufferDataProvider) {
 			((CircularBufferDataProvider) dataProvider).triggerUpdate();
 			success = true;
@@ -49,13 +49,11 @@ public class TorqueGraph extends Canvas {
 
 	public TorqueGraph(final Composite parent, final Bike bike) {
 		super(parent, SWT.NULL);
-		GridData graphGridLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		graphGridLayoutData.verticalSpan = 2;
-		this.setLayoutData(graphGridLayoutData);
+		GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(this);
 
 		final LightweightSystem lws = new LightweightSystem(this);
 
-		XYGraph xyGraph = new XYGraph();
+		final XYGraph xyGraph = new XYGraph();
 		xyGraph.setTitle(Resources.get("lbl.graph.title"));
 		lws.setContents(xyGraph);
 
@@ -65,31 +63,31 @@ public class TorqueGraph extends Canvas {
 			y[i] = bike.getTorque().getCurve()[i];
 		}
 
-		CircularBufferDataProvider traceDataProvider = new CircularBufferDataProvider(false);
+		final CircularBufferDataProvider traceDataProvider = new CircularBufferDataProvider(false);
 		traceDataProvider.setBufferSize(x.length);
 		traceDataProvider.setCurrentXDataArray(x);
 		traceDataProvider.setCurrentYDataArray(y);
 
-		FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+		final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
 		if (!fontRegistry.hasValueFor("axisTitle")) {
-			Font sysFont = Display.getCurrent().getSystemFont();
+			final Font sysFont = Display.getCurrent().getSystemFont();
 			fontRegistry.put("axisTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD) });
 		}
-		Font axisTitleFont = fontRegistry.get("axisTitle");
+		final Font axisTitleFont = fontRegistry.get("axisTitle");
 
-		Axis abscissae = xyGraph.primaryXAxis;
+		final Axis abscissae = xyGraph.primaryXAxis;
 		abscissae.setAutoScale(true);
 		abscissae.setTitle(Resources.get("lbl.graph.axis.x"));
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
-		Axis ordinates = xyGraph.primaryYAxis;
+		final Axis ordinates = xyGraph.primaryYAxis;
 		ordinates.setAutoScale(true);
 		ordinates.setTitle(Resources.get("lbl.graph.axis.y"));
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 
-		Trace trace = new Trace("Torque", abscissae, ordinates, traceDataProvider);
+		final Trace trace = new Trace("Torque", abscissae, ordinates, traceDataProvider);
 		trace.setPointStyle(PointStyle.NONE);
 		trace.setLineWidth(3);
 		final Color traceColor;
@@ -118,7 +116,7 @@ public class TorqueGraph extends Canvas {
 		xyGraph.setShowLegend(false);
 
 		if (!fontRegistry.hasValueFor("graphTitle")) {
-			Font sysFont = Display.getCurrent().getSystemFont();
+			final Font sysFont = Display.getCurrent().getSystemFont();
 			fontRegistry.put("graphTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), 11, SWT.BOLD) });
 		}
 		xyGraph.setTitleFont(fontRegistry.get("graphTitle"));
