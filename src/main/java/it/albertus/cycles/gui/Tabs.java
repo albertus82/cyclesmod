@@ -11,9 +11,9 @@ import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -27,7 +27,7 @@ public class Tabs {
 
 	private final TabFolder tabFolder;
 
-	public Tabs(CyclesModGui gui) {
+	public Tabs(final CyclesModGui gui) {
 		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
 		for (final Bike bike : gui.getBikesInf().getBikes()) {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
@@ -35,22 +35,16 @@ public class Tabs {
 
 			final Composite tabComposite = new Composite(tabFolder, SWT.NULL);
 			tabItem.setControl(tabComposite);
-			GridLayout compositeGridLayout = new GridLayout(2, false);
-			tabComposite.setLayout(compositeGridLayout);
+			GridLayoutFactory.swtDefaults().numColumns(2).applyTo(tabComposite);
 
 			// Settings
 			final Group settingsGroup = new Group(tabComposite, SWT.NULL);
 			settingsGroup.setText(Resources.get("lbl.settings"));
-			// Posizionamento dell'elemento all'interno del contenitore
-			final GridData settingsGroupGridLayoutData = new GridData(SWT.FILL, SWT.FILL, false, true);
-			settingsGroup.setLayoutData(settingsGroupGridLayoutData);
-			// Definizione di come saranno disposti gli elementi contenuti
-			final GridLayout settingsGroupGridLayout = new GridLayout();
-			settingsGroupGridLayout.numColumns = 6;
-			settingsGroup.setLayout(settingsGroupGridLayout);
+			// Posizionamento dell'elemento all'interno del contenitore...
+			GridDataFactory.fillDefaults().grab(false, true).applyTo(settingsGroup);
+			// Definizione di come saranno disposti gli elementi contenuti...
+			GridLayoutFactory.swtDefaults().numColumns(6).applyTo(settingsGroup);
 
-			final GridData settingGridData = new GridData();
-			settingGridData.grabExcessHorizontalSpace = true;
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
@@ -62,7 +56,7 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setLayoutData(settingGridData);
+				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
@@ -75,14 +69,9 @@ public class Tabs {
 			// Gearbox
 			final Group gearboxGroup = new Group(tabComposite, SWT.NULL);
 			gearboxGroup.setText(Resources.get("lbl.gearbox"));
-			final GridLayout gearboxGroupGridLayout = new GridLayout();
-			gearboxGroupGridLayout.numColumns = 10;
-			gearboxGroup.setLayout(gearboxGroupGridLayout);
-			final GridData gearboxGroupGridLayoutData = new GridData(SWT.FILL, SWT.FILL, false, true);
-			gearboxGroup.setLayoutData(gearboxGroupGridLayoutData);
+			GridDataFactory.fillDefaults().grab(false, true).applyTo(gearboxGroup);
+			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
 
-			final GridData gearGridData = new GridData();
-			gearGridData.grabExcessHorizontalSpace = true;
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
@@ -94,7 +83,7 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setLayoutData(gearGridData);
+				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
@@ -103,15 +92,9 @@ public class Tabs {
 			// Torque
 			final Group torqueGroup = new Group(tabComposite, SWT.NULL);
 			torqueGroup.setText(Resources.get("lbl.torque"));
-			final GridLayout torqueGroupGridLayout = new GridLayout();
-			torqueGroupGridLayout.numColumns = 18;
-			torqueGroup.setLayout(torqueGroupGridLayout);
-			final GridData torqueGroupGridLayoutData = new GridData(SWT.FILL, SWT.FILL, true, false);
-			torqueGroupGridLayoutData.horizontalSpan = 2;
-			torqueGroup.setLayoutData(torqueGroupGridLayoutData);
+			GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(torqueGroup);
+			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(torqueGroup);
 
-			final GridData torqueGridData = new GridData();
-			torqueGridData.grabExcessHorizontalSpace = true;
 			for (int index = 0; index < bike.getTorque().getCurve().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
@@ -123,7 +106,7 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setLayoutData(torqueGridData);
+				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
 				text.addFocusListener(new TorquePropertyFocusListener(defaultValue, key, graph));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
