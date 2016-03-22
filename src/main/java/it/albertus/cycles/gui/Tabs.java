@@ -101,7 +101,7 @@ public class Tabs {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
 				final Label label = new Label(torqueGroup, SWT.NULL);
-				GridDataFactory.swtDefaults().applyTo(label);
+				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
