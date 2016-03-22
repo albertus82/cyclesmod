@@ -52,11 +52,11 @@ public class Tabs {
 				label.setText(Resources.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
+				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);				
 				final int maxFieldSize = Integer.toString(Settings.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
@@ -79,11 +79,11 @@ public class Tabs {
 				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
+				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
 				final int maxFieldSize = Integer.toString(Gearbox.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
 				text.addFocusListener(new PropertyFocusListener(defaultValue));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
@@ -102,11 +102,11 @@ public class Tabs {
 				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
+				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
 				final int maxFieldSize = Short.toString(Torque.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
 				text.addFocusListener(new TorquePropertyFocusListener(defaultValue, key, graph));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
