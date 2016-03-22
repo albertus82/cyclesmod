@@ -65,6 +65,7 @@ public class Tabs {
 
 			// Torque graph
 			final TorqueGraph graph = new TorqueGraph(tabComposite, bike);
+			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(graph);
 			gui.getTorqueGraphs().put(bike.getType(), graph);
 
 			// Gearbox
