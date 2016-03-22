@@ -5,7 +5,6 @@ import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
@@ -49,7 +48,6 @@ public class TorqueGraph extends Canvas {
 
 	public TorqueGraph(final Composite parent, final Bike bike) {
 		super(parent, SWT.NULL);
-		GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(this);
 
 		final LightweightSystem lws = new LightweightSystem(this);
 
