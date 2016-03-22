@@ -79,11 +79,10 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		menuBar = new MenuBar(this);
 
-		tabs = new Tabs(this); // TODO Aggiungere scrollbar verticale!
+		tabs = new Tabs(this);
 
 		// Size...
 		shell.pack();
-		shell.setMinimumSize(shell.getSize());
 
 		return shell;
 	}

@@ -14,6 +14,8 @@ import it.albertus.cycles.resources.Resources;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
@@ -33,8 +35,12 @@ public class Tabs {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
 			tabItem.setText(bike.getType().getDisplacement() + " cc");
 
-			final Composite tabComposite = new Composite(tabFolder, SWT.NULL);
-			tabItem.setControl(tabComposite);
+			// This outer composite is required for GTK!
+			final Composite outerComposite = new Composite(tabFolder, SWT.NONE);
+			outerComposite.setLayout(new FillLayout());
+
+			final ScrolledComposite tabScrolledComposite = new ScrolledComposite(outerComposite, SWT.V_SCROLL | SWT.H_SCROLL);
+			final Composite tabComposite = new Composite(tabScrolledComposite, SWT.NONE);
 			GridLayoutFactory.swtDefaults().numColumns(2).applyTo(tabComposite);
 
 			// Settings
@@ -115,6 +121,11 @@ public class Tabs {
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
 			}
+			tabScrolledComposite.setContent(tabComposite);
+			tabScrolledComposite.setExpandVertical(true);
+			tabScrolledComposite.setExpandHorizontal(true);
+			tabScrolledComposite.setMinSize(tabComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			tabItem.setControl(outerComposite);
 		}
 	}
 
