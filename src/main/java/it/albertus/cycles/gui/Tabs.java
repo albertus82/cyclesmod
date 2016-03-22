@@ -49,10 +49,11 @@ public class Tabs {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
 				final Label label = new Label(settingsGroup, SWT.NULL);
+				GridDataFactory.swtDefaults().applyTo(label);
 				label.setText(Resources.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
-				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);				
+				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(text);
 				final int maxFieldSize = Integer.toString(Settings.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
@@ -76,10 +77,11 @@ public class Tabs {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
 				final Label label = new Label(gearboxGroup, SWT.NULL);
+				GridDataFactory.swtDefaults().applyTo(label);
 				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
-				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
+				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(text);
 				final int maxFieldSize = Integer.toString(Gearbox.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
@@ -99,10 +101,11 @@ public class Tabs {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
 				final String defaultValue = gui.getDefaultProperties().getProperty(key);
 				final Label label = new Label(torqueGroup, SWT.NULL);
+				GridDataFactory.swtDefaults().applyTo(label);
 				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
-				GridDataFactory.swtDefaults().grab(true, false).applyTo(text);
+				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(text);
 				final int maxFieldSize = Short.toString(Torque.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
