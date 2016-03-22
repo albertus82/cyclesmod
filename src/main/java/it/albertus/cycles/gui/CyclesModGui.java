@@ -71,7 +71,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	private Shell createShell(final Display display) throws IOException {
-		shell = new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
+		shell = new Shell(display);
 		shell.setImages(Images.MAIN_ICONS);
 		shell.setText(Resources.get("win.title"));
 		shell.setLayout(new FillLayout());
