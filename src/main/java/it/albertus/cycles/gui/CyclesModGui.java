@@ -36,32 +36,14 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	private final Properties defaultProperties;
 	private Properties lastPersistedProperties;
 
-	private Shell shell;
-
-	private MenuBar menuBar;
-
-	private Tabs tabs;
-
-	private CyclesModGui() throws IOException {
-		// Loading default properties...
-		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
-		defaultProperties = new BikesCfg(getBikesInf()).getProperties();
-		lastPersistedProperties = defaultProperties;
-	}
+	private final Shell shell;
+	private final MenuBar menuBar;
+	private final Tabs tabs;
 
 	/** GUI entry point. */
 	public static void start(final String fileName) throws IOException {
-		Display display = new Display();
-		final CyclesModGui gui = new CyclesModGui();
-		final Shell shell = gui.createShell(display);
-
-		gui.updateFormValues();
-
-		// Loading custom properties...
-		if (StringUtils.isNotBlank(fileName)) {
-			gui.load(fileName, false);
-		}
-
+		final Display display = new Display();
+		final Shell shell = new CyclesModGui(display, fileName).getShell();
 		shell.open();
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
@@ -70,7 +52,13 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		display.dispose();
 	}
 
-	private Shell createShell(final Display display) throws IOException {
+	private CyclesModGui(final Display display, final String fileName) throws IOException {
+		// Loading default properties...
+		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
+		defaultProperties = new BikesCfg(getBikesInf()).getProperties();
+		lastPersistedProperties = defaultProperties;
+
+		// Shell creation...
 		shell = new Shell(display);
 		shell.setImages(Images.MAIN_ICONS);
 		shell.setText(Resources.get("win.title"));
@@ -84,7 +72,12 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		// Size...
 		shell.pack();
 
-		return shell;
+		updateFormValues();
+
+		// Loading custom properties...
+		if (StringUtils.isNotBlank(fileName)) {
+			load(fileName, false);
+		}
 	}
 
 	public void updateFormValues() {
