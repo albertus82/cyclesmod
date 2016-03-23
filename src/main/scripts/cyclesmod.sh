@@ -6,7 +6,7 @@ if [ "$1" = "-c" ] || [ "$1" = "-C" ] || [ "$1" = "--help" ] || [ "$1" = "--HELP
   fi
 else
   if [ "$JAVA_HOME" != "" ]
-  then "$JAVA_HOME/bin/java" -Xms8m -Xmx32m -jar cyclesmod.jar $1
-  else java -Xms8m -Xmx32m -jar cyclesmod.jar $1
+  then "$JAVA_HOME/bin/java" -Xms8m -Xmx16m -jar cyclesmod.jar $1
+  else java -Xms8m -Xmx16m -jar cyclesmod.jar $1
   fi
 fi
