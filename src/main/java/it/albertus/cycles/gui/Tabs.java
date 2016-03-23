@@ -59,7 +59,7 @@ public class Tabs {
 				label.setText(Resources.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
-				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(text);
+				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				final int maxFieldSize = Integer.toString(Settings.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
@@ -88,7 +88,7 @@ public class Tabs {
 				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
-				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(text);
+				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				final int maxFieldSize = Integer.toString(Gearbox.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
@@ -101,7 +101,7 @@ public class Tabs {
 			// Torque
 			final Group torqueGroup = new Group(tabComposite, SWT.NULL);
 			torqueGroup.setText(Resources.get("lbl.torque"));
-			GridDataFactory.fillDefaults().grab(true, false).span(2, 1).applyTo(torqueGroup);
+			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(torqueGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(torqueGroup);
 
 			for (int index = 0; index < bike.getTorque().getCurve().length; index++) {
@@ -112,7 +112,7 @@ public class Tabs {
 				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
-				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(text);
+				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				final int maxFieldSize = Short.toString(Torque.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
