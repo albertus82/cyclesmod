@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.Display;
 
 public class TorqueGraph extends Canvas {
 
+	private static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
+
 	private final Trace trace;
 	private final double[] values;
 
@@ -69,7 +71,7 @@ public class TorqueGraph extends Canvas {
 		final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
 		if (!fontRegistry.hasValueFor("axisTitle")) {
 			final Font sysFont = Display.getCurrent().getSystemFont();
-			fontRegistry.put("axisTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), 9, SWT.BOLD) });
+			fontRegistry.put("axisTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), sysFont.getFontData()[0].getHeight(), SWT.BOLD) });
 		}
 		final Font axisTitleFont = fontRegistry.get("axisTitle");
 
@@ -115,7 +117,7 @@ public class TorqueGraph extends Canvas {
 
 		if (!fontRegistry.hasValueFor("graphTitle")) {
 			final Font sysFont = Display.getCurrent().getSystemFont();
-			fontRegistry.put("graphTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), 11, SWT.BOLD) });
+			fontRegistry.put("graphTitle", new FontData[] { new FontData(sysFont.getFontData()[0].getName(), (int) (sysFont.getFontData()[0].getHeight() * TITLE_FONT_HEIGHT_FACTOR), SWT.BOLD) });
 		}
 		xyGraph.setTitleFont(fontRegistry.get("graphTitle"));
 
