@@ -8,18 +8,12 @@ import org.eclipse.swt.widgets.Text;
 
 public class PropertyFocusListener extends FocusAdapter {
 
-	private final String defaultValue;
-
-	public PropertyFocusListener(String defaultValue) {
-		this.defaultValue = defaultValue;
-	}
-
 	@Override
 	public void focusLost(FocusEvent event) {
 		Text field = (Text) event.widget;
 		PropertyFormatter formatter = PropertyFormatter.getInstance();
 		formatter.clean(field);
-		formatter.updateFontStyle(field, defaultValue);
+		formatter.updateFontStyle(field);
 	}
 
 }

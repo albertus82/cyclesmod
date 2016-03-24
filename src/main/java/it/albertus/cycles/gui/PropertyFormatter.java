@@ -1,5 +1,7 @@
 package it.albertus.cycles.gui;
 
+import it.albertus.cycles.engine.CyclesModEngine;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.resource.FontRegistry;
@@ -12,25 +14,22 @@ public class PropertyFormatter {
 
 	private static final PropertyFormatter INSTANCE = new PropertyFormatter();
 
-	private PropertyFormatter() {
-		fontRegistry = JFaceResources.getFontRegistry();
-	}
-
 	public static PropertyFormatter getInstance() {
 		return INSTANCE;
 	}
 
-	private final FontRegistry fontRegistry;
+	private final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
 
-	public void clean(Text field) {
-		if (field != null && StringUtils.isNumeric(field.getText()) && StringUtils.isNotEmpty(field.getText())) {
-			field.setText(Integer.valueOf(field.getText()).toString());
+	public void clean(final Text field) {
+		if (field != null && CyclesModEngine.isNumeric(field.getText()) && StringUtils.isNotEmpty(field.getText())) {
+			field.setText(Integer.toString(Integer.valueOf(field.getText(), CyclesModEngine.getRadix()), CyclesModEngine.getRadix()));
 		}
 	}
 
-	public void updateFontStyle(Text field, String defaultValue) {
-		if (field != null && field.getFont() != null && ArrayUtils.isNotEmpty(field.getFont().getFontData()) && defaultValue != null) {
-			if (!defaultValue.equalsIgnoreCase(field.getText())) {
+	public void updateFontStyle(final Text field) {
+		if (field != null && field.getFont() != null && ArrayUtils.isNotEmpty(field.getFont().getFontData()) && field.getData(FormProperty.KEY_DEFAULT_VALUE) instanceof Integer) {
+			final Integer defaultValue = (Integer) field.getData(FormProperty.KEY_DEFAULT_VALUE);
+			if (!defaultValue.equals(Integer.valueOf(field.getText(), CyclesModGui.getRadix()))) {
 				if (field.getFont().getFontData()[0].getStyle() != SWT.BOLD) {
 					setBoldFontStyle(field);
 				}

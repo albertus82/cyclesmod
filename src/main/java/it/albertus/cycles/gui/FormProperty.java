@@ -6,6 +6,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class FormProperty {
 
+	public static final String KEY_DEFAULT_VALUE = "default";
+
 	private final Label label;
 	private final Text text;
 

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
+import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.window.IShellProvider;
@@ -33,8 +33,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
-	private final Properties defaultProperties;
-	private Properties lastPersistedProperties;
+	private final Map<String, Integer> defaultProperties = new TreeMap<String, Integer>();
+	private final Map<String, Integer> lastPersistedProperties = new TreeMap<String, Integer>();
 
 	private final Shell shell;
 	private final MenuBar menuBar;
@@ -46,17 +46,25 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		final Shell shell = new CyclesModGui(display, fileName).getShell();
 		shell.open();
 		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
+			if (!display.readAndDispatch()) {
 				display.sleep();
+			}
 		}
 		display.dispose();
+	}
+
+	public void toNumericProperties(final BikesCfg bikesCfg, final Map<String, Integer> destination) {
+		destination.clear();
+		for (String key : bikesCfg.getProperties().stringPropertyNames()) {
+			destination.put(key, Integer.valueOf(bikesCfg.getProperties().getProperty(key), 10));
+		}
 	}
 
 	private CyclesModGui(final Display display, final String fileName) throws IOException {
 		// Loading default properties...
 		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
-		defaultProperties = new BikesCfg(getBikesInf()).getProperties();
-		lastPersistedProperties = defaultProperties;
+		toNumericProperties(new BikesCfg(getBikesInf()), defaultProperties);
+		lastPersistedProperties.putAll(defaultProperties);
 
 		// Shell creation...
 		shell = new Shell(display);
@@ -81,7 +89,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	public void updateFormValues() {
-		final Properties properties = new BikesCfg(getBikesInf()).getProperties();
+		final Map<String, Integer> properties = new TreeMap<String, Integer>();
+		toNumericProperties(new BikesCfg(getBikesInf()), properties);
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
@@ -94,11 +103,10 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				throw new RuntimeException(Resources.get("err.property.missing", key));
 			}
 			final Text field = formProperties.get(key).getText();
-			field.setText((String) properties.get(key)); // Update field value.
+			field.setText(Integer.toString(properties.get(key), CyclesModEngine.getRadix())); // Update field value.
 
 			// Update font style...
-			final String defaultValue = (String) defaultProperties.get(key);
-			PropertyFormatter.getInstance().updateFontStyle(field, defaultValue);
+			PropertyFormatter.getInstance().updateFontStyle(field);
 		}
 
 		// Update torque graphs...
@@ -122,7 +130,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
 				setBikesInf(new BikesInf(fileName));
 				updateFormValues();
-				setLastPersistedProperties(new BikesCfg(getBikesInf()).getProperties());
+				toNumericProperties(new BikesCfg(getBikesInf()), lastPersistedProperties);
 				if (successMessage) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 					messageBox.setText(Resources.get("msg.completed"));
@@ -142,7 +150,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 					}
 				}
 				updateFormValues();
-				setLastPersistedProperties(new BikesCfg(getBikesInf()).getProperties());
+				toNumericProperties(new BikesCfg(getBikesInf()), lastPersistedProperties);
 				if (successMessage) {
 					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 					messageBox.setText(Resources.get("msg.completed"));
@@ -196,7 +204,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				messageBox.open();
 				return false;
 			}
-			setLastPersistedProperties(new BikesCfg(getBikesInf()).getProperties());
+			toNumericProperties(new BikesCfg(getBikesInf()), lastPersistedProperties);
 			if (successMessage) {
 				MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_INFORMATION);
 				messageBox.setText(Resources.get("msg.completed"));
@@ -257,10 +265,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		return torqueGraphs;
 	}
 
-	public Properties getDefaultProperties() {
-		return defaultProperties;
-	}
-
 	public MenuBar getMenuBar() {
 		return menuBar;
 	}
@@ -269,12 +273,12 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		return tabs;
 	}
 
-	public Properties getLastPersistedProperties() {
+	public Map<String, Integer> getLastPersistedProperties() {
 		return lastPersistedProperties;
 	}
 
-	public void setLastPersistedProperties(Properties lastPersistedProperties) {
-		this.lastPersistedProperties = lastPersistedProperties;
+	public Map<String, Integer> getDefaultProperties() {
+		return defaultProperties;
 	}
 
 }

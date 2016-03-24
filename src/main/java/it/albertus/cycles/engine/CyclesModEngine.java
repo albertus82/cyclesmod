@@ -14,6 +14,18 @@ import org.apache.commons.lang.StringUtils;
 
 public abstract class CyclesModEngine {
 
+	public static final int DEFAULT_RADIX = 10;
+
+	private static int radix = DEFAULT_RADIX;
+
+	public static int getRadix() {
+		return radix;
+	}
+
+	public static void setRadix(int radix) {
+		CyclesModEngine.radix = radix;
+	}
+
 	private BikesInf bikesInf;
 
 	public BikesInf getBikesInf() {
@@ -24,10 +36,24 @@ public abstract class CyclesModEngine {
 		this.bikesInf = bikesInf;
 	}
 
+	public static boolean isNumeric(final String value, final int radix) {
+		try {
+			Long.parseLong(value, radix);
+		}
+		catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean isNumeric(final String value) {
+		return isNumeric(value, radix);
+	}
+
 	protected boolean applyProperty(String key, String value, boolean lenient) {
 		boolean applied = false;
 		try {
-			if (StringUtils.isBlank(value) || !StringUtils.isNumeric(value)) {
+			if (StringUtils.isBlank(value) || !isNumeric(value)) {
 				throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 			}
 
@@ -144,4 +170,5 @@ public abstract class CyclesModEngine {
 		}
 		return bike;
 	}
+
 }

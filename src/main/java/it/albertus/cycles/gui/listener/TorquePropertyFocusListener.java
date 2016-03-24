@@ -14,8 +14,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 	private final TorqueGraph graph;
 	private final short index;
 
-	public TorquePropertyFocusListener(String defaultValue, String key, TorqueGraph graph) {
-		super(defaultValue);
+	public TorquePropertyFocusListener(String key, TorqueGraph graph) {
 		this.key = key;
 		this.graph = graph;
 		this.index = Short.parseShort(StringUtils.substringAfterLast(key, "."));
@@ -32,9 +31,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 			graph.getValues()[index] = value;
 			graph.refresh();
 		}
-		catch (InvalidPropertyException ipe) {
-//			log.debug(ExceptionUtils.getLogMessage(ipe));
-		}
+		catch (InvalidPropertyException ipe) {}
 	}
 
 }

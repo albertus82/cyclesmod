@@ -53,7 +53,7 @@ public class Tabs {
 
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
-				final String defaultValue = gui.getDefaultProperties().getProperty(key);
+				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setText(Resources.get("lbl." + setting.toString()));
@@ -63,8 +63,9 @@ public class Tabs {
 				final int maxFieldSize = Integer.toString(Settings.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
-				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.addFocusListener(new PropertyFocusListener(defaultValue));
+				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue.toString()));
+				text.setData(FormProperty.KEY_DEFAULT_VALUE, defaultValue);
+				text.addFocusListener(new PropertyFocusListener());
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
 			}
@@ -82,7 +83,7 @@ public class Tabs {
 
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
-				final String defaultValue = gui.getDefaultProperties().getProperty(key);
+				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(gearboxGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
@@ -93,7 +94,8 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.addFocusListener(new PropertyFocusListener(defaultValue));
+				text.setData(FormProperty.KEY_DEFAULT_VALUE, defaultValue);
+				text.addFocusListener(new PropertyFocusListener());
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
 			}
@@ -106,7 +108,7 @@ public class Tabs {
 
 			for (int index = 0; index < bike.getTorque().getCurve().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
-				final String defaultValue = gui.getDefaultProperties().getProperty(key);
+				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(torqueGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
@@ -117,7 +119,8 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.addFocusListener(new TorquePropertyFocusListener(defaultValue, key, graph));
+				text.setData(FormProperty.KEY_DEFAULT_VALUE, defaultValue);
+				text.addFocusListener(new TorquePropertyFocusListener(key, graph));
 				text.addListener(SWT.Verify, new PropertyVerifyListener());
 				gui.getFormProperties().put(key, new FormProperty(label, text));
 			}
