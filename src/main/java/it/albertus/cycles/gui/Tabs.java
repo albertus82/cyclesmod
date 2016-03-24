@@ -80,7 +80,6 @@ public class Tabs {
 				final int maxFieldSize = Integer.toString(Settings.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
-				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue.toString()));
 				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
 				text.setData(FormProperty.DataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
@@ -111,7 +110,6 @@ public class Tabs {
 				final int maxFieldSize = Integer.toString(Gearbox.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
-				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
 				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
 				text.setData(FormProperty.DataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
@@ -137,7 +135,6 @@ public class Tabs {
 				final int maxFieldSize = Short.toString(Torque.MAX_VALUE).length();
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
-				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
 				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
 				text.setData(FormProperty.DataKey.KEY.toString(), key);
 				text.setData(FormProperty.DataKey.GRAPH.toString(), graph);

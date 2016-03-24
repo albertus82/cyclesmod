@@ -7,20 +7,19 @@ import org.eclipse.swt.widgets.Text;
 public class FormProperty {
 
 	public enum DataKey {
-		DEFAULT("default"),
-		KEY("key"),
-		GRAPH("graph"),
-		INDEX("index");
+		DEFAULT(Integer.class),
+		KEY(String.class),
+		GRAPH(TorqueGraph.class),
+		INDEX(Integer.class);
 
-		private final String key;
+		private final Class<?> type;
 
-		private DataKey(final String key) {
-			this.key = key;
+		private DataKey(final Class<?> type) {
+			this.type = type;
 		}
 
-		@Override
-		public String toString() {
-			return key;
+		public Class<?> getType() {
+			return type;
 		}
 	}
 
