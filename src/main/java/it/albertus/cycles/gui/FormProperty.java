@@ -6,15 +6,28 @@ import org.eclipse.swt.widgets.Text;
 
 public class FormProperty {
 
-	public static final String KEY_DEFAULT = "default";
-	public static final String KEY_KEY = "key";
-	public static final String KEY_GRAPH = "graph";
-	public static final String KEY_INDEX = "index";
+	public enum DataKey {
+		DEFAULT("default"),
+		KEY("key"),
+		GRAPH("graph"),
+		INDEX("index");
+
+		private final String key;
+
+		private DataKey(final String key) {
+			this.key = key;
+		}
+
+		@Override
+		public String toString() {
+			return key;
+		}
+	}
 
 	private final Label label;
 	private final Text text;
 
-	public FormProperty(Label label, Text text) {
+	public FormProperty(final Label label, final Text text) {
 		this.label = label;
 		this.text = text;
 	}
