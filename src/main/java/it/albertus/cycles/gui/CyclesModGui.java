@@ -96,8 +96,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			final Text field = tabs.getFormProperties().get(key).getText();
 
-			// Update field value...
+			// Update field value & tooltip text...
 			field.setText(Integer.toString(properties.get(key), getRadix()));
+			field.setToolTipText(Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.DataKey.DEFAULT.toString())), getRadix()).toUpperCase()));
 
 			// Update font style...
 			textFormatter.updateFontStyle(field);
