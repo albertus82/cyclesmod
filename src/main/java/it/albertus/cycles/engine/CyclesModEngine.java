@@ -98,13 +98,13 @@ public abstract class CyclesModEngine {
 
 	private boolean applyTorqueProperty(final String key, final String value) {
 		boolean applied = false;
-		short newValue = Torque.parse(key, value, radix);
+		final short newValue = Torque.parse(key, value, radix);
 
-		Bike bike = getBike(key, value);
-		String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Torque.class.getSimpleName()) + '.');
+		final Bike bike = getBike(key, value);
+		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Torque.class.getSimpleName()) + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getTorque().getCurve().length) {
-			int index = Integer.parseInt(suffix);
-			short defaultValue = bike.getTorque().getCurve()[index];
+			final int index = Integer.parseInt(suffix);
+			final short defaultValue = bike.getTorque().getCurve()[index];
 			if (defaultValue != newValue) {
 				bike.getTorque().getCurve()[index] = newValue;
 				applied = true;
@@ -119,13 +119,13 @@ public abstract class CyclesModEngine {
 
 	private boolean applyGearboxProperty(final String key, final String value) {
 		boolean applied = false;
-		int newValue = Gearbox.parse(key, value, radix);
+		final int newValue = Gearbox.parse(key, value, radix);
 
-		Bike bike = getBike(key, value);
-		String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Gearbox.class.getSimpleName()) + '.');
+		final Bike bike = getBike(key, value);
+		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Gearbox.class.getSimpleName()) + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getGearbox().getRatios().length) {
-			int index = Integer.parseInt(suffix);
-			int defaultValue = bike.getGearbox().getRatios()[index];
+			final int index = Integer.parseInt(suffix);
+			final int defaultValue = bike.getGearbox().getRatios()[index];
 			if (defaultValue != newValue) {
 				bike.getGearbox().getRatios()[index] = newValue;
 				applied = true;
@@ -140,13 +140,13 @@ public abstract class CyclesModEngine {
 
 	private boolean applySettingProperty(final String key, final String value) {
 		boolean applied = false;
-		int newValue = Settings.parse(key, value, radix);
+		final int newValue = Settings.parse(key, value, radix);
 
-		Bike bike = getBike(key, value);
-		String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Settings.class.getSimpleName()) + '.');
-		Setting setting = Setting.getSetting(suffix);
+		final Bike bike = getBike(key, value);
+		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Settings.class.getSimpleName()) + '.');
+		final Setting setting = Setting.getSetting(suffix);
 		if (setting != null) {
-			int defaultValue = bike.getSettings().getValues().get(setting);
+			final int defaultValue = bike.getSettings().getValues().get(setting);
 			if (newValue != defaultValue) {
 				bike.getSettings().getValues().put(setting, newValue);
 				applied = true;
@@ -164,7 +164,7 @@ public abstract class CyclesModEngine {
 	}
 
 	private Bike getBike(final String key, final String value) {
-		Bike bike = bikesInf.getBike(Integer.parseInt(StringUtils.substringBefore(key, ".")));
+		final Bike bike = bikesInf.getBike(Integer.parseInt(StringUtils.substringBefore(key, ".")));
 		if (bike == null) {
 			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 		}
