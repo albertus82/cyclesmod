@@ -27,9 +27,19 @@ public class Tabs {
 
 	private static final char SAMPLE_CHAR = '9';
 
+	private final CyclesModGui gui;
 	private final TabFolder tabFolder;
 
+	private final PropertyVerifyListener propertyVerifyListener;
+	private final PropertyFocusListener propertyFocusListener;
+	private final TorquePropertyFocusListener torquePropertyFocusListener;
+
 	public Tabs(final CyclesModGui gui) {
+		this.gui = gui;
+		propertyVerifyListener = new PropertyVerifyListener(gui);
+		propertyFocusListener = new PropertyFocusListener(gui);
+		torquePropertyFocusListener = new TorquePropertyFocusListener(gui);
+
 		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
 		for (final Bike bike : gui.getBikesInf().getBikes()) {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
@@ -64,9 +74,10 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue.toString()));
-				text.setData(FormProperty.KEY_DEFAULT_VALUE, defaultValue);
-				text.addFocusListener(new PropertyFocusListener());
-				text.addListener(SWT.Verify, new PropertyVerifyListener());
+				text.setData(FormProperty.KEY_DEFAULT, defaultValue);
+				text.setData(FormProperty.KEY_KEY, key);
+				text.addFocusListener(propertyFocusListener);
+				text.addVerifyListener(propertyVerifyListener);
 				gui.getFormProperties().put(key, new FormProperty(label, text));
 			}
 
@@ -94,9 +105,10 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setData(FormProperty.KEY_DEFAULT_VALUE, defaultValue);
-				text.addFocusListener(new PropertyFocusListener());
-				text.addListener(SWT.Verify, new PropertyVerifyListener());
+				text.setData(FormProperty.KEY_DEFAULT, defaultValue);
+				text.setData(FormProperty.KEY_KEY, key);
+				text.addFocusListener(propertyFocusListener);
+				text.addVerifyListener(propertyVerifyListener);
 				gui.getFormProperties().put(key, new FormProperty(label, text));
 			}
 
@@ -119,9 +131,12 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setData(FormProperty.KEY_DEFAULT_VALUE, defaultValue);
-				text.addFocusListener(new TorquePropertyFocusListener(key, graph));
-				text.addListener(SWT.Verify, new PropertyVerifyListener());
+				text.setData(FormProperty.KEY_DEFAULT, defaultValue);
+				text.setData(FormProperty.KEY_KEY, key);
+				text.setData(FormProperty.KEY_GRAPH, graph);
+				text.setData(FormProperty.KEY_INDEX, index);
+				text.addFocusListener(torquePropertyFocusListener);
+				text.addVerifyListener(propertyVerifyListener);
 				gui.getFormProperties().put(key, new FormProperty(label, text));
 			}
 			tabScrolledComposite.setContent(tabComposite);
@@ -139,7 +154,7 @@ public class Tabs {
 			sample[i] = SAMPLE_CHAR;
 		}
 		text.setText(String.valueOf(sample));
-		PropertyFormatter.getInstance().setBoldFontStyle(text);
+		gui.getTextFormatter().setBoldFontStyle(text);
 	}
 
 	public TabFolder getTabFolder() {

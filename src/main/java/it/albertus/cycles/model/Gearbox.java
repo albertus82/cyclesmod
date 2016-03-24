@@ -1,6 +1,5 @@
 package it.albertus.cycles.model;
 
-import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ByteUtils;
@@ -40,8 +39,8 @@ public class Gearbox extends BikesInfElement {
 		return byteList;
 	}
 
-	public static int parse(final String key, final String value) {
-		long newValue = Long.parseLong(value, CyclesModEngine.getRadix());
+	public static int parse(final String key, final String value, final int radix) {
+		long newValue = Long.parseLong(value, radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
 			throw new InvalidPropertyException(Resources.get("err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue));
 		}

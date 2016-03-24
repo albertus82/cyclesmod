@@ -1,6 +1,5 @@
 package it.albertus.cycles.model;
 
-import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.resources.Resources;
 
@@ -46,9 +45,9 @@ public class Torque extends BikesInfElement {
 		return BASE_RPM + POINT_WIDTH_RPM * index;
 	}
 
-	public static short parse(final String key, final String value) {
+	public static short parse(final String key, final String value, final int radix) {
 		try {
-			long newValue = Long.parseLong(value, CyclesModEngine.getRadix());
+			long newValue = Long.parseLong(value, radix);
 			if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
 				throw new IllegalArgumentException();
 			}
