@@ -46,16 +46,11 @@ public class Torque extends BikesInfElement {
 	}
 
 	public static short parse(final String key, final String value, final int radix) {
-		try {
-			final long newValue = Long.parseLong(value, radix);
-			if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-				throw new IllegalArgumentException();
-			}
-			return (short) newValue;
+		final long newValue = Long.parseLong(value, radix);
+		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
+			throw new InvalidPropertyException(Resources.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
 		}
-		catch (Exception e) {
-			throw new InvalidPropertyException(Resources.get("err.illegal.value", MIN_VALUE, MAX_VALUE, key, value));
-		}
+		return (short) newValue;
 	}
 
 	public short[] getCurve() {

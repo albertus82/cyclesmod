@@ -43,7 +43,7 @@ public class Settings extends BikesInfElement {
 	public static int parse(final String key, final String value, final int radix) {
 		final long newValue = Long.parseLong(value, radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(Resources.get("err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue));
+			throw new InvalidPropertyException(Resources.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
 		}
 		return (int) newValue;
 	}
