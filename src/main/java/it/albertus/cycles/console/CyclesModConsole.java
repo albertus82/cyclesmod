@@ -69,8 +69,7 @@ public class CyclesModConsole extends CyclesModEngine {
 
 		// Elaborazione delle properties...
 		short changesCount = 0;
-		for (Object objectKey : bikesCfg.getProperties().keySet()) {
-			String key = (String) objectKey;
+		for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
 			if (applyProperty(key, bikesCfg.getProperties().getProperty(key), false)) {
 				changesCount++;
 			}

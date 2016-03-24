@@ -32,15 +32,15 @@ public class Gearbox extends BikesInfElement {
 
 	@Override
 	public List<Byte> toByteList() {
-		List<Byte> byteList = new ArrayList<Byte>(LENGTH);
-		for (int ratio : ratios) {
+		final List<Byte> byteList = new ArrayList<Byte>(LENGTH);
+		for (final int ratio : ratios) {
 			byteList.addAll(ByteUtils.toByteList(ratio));
 		}
 		return byteList;
 	}
 
 	public static int parse(final String key, final String value, final int radix) {
-		long newValue = Long.parseLong(value, radix);
+		final long newValue = Long.parseLong(value, radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
 			throw new InvalidPropertyException(Resources.get("err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue));
 		}
