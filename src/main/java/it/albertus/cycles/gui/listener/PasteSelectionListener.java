@@ -15,14 +15,14 @@ public class PasteSelectionListener extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent event) {
+	public void widgetSelected(final SelectionEvent se) {
 		if (gui.canPaste()) {
 			paste();
 		}
 	}
 
 	public void paste() {
-		for (final FormProperty fp : gui.getFormProperties().values()) {
+		for (final FormProperty fp : gui.getTabs().getFormProperties().values()) {
 			if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
 				fp.getText().paste();
 				break;

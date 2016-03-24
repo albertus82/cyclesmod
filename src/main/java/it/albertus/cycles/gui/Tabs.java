@@ -11,6 +11,10 @@ import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -29,6 +33,9 @@ public class Tabs {
 
 	private final CyclesModGui gui;
 	private final TabFolder tabFolder;
+
+	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
+	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 
 	private final PropertyVerifyListener propertyVerifyListener;
 	private final PropertyFocusListener propertyFocusListener;
@@ -78,13 +85,13 @@ public class Tabs {
 				text.setData(FormProperty.KEY_KEY, key);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				gui.getFormProperties().put(key, new FormProperty(label, text));
+				formProperties.put(key, new FormProperty(label, text));
 			}
 
 			// Torque graph
 			final TorqueGraph graph = new TorqueGraph(tabComposite, bike);
 			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(graph);
-			gui.getTorqueGraphs().put(bike.getType(), graph);
+			torqueGraphs.put(bike.getType(), graph);
 
 			// Gearbox
 			final Group gearboxGroup = new Group(tabComposite, SWT.NULL);
@@ -109,7 +116,7 @@ public class Tabs {
 				text.setData(FormProperty.KEY_KEY, key);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				gui.getFormProperties().put(key, new FormProperty(label, text));
+				formProperties.put(key, new FormProperty(label, text));
 			}
 
 			// Torque
@@ -137,7 +144,7 @@ public class Tabs {
 				text.setData(FormProperty.KEY_INDEX, index);
 				text.addFocusListener(torquePropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				gui.getFormProperties().put(key, new FormProperty(label, text));
+				formProperties.put(key, new FormProperty(label, text));
 			}
 			tabScrolledComposite.setContent(tabComposite);
 			tabScrolledComposite.setExpandVertical(true);
@@ -159,6 +166,18 @@ public class Tabs {
 
 	public TabFolder getTabFolder() {
 		return tabFolder;
+	}
+
+	public Map<String, FormProperty> getFormProperties() {
+		return formProperties;
+	}
+
+	public Map<Bike.Type, TorqueGraph> getTorqueGraphs() {
+		return torqueGraphs;
+	}
+
+	public TorquePropertyFocusListener getTorquePropertyFocusListener() {
+		return torquePropertyFocusListener;
 	}
 
 }

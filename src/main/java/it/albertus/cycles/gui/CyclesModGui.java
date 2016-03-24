@@ -12,8 +12,6 @@ import it.albertus.util.ExceptionUtils;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -32,8 +30,6 @@ import org.eclipse.swt.widgets.Text;
 
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
-	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
-	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 	private final Map<String, Integer> defaultProperties = new TreeMap<String, Integer>();
 	private final Map<String, Integer> lastPersistedProperties = new TreeMap<String, Integer>();
 	private final TextFormatter textFormatter = new TextFormatter(this);
@@ -89,16 +85,16 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		final Map<String, Integer> properties = new BikesCfg(getBikesInf()).getMap();
 
 		// Consistency check...
-		if (properties.size() != formProperties.size()) {
+		if (properties.size() != tabs.getFormProperties().size()) {
 			throw new IllegalStateException(Resources.get("err.properties.number"));
 		}
 
 		// Update screen values...
-		for (final String key : formProperties.keySet()) {
+		for (final String key : tabs.getFormProperties().keySet()) {
 			if (!properties.containsKey(key)) {
 				throw new RuntimeException(Resources.get("err.property.missing", key));
 			}
-			final Text field = formProperties.get(key).getText();
+			final Text field = tabs.getFormProperties().get(key).getText();
 
 			// Update field value...
 			field.setText(Integer.toString(properties.get(key), getRadix()));
@@ -109,7 +105,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		// Update torque graphs...
 		for (final Bike bike : getBikesInf().getBikes()) {
-			final TorqueGraph graph = torqueGraphs.get(bike.getType());
+			final TorqueGraph graph = tabs.getTorqueGraphs().get(bike.getType());
 			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
 				graph.getValues()[i] = bike.getTorque().getCurve()[i];
 			}
@@ -118,8 +114,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	public void updateModelValues(boolean lenient) {
-		for (final String key : formProperties.keySet()) {
-			applyProperty(key, formProperties.get(key).getValue(), lenient);
+		for (final String key : tabs.getFormProperties().keySet()) {
+			applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
 		}
 	}
 
@@ -220,7 +216,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	public boolean canCopy() {
-		for (final FormProperty fp : this.getFormProperties().values()) {
+		for (final FormProperty fp : tabs.getFormProperties().values()) {
 			if (fp != null && fp.getText() != null && fp.getText().getSelectionText() != null && fp.getText().getSelectionText().length() != 0) {
 				return true;
 			}
@@ -240,7 +236,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 		}
 		if (enabled) {
-			for (final FormProperty fp : this.getFormProperties().values()) {
+			for (final FormProperty fp : tabs.getFormProperties().values()) {
 				if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
 					return true;
 				}
@@ -256,17 +252,18 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		updateFormValues();
 	}
 
+	public Map<String, Integer> getLastPersistedProperties() {
+		return Collections.unmodifiableMap(lastPersistedProperties);
+	}
+
+	private void setLastPersistedProperties(final Map<String, Integer> lastPersistedProperties) {
+		this.lastPersistedProperties.clear();
+		this.lastPersistedProperties.putAll(lastPersistedProperties);
+	}
+
 	@Override
 	public Shell getShell() {
 		return shell;
-	}
-
-	public Map<String, FormProperty> getFormProperties() {
-		return formProperties;
-	}
-
-	public Map<Bike.Type, TorqueGraph> getTorqueGraphs() {
-		return torqueGraphs;
 	}
 
 	public MenuBar getMenuBar() {
@@ -275,15 +272,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	public Tabs getTabs() {
 		return tabs;
-	}
-
-	public Map<String, Integer> getLastPersistedProperties() {
-		return Collections.unmodifiableMap(lastPersistedProperties);
-	}
-
-	private void setLastPersistedProperties(final Map<String, Integer> lastPersistedProperties) {
-		this.lastPersistedProperties.clear();
-		this.lastPersistedProperties.putAll(lastPersistedProperties);
 	}
 
 	public Map<String, Integer> getDefaultProperties() {
