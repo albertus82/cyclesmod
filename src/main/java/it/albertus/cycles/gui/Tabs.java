@@ -81,8 +81,8 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue.toString()));
-				text.setData(FormProperty.KEY_DEFAULT, defaultValue);
-				text.setData(FormProperty.KEY_KEY, key);
+				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
+				text.setData(FormProperty.DataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -112,8 +112,8 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setData(FormProperty.KEY_DEFAULT, defaultValue);
-				text.setData(FormProperty.KEY_KEY, key);
+				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
+				text.setData(FormProperty.DataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -138,10 +138,10 @@ public class Tabs {
 				setSampleNumber(text, maxFieldSize);
 				text.setTextLimit(maxFieldSize);
 				text.setToolTipText(Resources.get("msg.tooltip.default", defaultValue));
-				text.setData(FormProperty.KEY_DEFAULT, defaultValue);
-				text.setData(FormProperty.KEY_KEY, key);
-				text.setData(FormProperty.KEY_GRAPH, graph);
-				text.setData(FormProperty.KEY_INDEX, index);
+				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
+				text.setData(FormProperty.DataKey.KEY.toString(), key);
+				text.setData(FormProperty.DataKey.GRAPH.toString(), graph);
+				text.setData(FormProperty.DataKey.INDEX.toString(), index);
 				text.addFocusListener(torquePropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
