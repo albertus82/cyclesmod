@@ -7,6 +7,7 @@ import it.albertus.cycles.gui.listener.CutSelectionListener;
 import it.albertus.cycles.gui.listener.EditMenuBarArmListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
 import it.albertus.cycles.gui.listener.PasteSelectionListener;
+import it.albertus.cycles.gui.listener.RadixSelectionListener;
 import it.albertus.cycles.gui.listener.ResetAllSelectionListener;
 import it.albertus.cycles.gui.listener.ResetSingleSelectionListener;
 import it.albertus.cycles.gui.listener.SaveSelectionListener;
@@ -42,6 +43,13 @@ public class MenuBar {
 	private final MenuItem editResetSubMenuItem;
 	private final MenuItem editResetSingleMenuItem;
 	private final MenuItem editResetAllMenuItem;
+
+	private final Menu viewMenu;
+	private final MenuItem viewMenuHeader;
+	private final Menu viewRadixSubMenu;
+	private final MenuItem viewRadixSubMenuItem;
+	private final MenuItem viewRadix10MenuItem;
+	private final MenuItem viewRadix16MenuItem;
 
 	private final Menu helpMenu;
 	private final MenuItem helpMenuHeader;
@@ -109,6 +117,26 @@ public class MenuBar {
 		editResetAllMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
 		editResetAllMenuItem.setText(Resources.get("lbl.menu.item.reset.all"));
 		editResetAllMenuItem.addSelectionListener(new ResetAllSelectionListener(gui));
+
+		// View
+		viewMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		viewMenuHeader = new MenuItem(bar, SWT.CASCADE);
+		viewMenuHeader.setText(Resources.get("lbl.menu.header.view"));
+		viewMenuHeader.setMenu(viewMenu);
+
+		viewRadixSubMenuItem = new MenuItem(viewMenu, SWT.CASCADE);
+		viewRadixSubMenuItem.setText(Resources.get("lbl.menu.item.radix"));
+
+		viewRadixSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		viewRadixSubMenuItem.setMenu(viewRadixSubMenu);
+
+		viewRadix10MenuItem = new MenuItem(viewRadixSubMenu, SWT.RADIO);
+		viewRadix10MenuItem.setText(Resources.get("lbl.menu.item.radix.10"));
+		viewRadix10MenuItem.setSelection(true);
+		viewRadix10MenuItem.addSelectionListener(new RadixSelectionListener(gui));
+
+		viewRadix16MenuItem = new MenuItem(viewRadixSubMenu, SWT.RADIO);
+		viewRadix16MenuItem.setText(Resources.get("lbl.menu.item.radix.16"));
 
 		// Help
 		helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
@@ -181,6 +209,30 @@ public class MenuBar {
 
 	public MenuItem getEditResetAllMenuItem() {
 		return editResetAllMenuItem;
+	}
+
+	public Menu getViewMenu() {
+		return viewMenu;
+	}
+
+	public MenuItem getViewMenuHeader() {
+		return viewMenuHeader;
+	}
+
+	public Menu getViewRadixSubMenu() {
+		return viewRadixSubMenu;
+	}
+
+	public MenuItem getViewRadixSubMenuItem() {
+		return viewRadixSubMenuItem;
+	}
+
+	public MenuItem getViewRadix10MenuItem() {
+		return viewRadix10MenuItem;
+	}
+
+	public MenuItem getViewRadix16MenuItem() {
+		return viewRadix16MenuItem;
 	}
 
 	public Menu getHelpMenu() {
