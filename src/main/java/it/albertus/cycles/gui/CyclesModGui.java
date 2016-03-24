@@ -12,8 +12,8 @@ import it.albertus.util.ExceptionUtils;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.window.IShellProvider;
@@ -30,8 +30,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
-	private final Map<String, Integer> defaultProperties = new TreeMap<String, Integer>();
-	private final Map<String, Integer> lastPersistedProperties = new TreeMap<String, Integer>();
+	private final Map<String, Integer> defaultProperties = new HashMap<String, Integer>();
+	private final Map<String, Integer> lastPersistedProperties = new HashMap<String, Integer>();
 	private final TextFormatter textFormatter = new TextFormatter(this);
 
 	private final Shell shell;
@@ -159,7 +159,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				messageBox.open();
 			}
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			System.err.println(ExceptionUtils.getLogMessage(e));
 			final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 			messageBox.setText(Resources.get("msg.warning"));
@@ -190,7 +190,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			try {
 				getBikesInf().write(fileName);
 			}
-			catch (Exception e) {
+			catch (final Exception e) {
 				System.err.println(ExceptionUtils.getLogMessage(e));
 				final MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
 				messageBox.setText(Resources.get("msg.warning"));

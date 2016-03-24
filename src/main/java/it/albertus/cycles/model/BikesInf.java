@@ -28,7 +28,7 @@ public class BikesInf {
 		read(bikesInfInputStream);
 	}
 
-	public BikesInf(String fileName) throws IOException {
+	public BikesInf(final String fileName) throws IOException {
 		read(new BufferedInputStream(new FileInputStream(fileName)));
 	}
 
@@ -68,12 +68,12 @@ public class BikesInf {
 	}
 
 	public void write(final String fileName) throws IOException {
-		byte[] newBikesInf = this.toByteArray();
-		Checksum crc = new CRC32();
+		final byte[] newBikesInf = this.toByteArray();
+		final Checksum crc = new CRC32();
 		crc.update(newBikesInf, 0, newBikesInf.length);
 		System.out.println(Resources.get("msg.configuration.changed", (crc.getValue() == FILE_CRC ? ' ' + Resources.get("msg.not") + ' ' : ' '), String.format("%08X", crc.getValue())));
 
-		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileName), FILE_SIZE);
+		final BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileName), FILE_SIZE);
 		write(bos, newBikesInf);
 		System.out.println(Resources.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
 	}
@@ -94,8 +94,8 @@ public class BikesInf {
 	 * @return L'array di byte corrispondente al file BIKES.INF.
 	 */
 	private byte[] toByteArray() {
-		List<Byte> byteList = new ArrayList<Byte>(FILE_SIZE);
-		for (Bike bike : bikes) {
+		final List<Byte> byteList = new ArrayList<Byte>(FILE_SIZE);
+		for (final Bike bike : bikes) {
 			byteList.addAll(bike.toByteList());
 		}
 		if (byteList.size() != FILE_SIZE) {
@@ -105,7 +105,7 @@ public class BikesInf {
 	}
 
 	public Bike getBike(int displacement) {
-		for (Bike bike : bikes) {
+		for (final Bike bike : bikes) {
 			if (bike.getType().getDisplacement() == displacement) {
 				return bike;
 			}
