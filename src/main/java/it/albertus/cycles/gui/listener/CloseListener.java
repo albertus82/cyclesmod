@@ -1,8 +1,5 @@
 package it.albertus.cycles.gui.listener;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.resources.Resources;
@@ -18,7 +15,7 @@ public class CloseListener extends SelectionAdapter implements Listener {
 
 	private final CyclesModGui gui;
 
-	public CloseListener(CyclesModGui gui) {
+	public CloseListener(final CyclesModGui gui) {
 		this.gui = gui;
 	}
 
@@ -38,9 +35,7 @@ public class CloseListener extends SelectionAdapter implements Listener {
 
 	private boolean confirmClose() {
 		gui.updateModelValues(true);
-		Map<String, Integer> props = new TreeMap<String, Integer>(); // TODO
-		gui.toNumericProperties(new BikesCfg(gui.getBikesInf()), props);
-		if (!props.equals(gui.getLastPersistedProperties())) {
+		if (!new BikesCfg(gui.getBikesInf()).getMap().equals(gui.getLastPersistedProperties())) {
 			final MessageBox messageBox = new MessageBox(gui.getShell(), SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
 			messageBox.setText(Resources.get("msg.confirm.close.text"));
 			messageBox.setMessage(Resources.get("msg.confirm.close.message"));

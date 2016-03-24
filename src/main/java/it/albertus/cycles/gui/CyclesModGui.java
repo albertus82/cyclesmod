@@ -55,18 +55,10 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		display.dispose();
 	}
 
-	public void toNumericProperties(final BikesCfg bikesCfg, final Map<String, Integer> destination) {
-		destination.clear();
-		for (String key : bikesCfg.getProperties().stringPropertyNames()) {
-			destination.put(key, Integer.valueOf(bikesCfg.getProperties().getProperty(key), 10));
-		}
-	}
-
 	private CyclesModGui(final Display display, final String fileName) throws IOException {
 		// Loading default properties...
 		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
-		toNumericProperties(new BikesCfg(getBikesInf()), defaultProperties);
-		lastPersistedProperties.putAll(defaultProperties);
+		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
 
 		// Shell creation...
 		shell = new Shell(display);
@@ -88,11 +80,13 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		if (StringUtils.isNotBlank(fileName)) {
 			load(fileName, false);
 		}
+		else {
+			setLastPersistedProperties(defaultProperties);
+		}
 	}
 
 	public void updateFormValues() {
-		final Map<String, Integer> properties = new TreeMap<String, Integer>();
-		toNumericProperties(new BikesCfg(getBikesInf()), properties);
+		final Map<String, Integer> properties = new BikesCfg(getBikesInf()).getMap();
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
@@ -134,9 +128,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
 				setBikesInf(new BikesInf(fileName));
 				updateFormValues();
-				toNumericProperties(new BikesCfg(getBikesInf()), lastPersistedProperties);
+				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 				if (successMessage) {
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 					messageBox.setText(Resources.get("msg.completed"));
 					messageBox.setMessage(Resources.get("msg.file.loaded", fileName));
 					messageBox.open();
@@ -145,25 +139,24 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			else if (StringUtils.endsWithIgnoreCase(fileName, ".cfg")) {
 				setBikesInf(new BikesInf(new BikesZip().getInputStream()));
 
-				BikesCfg bikesCfg = new BikesCfg(fileName);
+				final BikesCfg bikesCfg = new BikesCfg(fileName);
 				short changesCount = 0;
-				for (Object objectKey : bikesCfg.getProperties().keySet()) {
-					String key = (String) objectKey;
+				for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
 					if (applyProperty(key, bikesCfg.getProperties().getProperty(key), false)) {
 						changesCount++;
 					}
 				}
 				updateFormValues();
-				toNumericProperties(new BikesCfg(getBikesInf()), lastPersistedProperties);
+				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 				if (successMessage) {
-					MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 					messageBox.setText(Resources.get("msg.completed"));
 					messageBox.setMessage(Resources.get("msg.customizations.applied", changesCount));
 					messageBox.open();
 				}
 			}
 			else {
-				MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+				final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 				messageBox.setText(Resources.get("msg.warning"));
 				messageBox.setMessage(Resources.get("err.file.invalid"));
 				messageBox.open();
@@ -171,7 +164,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (Exception e) {
 			System.err.println(ExceptionUtils.getLogMessage(e));
-			MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
+			final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 			messageBox.setText(Resources.get("msg.warning"));
 			messageBox.setMessage(Resources.get("err.file.load", ExceptionUtils.getUIMessage(e)));
 			messageBox.open();
@@ -190,11 +183,11 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			messageBox.open();
 			return false;
 		}
-		FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
+		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
 		saveDialog.setFilterExtensions(new String[] { "*.INF; *.inf" });
 		saveDialog.setFileName(BikesInf.FILE_NAME);
 		saveDialog.setOverwrite(true);
-		String fileName = saveDialog.open();
+		final String fileName = saveDialog.open();
 
 		if (StringUtils.isNotBlank(fileName)) {
 			try {
@@ -202,15 +195,15 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (Exception e) {
 				System.err.println(ExceptionUtils.getLogMessage(e));
-				MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
+				final MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
 				messageBox.setText(Resources.get("msg.warning"));
 				messageBox.setMessage(Resources.get("err.file.save", ExceptionUtils.getUIMessage(e)));
 				messageBox.open();
 				return false;
 			}
-			toNumericProperties(new BikesCfg(getBikesInf()), lastPersistedProperties);
+			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 			if (successMessage) {
-				MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_INFORMATION);
+				final MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_INFORMATION);
 				messageBox.setText(Resources.get("msg.completed"));
 				messageBox.setMessage(Resources.get("msg.file.saved", fileName));
 				messageBox.open();
@@ -285,7 +278,12 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	public Map<String, Integer> getLastPersistedProperties() {
-		return lastPersistedProperties;
+		return Collections.unmodifiableMap(lastPersistedProperties);
+	}
+
+	private void setLastPersistedProperties(final Map<String, Integer> lastPersistedProperties) {
+		this.lastPersistedProperties.clear();
+		this.lastPersistedProperties.putAll(lastPersistedProperties);
 	}
 
 	public Map<String, Integer> getDefaultProperties() {

@@ -12,7 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 public class BikesCfg {
 
@@ -131,12 +133,12 @@ public class BikesCfg {
 		return properties;
 	}
 
-//	public Map<String, Integer> getMap() {
-//		final Map<String, Integer> map = new TreeMap<String, Integer>();
-//		for (final String key : this.getProperties().stringPropertyNames()) {
-//			map.put(key, Integer.valueOf(this.getProperties().getProperty(key), RADIX));
-//		}
-//		return map;
-//	}
+	public Map<String, Integer> getMap() {
+		final Map<String, Integer> map = new TreeMap<String, Integer>();
+		for (final String key : this.getProperties().stringPropertyNames()) {
+			map.put(key, Integer.valueOf(this.getProperties().getProperty(key), RADIX));
+		}
+		return map;
+	}
 
 }
