@@ -33,15 +33,15 @@ public class Settings extends BikesInfElement {
 
 	@Override
 	public List<Byte> toByteList() {
-		List<Byte> byteList = new ArrayList<Byte>(LENGTH);
-		for (int value : values.values()) {
+		final List<Byte> byteList = new ArrayList<Byte>(LENGTH);
+		for (final int value : values.values()) {
 			byteList.addAll(ByteUtils.toByteList(value));
 		}
 		return byteList;
 	}
 
 	public static int parse(final String key, final String value, final int radix) {
-		long newValue = Long.parseLong(value, radix);
+		final long newValue = Long.parseLong(value, radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
 			throw new InvalidPropertyException(Resources.get("err.illegal.value", MIN_VALUE, MAX_VALUE, key, newValue));
 		}

@@ -34,8 +34,8 @@ public class Torque extends BikesInfElement {
 
 	@Override
 	public List<Byte> toByteList() {
-		List<Byte> byteList = new ArrayList<Byte>(LENGTH);
-		for (short point : curve) {
+		final List<Byte> byteList = new ArrayList<Byte>(LENGTH);
+		for (final short point : curve) {
 			byteList.add((byte) point);
 		}
 		return byteList;
@@ -47,7 +47,7 @@ public class Torque extends BikesInfElement {
 
 	public static short parse(final String key, final String value, final int radix) {
 		try {
-			long newValue = Long.parseLong(value, radix);
+			final long newValue = Long.parseLong(value, radix);
 			if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
 				throw new IllegalArgumentException();
 			}
