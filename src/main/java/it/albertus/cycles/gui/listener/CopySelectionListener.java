@@ -15,14 +15,14 @@ public class CopySelectionListener extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent event) {
+	public void widgetSelected(final SelectionEvent se) {
 		if (gui.canCopy()) {
 			copy();
 		}
 	}
 
 	public void copy() {
-		for (final FormProperty fp : gui.getFormProperties().values()) {
+		for (final FormProperty fp : gui.getTabs().getFormProperties().values()) {
 			if (fp != null && fp.getText() != null && fp.getText().getSelectionText() != null && fp.getText().getSelectionText().length() != 0) {
 				fp.getText().copy();
 				break;
