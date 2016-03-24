@@ -16,14 +16,14 @@ public abstract class CyclesModEngine {
 
 	public static final int DEFAULT_RADIX = 10;
 
-	private static int radix = DEFAULT_RADIX;
+	private int radix = DEFAULT_RADIX;
 
-	public static int getRadix() {
+	public int getRadix() {
 		return radix;
 	}
 
-	public static void setRadix(int radix) {
-		CyclesModEngine.radix = radix;
+	public void setRadix(int radix) {
+		this.radix = radix;
 	}
 
 	private BikesInf bikesInf;
@@ -46,7 +46,7 @@ public abstract class CyclesModEngine {
 		return true;
 	}
 
-	public static boolean isNumeric(final String value) {
+	public boolean isNumeric(final String value) {
 		return isNumeric(value, radix);
 	}
 
@@ -98,7 +98,7 @@ public abstract class CyclesModEngine {
 
 	private boolean applyTorqueProperty(final String key, final String value) {
 		boolean applied = false;
-		short newValue = Torque.parse(key, value);
+		short newValue = Torque.parse(key, value, radix);
 
 		Bike bike = getBike(key, value);
 		String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Torque.class.getSimpleName()) + '.');
@@ -119,7 +119,7 @@ public abstract class CyclesModEngine {
 
 	private boolean applyGearboxProperty(final String key, final String value) {
 		boolean applied = false;
-		int newValue = Gearbox.parse(key, value);
+		int newValue = Gearbox.parse(key, value, radix);
 
 		Bike bike = getBike(key, value);
 		String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Gearbox.class.getSimpleName()) + '.');
@@ -140,7 +140,7 @@ public abstract class CyclesModEngine {
 
 	private boolean applySettingProperty(final String key, final String value) {
 		boolean applied = false;
-		int newValue = Settings.parse(key, value);
+		int newValue = Settings.parse(key, value, radix);
 
 		Bike bike = getBike(key, value);
 		String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Settings.class.getSimpleName()) + '.');

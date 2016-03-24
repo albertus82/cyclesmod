@@ -11,6 +11,7 @@ import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 	private final Map<String, Integer> defaultProperties = new TreeMap<String, Integer>();
 	private final Map<String, Integer> lastPersistedProperties = new TreeMap<String, Integer>();
+	private final TextFormatter textFormatter = new TextFormatter(this);
 
 	private final Shell shell;
 	private final MenuBar menuBar;
@@ -103,10 +105,12 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				throw new RuntimeException(Resources.get("err.property.missing", key));
 			}
 			final Text field = formProperties.get(key).getText();
-			field.setText(Integer.toString(properties.get(key), CyclesModEngine.getRadix())); // Update field value.
+
+			// Update field value...
+			field.setText(Integer.toString(properties.get(key), getRadix()));
 
 			// Update font style...
-			PropertyFormatter.getInstance().updateFontStyle(field);
+			textFormatter.updateFontStyle(field);
 		}
 
 		// Update torque graphs...
@@ -253,6 +257,13 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	@Override
+	public void setRadix(final int radix) {
+		updateModelValues(true);
+		super.setRadix(radix);
+		updateFormValues();
+	}
+
+	@Override
 	public Shell getShell() {
 		return shell;
 	}
@@ -278,7 +289,11 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	public Map<String, Integer> getDefaultProperties() {
-		return defaultProperties;
+		return Collections.unmodifiableMap(defaultProperties);
+	}
+
+	public TextFormatter getTextFormatter() {
+		return textFormatter;
 	}
 
 }

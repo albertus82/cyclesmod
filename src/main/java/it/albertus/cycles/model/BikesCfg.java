@@ -17,8 +17,8 @@ import java.util.Properties;
 public class BikesCfg {
 
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
-
 	private static final String FILE_NAME = "BIKES.CFG";
+	private static final int RADIX = 10;
 
 	private final Properties properties = new Properties();
 
@@ -130,5 +130,13 @@ public class BikesCfg {
 	public Properties getProperties() {
 		return properties;
 	}
+
+//	public Map<String, Integer> getMap() {
+//		final Map<String, Integer> map = new TreeMap<String, Integer>();
+//		for (final String key : this.getProperties().stringPropertyNames()) {
+//			map.put(key, Integer.valueOf(this.getProperties().getProperty(key), RADIX));
+//		}
+//		return map;
+//	}
 
 }

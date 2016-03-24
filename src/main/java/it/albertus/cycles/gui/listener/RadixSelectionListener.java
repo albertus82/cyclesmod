@@ -1,6 +1,5 @@
 package it.albertus.cycles.gui.listener;
 
-import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.gui.CyclesModGui;
 
 import org.eclipse.swt.events.SelectionAdapter;
@@ -15,17 +14,15 @@ public class RadixSelectionListener extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent e) {
+	public void widgetSelected(SelectionEvent se) {
 		if (gui.getMenuBar().getViewRadix10MenuItem().getSelection()) {
-			if (CyclesModEngine.getRadix() != 10) {
-				CyclesModEngine.setRadix(10);
-				gui.updateFormValues();
+			if (gui.getRadix() != 10) {
+				gui.setRadix(10);
 			}
 		}
 		else if (gui.getMenuBar().getViewRadix16MenuItem().getSelection()) {
-			if (CyclesModEngine.getRadix() != 16) {
-				CyclesModEngine.setRadix(16);
-				gui.updateFormValues();
+			if (gui.getRadix() != 16) {
+				gui.setRadix(16);
 			}
 		}
 	}
