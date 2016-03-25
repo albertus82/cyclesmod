@@ -14,16 +14,14 @@ import org.apache.commons.lang.StringUtils;
 
 public abstract class CyclesModEngine {
 
-	public static final int DEFAULT_RADIX = 10;
+	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
 
-	private int radix = DEFAULT_RADIX;
-
-	public int getRadix() {
-		return radix;
+	public NumeralSystem getNumeralSystem() {
+		return numeralSystem;
 	}
 
-	public void setRadix(int radix) {
-		this.radix = radix;
+	public void setNumeralSystem(NumeralSystem numeralSystem) {
+		this.numeralSystem = numeralSystem;
 	}
 
 	private BikesInf bikesInf;
@@ -47,7 +45,7 @@ public abstract class CyclesModEngine {
 	}
 
 	public boolean isNumeric(final String value) {
-		return isNumeric(value, radix);
+		return isNumeric(value, numeralSystem.getRadix());
 	}
 
 	protected boolean applyProperty(String key, String value, boolean lenient) {
@@ -98,7 +96,7 @@ public abstract class CyclesModEngine {
 
 	private boolean applyTorqueProperty(final String key, final String value) {
 		boolean applied = false;
-		final short newValue = Torque.parse(key, value, radix);
+		final short newValue = Torque.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key, value);
 		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Torque.class.getSimpleName()) + '.');
@@ -119,7 +117,7 @@ public abstract class CyclesModEngine {
 
 	private boolean applyGearboxProperty(final String key, final String value) {
 		boolean applied = false;
-		final int newValue = Gearbox.parse(key, value, radix);
+		final int newValue = Gearbox.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key, value);
 		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Gearbox.class.getSimpleName()) + '.');
@@ -140,7 +138,7 @@ public abstract class CyclesModEngine {
 
 	private boolean applySettingProperty(final String key, final String value) {
 		boolean applied = false;
-		final int newValue = Settings.parse(key, value, radix);
+		final int newValue = Settings.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key, value);
 		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Settings.class.getSimpleName()) + '.');

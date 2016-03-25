@@ -3,6 +3,7 @@ package it.albertus.cycles.gui;
 import it.albertus.cycles.data.BikesZip;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
+import it.albertus.cycles.engine.NumeralSystem;
 import it.albertus.cycles.gui.listener.CloseListener;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
@@ -97,8 +98,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			final Text field = tabs.getFormProperties().get(key).getText();
 
 			// Update field value & tooltip text...
-			field.setText(Integer.toString(properties.get(key), getRadix()));
-			field.setToolTipText(Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.DataKey.DEFAULT.toString())), getRadix()).toUpperCase()));
+			field.setText(Integer.toString(properties.get(key), getNumeralSystem().getRadix()));
+			field.setToolTipText(Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.DataKey.DEFAULT.toString())), getNumeralSystem().getRadix()).toUpperCase()));
 
 			// Update font style...
 			textFormatter.updateFontStyle(field);
@@ -247,9 +248,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	@Override
-	public void setRadix(final int radix) {
+	public void setNumeralSystem(final NumeralSystem numeralSystem) {
 		updateModelValues(true);
-		super.setRadix(radix);
+		super.setNumeralSystem(numeralSystem);
 		updateFormValues();
 	}
 

@@ -20,14 +20,14 @@ public class TextFormatter {
 
 	public void clean(final Text text) {
 		if (text != null && gui.isNumeric(text.getText()) && StringUtils.isNotEmpty(text.getText())) {
-			text.setText(Integer.toString(Integer.parseInt(text.getText(), gui.getRadix()), gui.getRadix()));
+			text.setText(Integer.toString(Integer.parseInt(text.getText(), gui.getNumeralSystem().getRadix()), gui.getNumeralSystem().getRadix()));
 		}
 	}
 
 	public void updateFontStyle(final Text text) {
 		if (text != null && text.getFont() != null && ArrayUtils.isNotEmpty(text.getFont().getFontData()) && text.getData(FormProperty.DataKey.DEFAULT.toString()) instanceof Integer) {
 			final Integer defaultValue = (Integer) text.getData(FormProperty.DataKey.DEFAULT.toString());
-			if (!defaultValue.equals(Integer.valueOf(text.getText(), gui.getRadix()))) {
+			if (!defaultValue.equals(Integer.valueOf(text.getText(), gui.getNumeralSystem().getRadix()))) {
 				if (text.getFont().getFontData()[0].getStyle() != SWT.BOLD) {
 					setBoldFontStyle(text);
 				}
@@ -40,7 +40,7 @@ public class TextFormatter {
 		}
 	}
 
-	public void setNormalFontStyle(Text field) {
+	public void setNormalFontStyle(final Text field) {
 		final FontData fontData = field.getFont().getFontData()[0];
 		if (!fontRegistry.hasValueFor("defaultProperty")) {
 			fontData.setStyle(SWT.NORMAL);
@@ -49,7 +49,7 @@ public class TextFormatter {
 		field.setFont(fontRegistry.get("defaultProperty"));
 	}
 
-	public void setBoldFontStyle(Text field) {
+	public void setBoldFontStyle(final Text field) {
 		final FontData fontData = field.getFont().getFontData()[0];
 		if (!fontRegistry.hasValueFor("customProperty")) {
 			fontData.setStyle(SWT.BOLD);
