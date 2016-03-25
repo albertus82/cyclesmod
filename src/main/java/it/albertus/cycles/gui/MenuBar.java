@@ -132,11 +132,18 @@ public class MenuBar {
 
 		viewRadix10MenuItem = new MenuItem(viewRadixSubMenu, SWT.RADIO);
 		viewRadix10MenuItem.setText(Resources.get("lbl.menu.item.radix.10"));
-		viewRadix10MenuItem.setSelection(true);
-		viewRadix10MenuItem.addSelectionListener(new RadixSelectionListener(gui));
 
 		viewRadix16MenuItem = new MenuItem(viewRadixSubMenu, SWT.RADIO);
 		viewRadix16MenuItem.setText(Resources.get("lbl.menu.item.radix.16"));
+		switch (gui.getRadix()) {
+		case 10:
+			viewRadix10MenuItem.setSelection(true);
+			break;
+		case 16:
+			viewRadix16MenuItem.setSelection(true);
+			break;
+		}
+		viewRadix10MenuItem.addSelectionListener(new RadixSelectionListener(gui));
 
 		// Help
 		helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
