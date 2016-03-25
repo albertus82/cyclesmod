@@ -144,7 +144,7 @@ public class MenuBar {
 			viewRadixMenuItems.put(numeralSystem, radixMenuItem);
 		}
 
-		viewRadixMenuItems.get(gui.getNumeralSystem()).setSelection(true);
+		viewRadixMenuItems.get(gui.getNumeralSystem()).setSelection(true); // Default
 
 		// Help
 		helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
