@@ -1,7 +1,6 @@
 package it.albertus.cycles.engine;
 
 public enum NumeralSystem {
-//	OCTAL(8),
 	DECIMAL(10),
 	HEXADECIMAL(16);
 
