@@ -16,7 +16,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 	}
 
 	@Override
-	public void focusLost(FocusEvent fe) {
+	public void focusLost(final FocusEvent fe) {
 		super.focusLost(fe);
 
 		// Update torque graph...
@@ -26,11 +26,10 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 			final int index = (Integer) field.getData(FormProperty.DataKey.INDEX.toString());
 			final TorqueGraph graph = (TorqueGraph) field.getData(FormProperty.DataKey.GRAPH.toString());
 
-			short value = Torque.parse(key, field.getText(), gui.getRadix());
+			final short value = Torque.parse(key, field.getText(), gui.getNumeralSystem().getRadix());
 			graph.getValues()[index] = value;
 			graph.refresh();
 		}
-		catch (ClassCastException ce) {}
 		catch (InvalidPropertyException ipe) {}
 	}
 

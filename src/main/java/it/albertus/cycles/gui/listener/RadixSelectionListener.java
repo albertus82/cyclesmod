@@ -1,9 +1,11 @@
 package it.albertus.cycles.gui.listener;
 
+import it.albertus.cycles.engine.NumeralSystem;
 import it.albertus.cycles.gui.CyclesModGui;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.MenuItem;
 
 public class RadixSelectionListener extends SelectionAdapter {
 
@@ -14,16 +16,10 @@ public class RadixSelectionListener extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent se) {
-		if (gui.getMenuBar().getViewRadix10MenuItem().getSelection()) {
-			if (gui.getRadix() != 10) {
-				gui.setRadix(10);
-			}
-		}
-		else if (gui.getMenuBar().getViewRadix16MenuItem().getSelection()) {
-			if (gui.getRadix() != 16) {
-				gui.setRadix(16);
-			}
+	public void widgetSelected(final SelectionEvent se) {
+		final MenuItem menuItem = (MenuItem) se.widget;
+		if (menuItem.getSelection() && !menuItem.getData().equals(gui.getNumeralSystem())) {
+			gui.setNumeralSystem((NumeralSystem) menuItem.getData());
 		}
 	}
 

@@ -16,14 +16,14 @@ public class PropertyVerifyListener implements VerifyListener {
 	}
 
 	@Override
-	public void verifyText(VerifyEvent ve) {
+	public void verifyText(final VerifyEvent ve) {
 		final Text text = (Text) ve.widget;
 		if (!text.getText().equals(ve.text)) {
 			if (!gui.isNumeric(ve.text) && !StringUtils.isNumeric(ve.text)) {
 				ve.doit = false;
 			}
 			else {
-				if (gui.getRadix() > 10) {
+				if (gui.getNumeralSystem().getRadix() > 10) {
 					ve.text = ve.text.toUpperCase(); // Hex letters case.
 				}
 			}
