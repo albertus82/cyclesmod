@@ -11,7 +11,7 @@ public class CyclesMod {
 	private static final String ARG_CONSOLE = "-c";
 
 	/** Unique entry point */
-	public static void main(String args[]) throws Exception {
+	public static final void main(final String args[]) throws Exception {
 		if (args.length != 0) {
 			if (args[0].trim().equalsIgnoreCase(ARG_HELP)) {
 				final Version version = Version.getInstance();
