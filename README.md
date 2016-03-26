@@ -37,7 +37,7 @@ La finestra principale dell'applicazione presenta tre schede, una per categoria 
 
 Ogni sezione presenta diverse propriet&agrave;, tutte rigorosamente numeriche e corredate da etichette descrittive sulla sinistra. Quando si modifica il valore di una propriet&agrave;, esso viene mostrato in grassetto per evidenziare che &egrave; diverso dal valore predefinito. Volendo conoscere il valore predefinito di una singola propriet&agrave;, &egrave; sufficiente portare il mouse sul relativo campo e attendere la comparsa del suggerimento.
 
-All'apertura del programma, tutte le maschere vengono precaricate con i valori predefiniti per tutte moto.
+All'apertura del programma, tutte le maschere vengono precaricate con i valori predefiniti per tutte le moto.
 
 Tramite la barra dei men&ugrave; &egrave; possibile:
 * Aprire un file `BIKES.INF` esistente.
