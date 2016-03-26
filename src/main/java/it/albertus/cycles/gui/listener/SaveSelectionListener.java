@@ -15,7 +15,7 @@ public class SaveSelectionListener extends SelectionAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		gui.save(true);
+		gui.save(false);
 	}
 
 }

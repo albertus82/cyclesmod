@@ -21,7 +21,7 @@ public class OpenSelectionListener extends AskForSavingSelectionAdapter {
 			openDialog.setFilterExtensions(new String[] { "*.INF; *.inf; *.CFG; *.cfg" });
 			final String fileName = openDialog.open();
 			if (StringUtils.isNotBlank(fileName)) {
-				gui.load(fileName, true);
+				gui.load(fileName, false);
 			}
 		}
 	}
