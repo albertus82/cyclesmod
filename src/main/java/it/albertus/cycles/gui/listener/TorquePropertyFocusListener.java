@@ -21,16 +21,18 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 
 		// Update torque graph...
 		Text field = (Text) fe.widget;
-		try {
-			final String key = (String) field.getData(FormProperty.DataKey.KEY.toString());
-			final int index = (Integer) field.getData(FormProperty.DataKey.INDEX.toString());
-			final TorqueGraph graph = (TorqueGraph) field.getData(FormProperty.DataKey.GRAPH.toString());
+		if (gui.isNumeric(field.getText())) {
+			try {
+				final String key = (String) field.getData(FormProperty.DataKey.KEY.toString());
+				final int index = (Integer) field.getData(FormProperty.DataKey.INDEX.toString());
+				final TorqueGraph graph = (TorqueGraph) field.getData(FormProperty.DataKey.GRAPH.toString());
 
-			final short value = Torque.parse(key, field.getText(), gui.getNumeralSystem().getRadix());
-			graph.getValues()[index] = value;
-			graph.refresh();
+				final short value = Torque.parse(key, field.getText(), gui.getNumeralSystem().getRadix());
+				graph.getValues()[index] = value;
+				graph.refresh();
+			}
+			catch (InvalidPropertyException ipe) {}
 		}
-		catch (InvalidPropertyException ipe) {}
 	}
 
 }
