@@ -7,7 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.MessageBox;
 
-public class AskForSavingSelectionAdapter extends SelectionAdapter {
+public abstract class AskForSavingSelectionAdapter extends SelectionAdapter {
 
 	protected final CyclesModGui gui;
 
