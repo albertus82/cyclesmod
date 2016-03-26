@@ -1,6 +1,6 @@
 package it.albertus.cycles.gui;
 
-import it.albertus.cycles.data.BikesZip;
+import it.albertus.cycles.data.DefaultBikes;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.engine.NumeralSystem;
@@ -54,7 +54,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private CyclesModGui(final Display display, final String fileName) throws IOException {
 		// Loading default properties...
-		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
+		setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
 		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
 
 		// Shell creation...
@@ -135,7 +135,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				}
 			}
 			else if (StringUtils.endsWithIgnoreCase(fileName, ".cfg")) {
-				setBikesInf(new BikesInf(new BikesZip().getInputStream()));
+				setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
 
 				final BikesCfg bikesCfg = new BikesCfg(fileName);
 				short changesCount = 0;

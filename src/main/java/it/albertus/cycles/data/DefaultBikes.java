@@ -9,7 +9,7 @@ import java.io.StreamCorruptedException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class BikesZip {
+public class DefaultBikes {
 
 	private static final char PACKAGE_SEPARATOR = '\u002E';
 	private static final char FILE_SEPARATOR = '\u002F';
@@ -22,7 +22,7 @@ public class BikesZip {
 		return inputStream;
 	}
 
-	public BikesZip() throws IOException {
+	public DefaultBikes() throws IOException {
 		this.inputStream = openBikesInfInputStream();
 	}
 
