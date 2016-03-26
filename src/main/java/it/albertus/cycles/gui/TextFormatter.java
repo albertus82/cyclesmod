@@ -1,7 +1,6 @@
 package it.albertus.cycles.gui;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -19,8 +18,13 @@ public class TextFormatter {
 	}
 
 	public void clean(final Text text) {
-		if (text != null && gui.isNumeric(text.getText()) && StringUtils.isNotEmpty(text.getText())) {
-			text.setText(Integer.toString(Integer.parseInt(text.getText(), gui.getNumeralSystem().getRadix()), gui.getNumeralSystem().getRadix()));
+		if (text != null) {
+			if (gui.isNumeric(text.getText().trim())) {
+				text.setText(Integer.toString(Integer.parseInt(text.getText().trim(), gui.getNumeralSystem().getRadix()), gui.getNumeralSystem().getRadix()));
+			}
+			else {
+				text.setText("0");
+			}
 		}
 	}
 
