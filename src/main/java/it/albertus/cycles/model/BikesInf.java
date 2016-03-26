@@ -6,6 +6,7 @@ import it.albertus.util.ByteUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,8 +29,8 @@ public class BikesInf {
 		read(bikesInfInputStream);
 	}
 
-	public BikesInf(final String fileName) throws IOException {
-		read(new BufferedInputStream(new FileInputStream(fileName)));
+	public BikesInf(final File file) throws IOException {
+		read(new BufferedInputStream(new FileInputStream(file)));
 	}
 
 	public void reset(final Bike.Type type) throws IOException {

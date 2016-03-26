@@ -11,6 +11,7 @@ import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -124,9 +125,11 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	public void load(final String fileName, final boolean successMessage) {
 		try {
 			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
-				setBikesInf(new BikesInf(fileName));
+				final File bikesInfFile = new File(fileName);
+				setBikesInf(new BikesInf(bikesInfFile));
 				updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+				shell.setText(Resources.get("win.title") + " - " + bikesInfFile.getAbsolutePath());
 				if (successMessage) {
 					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 					messageBox.setText(Resources.get("msg.completed"));
@@ -199,6 +202,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				messageBox.open();
 				return false;
 			}
+			shell.setText(Resources.get("win.title") + " - " + fileName);
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 			if (successMessage) {
 				final MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_INFORMATION);
