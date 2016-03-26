@@ -23,7 +23,7 @@ public class PropertyVerifyListener implements VerifyListener {
 				ve.doit = false;
 			}
 			else {
-				if (gui.getNumeralSystem().getRadix() > 10) {
+				if (gui.getNumeralSystem().getRadix() > 10 && gui.getNumeralSystem().getRadix() <= 36) {
 					ve.text = ve.text.toUpperCase(); // Hex letters case.
 				}
 			}
