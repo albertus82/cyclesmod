@@ -82,15 +82,15 @@ public abstract class CyclesModEngine {
 		return applied;
 	}
 
-	private boolean isTorqueProperty(String key) {
+	protected boolean isTorqueProperty(String key) {
 		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Torque.class.getSimpleName()));
 	}
 
-	private boolean isGearboxProperty(String key) {
+	protected boolean isGearboxProperty(String key) {
 		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Gearbox.class.getSimpleName()));
 	}
 
-	private boolean isSettingsProperty(String key) {
+	protected boolean isSettingsProperty(String key) {
 		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Settings.class.getSimpleName()));
 	}
 
