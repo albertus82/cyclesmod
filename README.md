@@ -39,11 +39,12 @@ Ogni sezione presenta diverse propriet&agrave;, tutte rigorosamente numeriche e 
 
 All'apertura del programma, tutte le maschere vengono precaricate con i valori predefiniti per tutte moto.
 
-Nella parte bassa della finestra sono presenti quattro pulsanti:
-* **Carica**: carica un file `BIKES.INF` esistente.
-* **Salva con nome...**: salva le impostazioni correnti in un file `BIKES.INF`.
-* **Reimposta**: ripristina le impostazioni predefinite per tutte le moto; qualsiasi personalizzazione non salvata viene cancellata.
-* **?**: Visualizza informazioni sulla versione di *CyclesMod*.
+Tramite la barra dei men&ugrave; &egrave; possibile:
+* Aprire un file `BIKES.INF` esistente.
+* Salvare le impostazioni correnti in un file `BIKES.INF`.
+* Ripristinare le impostazioni predefinite per una o per tutte le moto (qualsiasi personalizzazione non salvata viene persa).
+* Modificare il sistema numerico (decimale/esadecimale).
+* Visualizzare informazioni sulla versione di *CyclesMod*.
 
 Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente fare clic sul pulsante *Salva con nome...* e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene ricaricata ogni volta che si inizia una nuova gara, pertanto non occorre riavviare completamente il gioco.
 
@@ -91,6 +92,6 @@ Una volta eseguito, il programma verifica per prima cosa l'esistenza di un file 
 
 A seguire, il programma rileva l'esistenza del file `BIKES.CFG`, ne legge il contenuto e infine produce un nuovo file `BIKES.INF`, sovrascrivendo quello eventualmente preesistente. A questo punto &egrave; sufficiente copiare nella directory del gioco il file `BIKES.INF` generato, sovrascrivendo il file preesistente, **avendone fatto prima una copia di backup**. Avviando il gioco sar&agrave; quindi possibile sperimentare le modifiche apportate alla configurazione.
 
-Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `CFG`, modificare i parametri di interesse, salvare il file e far girare *CyclesMod*. Il programma rilever&agrave; l'esistenza del file BIKES.CFG e produrr&agrave; un nuovo BIKES.INF contenente le modifiche apportate. In caso di errori saranno mostrati opportuni messaggi in console.
+Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `CFG`, modificare i parametri di interesse, salvare il file e far girare *CyclesMod*. Il programma rilever&agrave; l'esistenza del file `BIKES.CFG` e produrr&agrave; un nuovo `BIKES.INF` contenente le modifiche apportate. In caso di errori saranno mostrati opportuni messaggi in console.
 
 **Volendo rigenerare il file `BIKES.INF` originale di *The Cycles*, &egrave; sufficiente cancellare il file `BIKES.CFG` e far girare il programma "a vuoto": esso generer&agrave; automaticamente un `BIKES.CFG` predefinito e un `BIKES.INF` analogo a quello originale.**
