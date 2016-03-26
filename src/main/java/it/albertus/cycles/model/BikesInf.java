@@ -1,6 +1,6 @@
 package it.albertus.cycles.model;
 
-import it.albertus.cycles.data.BikesZip;
+import it.albertus.cycles.data.DefaultBikes;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ByteUtils;
 
@@ -33,7 +33,7 @@ public class BikesInf {
 	}
 
 	public void reset(final Bike.Type type) throws IOException {
-		read(new BikesZip().getInputStream(), type);
+		read(new DefaultBikes().getInputStream(), type);
 	}
 
 	private void read(final InputStream inf, Bike.Type... types) throws IOException {

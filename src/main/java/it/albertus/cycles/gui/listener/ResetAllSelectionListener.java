@@ -1,6 +1,6 @@
 package it.albertus.cycles.gui.listener;
 
-import it.albertus.cycles.data.BikesZip;
+import it.albertus.cycles.data.DefaultBikes;
 import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Resources;
@@ -27,7 +27,7 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 		int choose = messageBox.open();
 		if (choose == SWT.YES) {
 			try {
-				gui.setBikesInf(new BikesInf(new BikesZip().getInputStream()));
+				gui.setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
 				gui.updateFormValues();
 			}
 			catch (Exception e) {

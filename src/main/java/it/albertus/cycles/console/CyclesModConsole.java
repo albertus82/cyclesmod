@@ -1,6 +1,6 @@
 package it.albertus.cycles.console;
 
-import it.albertus.cycles.data.BikesZip;
+import it.albertus.cycles.data.DefaultBikes;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
@@ -54,7 +54,7 @@ public class CyclesModConsole extends CyclesModEngine {
 
 	private void execute() throws IOException {
 		System.out.println(Resources.get("msg.reading.original.file", BikesInf.FILE_NAME));
-		setBikesInf(new BikesInf(new BikesZip().getInputStream()));
+		setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
 
 		System.out.println(Resources.get("msg.applying.customizations"));
 		customize();
