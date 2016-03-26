@@ -16,6 +16,8 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 
 ### Installazione
 
+**Effettuare una copia di backup della directory di *The Cycles* prima di utilizzare questo programma!**
+
 1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato ZIP adatta al proprio sistema operativo. La scelta &egrave; tra Windows, Linux e OS X (sia 32 che 64 bit);
 2. scompattare il file ZIP in una cartella a piacimento.
 
@@ -25,8 +27,6 @@ In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cycles
 
 
 ### Utilizzo
-
-**Si raccomanda di effettuare una copia di backup del gioco prima di utilizzare questo programma!**
 
 La finestra principale dell'applicazione presenta tre schede, una per categoria di moto: 125, 250 e 500 cc. Ogni scheda &egrave; suddivisa in tre sezioni:
 * **Impostazioni** generali
@@ -90,6 +90,7 @@ Gli script di avvio ([**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat), [**`
 Una volta eseguito, il programma verifica per prima cosa l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *coppia motrice* (torque). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
 
 A seguire, il programma rileva l'esistenza del file `BIKES.CFG`, ne legge il contenuto e infine produce un nuovo file `BIKES.INF`, sovrascrivendo quello eventualmente preesistente. A questo punto &egrave; sufficiente copiare nella directory del gioco il file `BIKES.INF` generato, sovrascrivendo il file preesistente, **avendone fatto prima una copia di backup**. Avviando il gioco sar&agrave; quindi possibile sperimentare le modifiche apportate alla configurazione.
->In realt&agrave; una copia compressa del file [`BIKES.INF`](/src/main/resources/it/albertus/cycles/data/bikes.zip) originale &egrave; contenuta anche nel JAR di *CyclesMod*, quindi sarebbe comunque possibile recuperarlo sia estraendolo direttamente da l&igrave;, che cancellando il file `CFG` e facendo girare nuovamente il programma "a vuoto", il quale quindi generer&agrave; automaticamente un `CFG` predefinito e un `INF` analogo a quello originale.
 
 Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `CFG`, modificare i parametri di interesse, salvare il file e far girare *CyclesMod*. Il programma rilever&agrave; l'esistenza del file BIKES.CFG e produrr&agrave; un nuovo BIKES.INF contenente le modifiche apportate. In caso di errori saranno mostrati opportuni messaggi in console.
+
+**Volendo rigenerare il file `BIKES.INF` originale di *The Cycles*, &egrave; sufficiente cancellare il file `BIKES.CFG` e far girare il programma "a vuoto": esso generer&agrave; automaticamente un `BIKES.CFG` predefinito e un `BIKES.INF` analogo a quello originale.**
