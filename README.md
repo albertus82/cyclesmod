@@ -46,11 +46,11 @@ Tramite la barra dei men&ugrave; &egrave; possibile:
 * Modificare il sistema numerico (decimale/esadecimale).
 * Visualizzare informazioni sulla versione di *CyclesMod*.
 
-Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente fare clic sul pulsante *Salva con nome...* e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene ricaricata ogni volta che si inizia una nuova gara, pertanto non occorre riavviare completamente il gioco.
+Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente utilizzare la funzione *Salva con nome...* (men&ugrave; *File*) e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene ricaricata ogni volta che si inizia una nuova gara, pertanto non occorre riavviare completamente il gioco.
 
 ###### Ripristino del `BIKES.INF` originale
 
-Nel caso in cui si volessero ripristinare le configurazioni originali di tutte le moto, &egrave; sufficiente fare clic sul pulsante *Reimposta*, che provveder&agrave; a ricaricare le impostazioni del `BIKES.INF` originale fornito insieme al gioco. Baster&agrave; quindi fare clic su *Salva con nome...* per poter sovrascrivere qualsiasi `BIKES.INF` personalizzato con la versione originale.
+Nel caso in cui si volessero ripristinare le configurazioni originali di tutte le moto, &egrave; sufficiente utilizzare la funzione *Reimposta* (men&ugrave; *Modifica*), che provveder&agrave; a ricaricare le impostazioni del `BIKES.INF` originale fornito insieme al gioco. Dopo di che, utilizzare la funzione *Salva con nome...* per poter sovrascrivere qualsiasi `BIKES.INF` personalizzato con la versione originale.
 
 
 ### Configurazione delle moto
