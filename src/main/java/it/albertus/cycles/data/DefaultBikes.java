@@ -3,22 +3,21 @@ package it.albertus.cycles.data;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Resources;
 
-import java.io.FileNotFoundException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StreamCorruptedException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
+
+import org.apache.openjpa.lib.util.Base16Encoder;
 
 public class DefaultBikes {
 
-	private static final char PACKAGE_SEPARATOR = '\u002E';
-	private static final char FILE_SEPARATOR = '\u002F';
+	private static final byte[] DEFAULT = Base16Encoder.decode("0600A82FB0367201EE02EE02EE02EE02620262021C25000000B000990085007300650059191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191919191C1C1C1C1C1C1F1F1F1F1F1F1F21232324242424242424242424242424212121212121212121190F05000000000000000000000600A82FB0367201EE02EE02EE02EE02760276021C25000000A00088007300610056004E252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252525252A2A2A2A2A2A2A2A2D2F2F2F2F2F3234373737373737373737373732323232323232322F2D28231C140F0A050000000000000006003831B03672010C030C03EE02EE028A028A02222400000092007C00690059004E00442F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F2F414141414141414141414141414B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B4B505050505050504B4B4B4B4B4B4B4B4B4B4B4641372D23140A050000000000");
 
-	public static final String FILE_NAME = "bikes.zip";
+	private final ByteArrayInputStream inputStream;
 
-	private final ZipInputStream inputStream;
-
-	public ZipInputStream getInputStream() {
+	public ByteArrayInputStream getInputStream() {
 		return inputStream;
 	}
 
@@ -26,24 +25,16 @@ public class DefaultBikes {
 		this.inputStream = openBikesInfInputStream();
 	}
 
-	private ZipInputStream openBikesInfInputStream() throws IOException {
-		System.out.println(Resources.get("msg.opening.original.file", BikesInf.FILE_NAME));
-		ZipInputStream zis = null;
-		try {
-			zis = new ZipInputStream(getClass().getResourceAsStream(FILE_NAME));
+	public ByteArrayInputStream openBikesInfInputStream() throws IOException {
+		final Checksum crc = new CRC32();
+		crc.update(DEFAULT, 0, DEFAULT.length);
+		if (crc.getValue() != BikesInf.FILE_CRC) {
+			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", BikesInf.FILE_CRC), String.format("%08X", crc.getValue())));
 		}
-		catch (Exception e) {
-			throw new FileNotFoundException(Resources.get("msg.file.not.found", FILE_SEPARATOR + getClass().getPackage().getName().replace(PACKAGE_SEPARATOR, FILE_SEPARATOR) + FILE_SEPARATOR + FILE_NAME));
+		if (DEFAULT.length != BikesInf.FILE_SIZE) {
+			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));
 		}
-		ZipEntry ze = zis.getNextEntry();
-		if (ze.getCrc() != BikesInf.FILE_CRC) {
-			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", BikesInf.FILE_CRC), String.format("%08X", ze.getCrc())));
-		}
-		if (ze.getSize() != BikesInf.FILE_SIZE) {
-			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, ze.getSize()));
-		}
-		System.out.println(Resources.get("msg.original.file.opened", BikesInf.FILE_NAME, String.format("%08X", ze.getCrc())));
-		return zis;
+		return new ByteArrayInputStream(DEFAULT);
 	}
 
 }
