@@ -129,7 +129,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				setBikesInf(new BikesInf(bikesInfFile));
 				updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-				shell.setText(Resources.get("win.title") + " - " + bikesInfFile.getAbsolutePath());
+				shell.setText(Resources.get("win.title") + " - " + bikesInfFile.getCanonicalPath());
 				if (successMessage) {
 					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
 					messageBox.setText(Resources.get("msg.completed"));
