@@ -48,10 +48,10 @@ public abstract class CyclesModEngine {
 		return isNumeric(value, numeralSystem.getRadix());
 	}
 
-	protected boolean applyProperty(String key, String value, boolean lenient) {
+	protected boolean applyProperty(final String key, final String value, final boolean lenient) {
 		boolean applied = false;
 		try {
-			if (StringUtils.isBlank(value) || !isNumeric(value)) {
+			if (value == null || value.trim().length() == 0 || !isNumeric(value.trim())) {
 				throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
 			}
 
