@@ -77,9 +77,7 @@ public class Tabs {
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				final int maxFieldSize = Integer.toString(Settings.MAX_VALUE).length();
-				setSampleNumber(text, maxFieldSize);
-				text.setTextLimit(maxFieldSize);
+				setSampleNumber(text, Integer.toString(Settings.MAX_VALUE).length());
 				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
 				text.setData(FormProperty.DataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
@@ -107,9 +105,7 @@ public class Tabs {
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				final int maxFieldSize = Integer.toString(Gearbox.MAX_VALUE).length();
-				setSampleNumber(text, maxFieldSize);
-				text.setTextLimit(maxFieldSize);
+				setSampleNumber(text, Integer.toString(Gearbox.MAX_VALUE).length());
 				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
 				text.setData(FormProperty.DataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
@@ -132,9 +128,7 @@ public class Tabs {
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				final int maxFieldSize = Short.toString(Torque.MAX_VALUE).length();
-				setSampleNumber(text, maxFieldSize);
-				text.setTextLimit(maxFieldSize);
+				setSampleNumber(text, Short.toString(Torque.MAX_VALUE).length());
 				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
 				text.setData(FormProperty.DataKey.KEY.toString(), key);
 				text.setData(FormProperty.DataKey.GRAPH.toString(), graph);

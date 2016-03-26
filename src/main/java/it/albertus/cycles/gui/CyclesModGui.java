@@ -8,6 +8,9 @@ import it.albertus.cycles.gui.listener.CloseListener;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
+import it.albertus.cycles.model.Gearbox;
+import it.albertus.cycles.model.Settings;
+import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
 
@@ -98,8 +101,21 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			final Text field = tabs.getFormProperties().get(key).getText();
 
-			// Update field value & tooltip text...
+			// Update field max length...
+			if (isSettingsProperty(key)) {
+				field.setTextLimit(Integer.toString(Settings.MAX_VALUE, getNumeralSystem().getRadix()).length());
+			}
+			else if (isGearboxProperty(key)) {
+				field.setTextLimit(Integer.toString(Gearbox.MAX_VALUE, getNumeralSystem().getRadix()).length());
+			}
+			else if (isTorqueProperty(key)) {
+				field.setTextLimit(Integer.toString(Torque.MAX_VALUE, getNumeralSystem().getRadix()).length());
+			}
+
+			// Update field value...
 			field.setText(Integer.toString(properties.get(key), getNumeralSystem().getRadix()));
+
+			// Update tooltip text...
 			field.setToolTipText(Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.DataKey.DEFAULT.toString())), getNumeralSystem().getRadix()).toUpperCase()));
 
 			// Update font style...
