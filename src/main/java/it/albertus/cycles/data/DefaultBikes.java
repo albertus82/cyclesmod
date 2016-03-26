@@ -4,7 +4,6 @@ import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Resources;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.StreamCorruptedException;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
@@ -39,17 +38,7 @@ public class DefaultBikes {
 			0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x50, 0x4B, 0x4B, 0x4B, 0x4B, 0x4B, 0x4B, 0x4B, 0x4B, 0x4B, 0x4B, 0x4B,
 			0x46, 0x41, 0x37, 0x2D, 0x23, 0x14, 0x0A, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
-	private final ByteArrayInputStream inputStream;
-
-	public DefaultBikes() throws IOException {
-		this.inputStream = openBikesInfInputStream();
-	}
-
-	public ByteArrayInputStream getInputStream() {
-		return inputStream;
-	}
-
-	public ByteArrayInputStream openBikesInfInputStream() throws IOException {
+	public DefaultBikes() throws StreamCorruptedException {
 		final Checksum crc = new CRC32();
 		crc.update(DEFAULT, 0, DEFAULT.length);
 		if (crc.getValue() != BikesInf.FILE_CRC) {
@@ -58,6 +47,9 @@ public class DefaultBikes {
 		if (DEFAULT.length != BikesInf.FILE_SIZE) {
 			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));
 		}
+	}
+
+	public ByteArrayInputStream getInputStream() {
 		return new ByteArrayInputStream(DEFAULT);
 	}
 
