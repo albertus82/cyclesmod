@@ -5,7 +5,7 @@ CyclesMod
 
 **CyclesMod** &egrave; un *mod* per la versione DOS di questo gioco, che consente di **modificare le configurazioni delle moto**, di norma non accessibili all'utente.
 
-![cyclesmod_221](https://cloud.githubusercontent.com/assets/8672431/13903500/3bac8840-ee7e-11e5-97fe-eeda1c7bb896.png)
+![cyclesmod_230](https://cloud.githubusercontent.com/assets/8672431/14059544/ddb86634-f344-11e5-964f-9b34a8fef66e.png)
 
 Il gioco permette di scegliere tre diverse moto: 125, 250 o 500 cc. I parametri di funzionamento delle moto sono contenuti nel file binario **`BIKES.INF`** che &egrave; uno dei file del gioco stesso. **CyclesMod** carica e interpreta questo file, e mette a disposizione del giocatore un'interfaccia grafica con quale pu&ograve; esaminare e modificare la configurazione delle tre moto. Al salvataggio del file, il programma genera un nuovo `BIKES.INF` utilizzabile da *The Cycles*, contenente la configurazione modificata.
 
