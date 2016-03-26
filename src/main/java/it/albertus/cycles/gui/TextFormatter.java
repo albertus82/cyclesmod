@@ -25,7 +25,7 @@ public class TextFormatter {
 	}
 
 	public void updateFontStyle(final Text text) {
-		if (text != null && text.getFont() != null && ArrayUtils.isNotEmpty(text.getFont().getFontData()) && text.getData(FormProperty.DataKey.DEFAULT.toString()) instanceof Integer) {
+		if (text != null && gui.isNumeric(text.getText()) && text.getFont() != null && ArrayUtils.isNotEmpty(text.getFont().getFontData()) && text.getData(FormProperty.DataKey.DEFAULT.toString()) instanceof Integer) {
 			final Integer defaultValue = (Integer) text.getData(FormProperty.DataKey.DEFAULT.toString());
 			if (!defaultValue.equals(Integer.valueOf(text.getText(), gui.getNumeralSystem().getRadix()))) {
 				if (text.getFont().getFontData()[0].getStyle() != SWT.BOLD) {
