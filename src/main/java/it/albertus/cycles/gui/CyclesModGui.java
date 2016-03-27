@@ -95,6 +95,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 
 		// Update screen values...
+		shell.setRedraw(false);
 		for (final String key : tabs.getFormProperties().keySet()) {
 			if (!properties.containsKey(key)) {
 				throw new RuntimeException(Resources.get("err.property.missing", key));
@@ -102,21 +103,34 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			final Text field = tabs.getFormProperties().get(key).getText();
 
 			// Update field max length...
+			final int textLimit;
 			if (isSettingsProperty(key)) {
-				field.setTextLimit(Integer.toString(Settings.MAX_VALUE, getNumeralSystem().getRadix()).length());
+				textLimit = Integer.toString(Settings.MAX_VALUE, getNumeralSystem().getRadix()).length();
 			}
 			else if (isGearboxProperty(key)) {
-				field.setTextLimit(Integer.toString(Gearbox.MAX_VALUE, getNumeralSystem().getRadix()).length());
+				textLimit = Integer.toString(Gearbox.MAX_VALUE, getNumeralSystem().getRadix()).length();
 			}
 			else if (isTorqueProperty(key)) {
-				field.setTextLimit(Integer.toString(Torque.MAX_VALUE, getNumeralSystem().getRadix()).length());
+				textLimit = Integer.toString(Torque.MAX_VALUE, getNumeralSystem().getRadix()).length();
+			}
+			else {
+				throw new IllegalStateException(Resources.get("err.unsupported.property", key, tabs.getFormProperties().get(key).getValue()));
+			}
+			if (field.getTextLimit() != textLimit) {
+				field.setTextLimit(textLimit);
 			}
 
 			// Update field value...
-			field.setText(Integer.toString(properties.get(key), getNumeralSystem().getRadix()));
+			final String text = Integer.toString(properties.get(key), getNumeralSystem().getRadix());
+			if (!field.getText().equals(text)) {
+				field.setText(text);
+			}
 
 			// Update tooltip text...
-			field.setToolTipText(Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.DataKey.DEFAULT.toString())), getNumeralSystem().getRadix()).toUpperCase()));
+			final String toolTipText = Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.DataKey.DEFAULT.toString())), getNumeralSystem().getRadix()).toUpperCase());
+			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
+				field.setToolTipText(toolTipText);
+			}
 
 			// Update font style...
 			textFormatter.updateFontStyle(field);
@@ -130,6 +144,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			graph.refresh();
 		}
+		shell.setRedraw(true);
 	}
 
 	public void updateModelValues(boolean lenient) {
