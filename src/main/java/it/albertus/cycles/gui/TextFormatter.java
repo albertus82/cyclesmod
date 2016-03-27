@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class TextFormatter {
 
+	private static final char SAMPLE_CHAR = '9';
+
 	private final CyclesModGui gui;
 	private final FontRegistry fontRegistry;
 
@@ -42,6 +44,16 @@ public class TextFormatter {
 				}
 			}
 		}
+	}
+
+	/** Consente la determinazione automatica della larghezza del campo. */
+	public void setSampleNumber(final Text text, final int size) {
+		final char[] sample = new char[size];
+		for (int i = 0; i < size; i++) {
+			sample[i] = SAMPLE_CHAR;
+		}
+		text.setText(String.valueOf(sample));
+		setBoldFontStyle(text);
 	}
 
 	public void setNormalFontStyle(final Text field) {

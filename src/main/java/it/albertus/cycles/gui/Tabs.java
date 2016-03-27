@@ -32,9 +32,6 @@ import org.eclipse.swt.widgets.Text;
 
 public class Tabs {
 
-	private static final char SAMPLE_CHAR = '9';
-
-	private final CyclesModGui gui;
 	private final TabFolder tabFolder;
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
@@ -49,7 +46,6 @@ public class Tabs {
 	private final TorquePropertyFocusListener torquePropertyFocusListener;
 
 	public Tabs(final CyclesModGui gui) {
-		this.gui = gui;
 		propertyVerifyListener = new PropertyVerifyListener(gui);
 		propertyFocusListener = new PropertyFocusListener(gui);
 		torquePropertyFocusListener = new TorquePropertyFocusListener(gui);
@@ -85,7 +81,7 @@ public class Tabs {
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				setSampleNumber(text, Integer.toString(Settings.MAX_VALUE).length());
+				gui.getTextFormatter().setSampleNumber(text, Integer.toString(Settings.MAX_VALUE).length());
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
@@ -114,7 +110,7 @@ public class Tabs {
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				setSampleNumber(text, Integer.toString(Gearbox.MAX_VALUE).length());
+				gui.getTextFormatter().setSampleNumber(text, Integer.toString(Gearbox.MAX_VALUE).length());
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
@@ -138,7 +134,7 @@ public class Tabs {
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				setSampleNumber(text, Short.toString(Torque.MAX_VALUE).length());
+				gui.getTextFormatter().setSampleNumber(text, Short.toString(Torque.MAX_VALUE).length());
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
 				text.setData(TextDataKey.GRAPH.toString(), graph);
@@ -168,16 +164,6 @@ public class Tabs {
 		for (final TorqueGraph torqueGraph : torqueGraphs.values()) {
 			torqueGraph.updateTexts();
 		}
-	}
-
-	/** Consente la determinazione automatica della larghezza del campo. */
-	private void setSampleNumber(final Text text, final int size) {
-		final char[] sample = new char[size];
-		for (int i = 0; i < size; i++) {
-			sample[i] = SAMPLE_CHAR;
-		}
-		text.setText(String.valueOf(sample));
-		gui.getTextFormatter().setBoldFontStyle(text);
 	}
 
 	public TabFolder getTabFolder() {
