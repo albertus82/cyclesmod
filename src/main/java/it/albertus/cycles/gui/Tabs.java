@@ -186,14 +186,14 @@ public class Tabs {
 		}
 
 		// Update form fields...
-		gui.updateModelValues(true);
+		gui.updateModelValues(true); // Backup (TODO)
 		for (final FormProperty formProperty : formProperties.values()) {
 			formProperty.getLabel().setText(Resources.get((String) formProperty.getLabel().getData(LabelDataKey.KEY.toString()), formProperty.getLabel().getData(LabelDataKey.ARGUMENT.toString())));
 			formProperty.getText().setVisible(false);
 			gui.getTextFormatter().setSampleNumber(formProperty.getText());
 		}
-		tabFolder.layout(true, true);
-		gui.updateFormValues();
+		gui.getShell().layout(true, true);
+		gui.updateFormValues(); // Restore (TODO)
 		for (final FormProperty formProperty : formProperties.values()) {
 			formProperty.getText().setVisible(true);
 		}
@@ -221,10 +221,6 @@ public class Tabs {
 
 	public Map<BikeType, Group> getTorqueGroups() {
 		return Collections.unmodifiableMap(torqueGroups);
-	}
-
-	public TorquePropertyFocusListener getTorquePropertyFocusListener() {
-		return torquePropertyFocusListener;
 	}
 
 }
