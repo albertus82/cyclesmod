@@ -1,7 +1,7 @@
 package it.albertus.cycles.gui.listener;
 
 import it.albertus.cycles.gui.CyclesModGui;
-import it.albertus.cycles.model.Bike;
+import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
 
@@ -20,7 +20,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		final Bike.Type type = Bike.Type.values()[gui.getTabs().getTabFolder().getSelectionIndex()];
+		final BikeType type = BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()];
 		MessageBox messageBox = new MessageBox(gui.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText(Resources.get("msg.warning"));
 		messageBox.setMessage(Resources.get("msg.reset.overwrite.single", type.getDisplacement()));

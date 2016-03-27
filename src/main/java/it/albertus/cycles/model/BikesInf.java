@@ -1,6 +1,7 @@
 package it.albertus.cycles.model;
 
 import it.albertus.cycles.data.DefaultBikes;
+import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ByteUtils;
 
@@ -33,11 +34,11 @@ public class BikesInf {
 		read(new BufferedInputStream(new FileInputStream(file)));
 	}
 
-	public void reset(final Bike.Type type) throws IOException {
+	public void reset(final BikeType type) throws IOException {
 		read(new DefaultBikes().getInputStream(), type);
 	}
 
-	private void read(final InputStream inf, Bike.Type... types) throws IOException {
+	private void read(final InputStream inf, BikeType... types) throws IOException {
 		byte[] inf125 = new byte[Bike.LENGTH];
 		byte[] inf250 = new byte[Bike.LENGTH];
 		byte[] inf500 = new byte[Bike.LENGTH];
@@ -51,9 +52,9 @@ public class BikesInf {
 
 		if (types == null || types.length == 0) {
 			/* Full reading */
-			bikes[0] = new Bike(Bike.Type.CLASS_125, inf125);
-			bikes[1] = new Bike(Bike.Type.CLASS_250, inf250);
-			bikes[2] = new Bike(Bike.Type.CLASS_500, inf500);
+			bikes[0] = new Bike(BikeType.CLASS_125, inf125);
+			bikes[1] = new Bike(BikeType.CLASS_250, inf250);
+			bikes[2] = new Bike(BikeType.CLASS_500, inf500);
 		}
 		else {
 			/* Replace only selected bikes */
@@ -61,7 +62,7 @@ public class BikesInf {
 			infs[0] = inf125;
 			infs[1] = inf250;
 			infs[2] = inf500;
-			for (final Bike.Type type : types) {
+			for (final BikeType type : types) {
 				bikes[type.ordinal()] = new Bike(type, infs[type.ordinal()]);
 			}
 		}
