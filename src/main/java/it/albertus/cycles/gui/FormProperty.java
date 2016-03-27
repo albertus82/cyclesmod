@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class FormProperty {
 
-	public enum DataKey {
+	public enum TextDataKey {
 		DEFAULT(Integer.class),
 		KEY(String.class),
 		GRAPH(TorqueGraph.class),
@@ -14,7 +14,7 @@ public class FormProperty {
 
 		private final Class<?> type;
 
-		private DataKey(final Class<?> type) {
+		private TextDataKey(final Class<?> type) {
 			this.type = type;
 		}
 

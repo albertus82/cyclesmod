@@ -1,6 +1,7 @@
 package it.albertus.cycles.gui.listener;
 
 import it.albertus.cycles.gui.CyclesModGui;
+import it.albertus.cycles.resources.Resources;
 import it.albertus.cycles.resources.Resources.Language;
 
 import org.eclipse.swt.events.SelectionAdapter;
@@ -18,7 +19,9 @@ public class LanguageSelectionListener extends SelectionAdapter {
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 		final MenuItem languageMenuItem = (MenuItem) e.widget;
-		gui.updateLanguage((Language) languageMenuItem.getData());
+		if (languageMenuItem.getSelection() && !Resources.getLanguage().equals(languageMenuItem.getData())) {
+			gui.updateLanguage((Language) languageMenuItem.getData());
+		}
 	}
 
 }
