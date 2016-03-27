@@ -1,5 +1,7 @@
 package it.albertus.cycles.gui.listener;
 
+import java.io.IOException;
+
 import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Resources;
@@ -19,7 +21,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent event) {
+	public void widgetSelected(final SelectionEvent se) {
 		final BikeType type = BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()];
 		MessageBox messageBox = new MessageBox(gui.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText(Resources.get("msg.warning"));
@@ -27,9 +29,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 		int choose = messageBox.open();
 		if (choose == SWT.YES) {
 			try {
-				gui.updateModelValues(true);
-				gui.getBikesInf().reset(type);
-				gui.updateFormValues();
+				reset(type);
 			}
 			catch (Exception e) {
 				System.err.println(ExceptionUtils.getLogMessage(e));
@@ -39,6 +39,12 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 				messageBox.open();
 			}
 		}
+	}
+
+	private void reset(final BikeType type) throws IOException {
+		gui.updateModelValues(true);
+		gui.getBikesInf().reset(type);
+		gui.updateFormValues();
 	}
 
 }

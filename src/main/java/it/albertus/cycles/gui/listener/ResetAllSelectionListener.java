@@ -6,6 +6,8 @@ import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.ExceptionUtils;
 
+import java.io.IOException;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,15 +22,14 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 	}
 
 	@Override
-	public void widgetSelected(SelectionEvent event) {
+	public void widgetSelected(final SelectionEvent se) {
 		MessageBox messageBox = new MessageBox(gui.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText(Resources.get("msg.warning"));
 		messageBox.setMessage(Resources.get("msg.reset.overwrite.all"));
 		int choose = messageBox.open();
 		if (choose == SWT.YES) {
 			try {
-				gui.setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
-				gui.updateFormValues();
+				reset();
 			}
 			catch (Exception e) {
 				System.err.println(ExceptionUtils.getLogMessage(e));
@@ -38,6 +39,11 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 				messageBox.open();
 			}
 		}
+	}
+
+	private void reset() throws IOException {
+		gui.setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
+		gui.updateFormValues();
 	}
 
 }

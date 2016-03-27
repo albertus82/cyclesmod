@@ -87,7 +87,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
-	public void updateLanguage(final Language language) {
+	public void setLanguage(final Language language) {
 		Resources.setLanguage(language);
 		menuBar.updateTexts();
 		tabs.updateTexts();
@@ -102,6 +102,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 
 		// Update screen values...
+		tabs.disableTextListeners();
 		for (final String key : tabs.getFormProperties().keySet()) {
 			if (!properties.containsKey(key)) {
 				throw new RuntimeException(Resources.get("err.property.missing", key));
@@ -127,7 +128,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 
 			// Update field value...
-			final String text = Integer.toString(properties.get(key), getNumeralSystem().getRadix());
+			final String text = Integer.toString(properties.get(key), getNumeralSystem().getRadix()).toUpperCase();
 			if (!field.getText().equals(text)) {
 				field.setText(text);
 			}
@@ -141,6 +142,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			// Update font style...
 			textFormatter.updateFontStyle(field);
 		}
+		tabs.enableTextListeners();
 
 		// Update torque graphs...
 		for (final Bike bike : getBikesInf().getBikes()) {
