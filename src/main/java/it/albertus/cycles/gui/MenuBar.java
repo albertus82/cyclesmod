@@ -6,6 +6,7 @@ import it.albertus.cycles.gui.listener.CloseListener;
 import it.albertus.cycles.gui.listener.CopySelectionListener;
 import it.albertus.cycles.gui.listener.CutSelectionListener;
 import it.albertus.cycles.gui.listener.EditMenuBarArmListener;
+import it.albertus.cycles.gui.listener.LanguageSelectionListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
 import it.albertus.cycles.gui.listener.PasteSelectionListener;
 import it.albertus.cycles.gui.listener.RadixSelectionListener;
@@ -13,6 +14,7 @@ import it.albertus.cycles.gui.listener.ResetAllSelectionListener;
 import it.albertus.cycles.gui.listener.ResetSingleSelectionListener;
 import it.albertus.cycles.gui.listener.SaveSelectionListener;
 import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Resources.Language;
 
 import java.util.Collections;
 import java.util.EnumMap;
@@ -54,6 +56,9 @@ public class MenuBar {
 	private final Menu viewRadixSubMenu;
 	private final MenuItem viewRadixSubMenuItem;
 	private final Map<NumeralSystem, MenuItem> viewRadixMenuItems = new EnumMap<NumeralSystem, MenuItem>(NumeralSystem.class);
+	private final Menu viewLanguageSubMenu;
+	private final MenuItem viewLanguageSubMenuItem;
+	private final Map<Language, MenuItem> viewLanguageMenuItems = new EnumMap<Language, MenuItem>(Language.class);
 
 	private final Menu helpMenu;
 	private final MenuItem helpMenuHeader;
@@ -132,6 +137,24 @@ public class MenuBar {
 
 		viewRadixMenuItems.get(gui.getNumeralSystem()).setSelection(true); // Default
 
+		new MenuItem(viewMenu, SWT.SEPARATOR);
+
+		viewLanguageSubMenuItem = new MenuItem(viewMenu, SWT.CASCADE);
+
+		viewLanguageSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		viewLanguageSubMenuItem.setMenu(viewLanguageSubMenu);
+
+		final LanguageSelectionListener languageSelectionListener = new LanguageSelectionListener(gui);
+
+		for (final Language language : Language.values()) {
+			final MenuItem languageMenuItem = new MenuItem(viewLanguageSubMenu, SWT.RADIO);
+			languageMenuItem.setData(language);
+			languageMenuItem.addSelectionListener(languageSelectionListener);
+			viewLanguageMenuItems.put(language, languageMenuItem);
+		}
+
+		viewLanguageMenuItems.get(Resources.getLanguage()).setSelection(true); // Default
+
 		// Help
 		helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		helpMenuHeader = new MenuItem(bar, SWT.CASCADE);
@@ -161,6 +184,10 @@ public class MenuBar {
 		viewRadixSubMenuItem.setText(Resources.get("lbl.menu.item.radix"));
 		for (final NumeralSystem numeralSystem : viewRadixMenuItems.keySet()) {
 			viewRadixMenuItems.get(numeralSystem).setText(Resources.get("lbl.menu.item.radix." + numeralSystem.getRadix()));
+		}
+		viewLanguageSubMenuItem.setText(Resources.get("lbl.menu.item.language"));
+		for (final Language language : viewLanguageMenuItems.keySet()) {
+			viewLanguageMenuItems.get(language).setText(language.getLocale().getDisplayLanguage(language.getLocale()));
 		}
 		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
 		helpAboutMenuItem.setText(Resources.get("lbl.menu.item.about"));
@@ -244,6 +271,18 @@ public class MenuBar {
 
 	public Map<NumeralSystem, MenuItem> getViewRadixMenuItems() {
 		return Collections.unmodifiableMap(viewRadixMenuItems);
+	}
+
+	public Menu getViewLanguageSubMenu() {
+		return viewLanguageSubMenu;
+	}
+
+	public MenuItem getViewLanguageSubMenuItem() {
+		return viewLanguageSubMenuItem;
+	}
+
+	public Map<Language, MenuItem> getViewLanguageMenuItems() {
+		return Collections.unmodifiableMap(viewLanguageMenuItems);
 	}
 
 	public Menu getHelpMenu() {
