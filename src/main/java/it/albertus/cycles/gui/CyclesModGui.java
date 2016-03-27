@@ -89,8 +89,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	public void updateLanguage(final Language language) {
 		Resources.setLanguage(language);
-		menuBar.setTexts();
-		tabs.setTexts();
+		menuBar.updateTexts();
+		tabs.updateTexts();
 	}
 
 	public void updateFormValues() {
