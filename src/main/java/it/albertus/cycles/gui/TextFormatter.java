@@ -1,5 +1,7 @@
 package it.albertus.cycles.gui;
 
+import it.albertus.cycles.gui.FormProperty.TextDataKey;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
@@ -47,13 +49,16 @@ public class TextFormatter {
 	}
 
 	/** Consente la determinazione automatica della larghezza del campo. */
-	public void setSampleNumber(final Text text, final int size) {
-		final char[] sample = new char[size];
-		for (int i = 0; i < size; i++) {
-			sample[i] = SAMPLE_CHAR;
+	public void setSampleNumber(final Text text) {
+		if (text != null && text.getData(TextDataKey.SIZE.toString()) instanceof Integer) {
+			final int size = (Integer) text.getData(TextDataKey.SIZE.toString());
+			final char[] sample = new char[size];
+			for (int i = 0; i < size; i++) {
+				sample[i] = SAMPLE_CHAR;
+			}
+			text.setText(String.valueOf(sample));
+			setBoldFontStyle(text);
 		}
-		text.setText(String.valueOf(sample));
-		setBoldFontStyle(text);
 	}
 
 	public void setNormalFontStyle(final Text field) {
