@@ -26,9 +26,12 @@ import org.eclipse.swt.widgets.Display;
 public class TorqueGraph extends Canvas {
 
 	private static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
-
 	private final Trace trace;
 	private final double[] values;
+
+	private final XYGraph xyGraph;
+	private final Axis abscissae;
+	private final Axis ordinates;
 
 	public Trace getTrace() {
 		return trace;
@@ -53,8 +56,7 @@ public class TorqueGraph extends Canvas {
 
 		final LightweightSystem lws = new LightweightSystem(this);
 
-		final XYGraph xyGraph = new XYGraph();
-		xyGraph.setTitle(Resources.get("lbl.graph.title"));
+		xyGraph = new XYGraph();
 		lws.setContents(xyGraph);
 
 		final double[] x = new double[Torque.LENGTH], y = new double[Torque.LENGTH];
@@ -75,15 +77,13 @@ public class TorqueGraph extends Canvas {
 		}
 		final Font axisTitleFont = fontRegistry.get("axisTitle");
 
-		final Axis abscissae = xyGraph.primaryXAxis;
+		abscissae = xyGraph.primaryXAxis;
 		abscissae.setAutoScale(true);
-		abscissae.setTitle(Resources.get("lbl.graph.axis.x"));
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
-		final Axis ordinates = xyGraph.primaryYAxis;
+		ordinates = xyGraph.primaryYAxis;
 		ordinates.setAutoScale(true);
-		ordinates.setTitle(Resources.get("lbl.graph.axis.y"));
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 
@@ -123,6 +123,26 @@ public class TorqueGraph extends Canvas {
 
 		this.trace = trace;
 		this.values = y;
+
+		setTexts();
+	}
+
+	public void setTexts() {
+		xyGraph.setTitle(Resources.get("lbl.graph.title"));
+		abscissae.setTitle(Resources.get("lbl.graph.axis.x"));
+		ordinates.setTitle(Resources.get("lbl.graph.axis.y"));
+	}
+
+	public XYGraph getXyGraph() {
+		return xyGraph;
+	}
+
+	public Axis getAbscissae() {
+		return abscissae;
+	}
+
+	public Axis getOrdinates() {
+		return ordinates;
 	}
 
 }
