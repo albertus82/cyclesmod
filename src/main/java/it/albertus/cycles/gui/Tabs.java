@@ -1,5 +1,7 @@
 package it.albertus.cycles.gui;
 
+import it.albertus.cycles.gui.FormProperty.LabelDataKey;
+import it.albertus.cycles.gui.FormProperty.TextDataKey;
 import it.albertus.cycles.gui.listener.PropertyFocusListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
 import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
@@ -79,13 +81,13 @@ public class Tabs {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
-				label.setText(Resources.get("lbl." + setting.toString()));
+				label.setData(LabelDataKey.KEY.toString(), "lbl." + setting.toString());
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				setSampleNumber(text, Integer.toString(Settings.MAX_VALUE).length());
-				text.setData(FormProperty.TextDataKey.DEFAULT.toString(), defaultValue);
-				text.setData(FormProperty.TextDataKey.KEY.toString(), key);
+				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
+				text.setData(TextDataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -107,13 +109,14 @@ public class Tabs {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(gearboxGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
-				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
+				label.setData(LabelDataKey.KEY.toString(), "lbl.gear");
+				label.setData(LabelDataKey.ARGUMENT.toString(), index != 0 ? String.valueOf(index) : "N");
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				setSampleNumber(text, Integer.toString(Gearbox.MAX_VALUE).length());
-				text.setData(FormProperty.TextDataKey.DEFAULT.toString(), defaultValue);
-				text.setData(FormProperty.TextDataKey.KEY.toString(), key);
+				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
+				text.setData(TextDataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -130,15 +133,16 @@ public class Tabs {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(torqueGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
-				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
+				label.setData(LabelDataKey.KEY.toString(), "lbl.rpm");
+				label.setData(LabelDataKey.ARGUMENT.toString(), String.valueOf(Torque.getRpm(index)));
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				setSampleNumber(text, Short.toString(Torque.MAX_VALUE).length());
-				text.setData(FormProperty.TextDataKey.DEFAULT.toString(), defaultValue);
-				text.setData(FormProperty.TextDataKey.KEY.toString(), key);
-				text.setData(FormProperty.TextDataKey.GRAPH.toString(), graph);
-				text.setData(FormProperty.TextDataKey.INDEX.toString(), index);
+				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
+				text.setData(TextDataKey.KEY.toString(), key);
+				text.setData(TextDataKey.GRAPH.toString(), graph);
+				text.setData(TextDataKey.INDEX.toString(), index);
 				text.addFocusListener(torquePropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -166,6 +170,9 @@ public class Tabs {
 		for (final TorqueGraph torqueGraph : torqueGraphs.values()) {
 			torqueGraph.setTexts();
 		}
+		for (final FormProperty formProperty : formProperties.values()) {
+			formProperty.getLabel().setText(Resources.get((String) formProperty.getLabel().getData(LabelDataKey.KEY.toString()), formProperty.getLabel().getData(LabelDataKey.ARGUMENT.toString())));
+		}
 	}
 
 	/** Consente la determinazione automatica della larghezza del campo. */
@@ -183,7 +190,7 @@ public class Tabs {
 	}
 
 	public Map<String, FormProperty> getFormProperties() {
-		return formProperties;
+		return Collections.unmodifiableMap(formProperties);
 	}
 
 	public Map<BikeType, TorqueGraph> getTorqueGraphs() {

@@ -6,6 +6,21 @@ import org.eclipse.swt.widgets.Text;
 
 public class FormProperty {
 
+	public enum LabelDataKey {
+		KEY(String.class),
+		ARGUMENT(String.class);
+
+		private final Class<?> type;
+
+		private LabelDataKey(final Class<?> type) {
+			this.type = type;
+		}
+
+		public Class<?> getType() {
+			return type;
+		}
+	}
+
 	public enum TextDataKey {
 		DEFAULT(Integer.class),
 		KEY(String.class),
