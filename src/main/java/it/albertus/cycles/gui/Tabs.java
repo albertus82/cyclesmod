@@ -69,6 +69,7 @@ public class Tabs {
 
 			// Settings
 			final Group settingsGroup = new Group(tabComposite, SWT.NULL);
+			settingsGroup.setText(Resources.get("lbl.settings"));
 			// Posizionamento dell'elemento all'interno del contenitore...
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(settingsGroup);
 			// Definizione di come saranno disposti gli elementi contenuti...
@@ -99,6 +100,7 @@ public class Tabs {
 
 			// Gearbox
 			final Group gearboxGroup = new Group(tabComposite, SWT.NULL);
+			gearboxGroup.setText(Resources.get("lbl.gearbox"));
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(gearboxGroup);
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
 			gearboxGroups.put(bike.getType(), gearboxGroup);
@@ -122,6 +124,7 @@ public class Tabs {
 
 			// Torque
 			final Group torqueGroup = new Group(tabComposite, SWT.NULL);
+			torqueGroup.setText(Resources.get("lbl.torque"));
 			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(torqueGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(torqueGroup);
 			torqueGroups.put(bike.getType(), torqueGroup);
@@ -149,12 +152,10 @@ public class Tabs {
 			tabScrolledComposite.setExpandHorizontal(true);
 			tabScrolledComposite.setMinSize(tabComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			tabItem.setControl(outerComposite);
-
-			setTexts();
 		}
 	}
 
-	public void setTexts() {
+	public void updateTexts() {
 		for (final Group settingsGroup : settingsGroups.values()) {
 			settingsGroup.setText(Resources.get("lbl.settings"));
 		}
@@ -165,7 +166,7 @@ public class Tabs {
 			torqueGroup.setText(Resources.get("lbl.torque"));
 		}
 		for (final TorqueGraph torqueGraph : torqueGraphs.values()) {
-			torqueGraph.setTexts();
+			torqueGraph.updateTexts();
 		}
 	}
 
