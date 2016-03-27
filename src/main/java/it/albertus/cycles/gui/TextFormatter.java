@@ -56,6 +56,9 @@ public class TextFormatter {
 			for (int i = 0; i < size; i++) {
 				sample[i] = SAMPLE_CHAR;
 			}
+			if (text.getTextLimit() < size) {
+				text.setTextLimit(size);
+			}
 			text.setText(String.valueOf(sample));
 			setBoldFontStyle(text);
 		}
