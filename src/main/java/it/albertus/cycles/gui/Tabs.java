@@ -1,6 +1,5 @@
 package it.albertus.cycles.gui;
 
-import it.albertus.cycles.gui.FormProperty.LabelDataKey;
 import it.albertus.cycles.gui.FormProperty.TextDataKey;
 import it.albertus.cycles.gui.listener.PropertyFocusListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
@@ -81,7 +80,7 @@ public class Tabs {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
-				label.setData(LabelDataKey.KEY.toString(), "lbl." + setting.toString());
+				label.setText(Resources.get("lbl." + setting.toString()));
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
@@ -109,8 +108,7 @@ public class Tabs {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(gearboxGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
-				label.setData(LabelDataKey.KEY.toString(), "lbl.gear");
-				label.setData(LabelDataKey.ARGUMENT.toString(), index != 0 ? String.valueOf(index) : "N");
+				label.setText(Resources.get("lbl.gear", index != 0 ? index : "N"));
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
@@ -133,8 +131,7 @@ public class Tabs {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(torqueGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
-				label.setData(LabelDataKey.KEY.toString(), "lbl.rpm");
-				label.setData(LabelDataKey.ARGUMENT.toString(), String.valueOf(Torque.getRpm(index)));
+				label.setText(Resources.get("lbl.rpm", Torque.getRpm(index)));
 				label.setToolTipText(key);
 				final Text text = new Text(torqueGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
@@ -169,9 +166,6 @@ public class Tabs {
 		}
 		for (final TorqueGraph torqueGraph : torqueGraphs.values()) {
 			torqueGraph.setTexts();
-		}
-		for (final FormProperty formProperty : formProperties.values()) {
-			formProperty.getLabel().setText(Resources.get((String) formProperty.getLabel().getData(LabelDataKey.KEY.toString()), formProperty.getLabel().getData(LabelDataKey.ARGUMENT.toString())));
 		}
 	}
 
