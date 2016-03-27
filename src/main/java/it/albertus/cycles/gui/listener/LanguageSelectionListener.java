@@ -20,7 +20,7 @@ public class LanguageSelectionListener extends SelectionAdapter {
 	public void widgetSelected(SelectionEvent e) {
 		final MenuItem languageMenuItem = (MenuItem) e.widget;
 		if (languageMenuItem.getSelection() && !Resources.getLanguage().equals(languageMenuItem.getData())) {
-			gui.updateLanguage((Language) languageMenuItem.getData());
+			gui.setLanguage((Language) languageMenuItem.getData());
 		}
 	}
 

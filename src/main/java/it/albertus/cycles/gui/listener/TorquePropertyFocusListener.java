@@ -20,7 +20,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 		super.focusLost(fe);
 
 		// Update torque graph...
-		Text field = (Text) fe.widget;
+		final Text field = (Text) fe.widget;
 		if (gui.isNumeric(field.getText().trim())) {
 			try {
 				final String key = (String) field.getData(FormProperty.TextDataKey.KEY.toString());

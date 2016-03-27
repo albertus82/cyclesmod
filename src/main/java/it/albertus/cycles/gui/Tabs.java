@@ -186,16 +186,27 @@ public class Tabs {
 		}
 
 		// Update form fields...
-		gui.updateModelValues(true); // Backup (TODO)
 		for (final FormProperty formProperty : formProperties.values()) {
 			formProperty.getLabel().setText(Resources.get((String) formProperty.getLabel().getData(LabelDataKey.KEY.toString()), formProperty.getLabel().getData(LabelDataKey.ARGUMENT.toString())));
+			formProperty.backup(true);
 			formProperty.getText().setVisible(false);
 			gui.getTextFormatter().setSampleNumber(formProperty.getText());
 		}
 		gui.getShell().layout(true, true);
-		gui.updateFormValues(); // Restore (TODO)
 		for (final FormProperty formProperty : formProperties.values()) {
-			formProperty.getText().setVisible(true);
+			formProperty.restore(true);
+		}
+	}
+
+	public void enableTextListeners() {
+		for (final FormProperty formProperty : formProperties.values()) {
+			formProperty.enableTextListeners();
+		}
+	}
+
+	public void disableTextListeners() {
+		for (final FormProperty formProperty : formProperties.values()) {
+			formProperty.disableTextListeners();
 		}
 	}
 
