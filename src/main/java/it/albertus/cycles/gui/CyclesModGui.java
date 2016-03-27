@@ -12,6 +12,7 @@ import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Resources.Language;
 import it.albertus.util.ExceptionUtils;
 
 import java.io.File;
@@ -86,6 +87,11 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
+	public void updateLanguage(final Language language) {
+		Resources.setLanguage(language);
+		menuBar.setTexts();
+	}
+
 	public void updateFormValues() {
 		final Map<String, Integer> properties = new BikesCfg(getBikesInf()).getMap();
 
@@ -95,7 +101,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 
 		// Update screen values...
-		shell.setRedraw(false);
 		for (final String key : tabs.getFormProperties().keySet()) {
 			if (!properties.containsKey(key)) {
 				throw new RuntimeException(Resources.get("err.property.missing", key));
@@ -144,7 +149,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			graph.refresh();
 		}
-		shell.setRedraw(true);
 	}
 
 	public void updateModelValues(boolean lenient) {
