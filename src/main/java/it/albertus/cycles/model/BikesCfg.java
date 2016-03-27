@@ -1,5 +1,6 @@
 package it.albertus.cycles.model;
 
+import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.util.NewLine;
 
@@ -121,11 +122,11 @@ public class BikesCfg {
 		return properties.toString();
 	}
 
-	public static String buildPropertyKey(final Bike.Type bikeType, final Class<? extends BikesInfElement> propertyType, final String suffix) {
+	public static String buildPropertyKey(final BikeType bikeType, final Class<? extends BikesInfElement> propertyType, final String suffix) {
 		return Integer.toString(bikeType.getDisplacement()) + '.' + Introspector.decapitalize(propertyType.getSimpleName()) + '.' + suffix;
 	}
 
-	public static String buildPropertyKey(final Bike.Type bikeType, final Class<? extends BikesInfElement> propertyType, final int suffix) {
+	public static String buildPropertyKey(final BikeType bikeType, final Class<? extends BikesInfElement> propertyType, final int suffix) {
 		return buildPropertyKey(bikeType, propertyType, Integer.toString(suffix));
 	}
 

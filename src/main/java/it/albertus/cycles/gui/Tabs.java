@@ -4,6 +4,7 @@ import it.albertus.cycles.gui.listener.PropertyFocusListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
 import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
 import it.albertus.cycles.model.Bike;
+import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Setting;
@@ -11,6 +12,7 @@ import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +38,10 @@ public class Tabs {
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
 
-	private final Map<Bike.Type, Group> settingsGroups = new EnumMap<Bike.Type, Group>(Bike.Type.class);
-	private final Map<Bike.Type, Group> gearboxGroups = new EnumMap<Bike.Type, Group>(Bike.Type.class);
-	private final Map<Bike.Type, Group> torqueGroups = new EnumMap<Bike.Type, Group>(Bike.Type.class);
-	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
+	private final Map<BikeType, Group> settingsGroups = new EnumMap<BikeType, Group>(BikeType.class);
+	private final Map<BikeType, Group> gearboxGroups = new EnumMap<BikeType, Group>(BikeType.class);
+	private final Map<BikeType, Group> torqueGroups = new EnumMap<BikeType, Group>(BikeType.class);
+	private final Map<BikeType, TorqueGraph> torqueGraphs = new EnumMap<BikeType, TorqueGraph>(BikeType.class);
 
 	private final PropertyVerifyListener propertyVerifyListener;
 	private final PropertyFocusListener propertyFocusListener;
@@ -184,8 +186,20 @@ public class Tabs {
 		return formProperties;
 	}
 
-	public Map<Bike.Type, TorqueGraph> getTorqueGraphs() {
-		return torqueGraphs;
+	public Map<BikeType, TorqueGraph> getTorqueGraphs() {
+		return Collections.unmodifiableMap(torqueGraphs);
+	}
+
+	public Map<BikeType, Group> getSettingsGroups() {
+		return Collections.unmodifiableMap(settingsGroups);
+	}
+
+	public Map<BikeType, Group> getGearboxGroups() {
+		return Collections.unmodifiableMap(gearboxGroups);
+	}
+
+	public Map<BikeType, Group> getTorqueGroups() {
+		return Collections.unmodifiableMap(torqueGroups);
 	}
 
 	public TorquePropertyFocusListener getTorquePropertyFocusListener() {
