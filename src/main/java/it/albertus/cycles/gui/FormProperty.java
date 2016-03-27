@@ -25,7 +25,8 @@ public class FormProperty {
 		DEFAULT(Integer.class),
 		KEY(String.class),
 		GRAPH(TorqueGraph.class),
-		INDEX(Integer.class);
+		INDEX(Integer.class),
+		SIZE(Integer.class);
 
 		private final Class<?> type;
 
