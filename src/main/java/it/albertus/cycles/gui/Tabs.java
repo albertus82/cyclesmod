@@ -35,6 +35,10 @@ public class Tabs {
 	private final TabFolder tabFolder;
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
+
+	private final Map<Bike.Type, Group> settingsGroups = new EnumMap<Bike.Type, Group>(Bike.Type.class);
+	private final Map<Bike.Type, Group> gearboxGroups = new EnumMap<Bike.Type, Group>(Bike.Type.class);
+	private final Map<Bike.Type, Group> torqueGroups = new EnumMap<Bike.Type, Group>(Bike.Type.class);
 	private final Map<Bike.Type, TorqueGraph> torqueGraphs = new EnumMap<Bike.Type, TorqueGraph>(Bike.Type.class);
 
 	private final PropertyVerifyListener propertyVerifyListener;
@@ -62,11 +66,11 @@ public class Tabs {
 
 			// Settings
 			final Group settingsGroup = new Group(tabComposite, SWT.NULL);
-			settingsGroup.setText(Resources.get("lbl.settings"));
 			// Posizionamento dell'elemento all'interno del contenitore...
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(settingsGroup);
 			// Definizione di come saranno disposti gli elementi contenuti...
 			GridLayoutFactory.swtDefaults().numColumns(6).applyTo(settingsGroup);
+			settingsGroups.put(bike.getType(), settingsGroup);
 
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
@@ -78,8 +82,8 @@ public class Tabs {
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				setSampleNumber(text, Integer.toString(Settings.MAX_VALUE).length());
-				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
-				text.setData(FormProperty.DataKey.KEY.toString(), key);
+				text.setData(FormProperty.TextDataKey.DEFAULT.toString(), defaultValue);
+				text.setData(FormProperty.TextDataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -92,9 +96,9 @@ public class Tabs {
 
 			// Gearbox
 			final Group gearboxGroup = new Group(tabComposite, SWT.NULL);
-			gearboxGroup.setText(Resources.get("lbl.gearbox"));
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(gearboxGroup);
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
+			gearboxGroups.put(bike.getType(), gearboxGroup);
 
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
@@ -106,8 +110,8 @@ public class Tabs {
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				setSampleNumber(text, Integer.toString(Gearbox.MAX_VALUE).length());
-				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
-				text.setData(FormProperty.DataKey.KEY.toString(), key);
+				text.setData(FormProperty.TextDataKey.DEFAULT.toString(), defaultValue);
+				text.setData(FormProperty.TextDataKey.KEY.toString(), key);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -115,9 +119,9 @@ public class Tabs {
 
 			// Torque
 			final Group torqueGroup = new Group(tabComposite, SWT.NULL);
-			torqueGroup.setText(Resources.get("lbl.torque"));
 			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(torqueGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(torqueGroup);
+			torqueGroups.put(bike.getType(), torqueGroup);
 
 			for (int index = 0; index < bike.getTorque().getCurve().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
@@ -129,10 +133,10 @@ public class Tabs {
 				final Text text = new Text(torqueGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				setSampleNumber(text, Short.toString(Torque.MAX_VALUE).length());
-				text.setData(FormProperty.DataKey.DEFAULT.toString(), defaultValue);
-				text.setData(FormProperty.DataKey.KEY.toString(), key);
-				text.setData(FormProperty.DataKey.GRAPH.toString(), graph);
-				text.setData(FormProperty.DataKey.INDEX.toString(), index);
+				text.setData(FormProperty.TextDataKey.DEFAULT.toString(), defaultValue);
+				text.setData(FormProperty.TextDataKey.KEY.toString(), key);
+				text.setData(FormProperty.TextDataKey.GRAPH.toString(), graph);
+				text.setData(FormProperty.TextDataKey.INDEX.toString(), index);
 				text.addFocusListener(torquePropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -142,6 +146,23 @@ public class Tabs {
 			tabScrolledComposite.setExpandHorizontal(true);
 			tabScrolledComposite.setMinSize(tabComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			tabItem.setControl(outerComposite);
+
+			setTexts();
+		}
+	}
+
+	public void setTexts() {
+		for (final Group settingsGroup : settingsGroups.values()) {
+			settingsGroup.setText(Resources.get("lbl.settings"));
+		}
+		for (final Group gearboxGroup : gearboxGroups.values()) {
+			gearboxGroup.setText(Resources.get("lbl.gearbox"));
+		}
+		for (final Group torqueGroup : torqueGroups.values()) {
+			torqueGroup.setText(Resources.get("lbl.torque"));
+		}
+		for (final TorqueGraph torqueGraph : torqueGraphs.values()) {
+			torqueGraph.setTexts();
 		}
 	}
 

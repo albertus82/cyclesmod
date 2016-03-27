@@ -90,9 +90,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	public void updateLanguage(final Language language) {
 		Resources.setLanguage(language);
 		menuBar.setTexts();
-		for (final TorqueGraph torqueGraph : tabs.getTorqueGraphs().values()) {
-			torqueGraph.setTexts();
-		}
+		tabs.setTexts();
 	}
 
 	public void updateFormValues() {
@@ -135,7 +133,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 
 			// Update tooltip text...
-			final String toolTipText = Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.DataKey.DEFAULT.toString())), getNumeralSystem().getRadix()).toUpperCase());
+			final String toolTipText = Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString())), getNumeralSystem().getRadix()).toUpperCase());
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}
