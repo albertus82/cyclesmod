@@ -14,11 +14,10 @@ import org.eclipse.swt.widgets.Text;
 
 public class FormProperty {
 
-	private static final int[] EventTypes = { SWT.Resize, SWT.Move, SWT.Dispose, SWT.DragDetect,
-		SWT.FocusIn, SWT.FocusOut, SWT.Gesture, SWT.Help, SWT.KeyUp, SWT.KeyDown, 
-		SWT.MenuDetect, SWT.Modify, SWT.MouseDown, SWT.MouseUp,	SWT.MouseDoubleClick, 
-		SWT.MouseMove, SWT.MouseEnter, SWT.MouseExit, SWT.MouseHover, SWT.MouseWheel, 
-		SWT.Paint, SWT.Selection, SWT.Touch, SWT.Traverse, SWT.Verify };
+	private static final int[] EventTypes = { SWT.Resize, SWT.Move, SWT.Dispose, SWT.DragDetect, SWT.FocusIn,
+			SWT.FocusOut, SWT.Gesture, SWT.Help, SWT.KeyUp, SWT.KeyDown, SWT.MenuDetect, SWT.Modify, SWT.MouseDown,
+			SWT.MouseUp, SWT.MouseDoubleClick, SWT.MouseMove, SWT.MouseEnter, SWT.MouseExit, SWT.MouseHover,
+			SWT.MouseWheel, SWT.Paint, SWT.Selection, SWT.Touch, SWT.Traverse, SWT.Verify };
 
 	public enum LabelDataKey {
 		KEY(String.class),
@@ -138,7 +137,6 @@ public class FormProperty {
 		if (enableListeners) {
 			enableTextListeners();
 		}
-		
 	}
 
 	public int enableTextListeners() {
