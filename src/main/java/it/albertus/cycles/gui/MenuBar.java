@@ -65,71 +65,58 @@ public class MenuBar {
 		// File
 		fileMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		fileMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
 		fileMenuHeader.setMenu(fileMenu);
 
 		fileOpenMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileOpenMenuItem.setText(Resources.get("lbl.menu.item.open") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_OPEN));
 		fileOpenMenuItem.addSelectionListener(new OpenSelectionListener(gui));
 		fileOpenMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_OPEN);
 
 		fileSaveMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileSaveMenuItem.setText(Resources.get("lbl.menu.item.saveas") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_SAVE));
 		fileSaveMenuItem.addSelectionListener(new SaveSelectionListener(gui));
 		fileSaveMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_SAVE);
 
 		new MenuItem(fileMenu, SWT.SEPARATOR);
 
 		fileExitMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileExitMenuItem.setText(Resources.get("lbl.menu.item.exit"));
 		fileExitMenuItem.addSelectionListener(new CloseListener(gui));
 
 		// Edit
 		editMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
 		editMenuHeader.addArmListener(new EditMenuBarArmListener(gui));
 
 		editCutMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editCutMenuItem.setText(Resources.get("lbl.menu.item.cut") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_CUT));
 		editCutMenuItem.addSelectionListener(new CutSelectionListener(gui));
 		editCutMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_CUT);
 
 		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_COPY));
 		editCopyMenuItem.addSelectionListener(new CopySelectionListener(gui));
 		editCopyMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_COPY);
 
 		editPasteMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editPasteMenuItem.setText(Resources.get("lbl.menu.item.paste") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_PASTE));
 		editPasteMenuItem.addSelectionListener(new PasteSelectionListener(gui));
 		editPasteMenuItem.setAccelerator(SWT.MOD1 | GuiUtils.KEY_PASTE);
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
 		editResetSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
-		editResetSubMenuItem.setText(Resources.get("lbl.menu.item.reset"));
 
 		editResetSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editResetSubMenuItem.setMenu(editResetSubMenu);
 
 		editResetSingleMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
-		editResetSingleMenuItem.setText(Resources.get("lbl.menu.item.reset.single"));
 		editResetSingleMenuItem.addSelectionListener(new ResetSingleSelectionListener(gui));
 
 		editResetAllMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
-		editResetAllMenuItem.setText(Resources.get("lbl.menu.item.reset.all"));
 		editResetAllMenuItem.addSelectionListener(new ResetAllSelectionListener(gui));
 
 		// View
 		viewMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		viewMenuHeader.setText(Resources.get("lbl.menu.header.view"));
 		viewMenuHeader.setMenu(viewMenu);
 
 		viewRadixSubMenuItem = new MenuItem(viewMenu, SWT.CASCADE);
-		viewRadixSubMenuItem.setText(Resources.get("lbl.menu.item.radix"));
 
 		viewRadixSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewRadixSubMenuItem.setMenu(viewRadixSubMenu);
@@ -138,7 +125,6 @@ public class MenuBar {
 
 		for (final NumeralSystem numeralSystem : NumeralSystem.values()) {
 			final MenuItem radixMenuItem = new MenuItem(viewRadixSubMenu, SWT.RADIO);
-			radixMenuItem.setText(Resources.get("lbl.menu.item.radix." + numeralSystem.getRadix()));
 			radixMenuItem.setData(numeralSystem);
 			radixMenuItem.addSelectionListener(radixSelectionListener);
 			viewRadixMenuItems.put(numeralSystem, radixMenuItem);
@@ -149,14 +135,35 @@ public class MenuBar {
 		// Help
 		helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		helpMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
 		helpMenuHeader.setMenu(helpMenu);
 
 		helpAboutMenuItem = new MenuItem(helpMenu, SWT.PUSH);
-		helpAboutMenuItem.setText(Resources.get("lbl.menu.item.about"));
 		helpAboutMenuItem.addSelectionListener(new AboutSelectionListener(gui));
 
+		setTexts();
+
 		gui.getShell().setMenuBar(bar);
+	}
+
+	public void setTexts() {
+		fileMenuHeader.setText(Resources.get("lbl.menu.header.file"));
+		fileOpenMenuItem.setText(Resources.get("lbl.menu.item.open") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_OPEN));
+		fileSaveMenuItem.setText(Resources.get("lbl.menu.item.saveas") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_SAVE));
+		fileExitMenuItem.setText(Resources.get("lbl.menu.item.exit"));
+		editMenuHeader.setText(Resources.get("lbl.menu.header.edit"));
+		editCutMenuItem.setText(Resources.get("lbl.menu.item.cut") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_CUT));
+		editCopyMenuItem.setText(Resources.get("lbl.menu.item.copy") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_COPY));
+		editPasteMenuItem.setText(Resources.get("lbl.menu.item.paste") + GuiUtils.getMod1ShortcutLabel(GuiUtils.KEY_PASTE));
+		editResetSubMenuItem.setText(Resources.get("lbl.menu.item.reset"));
+		editResetSingleMenuItem.setText(Resources.get("lbl.menu.item.reset.single"));
+		editResetAllMenuItem.setText(Resources.get("lbl.menu.item.reset.all"));
+		viewMenuHeader.setText(Resources.get("lbl.menu.header.view"));
+		viewRadixSubMenuItem.setText(Resources.get("lbl.menu.item.radix"));
+		for (final NumeralSystem numeralSystem : viewRadixMenuItems.keySet()) {
+			viewRadixMenuItems.get(numeralSystem).setText(Resources.get("lbl.menu.item.radix." + numeralSystem.getRadix()));
+		}
+		helpMenuHeader.setText(Resources.get("lbl.menu.header.help"));
+		helpAboutMenuItem.setText(Resources.get("lbl.menu.item.about"));
 	}
 
 	public Menu getBar() {
