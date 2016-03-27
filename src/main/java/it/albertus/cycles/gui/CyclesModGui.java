@@ -90,6 +90,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	public void updateLanguage(final Language language) {
 		Resources.setLanguage(language);
 		menuBar.setTexts();
+		for (final TorqueGraph torqueGraph : tabs.getTorqueGraphs().values()) {
+			torqueGraph.setTexts();
+		}
 	}
 
 	public void updateFormValues() {
