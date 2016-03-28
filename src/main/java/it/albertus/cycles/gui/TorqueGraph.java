@@ -14,8 +14,6 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -26,6 +24,7 @@ import org.eclipse.swt.widgets.Display;
 public class TorqueGraph extends Canvas {
 
 	private static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
+
 	private final Trace trace;
 	private final double[] values;
 
@@ -96,22 +95,17 @@ public class TorqueGraph extends Canvas {
 		final Color traceColor;
 		switch (bike.getType()) {
 		case CLASS_125:
-			traceColor = new Color(Display.getCurrent(), 0xFF, 0, 0);
+			traceColor = getDisplay().getSystemColor(SWT.COLOR_RED);
 			break;
 		case CLASS_250:
-			traceColor = new Color(Display.getCurrent(), 0, 0, 0xFF);
+			traceColor = getDisplay().getSystemColor(SWT.COLOR_BLUE);
 			break;
 		case CLASS_500:
-			traceColor = new Color(Display.getCurrent(), 0x1F, 0x1F, 0x1F);
+			traceColor = getDisplay().getSystemColor(SWT.COLOR_BLACK);
 			break;
 		default:
 			traceColor = trace.getTraceColor();
 		}
-		this.addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				traceColor.dispose();
-			}
-		});
 
 		trace.setTraceColor(traceColor);
 
