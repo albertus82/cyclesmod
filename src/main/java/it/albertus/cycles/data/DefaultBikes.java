@@ -10,6 +10,8 @@ import java.util.zip.Checksum;
 
 public class DefaultBikes {
 
+	public static final int CRC = 0x28A33682;
+
 	private static final byte[] DEFAULT = { 0x06, 0x00, (byte) 0xA8, 0x2F, (byte) 0xB0, 0x36, 0x72, 0x01, (byte) 0xEE,
 			0x02, (byte) 0xEE, 0x02, (byte) 0xEE, 0x02, (byte) 0xEE, 0x02, 0x62, 0x02, 0x62, 0x02, 0x1C, 0x25, 0x00,
 			0x00, 0x00, (byte) 0xB0, 0x00, (byte) 0x99, 0x00, (byte) 0x85, 0x00, 0x73, 0x00, 0x65, 0x00, 0x59, 0x19,
@@ -41,8 +43,8 @@ public class DefaultBikes {
 	public DefaultBikes() throws StreamCorruptedException {
 		final Checksum crc = new CRC32();
 		crc.update(DEFAULT, 0, DEFAULT.length);
-		if (crc.getValue() != BikesInf.FILE_CRC) {
-			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", BikesInf.FILE_CRC), String.format("%08X", crc.getValue())));
+		if (crc.getValue() != CRC) {
+			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC), String.format("%08X", crc.getValue())));
 		}
 		if (DEFAULT.length != BikesInf.FILE_SIZE) {
 			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));

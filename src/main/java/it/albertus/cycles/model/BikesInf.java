@@ -21,7 +21,6 @@ import java.util.zip.Checksum;
 public class BikesInf {
 
 	public static final String FILE_NAME = "BIKES.INF";
-	public static final int FILE_CRC = 0x28A33682;
 	public static final short FILE_SIZE = 444;
 
 	private final Bike[] bikes = new Bike[3];
@@ -73,7 +72,7 @@ public class BikesInf {
 		final byte[] newBikesInf = this.toByteArray();
 		final Checksum crc = new CRC32();
 		crc.update(newBikesInf, 0, newBikesInf.length);
-		System.out.println(Resources.get("msg.configuration.changed", (crc.getValue() == FILE_CRC ? ' ' + Resources.get("msg.not") + ' ' : ' '), String.format("%08X", crc.getValue())));
+		System.out.println(Resources.get("msg.configuration.changed", (crc.getValue() == DefaultBikes.CRC ? ' ' + Resources.get("msg.not") + ' ' : ' '), String.format("%08X", crc.getValue())));
 
 		final BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileName), FILE_SIZE);
 		write(bos, newBikesInf);
