@@ -44,7 +44,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 	private void reset(final BikeType type) throws IOException {
 		gui.updateModelValues(true);
 		gui.getBikesInf().reset(type);
-		gui.updateFormValues();
+		gui.getTabs().updateFormValues();
 	}
 
 }

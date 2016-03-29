@@ -35,6 +35,8 @@ public class Tabs {
 
 	private final CyclesModGui gui;
 
+	private final TextFormatter textFormatter; 
+
 	private final TabFolder tabFolder;
 
 	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
@@ -50,6 +52,7 @@ public class Tabs {
 
 	public Tabs(final CyclesModGui gui) {
 		this.gui = gui;
+		textFormatter = new TextFormatter(gui);
 		propertyVerifyListener = new PropertyVerifyListener(gui);
 		propertyFocusListener = new PropertyFocusListener(gui);
 		torquePropertyFocusListener = new TorquePropertyFocusListener(gui);
@@ -91,7 +94,7 @@ public class Tabs {
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
 				text.setData(TextDataKey.SIZE.toString(), textSize);
-				gui.getTextFormatter().setSampleNumber(text);
+				textFormatter.setSampleNumber(text);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -126,7 +129,7 @@ public class Tabs {
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
 				text.setData(TextDataKey.SIZE.toString(), textSize);
-				gui.getTextFormatter().setSampleNumber(text);
+				textFormatter.setSampleNumber(text);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -158,7 +161,7 @@ public class Tabs {
 				text.setData(TextDataKey.GRAPH.toString(), graph);
 				text.setData(TextDataKey.INDEX.toString(), index);
 				text.setData(TextDataKey.SIZE.toString(), textSize);
-				gui.getTextFormatter().setSampleNumber(text);
+				textFormatter.setSampleNumber(text);
 				text.addFocusListener(torquePropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -196,7 +199,7 @@ public class Tabs {
 			formProperty.backup();
 			final Text text = formProperty.getText();
 			text.setVisible(false);
-			gui.getTextFormatter().setSampleNumber(text);
+			textFormatter.setSampleNumber(text);
 		}
 		gui.getShell().layout(true, true);
 		for (final FormProperty formProperty : formProperties.values()) {
@@ -205,13 +208,74 @@ public class Tabs {
 		enableTextListeners();
 	}
 
-	public void enableTextListeners() {
+	public void updateFormValues() {
+		final Map<String, Integer> properties = new BikesCfg(gui.getBikesInf()).getMap();
+
+		// Consistency check...
+		if (properties.size() != formProperties.size()) {
+			throw new IllegalStateException(Resources.get("err.properties.number"));
+		}
+
+		// Update screen values...
+		disableTextListeners();
+		for (final String key : formProperties.keySet()) {
+			if (!properties.containsKey(key)) {
+				throw new RuntimeException(Resources.get("err.property.missing", key));
+			}
+			final Text field = formProperties.get(key).getText();
+
+			// Update field max length...
+			final int textLimit;
+			if (gui.isSettingsProperty(key)) {
+				textLimit = Integer.toString(Settings.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+			}
+			else if (gui.isGearboxProperty(key)) {
+				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+			}
+			else if (gui.isTorqueProperty(key)) {
+				textLimit = Integer.toString(Torque.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+			}
+			else {
+				throw new IllegalStateException(Resources.get("err.unsupported.property", key, formProperties.get(key).getValue()));
+			}
+			if (field.getTextLimit() != textLimit) {
+				field.setTextLimit(textLimit);
+			}
+
+			// Update field value...
+			final String text = Integer.toString(properties.get(key), gui.getNumeralSystem().getRadix()).toUpperCase();
+			if (!field.getText().equals(text)) {
+				field.setText(text);
+			}
+
+			// Update tooltip text...
+			final String toolTipText = Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString())), gui.getNumeralSystem().getRadix()).toUpperCase());
+			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
+				field.setToolTipText(toolTipText);
+			}
+
+			// Update font style...
+			textFormatter.updateFontStyle(field);
+		}
+		enableTextListeners();
+
+		// Update torque graphs...
+		for (final Bike bike : gui.getBikesInf().getBikes()) {
+			final TorqueGraph graph = torqueGraphs.get(bike.getType());
+			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
+				graph.getValues()[i] = bike.getTorque().getCurve()[i];
+			}
+			graph.refresh();
+		}
+	}
+
+	private void enableTextListeners() {
 		propertyVerifyListener.setEnabled(true);
 		propertyFocusListener.setEnabled(true);
 		torquePropertyFocusListener.setEnabled(true);
 	}
 
-	public void disableTextListeners() {
+	private void disableTextListeners() {
 		propertyVerifyListener.setEnabled(false);
 		propertyFocusListener.setEnabled(false);
 		torquePropertyFocusListener.setEnabled(false);
@@ -219,6 +283,10 @@ public class Tabs {
 
 	public TabFolder getTabFolder() {
 		return tabFolder;
+	}
+
+	public TextFormatter getTextFormatter() {
+		return textFormatter;
 	}
 
 	public Map<String, FormProperty> getFormProperties() {

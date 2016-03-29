@@ -43,7 +43,7 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 
 	private void reset() throws IOException {
 		gui.setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
-		gui.updateFormValues();
+		gui.getTabs().updateFormValues();
 	}
 
 }
