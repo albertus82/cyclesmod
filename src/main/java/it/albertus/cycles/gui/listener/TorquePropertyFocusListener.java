@@ -17,21 +17,23 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 
 	@Override
 	public void focusLost(final FocusEvent fe) {
-		super.focusLost(fe);
+		if (isEnabled()) {
+			super.focusLost(fe);
 
-		// Update torque graph...
-		final Text field = (Text) fe.widget;
-		if (gui.isNumeric(field.getText().trim())) {
-			try {
-				final String key = (String) field.getData(FormProperty.TextDataKey.KEY.toString());
-				final int index = (Integer) field.getData(FormProperty.TextDataKey.INDEX.toString());
-				final TorqueGraph graph = (TorqueGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
+			// Update torque graph...
+			final Text field = (Text) fe.widget;
+			if (gui.isNumeric(field.getText().trim())) {
+				try {
+					final String key = (String) field.getData(FormProperty.TextDataKey.KEY.toString());
+					final int index = (Integer) field.getData(FormProperty.TextDataKey.INDEX.toString());
+					final TorqueGraph graph = (TorqueGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
 
-				final short value = Torque.parse(key, field.getText().trim(), gui.getNumeralSystem().getRadix());
-				graph.getValues()[index] = value;
-				graph.refresh();
+					final short value = Torque.parse(key, field.getText().trim(), gui.getNumeralSystem().getRadix());
+					graph.getValues()[index] = value;
+					graph.refresh();
+				}
+				catch (InvalidPropertyException ipe) {}
 			}
-			catch (InvalidPropertyException ipe) {}
 		}
 	}
 
