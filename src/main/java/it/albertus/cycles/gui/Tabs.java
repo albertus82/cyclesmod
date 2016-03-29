@@ -186,28 +186,35 @@ public class Tabs {
 		}
 
 		// Update form fields...
+		disableTextListeners();
 		for (final FormProperty formProperty : formProperties.values()) {
-			formProperty.getLabel().setText(Resources.get((String) formProperty.getLabel().getData(LabelDataKey.KEY.toString()), formProperty.getLabel().getData(LabelDataKey.ARGUMENT.toString())));
-			formProperty.backup(true);
-			formProperty.getText().setVisible(false);
-			gui.getTextFormatter().setSampleNumber(formProperty.getText());
+			final Label label = formProperty.getLabel();
+			final String updatedLabelText = Resources.get((String) label.getData(LabelDataKey.KEY.toString()), label.getData(LabelDataKey.ARGUMENT.toString()));
+			if (!label.getText().equals(updatedLabelText)) {
+				label.setText(updatedLabelText);
+			}
+			formProperty.backup();
+			final Text text = formProperty.getText();
+			text.setVisible(false);
+			gui.getTextFormatter().setSampleNumber(text);
 		}
 		gui.getShell().layout(true, true);
 		for (final FormProperty formProperty : formProperties.values()) {
-			formProperty.restore(true);
+			formProperty.restore();
 		}
+		enableTextListeners();
 	}
 
 	public void enableTextListeners() {
-		for (final FormProperty formProperty : formProperties.values()) {
-			formProperty.enableTextListeners();
-		}
+		propertyVerifyListener.setEnabled(true);
+		propertyFocusListener.setEnabled(true);
+		torquePropertyFocusListener.setEnabled(true);
 	}
 
 	public void disableTextListeners() {
-		for (final FormProperty formProperty : formProperties.values()) {
-			formProperty.disableTextListeners();
-		}
+		propertyVerifyListener.setEnabled(false);
+		propertyFocusListener.setEnabled(false);
+		torquePropertyFocusListener.setEnabled(false);
 	}
 
 	public TabFolder getTabFolder() {
