@@ -5,12 +5,8 @@ import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.engine.NumeralSystem;
 import it.albertus.cycles.gui.listener.CloseListener;
-import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
-import it.albertus.cycles.model.Gearbox;
-import it.albertus.cycles.model.Settings;
-import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Resources;
 import it.albertus.cycles.resources.Resources.Language;
 import it.albertus.util.ExceptionUtils;
@@ -32,13 +28,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private final Map<String, Integer> defaultProperties = new HashMap<String, Integer>();
 	private final Map<String, Integer> lastPersistedProperties = new HashMap<String, Integer>();
-	private final TextFormatter textFormatter = new TextFormatter(this);
 
 	private final Shell shell;
 	private final MenuBar menuBar;
@@ -76,7 +70,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		// Size...
 		shell.pack();
 
-		updateFormValues();
+		tabs.updateFormValues();
 
 		// Loading custom properties...
 		if (StringUtils.isNotBlank(fileName)) {
@@ -93,67 +87,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		tabs.updateTexts();
 	}
 
-	public void updateFormValues() {
-		final Map<String, Integer> properties = new BikesCfg(getBikesInf()).getMap();
-
-		// Consistency check...
-		if (properties.size() != tabs.getFormProperties().size()) {
-			throw new IllegalStateException(Resources.get("err.properties.number"));
-		}
-
-		// Update screen values...
-		tabs.disableTextListeners();
-		for (final String key : tabs.getFormProperties().keySet()) {
-			if (!properties.containsKey(key)) {
-				throw new RuntimeException(Resources.get("err.property.missing", key));
-			}
-			final Text field = tabs.getFormProperties().get(key).getText();
-
-			// Update field max length...
-			final int textLimit;
-			if (isSettingsProperty(key)) {
-				textLimit = Integer.toString(Settings.MAX_VALUE, getNumeralSystem().getRadix()).length();
-			}
-			else if (isGearboxProperty(key)) {
-				textLimit = Integer.toString(Gearbox.MAX_VALUE, getNumeralSystem().getRadix()).length();
-			}
-			else if (isTorqueProperty(key)) {
-				textLimit = Integer.toString(Torque.MAX_VALUE, getNumeralSystem().getRadix()).length();
-			}
-			else {
-				throw new IllegalStateException(Resources.get("err.unsupported.property", key, tabs.getFormProperties().get(key).getValue()));
-			}
-			if (field.getTextLimit() != textLimit) {
-				field.setTextLimit(textLimit);
-			}
-
-			// Update field value...
-			final String text = Integer.toString(properties.get(key), getNumeralSystem().getRadix()).toUpperCase();
-			if (!field.getText().equals(text)) {
-				field.setText(text);
-			}
-
-			// Update tooltip text...
-			final String toolTipText = Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString())), getNumeralSystem().getRadix()).toUpperCase());
-			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
-				field.setToolTipText(toolTipText);
-			}
-
-			// Update font style...
-			textFormatter.updateFontStyle(field);
-		}
-		tabs.enableTextListeners();
-
-		// Update torque graphs...
-		for (final Bike bike : getBikesInf().getBikes()) {
-			final TorqueGraph graph = tabs.getTorqueGraphs().get(bike.getType());
-			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
-				graph.getValues()[i] = bike.getTorque().getCurve()[i];
-			}
-			graph.refresh();
-		}
-	}
-
 	public void updateModelValues(boolean lenient) {
 		for (final String key : tabs.getFormProperties().keySet()) {
 			applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
@@ -165,7 +98,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
 				final File bikesInfFile = new File(fileName);
 				setBikesInf(new BikesInf(bikesInfFile));
-				updateFormValues();
+				tabs.updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 				shell.setText(Resources.get("win.title") + " - " + bikesInfFile.getCanonicalPath());
 				if (successMessage) {
@@ -185,7 +118,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 						changesCount++;
 					}
 				}
-				updateFormValues();
+				tabs.updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 				if (successMessage) {
 					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
@@ -293,7 +226,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	public void setNumeralSystem(final NumeralSystem numeralSystem) {
 		updateModelValues(true);
 		super.setNumeralSystem(numeralSystem);
-		updateFormValues();
+		tabs.updateFormValues();
 	}
 
 	public Map<String, Integer> getLastPersistedProperties() {
@@ -320,10 +253,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	public Map<String, Integer> getDefaultProperties() {
 		return Collections.unmodifiableMap(defaultProperties);
-	}
-
-	public TextFormatter getTextFormatter() {
-		return textFormatter;
 	}
 
 }

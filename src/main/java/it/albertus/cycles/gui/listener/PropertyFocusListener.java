@@ -1,6 +1,7 @@
 package it.albertus.cycles.gui.listener;
 
 import it.albertus.cycles.gui.CyclesModGui;
+import it.albertus.cycles.gui.TextFormatter;
 
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -20,8 +21,9 @@ public class PropertyFocusListener implements FocusListener {
 	public void focusLost(final FocusEvent fe) {
 		if (enabled) {
 			final Text text = (Text) fe.widget;
-			gui.getTextFormatter().clean(text);
-			gui.getTextFormatter().updateFontStyle(text);
+			final TextFormatter textFormatter = gui.getTabs().getTextFormatter();
+			textFormatter.clean(text);
+			textFormatter.updateFontStyle(text);
 		}
 	}
 
