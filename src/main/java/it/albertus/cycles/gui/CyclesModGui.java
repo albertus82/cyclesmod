@@ -52,6 +52,10 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	private CyclesModGui(final Display display, final String fileName) throws IOException {
+		if (this.shell != null) {
+			throw new IllegalStateException("Only one instance is allowed");
+		}
+
 		// Loading default properties...
 		setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
 		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
