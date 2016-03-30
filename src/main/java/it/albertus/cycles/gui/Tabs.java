@@ -51,10 +51,6 @@ public class Tabs {
 	private final TorquePropertyFocusListener torquePropertyFocusListener;
 
 	public Tabs(final CyclesModGui gui) {
-		if (this.tabFolder != null) {
-			throw new IllegalStateException("Only one instance is allowed");
-		}
-
 		this.gui = gui;
 		textFormatter = new TextFormatter(gui);
 		propertyVerifyListener = new PropertyVerifyListener(gui);
