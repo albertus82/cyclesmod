@@ -65,6 +65,10 @@ public class MenuBar {
 	private final MenuItem helpAboutMenuItem;
 
 	public MenuBar(final CyclesModGui gui) {
+		if (this.bar != null) {
+			throw new IllegalStateException("Only one instance is allowed");
+		}
+
 		bar = new Menu(gui.getShell(), SWT.BAR); // Barra
 
 		// File
