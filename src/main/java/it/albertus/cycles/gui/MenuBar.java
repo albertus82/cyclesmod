@@ -64,7 +64,7 @@ public class MenuBar {
 	private final MenuItem helpMenuHeader;
 	private final MenuItem helpAboutMenuItem;
 
-	public MenuBar(final CyclesModGui gui) {
+	MenuBar(final CyclesModGui gui) {
 		bar = new Menu(gui.getShell(), SWT.BAR); // Barra
 
 		// File

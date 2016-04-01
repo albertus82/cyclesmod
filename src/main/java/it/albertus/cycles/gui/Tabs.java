@@ -50,7 +50,7 @@ public class Tabs {
 	private final PropertyFocusListener propertyFocusListener;
 	private final TorquePropertyFocusListener torquePropertyFocusListener;
 
-	public Tabs(final CyclesModGui gui) {
+	Tabs(final CyclesModGui gui) {
 		this.gui = gui;
 		textFormatter = new TextFormatter(gui);
 		propertyVerifyListener = new PropertyVerifyListener(gui);
