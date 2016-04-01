@@ -58,7 +58,7 @@ public class FormProperty {
 	private final Text text;
 	private TextBackup textBackup = null;
 
-	public FormProperty(final Label label, final Text text) {
+	FormProperty(final Label label, final Text text) {
 		this.label = label;
 		this.text = text;
 	}

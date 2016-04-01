@@ -50,7 +50,7 @@ public class TorqueGraph extends Canvas {
 		return success;
 	}
 
-	public TorqueGraph(final Composite parent, final Bike bike) {
+	TorqueGraph(final Composite parent, final Bike bike) {
 		super(parent, SWT.NULL);
 
 		final LightweightSystem lws = new LightweightSystem(this);

@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Display;
 public class Images {
 
 	/* Icona principale dell'applicazione (in vari formati) */
-	public static final Image[] MAIN_ICONS = loadIcons("main.ico");
+	static final Image[] MAIN_ICONS = loadIcons("main.ico");
 
 	private static Image[] loadIcons(final String fileName) {
 		final InputStream is = Images.class.getResourceAsStream(fileName);
