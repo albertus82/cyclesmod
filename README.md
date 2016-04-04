@@ -11,8 +11,6 @@ Il gioco permette di scegliere tre diverse moto: 125, 250 o 500 cc. I parametri 
 
 Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere eseguito nativamente con i sistemi operativi correnti, ma con l'aiuto di macchine virtuali o, meglio ancora, di specifici emulatori come [**DOSBox**](http://www.dosbox.com), &egrave; possibile comunque eseguirlo con ottimi risultati.
 
->L'icona dell'applicazione &egrave; stata realizzata da [Everaldo Coelho](http://www.everaldo.com) (licenza [LGPL](http://www.gnu.org/licenses/lgpl.html)), e prelevata da [Iconfinder](http://www.iconfinder.com).
-
 
 ### Installazione
 
@@ -95,3 +93,10 @@ A seguire, il programma rileva l'esistenza del file `BIKES.CFG`, ne legge il con
 Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `CFG`, modificare i parametri di interesse, salvare il file e far girare *CyclesMod*. Il programma rilever&agrave; l'esistenza del file `BIKES.CFG` e produrr&agrave; un nuovo `BIKES.INF` contenente le modifiche apportate. In caso di errori saranno mostrati opportuni messaggi in console.
 
 **Volendo rigenerare il file `BIKES.INF` originale di *The Cycles*, &egrave; sufficiente cancellare il file `BIKES.CFG` e far girare il programma "a vuoto": esso generer&agrave; automaticamente un `BIKES.CFG` predefinito e un `BIKES.INF` analogo a quello originale.**
+
+
+### Riconoscimenti
+
+Quest'applicazione include componenti realizzati da [Apache Software Foundation](lib/license/apache-2.0.txt) ed [Eclipse Foundation](lib/license/eclipse-1.0.txt).
+
+L'icona dell'applicazione &egrave; stata realizzata da [Everaldo Coelho](http://www.everaldo.com) (licenza [LGPL](http://www.gnu.org/licenses/lgpl.html)), e prelevata da [Iconfinder](http://www.iconfinder.com).
