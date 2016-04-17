@@ -23,8 +23,16 @@ public class TextFormatter {
 
 	public void clean(final Text text) {
 		if (text != null) {
-			if (gui.isNumeric(text.getText().trim())) {
-				text.setText(Integer.toString(Integer.parseInt(text.getText().trim(), gui.getNumeralSystem().getRadix()), gui.getNumeralSystem().getRadix()));
+			final String textValue = text.getText().trim();
+			if (gui.isNumeric(textValue)) {
+				final int actualValue = Integer.parseInt(textValue, gui.getNumeralSystem().getRadix());
+				final Integer maxValue = (Integer) text.getData(TextDataKey.MAX.toString());
+				if (maxValue != null && actualValue > maxValue.intValue()) {
+					text.setText(Integer.toString(maxValue, gui.getNumeralSystem().getRadix()));
+				}
+				else {
+					text.setText(Integer.toString(Integer.parseInt(textValue, gui.getNumeralSystem().getRadix()), gui.getNumeralSystem().getRadix()));
+				}
 			}
 			else {
 				text.setText("0");
