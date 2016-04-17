@@ -24,9 +24,10 @@ public class FormProperty {
 
 	public enum TextDataKey {
 		DEFAULT(Integer.class),
-		KEY(String.class),
 		GRAPH(TorqueGraph.class),
 		INDEX(Integer.class),
+		KEY(String.class),
+		MAX(Integer.class),
 		SIZE(Integer.class);
 
 		private final Class<?> type;

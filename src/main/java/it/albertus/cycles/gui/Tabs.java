@@ -3,6 +3,7 @@ package it.albertus.cycles.gui;
 import it.albertus.cycles.gui.FormProperty.LabelDataKey;
 import it.albertus.cycles.gui.FormProperty.TextDataKey;
 import it.albertus.cycles.gui.listener.PropertyFocusListener;
+import it.albertus.cycles.gui.listener.PropertyKeyListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
 import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
 import it.albertus.cycles.model.Bike;
@@ -35,7 +36,7 @@ public class Tabs {
 
 	private final CyclesModGui gui;
 
-	private final TextFormatter textFormatter; 
+	private final TextFormatter textFormatter;
 
 	private final TabFolder tabFolder;
 
@@ -49,6 +50,7 @@ public class Tabs {
 	private final PropertyVerifyListener propertyVerifyListener;
 	private final PropertyFocusListener propertyFocusListener;
 	private final TorquePropertyFocusListener torquePropertyFocusListener;
+	private final PropertyKeyListener propertyKeyListener;
 
 	Tabs(final CyclesModGui gui) {
 		this.gui = gui;
@@ -56,6 +58,7 @@ public class Tabs {
 		propertyVerifyListener = new PropertyVerifyListener(gui);
 		propertyFocusListener = new PropertyFocusListener(gui);
 		torquePropertyFocusListener = new TorquePropertyFocusListener(gui);
+		propertyKeyListener = new PropertyKeyListener(gui);
 
 		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
 		for (final Bike bike : gui.getBikesInf().getBikes()) {
@@ -94,7 +97,9 @@ public class Tabs {
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
 				text.setData(TextDataKey.SIZE.toString(), textSize);
+				text.setData(TextDataKey.MAX.toString(), Settings.MAX_VALUE);
 				textFormatter.setSampleNumber(text);
+				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -129,7 +134,9 @@ public class Tabs {
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
 				text.setData(TextDataKey.SIZE.toString(), textSize);
+				text.setData(TextDataKey.MAX.toString(), Gearbox.MAX_VALUE);
 				textFormatter.setSampleNumber(text);
+				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -161,7 +168,9 @@ public class Tabs {
 				text.setData(TextDataKey.GRAPH.toString(), graph);
 				text.setData(TextDataKey.INDEX.toString(), index);
 				text.setData(TextDataKey.SIZE.toString(), textSize);
+				text.setData(TextDataKey.MAX.toString(), Integer.valueOf(Torque.MAX_VALUE));
 				textFormatter.setSampleNumber(text);
+				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(torquePropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
@@ -270,12 +279,14 @@ public class Tabs {
 	}
 
 	private void enableTextListeners() {
+		propertyKeyListener.setEnabled(true);
 		propertyVerifyListener.setEnabled(true);
 		propertyFocusListener.setEnabled(true);
 		torquePropertyFocusListener.setEnabled(true);
 	}
 
 	private void disableTextListeners() {
+		propertyKeyListener.setEnabled(false);
 		propertyVerifyListener.setEnabled(false);
 		propertyFocusListener.setEnabled(false);
 		torquePropertyFocusListener.setEnabled(false);
