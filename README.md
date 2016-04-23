@@ -21,7 +21,7 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 
 Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva. Se la variabile di ambiente `JAVA_HOME` viene rilevata, essa sar&agrave; utilizzata come riferimento per avviare la Java Virtual Machine, in caso contrario sar&agrave; richiamato direttamente l'eseguibile `java` (o `javaw`).
 
-In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat) senza specificare altro; analogamente su **Linux** e **OS X** basta richiamare rispettivamente lo script shell [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) o [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command), avendogli prima assegnato il permesso di esecuzione con un comando del tipo `chmod 754 cyclesmod.sh` o `chmod 754 cyclesmod.command`.
+In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat) senza specificare altro; analogamente su **Linux** e **OS X** basta richiamare rispettivamente lo script shell [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) o [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command).
 
 
 ### Utilizzo

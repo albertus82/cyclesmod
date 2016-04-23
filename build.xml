@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="CyclesMod" default="zip">
+<project name="CyclesMod" default="release">
 
 	<property environment="env" />
 
@@ -201,10 +201,10 @@
 	</target>
 
 	<target name="icons">
-		<copy file="${icons.directory}/main.ico"  tofile="${build.distDirectory}/win32-win32-x86/${artifactId}.ico" />
-		<copy file="${icons.directory}/main.ico"  tofile="${build.distDirectory}/win32-win32-x86_64/${artifactId}.ico" />
-		<copy file="${icons.directory}/main.ico"  tofile="${build.distDirectory}/gtk-linux-x86/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.ico"  tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}.icns" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86/${artifactId}.ico" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86_64/${artifactId}.ico" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86/${artifactId}.icns" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}.icns" />
 		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}.icns" />
 		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.icns" />
 	</target>
@@ -248,13 +248,58 @@
 		</jar>
 	</target>
 
-	<target name="zip" depends="jar">
+	<target name="release" depends="jar">
+		<!-- Mac OS X -->
+		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-bin.tar.gz" compression="gzip">
+			<tarfileset dir="${build.distDirectory}/cocoa-macosx" filemode="777">
+				<include name="/*.jar" />
+				<include name="/*.command" />
+			</tarfileset>
+			<tarfileset dir="${build.distDirectory}/cocoa-macosx">
+				<include name="/**" />
+				<exclude name="/*.jar" />
+				<exclude name="/*.command" />
+			</tarfileset>
+		</tar>
+		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.tar.gz" compression="gzip">
+			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64" filemode="777">
+				<include name="/*.jar" />
+				<include name="/*.command" />
+			</tarfileset>
+			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64">
+				<include name="/**" />
+				<exclude name="/*.jar" />
+				<exclude name="/*.command" />
+			</tarfileset>
+		</tar>
+
+		<!-- Linux -->
+		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86-bin.tar.gz" compression="gzip">
+			<tarfileset dir="${build.distDirectory}/gtk-linux-x86" filemode="777">
+				<include name="/*.jar" />
+				<include name="/*.sh" />
+			</tarfileset>
+			<tarfileset dir="${build.distDirectory}/gtk-linux-x86">
+				<include name="/**" />
+				<exclude name="/*.jar" />
+				<exclude name="/*.sh" />
+			</tarfileset>
+		</tar>
+		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86_64-bin.tar.gz" compression="gzip">
+			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64" filemode="777">
+				<include name="/*.jar" />
+				<include name="/*.sh" />
+			</tarfileset>
+			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64">
+				<include name="/**" />
+				<exclude name="/*.jar" />
+				<exclude name="/*.sh" />
+			</tarfileset>
+		</tar>
+
+		<!-- Windows -->
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86-bin.zip" basedir="${build.distDirectory}/win32-win32-x86" level="9" />
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86_64-bin.zip" basedir="${build.distDirectory}/win32-win32-x86_64" level="9" />
-		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86-bin.zip" basedir="${build.distDirectory}/gtk-linux-x86" level="9" />
-		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86_64-bin.zip" basedir="${build.distDirectory}/gtk-linux-x86_64" level="9" />
-		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-bin.zip" basedir="${build.distDirectory}/cocoa-macosx" level="9" />
-		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.zip" basedir="${build.distDirectory}/cocoa-macosx-x86_64" level="9" />
 	</target>
 
 </project>
