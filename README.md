@@ -12,16 +12,18 @@ Il gioco permette di scegliere tre diverse moto: 125, 250 o 500 cc. I parametri 
 Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere eseguito nativamente con i sistemi operativi correnti, ma con l'aiuto di macchine virtuali o, meglio ancora, di specifici emulatori come [**DOSBox**](http://www.dosbox.com), &egrave; possibile comunque eseguirlo con ottimi risultati.
 
 
-### Installazione
+### Installazione e avvio
 
 **Effettuare una copia di backup della directory di *The Cycles* prima di utilizzare questo programma!**
 
-1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato ZIP adatta al proprio sistema operativo. La scelta &egrave; tra Windows, Linux e OS X (sia 32 che 64 bit);
-2. scompattare il file ZIP in una cartella a piacimento.
+1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato **zip** o **tar.gz**, possibilmente la pi&ugrave; recente;
+2. scompattare l'archivio in una cartella a piacimento;
+3. avviare il programma eseguendo lo script di avvio che, a seconda del sistema operativo, sar&agrave;:
+	* Windows: [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat)
+	* Linux: [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh)
+	* OS X: [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command)
 
 Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva. Se la variabile di ambiente `JAVA_HOME` viene rilevata, essa sar&agrave; utilizzata come riferimento per avviare la Java Virtual Machine, in caso contrario sar&agrave; richiamato direttamente l'eseguibile `java` (o `javaw`).
-
-In ambiente **Windows** &egrave; sufficiente richiamare il file batch [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat) senza specificare altro; analogamente su **Linux** e **OS X** basta richiamare rispettivamente lo script shell [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) o [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command).
 
 
 ### Utilizzo
@@ -78,6 +80,7 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
 #### Coppia motrice
 La curva di coppia del motore viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la coppia del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m. La curva risultante viene rappresentata graficamente nel relativo riquadro.
 
+
 ### Versione da riga di comando
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
@@ -97,6 +100,6 @@ Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `
 
 ### Riconoscimenti
 
-Quest'applicazione include componenti realizzati da [Apache Software Foundation](lib/license/apache-2.0.txt) ed [Eclipse Foundation](lib/license/eclipse-1.0.txt).
+Quest'applicazione include componenti realizzati da [Apache Software Foundation](lib/license/apache-2.0.txt) e da [Eclipse Foundation](lib/license/eclipse-1.0.txt).
 
 L'icona dell'applicazione &egrave; stata realizzata da [Everaldo Coelho](http://www.everaldo.com) (licenza [LGPL](http://www.gnu.org/licenses/lgpl.html)), e prelevata da [Iconfinder](http://www.iconfinder.com).
