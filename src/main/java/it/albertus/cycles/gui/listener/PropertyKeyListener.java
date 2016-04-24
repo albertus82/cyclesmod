@@ -12,14 +12,14 @@ public class PropertyKeyListener extends KeyAdapter {
 
 	private boolean enabled = true;
 
-	public PropertyKeyListener(CyclesModGui gui) {
+	public PropertyKeyListener(final CyclesModGui gui) {
 		this.gui = gui;
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(final KeyEvent ke) {
 		if (enabled) {
-			gui.getTabs().getTextFormatter().updateFontStyle((Text) e.widget);
+			gui.getTabs().getTextFormatter().updateFontStyle((Text) ke.widget);
 		}
 	}
 
@@ -27,7 +27,7 @@ public class PropertyKeyListener extends KeyAdapter {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 
