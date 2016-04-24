@@ -62,11 +62,11 @@ Ogni moto dispone di otto impostazioni generali che determinano le seguenti cara
 * **Regime massimo**: regime massimo raggiungibile dal motore (limitatore). Intervallo di valori validi: `768`-`14335` giri/min. Notare che, una volta raggiunto il limite, la moto continua ad accelerare con una coppia motrice pari a quella impostata per il regime limite, pertanto, per limitare efficacemente il regime ad un certo valore, occorre azzerare i valori della [coppia](#coppia-motrice) nell'intorno del regime limite.
 * **Tolleranza fuorigiri**: periodo di grazia durante il quale il motore non si guasta nonostante giri ad un regime maggiore del *Regime inizio zona rossa*; il valore &egrave; espresso in un'unit&agrave; di misura del tempo *lineare* variabile a seconda del livello di difficolt&agrave;. Intervallo di valori validi: `0`-`32767`.
 Segue un elenco per la determinazione del valore in base ai secondi di tolleranza desiderati a seconda del livello di difficolt&agrave;:
-  * Livello 1/5 (Beg.): il motore non si guasta mai, a meno di non impostare `0`.
-  * Livello 2/5: 1 sec. = `50` (&egrave; comunque attivo il cambio automatico).
-  * Livello 3/5: 1 sec. = `80`.
-  * Livello 4/5: 1 sec. = `120`.
-  * Livello 5/5 (Pro): 1 sec. = `160`.
+	* Livello 1/5 (Beg.): il motore non si guasta mai, a meno di non impostare `0`.
+	* Livello 2/5: 1 sec. = `50` (&egrave; comunque attivo il cambio automatico).
+	* Livello 3/5: 1 sec. = `80`.
+	* Livello 4/5: 1 sec. = `120`.
+	* Livello 5/5 (Pro): 1 sec. = `160`.
 * **Aderenza**: soglia di slittamento della moto, che determina la velocit&agrave; con cui &egrave; possibile affrontare le curve. Valori validi compresi tra `0` (la moto slitta immediatamente e non curva affatto) e `65535` (la moto non slitta mai).
 * **Velocit&agrave; di frenata**: determina il tempo di arresto della moto. Valori validi compresi tra `0` (la moto non frena, anzi si azzerano addirittura gli attriti e la resistenza aerodinamica) e `65535` (la moto si arresta istantaneamente alla minima frenata).
 * **Soglia testacoda**: facilit&agrave; con cui la moto va in testacoda mentre si percorre una curva slittando. Valori validi compresi tra `0` (la moto va in testacoda al primo accenno di slittamento) e `65535` (la moto non va mai in testacoda).
