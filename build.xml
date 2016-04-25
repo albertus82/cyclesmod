@@ -251,7 +251,7 @@
 	<target name="release" depends="jar">
 		<!-- Mac OS X -->
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-bin.tar.gz" compression="gzip">
-			<tarfileset dir="${build.distDirectory}/cocoa-macosx" filemode="777">
+			<tarfileset dir="${build.distDirectory}/cocoa-macosx" filemode="755">
 				<include name="/*.jar" />
 				<include name="/*.command" />
 			</tarfileset>
@@ -262,7 +262,7 @@
 			</tarfileset>
 		</tar>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.tar.gz" compression="gzip">
-			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64" filemode="777">
+			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64" filemode="755">
 				<include name="/*.jar" />
 				<include name="/*.command" />
 			</tarfileset>
@@ -275,7 +275,7 @@
 
 		<!-- Linux -->
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86-bin.tar.gz" compression="gzip">
-			<tarfileset dir="${build.distDirectory}/gtk-linux-x86" filemode="777">
+			<tarfileset dir="${build.distDirectory}/gtk-linux-x86" filemode="755">
 				<include name="/*.jar" />
 				<include name="/*.sh" />
 			</tarfileset>
@@ -286,7 +286,7 @@
 			</tarfileset>
 		</tar>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86_64-bin.tar.gz" compression="gzip">
-			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64" filemode="777">
+			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64" filemode="755">
 				<include name="/*.jar" />
 				<include name="/*.sh" />
 			</tarfileset>
