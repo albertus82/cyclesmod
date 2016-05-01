@@ -20,9 +20,6 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
@@ -186,40 +183,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		else {
 			return false;
 		}
-	}
-
-	public boolean canCut() {
-		return canCopy();
-	}
-
-	public boolean canCopy() {
-		for (final FormProperty fp : tabs.getFormProperties().values()) {
-			if (fp != null && fp.getText() != null && fp.getText().getSelectionText() != null && fp.getText().getSelectionText().length() != 0) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean canPaste() {
-		final Clipboard clipboard = new Clipboard(this.getShell().getDisplay());
-		final TransferData[] clipboardAvailableTypes = clipboard.getAvailableTypes();
-		clipboard.dispose();
-		boolean enabled = false;
-		for (final TransferData clipboardType : clipboardAvailableTypes) {
-			if (TextTransfer.getInstance().isSupportedType(clipboardType)) {
-				enabled = true;
-				break;
-			}
-		}
-		if (enabled) {
-			for (final FormProperty fp : tabs.getFormProperties().values()) {
-				if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	@Override
