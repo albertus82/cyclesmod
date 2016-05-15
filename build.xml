@@ -37,82 +37,92 @@
 		</fileset>
 
 		<!-- Copia dei file JAR delle librerie -->
-		<copy todir="${build.distDirectory}/win32-win32-x86/lib">
+		<copy todir="${build.distDirectory}/win32-win32-x86/${artifactId}/lib">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/os/win32-win32-x86">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.distDirectory}/win32-win32-x86_64/lib">
+		<copy todir="${build.distDirectory}/win32-win32-x86_64/${artifactId}/lib">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/os/win32-win32-x86_64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86/lib">
+		<copy todir="${build.distDirectory}/gtk-linux-x86/${artifactId}/lib">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/os/gtk-linux-x86">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86_64/lib">
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/lib">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/os/gtk-linux-x86_64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx/lib">
+		<copy todir="${build.distDirectory}/cocoa-macosx/${artifactId}/lib">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/os/cocoa-macosx">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/lib">
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/lib">
 			<fileset refid="lib" />
 			<fileset dir="${dependencies.directory}/os/cocoa-macosx-x86_64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
+		<copy todir="${build.distDirectory}/other/${artifactId}/lib">
+			<fileset refid="lib" />
+		</copy>
 
 		<!-- Preparazione dei file MANIFEST.MF -->
-		<manifestclasspath property="classpath.win32-win32-x86" jarfile="${build.distDirectory}/win32-win32-x86/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.win32-win32-x86" jarfile="${build.distDirectory}/win32-win32-x86/${artifactId}/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.distDirectory}/win32-win32-x86/lib">
+				<fileset dir="${build.distDirectory}/win32-win32-x86/${artifactId}/lib">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.win32-win32-x86_64" jarfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.win32-win32-x86_64" jarfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.distDirectory}/win32-win32-x86_64/lib">
+				<fileset dir="${build.distDirectory}/win32-win32-x86_64/${artifactId}/lib">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.gtk-linux-x86" jarfile="${build.distDirectory}/gtk-linux-x86/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.gtk-linux-x86" jarfile="${build.distDirectory}/gtk-linux-x86/${artifactId}/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.distDirectory}/gtk-linux-x86/lib">
+				<fileset dir="${build.distDirectory}/gtk-linux-x86/${artifactId}/lib">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.gtk-linux-x86_64" jarfile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.gtk-linux-x86_64" jarfile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.distDirectory}/gtk-linux-x86_64/lib">
+				<fileset dir="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/lib">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.cocoa-macosx" jarfile="${build.distDirectory}/cocoa-macosx/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.cocoa-macosx" jarfile="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.distDirectory}/cocoa-macosx/lib">
+				<fileset dir="${build.distDirectory}/cocoa-macosx/${artifactId}/lib">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.cocoa-macosx-x86_64" jarfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.cocoa-macosx-x86_64" jarfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.distDirectory}/cocoa-macosx-x86_64/lib">
+				<fileset dir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/lib">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</manifestclasspath>
+		<manifestclasspath property="classpath.other" jarfile="${build.distDirectory}/other/${artifactId}/${artifactId}.jar" maxParentLevels="0">
+			<classpath>
+				<fileset dir="${build.distDirectory}/other/${artifactId}/lib">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
@@ -122,22 +132,25 @@
 	<target name="config">
 		<fileset id="config" dir="${build.configDirectory}" />
 
-		<copy todir="${build.distDirectory}/win32-win32-x86">
+		<copy todir="${build.distDirectory}/win32-win32-x86/${artifactId}">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.distDirectory}/win32-win32-x86_64">
+		<copy todir="${build.distDirectory}/win32-win32-x86_64/${artifactId}">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86">
+		<copy todir="${build.distDirectory}/gtk-linux-x86/${artifactId}">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86_64">
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64/${artifactId}">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx">
+		<copy todir="${build.distDirectory}/cocoa-macosx/${artifactId}">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64">
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}">
+			<fileset refid="config" />
+		</copy>
+		<copy todir="${build.distDirectory}/other/${artifactId}">
 			<fileset refid="config" />
 		</copy>
 	</target>
@@ -153,22 +166,27 @@
 			<include name="*.command" />
 		</fileset>
 
-		<copy todir="${build.distDirectory}/win32-win32-x86">
+		<copy todir="${build.distDirectory}/win32-win32-x86/${artifactId}">
 			<fileset refid="bat" />
 		</copy>
-		<copy todir="${build.distDirectory}/win32-win32-x86_64">
+		<copy todir="${build.distDirectory}/win32-win32-x86_64/${artifactId}">
 			<fileset refid="bat" />
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86">
+		<copy todir="${build.distDirectory}/gtk-linux-x86/${artifactId}">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86_64">
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64/${artifactId}">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx">
+		<copy todir="${build.distDirectory}/cocoa-macosx/${artifactId}">
 			<fileset refid="command" />
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64">
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}">
+			<fileset refid="command" />
+		</copy>
+		<copy todir="${build.distDirectory}/other/${artifactId}">
+			<fileset refid="bat" />
+			<fileset refid="sh" />
 			<fileset refid="command" />
 		</copy>
 	</target>
@@ -180,70 +198,81 @@
 			<include name="NOTICE*" />
 		</fileset>
 
-		<copy todir="${build.distDirectory}/win32-win32-x86">
+		<copy todir="${build.distDirectory}/win32-win32-x86/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.distDirectory}/win32-win32-x86_64">
+		<copy todir="${build.distDirectory}/win32-win32-x86_64/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86">
+		<copy todir="${build.distDirectory}/gtk-linux-x86/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86_64">
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx">
+		<copy todir="${build.distDirectory}/cocoa-macosx/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64">
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}">
+			<fileset refid="docs" />
+		</copy>
+		<copy todir="${build.distDirectory}/other/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
 	</target>
 
 	<target name="icons">
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86/${artifactId}.ico" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86_64/${artifactId}.ico" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.icns" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86/${artifactId}/${artifactId}.ico" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.ico" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86/${artifactId}/${artifactId}.icns" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/${artifactId}.icns" />
+		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" />
+		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" />
+		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/other/${artifactId}/${artifactId}.icns" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/other/${artifactId}/${artifactId}.ico" />
 	</target>
 
 	<target name="jar" depends="compile, resources, scripts, docs, icons, lib">
-		<jar destfile="${build.distDirectory}/win32-win32-x86/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.distDirectory}/win32-win32-x86/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86}" />
 			</manifest>
 		</jar>
-		<jar destfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86_64}" />
 			</manifest>
 		</jar>
-		<jar destfile="${build.distDirectory}/gtk-linux-x86/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.distDirectory}/gtk-linux-x86/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86}" />
 			</manifest>
 		</jar>
-		<jar destfile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86_64}" />
 			</manifest>
 		</jar>
-		<jar destfile="${build.distDirectory}/cocoa-macosx/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx}" />
 			</manifest>
 		</jar>
-		<jar destfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx-x86_64}" />
+			</manifest>
+		</jar>
+		<jar destfile="${build.distDirectory}/other/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+			<manifest>
+				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
+				<attribute name="Class-Path" value="${classpath.other}" />
 			</manifest>
 		</jar>
 	</target>
@@ -252,54 +281,67 @@
 		<!-- Mac OS X -->
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.distDirectory}/cocoa-macosx" filemode="755">
-				<include name="/*.jar" />
-				<include name="/*.command" />
+				<include name="/${artifactId}/*.jar" />
+				<include name="/${artifactId}/*.command" />
 			</tarfileset>
 			<tarfileset dir="${build.distDirectory}/cocoa-macosx">
 				<include name="/**" />
-				<exclude name="/*.jar" />
-				<exclude name="/*.command" />
+				<exclude name="/${artifactId}/*.jar" />
+				<exclude name="/${artifactId}/*.command" />
 			</tarfileset>
 		</tar>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64" filemode="755">
-				<include name="/*.jar" />
-				<include name="/*.command" />
+				<include name="/${artifactId}/*.jar" />
+				<include name="/${artifactId}/*.command" />
 			</tarfileset>
 			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64">
 				<include name="/**" />
-				<exclude name="/*.jar" />
-				<exclude name="/*.command" />
+				<exclude name="/${artifactId}/*.jar" />
+				<exclude name="/${artifactId}/*.command" />
 			</tarfileset>
 		</tar>
 
 		<!-- Linux -->
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86" filemode="755">
-				<include name="/*.jar" />
-				<include name="/*.sh" />
+				<include name="/${artifactId}/*.jar" />
+				<include name="/${artifactId}/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86">
 				<include name="/**" />
-				<exclude name="/*.jar" />
-				<exclude name="/*.sh" />
+				<exclude name="/${artifactId}/*.jar" />
+				<exclude name="/${artifactId}/*.sh" />
 			</tarfileset>
 		</tar>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86_64-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64" filemode="755">
-				<include name="/*.jar" />
-				<include name="/*.sh" />
+				<include name="/${artifactId}/*.jar" />
+				<include name="/${artifactId}/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64">
 				<include name="/**" />
-				<exclude name="/*.jar" />
-				<exclude name="/*.sh" />
+				<exclude name="/${artifactId}/*.jar" />
+				<exclude name="/${artifactId}/*.sh" />
 			</tarfileset>
 		</tar>
 
 		<!-- Windows -->
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86-bin.zip" basedir="${build.distDirectory}/win32-win32-x86" level="9" />
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86_64-bin.zip" basedir="${build.distDirectory}/win32-win32-x86_64" level="9" />
+
+		<!-- Other -->
+		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-other-bin.tar.gz" compression="gzip">
+			<tarfileset dir="${build.distDirectory}/other" filemode="755">
+				<include name="/${artifactId}/*.jar" />
+				<include name="/${artifactId}/*.sh" />
+			</tarfileset>
+			<tarfileset dir="${build.distDirectory}/other">
+				<include name="/**" />
+				<exclude name="/${artifactId}/*.jar" />
+				<exclude name="/${artifactId}/*.sh" />
+			</tarfileset>
+		</tar>
 	</target>
 
 </project>
