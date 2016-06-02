@@ -20,7 +20,7 @@
 				</fileset>
 			</classpath>
 			<!-- Compilazione per JRE specifico -->
-			<bootclasspath location="${build.compiler.compilerArguments.bootclasspath}" />
+			<bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" />
 		</javac>
 	</target>
 
