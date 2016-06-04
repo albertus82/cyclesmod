@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.FileDialog;
 
 public class OpenSelectionListener extends AskForSavingSelectionAdapter {
 
+	private static final String[] EXTENSIONS = { "*.INF;*.inf;*.CFG;*.cfg" };
+
 	public OpenSelectionListener(CyclesModGui gui) {
 		super(gui);
 	}
@@ -18,7 +20,7 @@ public class OpenSelectionListener extends AskForSavingSelectionAdapter {
 	public void widgetSelected(final SelectionEvent event) {
 		if (askForSaving(Resources.get("win.title"), Resources.get("msg.confirm.open.message"))) {
 			final FileDialog openDialog = new FileDialog(gui.getShell(), SWT.OPEN);
-			openDialog.setFilterExtensions(new String[] { "*.INF; *.inf; *.CFG; *.cfg" });
+			openDialog.setFilterExtensions(EXTENSIONS);
 			final String fileName = openDialog.open();
 			if (StringUtils.isNotBlank(fileName)) {
 				gui.load(fileName, false);
