@@ -153,7 +153,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
-		saveDialog.setFilterExtensions(new String[] { "*.INF; *.inf" });
+		saveDialog.setFilterExtensions(new String[] { "*.INF;*.inf" });
 		saveDialog.setFileName(BikesInf.FILE_NAME);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
