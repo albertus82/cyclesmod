@@ -14,7 +14,7 @@ Il gioco permette di scegliere tre diverse moto: 125, 250 o 500 cc. I parametri 
 Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere eseguito nativamente con i sistemi operativi correnti, ma con l'aiuto di macchine virtuali o, meglio ancora, di specifici emulatori come [**DOSBox**](http://www.dosbox.com), &egrave; possibile comunque eseguirlo con ottimi risultati.
 
 
-### Installazione e avvio
+## Installazione e avvio
 
 **Effettuare una copia di backup della directory di *The Cycles* prima di utilizzare questo programma!**
 
@@ -28,7 +28,7 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva. Se la variabile di ambiente `JAVA_HOME` viene rilevata, essa sar&agrave; utilizzata come riferimento per avviare la Java Virtual Machine, in caso contrario sar&agrave; richiamato direttamente l'eseguibile `java` (o `javaw`).
 
 
-### Utilizzo
+## Utilizzo
 
 La finestra principale dell'applicazione presenta tre schede, una per categoria di moto: 125, 250 e 500 cc. Ogni scheda &egrave; suddivisa in tre sezioni:
 * **Impostazioni** generali
@@ -50,14 +50,14 @@ Tramite la barra dei men&ugrave; &egrave; possibile:
 
 Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente utilizzare la funzione *Salva con nome...* (men&ugrave; *File*) e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene ricaricata ogni volta che si inizia una nuova gara, pertanto non occorre riavviare completamente il gioco.
 
-###### Ripristino del `BIKES.INF` originale
+#### Ripristino del `BIKES.INF` originale
 
 Nel caso in cui si volessero ripristinare le configurazioni originali di tutte le moto, &egrave; sufficiente utilizzare la funzione *Reimposta* (men&ugrave; *Modifica*), che provveder&agrave; a ricaricare le impostazioni del `BIKES.INF` originale fornito insieme al gioco. Dopo di che, utilizzare la funzione *Salva con nome...* per poter sovrascrivere qualsiasi `BIKES.INF` personalizzato con la versione originale.
 
 
-### Configurazione delle moto
+## Configurazione delle moto
 
-#### Impostazioni generali
+### Impostazioni generali
 Ogni moto dispone di otto impostazioni generali che determinano le seguenti caratteristiche:
 * **Numero marce**: il numero di rapporti del cambio di velocit&agrave;. Intervallo di valori validi: da `0` a `9`.
 * **Regime inizio zona rossa**: regime oltre il quale, dopo un tempo variabile determinato dall'impostazione *Tolleranza fuorigiri* e dal livello di difficolt&agrave; impostato, si verifica la rottura del motore. Ai livelli di difficolt&agrave; 1 e 2 (i pi&ugrave; bassi), questo valore determina anche il regime di cambiata. Intervallo di valori validi: `8500`-`32767` giri/min.
@@ -76,14 +76,14 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
 
 >Sono inoltre presenti tre valori di significato sconosciuto, probabilmente irrilevanti, che &egrave; comunque possibile modificare a scopo sperimentale.
 
-#### Cambio di velocit&agrave;
+### Cambio di velocit&agrave;
 &Egrave; possibile configurare i rapporti del cambio di velocit&agrave; per ogni singola marcia. A valori pi&ugrave; elevati corrispondono rapporti pi&ugrave; corti. I valori ammessi sono compresi tra `0` e `65535` per le marce da 1 a 9, mentre per marcia *N* (folle) il valore &egrave; irrilevante.
 
-#### Coppia motrice
+### Coppia motrice
 La curva di coppia del motore viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la coppia del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m. La curva risultante viene rappresentata graficamente nel relativo riquadro.
 
 
-### Versione da riga di comando
+## Versione da riga di comando
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
 Gli script di avvio ([**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat), [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) e [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
@@ -100,7 +100,7 @@ Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `
 **Volendo rigenerare il file `BIKES.INF` originale di *The Cycles*, &egrave; sufficiente cancellare il file `BIKES.CFG` e far girare il programma "a vuoto": esso generer&agrave; automaticamente un `BIKES.CFG` predefinito e un `BIKES.INF` analogo a quello originale.**
 
 
-### Riconoscimenti
+## Riconoscimenti
 
 Quest'applicazione include componenti realizzati da [Apache Software Foundation](lib/license/apache-2.0.txt) e da [Eclipse Foundation](lib/license/eclipse-1.0.txt).
 
