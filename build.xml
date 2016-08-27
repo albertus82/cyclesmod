@@ -192,13 +192,13 @@
 		</copy>
 	</target>
 
-	<target name="docs">
-		<fileset id="docs" dir="">
-			<include name="README*" />
-			<include name="LICENSE*" />
-			<include name="NOTICE*" />
-		</fileset>
+	<fileset id="docs" dir="">
+		<include name="README*" />
+		<include name="LICENSE*" />
+		<include name="NOTICE*" />
+	</fileset>
 
+	<target name="docs">
 		<copy todir="${build.distDirectory}/win32-win32-x86/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
@@ -239,42 +239,49 @@
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86}" />
 			</manifest>
+			<metainf refid="docs" />
 		</jar>
 		<jar destfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86_64}" />
 			</manifest>
+			<metainf refid="docs" />
 		</jar>
 		<jar destfile="${build.distDirectory}/gtk-linux-x86/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86}" />
 			</manifest>
+			<metainf refid="docs" />
 		</jar>
 		<jar destfile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86_64}" />
 			</manifest>
+			<metainf refid="docs" />
 		</jar>
 		<jar destfile="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx}" />
 			</manifest>
+			<metainf refid="docs" />
 		</jar>
 		<jar destfile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx-x86_64}" />
 			</manifest>
+			<metainf refid="docs" />
 		</jar>
 		<jar destfile="${build.distDirectory}/other/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.other}" />
 			</manifest>
+			<metainf refid="docs" />
 		</jar>
 	</target>
 
