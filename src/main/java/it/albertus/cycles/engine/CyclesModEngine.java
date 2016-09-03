@@ -6,7 +6,7 @@ import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 
 import java.beans.Introspector;
 
@@ -52,7 +52,7 @@ public abstract class CyclesModEngine {
 		boolean applied = false;
 		try {
 			if (value == null || value.trim().length() == 0 || !isNumeric(value.trim())) {
-				throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
+				throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
 			}
 
 			// Settings
@@ -71,7 +71,7 @@ public abstract class CyclesModEngine {
 			}
 
 			else {
-				throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
+				throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
 			}
 		}
 		catch (InvalidPropertyException ipe) {
@@ -110,7 +110,7 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
 		}
 		return applied;
 	}
@@ -131,7 +131,7 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
 		}
 		return applied;
 	}
@@ -152,19 +152,19 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
 		}
 		return applied;
 	}
 
 	private void logChange(final String key, final int defaultValue, final int newValue) {
-		System.out.println(Resources.get("msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
+		System.out.println(Messages.get("msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
 	}
 
 	private Bike getBike(final String key, final String value) {
 		final Bike bike = bikesInf.getBike(Integer.parseInt(StringUtils.substringBefore(key, ".")));
 		if (bike == null) {
-			throw new InvalidPropertyException(Resources.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
 		}
 		return bike;
 	}

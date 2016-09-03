@@ -1,7 +1,7 @@
 package it.albertus.cycles.model;
 
 import it.albertus.cycles.engine.InvalidPropertyException;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class Torque extends BikesInfElement {
 
 	public Torque(final short[] curve) {
 		if (curve.length > LENGTH) {
-			throw new IllegalArgumentException(Resources.get("err.torque", LENGTH, curve.length));
+			throw new IllegalArgumentException(Messages.get("err.torque", LENGTH, curve.length));
 		}
 		for (int i = 0; i < curve.length; i++) {
 			this.curve[i] = curve[i];
@@ -48,7 +48,7 @@ public class Torque extends BikesInfElement {
 	public static short parse(final String key, final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(Resources.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
+			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
 		}
 		return (short) newValue;
 	}

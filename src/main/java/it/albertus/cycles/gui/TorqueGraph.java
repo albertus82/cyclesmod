@@ -2,7 +2,7 @@ package it.albertus.cycles.gui;
 
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Torque;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.jface.resource.FontRegistry;
@@ -56,7 +56,7 @@ public class TorqueGraph extends Canvas {
 		final LightweightSystem lws = new LightweightSystem(this);
 
 		xyGraph = new XYGraph();
-		xyGraph.setTitle(Resources.get("lbl.graph.title"));
+		xyGraph.setTitle(Messages.get("lbl.graph.title"));
 		lws.setContents(xyGraph);
 
 		final double[] x = new double[Torque.LENGTH], y = new double[Torque.LENGTH];
@@ -78,13 +78,13 @@ public class TorqueGraph extends Canvas {
 		final Font axisTitleFont = fontRegistry.get("axisTitle");
 
 		abscissae = xyGraph.primaryXAxis;
-		abscissae.setTitle(Resources.get("lbl.graph.axis.x"));
+		abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
 		abscissae.setAutoScale(true);
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
 		ordinates = xyGraph.primaryYAxis;
-		ordinates.setTitle(Resources.get("lbl.graph.axis.y"));
+		ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
 		ordinates.setAutoScale(true);
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
@@ -123,9 +123,9 @@ public class TorqueGraph extends Canvas {
 	}
 
 	public void updateTexts() {
-		xyGraph.setTitle(Resources.get("lbl.graph.title"));
-		abscissae.setTitle(Resources.get("lbl.graph.axis.x"));
-		ordinates.setTitle(Resources.get("lbl.graph.axis.y"));
+		xyGraph.setTitle(Messages.get("lbl.graph.title"));
+		abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
+		ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
 	}
 
 	public XYGraph getXyGraph() {

@@ -1,7 +1,7 @@
 package it.albertus.cycles.gui;
 
 import it.albertus.cycles.gui.listener.LinkSelectionListener;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -64,13 +64,13 @@ public class AboutDialog extends Dialog {
 
 		final Link linkIcon = new Link(shell, SWT.NONE);
 		String url = getIconUrl().startsWith("http") ? getIconUrl() : "http://" + getIconUrl();
-		linkIcon.setText(Resources.get("msg.info.icon") + " <a href=\"" + url + "\">" + getIconUrl() + "</a>");
+		linkIcon.setText(Messages.get("msg.info.icon") + " <a href=\"" + url + "\">" + getIconUrl() + "</a>");
 		gridData = new GridData(SWT.LEAD, SWT.CENTER, false, true);
 		linkIcon.setLayoutData(gridData);
 		linkIcon.addSelectionListener(new LinkSelectionListener());
 
 		final Button okButton = new Button(shell, SWT.PUSH);
-		okButton.setText(Resources.get("lbl.button.ok"));
+		okButton.setText(Messages.get("lbl.button.ok"));
 		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 0);
 		gridData.minimumWidth = 64;
 		okButton.setLayoutData(gridData);

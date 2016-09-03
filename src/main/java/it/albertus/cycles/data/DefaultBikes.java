@@ -1,7 +1,7 @@
 package it.albertus.cycles.data;
 
 import it.albertus.cycles.model.BikesInf;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 
 import java.io.ByteArrayInputStream;
 import java.io.StreamCorruptedException;
@@ -44,10 +44,10 @@ public class DefaultBikes {
 		final Checksum crc = new CRC32();
 		crc.update(DEFAULT, 0, DEFAULT.length);
 		if (crc.getValue() != CRC) {
-			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC), String.format("%08X", crc.getValue())));
+			throw new StreamCorruptedException(Messages.get("err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC), String.format("%08X", crc.getValue())));
 		}
 		if (DEFAULT.length != BikesInf.FILE_SIZE) {
-			throw new StreamCorruptedException(Resources.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));
+			throw new StreamCorruptedException(Messages.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));
 		}
 	}
 

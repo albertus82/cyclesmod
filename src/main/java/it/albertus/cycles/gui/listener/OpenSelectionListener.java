@@ -1,7 +1,7 @@
 package it.albertus.cycles.gui.listener;
 
 import it.albertus.cycles.gui.CyclesModGui;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
@@ -18,7 +18,7 @@ public class OpenSelectionListener extends AskForSavingSelectionAdapter {
 
 	@Override
 	public void widgetSelected(final SelectionEvent event) {
-		if (askForSaving(Resources.get("win.title"), Resources.get("msg.confirm.open.message"))) {
+		if (askForSaving(Messages.get("win.title"), Messages.get("msg.confirm.open.message"))) {
 			final FileDialog openDialog = new FileDialog(gui.getShell(), SWT.OPEN);
 			openDialog.setFilterExtensions(EXTENSIONS);
 			final String fileName = openDialog.open();
