@@ -13,7 +13,7 @@ import it.albertus.cycles.model.Gearbox;
 import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 
 import java.util.Collections;
 import java.util.EnumMap;
@@ -75,7 +75,7 @@ public class Tabs {
 
 			// Settings
 			final Group settingsGroup = new Group(tabComposite, SWT.NULL);
-			settingsGroup.setText(Resources.get("lbl.settings"));
+			settingsGroup.setText(Messages.get("lbl.settings"));
 			// Posizionamento dell'elemento all'interno del contenitore...
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(settingsGroup);
 			// Definizione di come saranno disposti gli elementi contenuti...
@@ -88,7 +88,7 @@ public class Tabs {
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
 				final String labelTextKey = "lbl." + setting.toString();
-				label.setText(Resources.get(labelTextKey));
+				label.setText(Messages.get(labelTextKey));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
@@ -112,7 +112,7 @@ public class Tabs {
 
 			// Gearbox
 			final Group gearboxGroup = new Group(tabComposite, SWT.NULL);
-			gearboxGroup.setText(Resources.get("lbl.gearbox"));
+			gearboxGroup.setText(Messages.get("lbl.gearbox"));
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(gearboxGroup);
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
 			gearboxGroups.put(bike.getType(), gearboxGroup);
@@ -124,7 +124,7 @@ public class Tabs {
 				GridDataFactory.swtDefaults().applyTo(label);
 				final String labelTextKey = "lbl.gear";
 				final String labelTextArgument = index != 0 ? String.valueOf(index) : "N";
-				label.setText(Resources.get(labelTextKey, labelTextArgument));
+				label.setText(Messages.get(labelTextKey, labelTextArgument));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setData(LabelDataKey.ARGUMENT.toString(), labelTextArgument);
 				label.setToolTipText(key);
@@ -144,7 +144,7 @@ public class Tabs {
 
 			// Torque
 			final Group torqueGroup = new Group(tabComposite, SWT.NULL);
-			torqueGroup.setText(Resources.get("lbl.torque"));
+			torqueGroup.setText(Messages.get("lbl.torque"));
 			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(torqueGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(torqueGroup);
 			torqueGroups.put(bike.getType(), torqueGroup);
@@ -156,7 +156,7 @@ public class Tabs {
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				final String labelTextKey = "lbl.rpm";
 				final String labelTextArgument = String.valueOf(Torque.getRpm(index));
-				label.setText(Resources.get(labelTextKey, labelTextArgument));
+				label.setText(Messages.get(labelTextKey, labelTextArgument));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setData(LabelDataKey.ARGUMENT.toString(), labelTextArgument);
 				label.setToolTipText(key);
@@ -185,13 +185,13 @@ public class Tabs {
 
 	public void updateTexts() {
 		for (final Group settingsGroup : settingsGroups.values()) {
-			settingsGroup.setText(Resources.get("lbl.settings"));
+			settingsGroup.setText(Messages.get("lbl.settings"));
 		}
 		for (final Group gearboxGroup : gearboxGroups.values()) {
-			gearboxGroup.setText(Resources.get("lbl.gearbox"));
+			gearboxGroup.setText(Messages.get("lbl.gearbox"));
 		}
 		for (final Group torqueGroup : torqueGroups.values()) {
-			torqueGroup.setText(Resources.get("lbl.torque"));
+			torqueGroup.setText(Messages.get("lbl.torque"));
 		}
 		for (final TorqueGraph torqueGraph : torqueGraphs.values()) {
 			torqueGraph.updateTexts();
@@ -201,7 +201,7 @@ public class Tabs {
 		disableTextListeners();
 		for (final FormProperty formProperty : formProperties.values()) {
 			final Label label = formProperty.getLabel();
-			final String updatedLabelText = Resources.get((String) label.getData(LabelDataKey.KEY.toString()), label.getData(LabelDataKey.ARGUMENT.toString()));
+			final String updatedLabelText = Messages.get((String) label.getData(LabelDataKey.KEY.toString()), label.getData(LabelDataKey.ARGUMENT.toString()));
 			if (!label.getText().equals(updatedLabelText)) {
 				label.setText(updatedLabelText);
 			}
@@ -222,14 +222,14 @@ public class Tabs {
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
-			throw new IllegalStateException(Resources.get("err.properties.number"));
+			throw new IllegalStateException(Messages.get("err.properties.number"));
 		}
 
 		// Update screen values...
 		disableTextListeners();
 		for (final String key : formProperties.keySet()) {
 			if (!properties.containsKey(key)) {
-				throw new RuntimeException(Resources.get("err.property.missing", key));
+				throw new RuntimeException(Messages.get("err.property.missing", key));
 			}
 			final Text field = formProperties.get(key).getText();
 
@@ -245,7 +245,7 @@ public class Tabs {
 				textLimit = Integer.toString(Torque.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else {
-				throw new IllegalStateException(Resources.get("err.unsupported.property", key, formProperties.get(key).getValue()));
+				throw new IllegalStateException(Messages.get("err.unsupported.property", key, formProperties.get(key).getValue()));
 			}
 			if (field.getTextLimit() != textLimit) {
 				field.setTextLimit(textLimit);
@@ -258,7 +258,7 @@ public class Tabs {
 			}
 
 			// Update tooltip text...
-			final String toolTipText = Resources.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString())), gui.getNumeralSystem().getRadix()).toUpperCase());
+			final String toolTipText = Messages.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString())), gui.getNumeralSystem().getRadix()).toUpperCase());
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}

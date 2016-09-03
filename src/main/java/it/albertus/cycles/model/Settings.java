@@ -1,7 +1,7 @@
 package it.albertus.cycles.model;
 
 import it.albertus.cycles.engine.InvalidPropertyException;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 import it.albertus.util.ByteUtils;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class Settings extends BikesInfElement {
 	public static int parse(final String key, final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(Resources.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
+			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
 		}
 		return (int) newValue;
 	}

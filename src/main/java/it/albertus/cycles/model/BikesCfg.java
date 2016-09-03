@@ -1,7 +1,7 @@
 package it.albertus.cycles.model;
 
 import it.albertus.cycles.model.Bike.BikeType;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 import it.albertus.util.NewLine;
 
 import java.beans.Introspector;
@@ -40,23 +40,23 @@ public class BikesCfg {
 
 	public BikesCfg(final String fileName) throws IOException {
 		populateProperties(new BufferedReader(new FileReader(fileName)));
-		System.out.println(Resources.get("msg.file.read", FILE_NAME));
+		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
 
 	public BikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
-		System.out.println(Resources.get("msg.reading.file", FILE_NAME));
+		System.out.println(Messages.get("msg.reading.file", FILE_NAME));
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(path + FILE_NAME));
 		}
 		catch (FileNotFoundException fnfe) {
-			System.out.println(Resources.get("msg.file.not.found.creating.default", FILE_NAME));
+			System.out.println(Messages.get("msg.file.not.found.creating.default", FILE_NAME));
 			writeDefaultBikesCfg(originalBikesInf, path);
-			System.out.println(Resources.get("msg.default.file.created", FILE_NAME));
+			System.out.println(Messages.get("msg.default.file.created", FILE_NAME));
 			reader = new BufferedReader(new FileReader(path + FILE_NAME));
 		}
 		populateProperties(reader);
-		System.out.println(Resources.get("msg.file.read", FILE_NAME));
+		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
 
 	private void writeDefaultBikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
@@ -71,11 +71,11 @@ public class BikesCfg {
 
 	private String createProperties(final BikesInf bikesInf) {
 		final String lineSeparator = LINE_SEPARATOR != null ? LINE_SEPARATOR : NewLine.CRLF.toString();
-		final StringBuilder properties = new StringBuilder(Resources.get("str.cfg.header"));
+		final StringBuilder properties = new StringBuilder(Messages.get("str.cfg.header"));
 
 		for (Bike bike : bikesInf.getBikes()) {
 			properties.append(lineSeparator).append(lineSeparator);
-			properties.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Resources.get("str.cfg.begin") + "... ###");
+			properties.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.begin") + "... ###");
 
 			// Settings
 			properties.append(lineSeparator);
@@ -114,11 +114,11 @@ public class BikesCfg {
 				properties.append(lineSeparator);
 			}
 
-			properties.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Resources.get("str.cfg.end") + ". ###");
+			properties.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.end") + ". ###");
 		}
 
 		properties.append(lineSeparator).append(lineSeparator);
-		properties.append(Resources.get("str.cfg.footer"));
+		properties.append(Messages.get("str.cfg.footer"));
 		return properties.toString();
 	}
 

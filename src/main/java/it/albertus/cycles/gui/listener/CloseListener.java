@@ -1,7 +1,7 @@
 package it.albertus.cycles.gui.listener;
 
 import it.albertus.cycles.gui.CyclesModGui;
-import it.albertus.cycles.resources.Resources;
+import it.albertus.cycles.resources.Messages;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Event;
@@ -16,7 +16,7 @@ public class CloseListener extends AskForSavingSelectionAdapter implements Liste
 	/** Comando di chiusura da men&ugrave;. */
 	@Override
 	public void widgetSelected(SelectionEvent e) {
-		if (askForSaving(Resources.get("msg.confirm.close.text"), Resources.get("msg.confirm.close.message"))) {
+		if (askForSaving(Messages.get("msg.confirm.close.text"), Messages.get("msg.confirm.close.message"))) {
 			gui.getShell().dispose();
 		}
 	}
@@ -24,7 +24,7 @@ public class CloseListener extends AskForSavingSelectionAdapter implements Liste
 	/** Pulsante di chiusura. */
 	@Override
 	public void handleEvent(Event event) {
-		event.doit = askForSaving(Resources.get("msg.confirm.close.text"), Resources.get("msg.confirm.close.message"));
+		event.doit = askForSaving(Messages.get("msg.confirm.close.text"), Messages.get("msg.confirm.close.message"));
 	}
 
 }
