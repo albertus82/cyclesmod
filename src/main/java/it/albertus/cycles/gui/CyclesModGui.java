@@ -1,16 +1,5 @@
 package it.albertus.cycles.gui;
 
-import it.albertus.cycles.data.DefaultBikes;
-import it.albertus.cycles.engine.CyclesModEngine;
-import it.albertus.cycles.engine.InvalidPropertyException;
-import it.albertus.cycles.engine.NumeralSystem;
-import it.albertus.cycles.gui.listener.CloseListener;
-import it.albertus.cycles.model.BikesCfg;
-import it.albertus.cycles.model.BikesInf;
-import it.albertus.cycles.resources.Messages;
-import it.albertus.cycles.resources.Messages.Language;
-import it.albertus.util.ExceptionUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -26,6 +15,18 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cycles.data.DefaultBikes;
+import it.albertus.cycles.engine.CyclesModEngine;
+import it.albertus.cycles.engine.InvalidPropertyException;
+import it.albertus.cycles.engine.NumeralSystem;
+import it.albertus.cycles.gui.listener.CloseListener;
+import it.albertus.cycles.model.BikesCfg;
+import it.albertus.cycles.model.BikesInf;
+import it.albertus.cycles.resources.Messages;
+import it.albertus.cycles.resources.Messages.Language;
+import it.albertus.util.ExceptionUtils;
+import it.albertus.util.Version;
+
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private final Map<String, Integer> defaultProperties = new HashMap<String, Integer>();
@@ -37,7 +38,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	/** GUI entry point. */
 	public static void start(final String fileName) throws IOException {
-		final Display display = new Display();
+		Display.setAppName(Messages.get("win.title"));
+		Display.setAppVersion(Version.getInstance().getNumber());
+		final Display display = Display.getDefault();
 		final Shell shell = new CyclesModGui(display, fileName).getShell();
 		shell.open();
 		while (!shell.isDisposed()) {
