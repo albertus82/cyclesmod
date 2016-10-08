@@ -1,15 +1,17 @@
 package it.albertus.cycles.gui;
 
-import it.albertus.cycles.gui.FormProperty.TextDataKey;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
+import it.albertus.cycles.gui.FormProperty.TextDataKey;
+
 public class TextFormatter {
+
+	private static final String FONT_KEY = "it.albertus.jface.font.property";
 
 	private static final char SAMPLE_CHAR = '9';
 
@@ -75,22 +77,18 @@ public class TextFormatter {
 		}
 	}
 
-	public void setNormalFontStyle(final Text field) {
-		final FontData fontData = field.getFont().getFontData()[0];
-		if (!fontRegistry.hasValueFor("defaultProperty")) {
-			fontData.setStyle(SWT.NORMAL);
-			fontRegistry.put("defaultProperty", new FontData[] { fontData });
+	public void setNormalFontStyle(final Control control) {
+		if (!fontRegistry.hasValueFor(FONT_KEY)) {
+			fontRegistry.put(FONT_KEY, control.getFont().getFontData());
 		}
-		field.setFont(fontRegistry.get("defaultProperty"));
+		control.setFont(fontRegistry.get(FONT_KEY));
 	}
 
-	public void setBoldFontStyle(final Text field) {
-		final FontData fontData = field.getFont().getFontData()[0];
-		if (!fontRegistry.hasValueFor("customProperty")) {
-			fontData.setStyle(SWT.BOLD);
-			fontRegistry.put("customProperty", new FontData[] { fontData });
+	public void setBoldFontStyle(final Control control) {
+		if (!fontRegistry.hasValueFor(FONT_KEY)) {
+			fontRegistry.put(FONT_KEY, control.getFont().getFontData());
 		}
-		field.setFont(fontRegistry.get("customProperty"));
+		control.setFont(fontRegistry.getBold(FONT_KEY));
 	}
 
 }
