@@ -1,8 +1,5 @@
 package it.albertus.cycles.gui;
 
-import it.albertus.cycles.gui.listener.LinkSelectionListener;
-import it.albertus.cycles.resources.Messages;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -10,10 +7,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Dialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
+
+import it.albertus.cycles.gui.listener.LinkSelectionListener;
+import it.albertus.cycles.resources.Messages;
 
 public class AboutDialog extends Dialog {
 
@@ -35,12 +34,6 @@ public class AboutDialog extends Dialog {
 		createContents(shell);
 		shell.pack();
 		shell.open();
-		final Display display = getParent().getDisplay();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
-			}
-		}
 	}
 
 	private void createContents(final Shell shell) {
