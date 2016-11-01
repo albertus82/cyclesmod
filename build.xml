@@ -8,6 +8,8 @@
 	<property file="build.properties" />
 	<property file="${build.resourcesDirectory}/version.properties" />
 
+	<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpath="${dependencies.directory}/ant/jarbundler-core-3.3.0.jar" />
+
 	<target name="clean">
 		<delete dir="${build.directory}" />
 	</target>
@@ -167,25 +169,25 @@
 			<include name="*.command" />
 		</fileset>
 
-		<copy todir="${build.distDirectory}/win32-win32-x86/${artifactId}">
+		<copy todir="${build.distDirectory}/win32-win32-x86/${artifactId}" failonerror="false">
 			<fileset refid="bat" />
 		</copy>
-		<copy todir="${build.distDirectory}/win32-win32-x86_64/${artifactId}">
+		<copy todir="${build.distDirectory}/win32-win32-x86_64/${artifactId}" failonerror="false">
 			<fileset refid="bat" />
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86/${artifactId}">
+		<copy todir="${build.distDirectory}/gtk-linux-x86/${artifactId}" failonerror="false">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.distDirectory}/gtk-linux-x86_64/${artifactId}">
+		<copy todir="${build.distDirectory}/gtk-linux-x86_64/${artifactId}" failonerror="false">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx/${artifactId}">
+		<copy todir="${build.distDirectory}/cocoa-macosx/${artifactId}" failonerror="false">
 			<fileset refid="command" />
 		</copy>
-		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}">
+		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}" failonerror="false">
 			<fileset refid="command" />
 		</copy>
-		<copy todir="${build.distDirectory}/other/${artifactId}">
+		<copy todir="${build.distDirectory}/other/${artifactId}" failonerror="false">
 			<fileset refid="bat" />
 			<fileset refid="sh" />
 			<fileset refid="command" />
@@ -223,14 +225,14 @@
 	</target>
 
 	<target name="icons">
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86/${artifactId}/${artifactId}.ico" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.ico" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86/${artifactId}/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/other/${artifactId}/${artifactId}.icns" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/other/${artifactId}/${artifactId}.ico" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86/${artifactId}/${artifactId}.ico" failonerror="false" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.ico" failonerror="false" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86/${artifactId}/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/other/${artifactId}/${artifactId}.icns" failonerror="false" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/other/${artifactId}/${artifactId}.ico" failonerror="false" />
 	</target>
 
 	<target name="jar" depends="compile, resources, config, scripts, docs, icons, lib">
@@ -287,26 +289,49 @@
 
 	<target name="release" depends="jar">
 		<!-- Mac OS X -->
+		<mkdir dir="${build.directory}/bundle/cocoa-macosx" />
+		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${dependencies.directory}/ant/JavaApplicationStub">
+			<jarfileset dir="${build.distDirectory}/cocoa-macosx/${artifactId}" includes="**/*.jar" />
+		</jarbundler>
+		<copy todir="${build.directory}/bundle/cocoa-macosx/${name}.app/Contents/Resources/Java" failonerror="false">
+			<fileset refid="config" />
+			<fileset refid="command" />
+		</copy>
+		<copy todir="${build.directory}/bundle/cocoa-macosx/${name}.app/Contents/SharedSupport">
+			<fileset refid="docs" />
+		</copy>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-bin.tar.gz" compression="gzip">
-			<tarfileset dir="${build.distDirectory}/cocoa-macosx" filemode="755">
-				<include name="/${artifactId}/*.jar" />
-				<include name="/${artifactId}/*.command" />
+			<tarfileset dir="${build.directory}/bundle/cocoa-macosx" filemode="755">
+				<include name="/${name}.app/Contents/MacOS/*" />
+				<include name="/${name}.app/Contents/Resources/Java/*.command" />
 			</tarfileset>
-			<tarfileset dir="${build.distDirectory}/cocoa-macosx">
+			<tarfileset dir="${build.directory}/bundle/cocoa-macosx">
 				<include name="/**" />
-				<exclude name="/${artifactId}/*.jar" />
-				<exclude name="/${artifactId}/*.command" />
+				<exclude name="/${name}.app/Contents/MacOS/*" />
+				<exclude name="/${name}.app/Contents/Resources/Java/*.command" />
 			</tarfileset>
 		</tar>
+
+		<mkdir dir="${build.directory}/bundle/cocoa-macosx-x86_64" />
+		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${dependencies.directory}/ant/JavaApplicationStub">
+			<jarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}" includes="**/*.jar" />
+		</jarbundler>
+		<copy todir="${build.directory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/Resources/Java" failonerror="false">
+			<fileset refid="config" />
+			<fileset refid="command" />
+		</copy>
+		<copy todir="${build.directory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/SharedSupport">
+			<fileset refid="docs" />
+		</copy>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.tar.gz" compression="gzip">
-			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64" filemode="755">
-				<include name="/${artifactId}/*.jar" />
-				<include name="/${artifactId}/*.command" />
+			<tarfileset dir="${build.directory}/bundle/cocoa-macosx-x86_64" filemode="755">
+				<include name="/${name}.app/Contents/MacOS/*" />
+				<include name="/${name}.app/Contents/Resources/Java/*.command" />
 			</tarfileset>
-			<tarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64">
+			<tarfileset dir="${build.directory}/bundle/cocoa-macosx-x86_64">
 				<include name="/**" />
-				<exclude name="/${artifactId}/*.jar" />
-				<exclude name="/${artifactId}/*.command" />
+				<exclude name="/${name}.app/Contents/MacOS/*" />
+				<exclude name="/${name}.app/Contents/Resources/Java/*.command" />
 			</tarfileset>
 		</tar>
 
