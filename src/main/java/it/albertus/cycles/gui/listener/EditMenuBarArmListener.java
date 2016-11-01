@@ -1,13 +1,13 @@
 package it.albertus.cycles.gui.listener;
 
-import it.albertus.cycles.gui.CyclesModGui;
-import it.albertus.cycles.gui.FormProperty;
-import it.albertus.cycles.gui.GuiUtils;
-
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.events.ArmEvent;
 import org.eclipse.swt.events.ArmListener;
 import org.eclipse.swt.widgets.MenuItem;
+
+import it.albertus.cycles.gui.CyclesModGui;
+import it.albertus.cycles.gui.FormProperty;
+import it.albertus.jface.SwtUtils;
 
 /**
  * Attenzione: disabilitando gli elementi dei menu, vengono automaticamente
@@ -47,7 +47,7 @@ public class EditMenuBarArmListener implements ArmListener {
 	}
 
 	protected boolean canPaste() {
-		if (GuiUtils.checkClipboard(TextTransfer.getInstance())) {
+		if (SwtUtils.checkClipboard(TextTransfer.getInstance())) {
 			for (final FormProperty fp : gui.getTabs().getFormProperties().values()) {
 				if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
 					return true;
