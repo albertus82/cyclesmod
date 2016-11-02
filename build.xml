@@ -8,7 +8,18 @@
 	<property file="build.properties" />
 	<property file="${build.resourcesDirectory}/version.properties" />
 
-	<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpath="${dependencies.directory}/ant/jarbundler-core-3.3.0.jar" />
+	<!-- JarBundler configuration -->
+	<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpath="${jarbundler.dir}/jarbundler-core-3.3.0.jar" />
+
+	<!-- Launch4j configuration -->
+	<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
+	<condition property="launch4j.bindir" value="${launch4j.dir}/mac" else="${launch4j.dir}/bin">
+		<and>
+			<os family="mac" />
+			<available file="${launch4j.dir}/mac" type="dir" />
+		</and>
+	</condition>
+	<chmod perm="+x" file="${launch4j.bindir}/*" failonerror="false" failifexecutionfails="false" ignoremissing="true" />
 
 	<target name="clean">
 		<delete dir="${build.directory}" />
@@ -225,8 +236,6 @@
 	</target>
 
 	<target name="icons">
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86/${artifactId}/${artifactId}.ico" failonerror="false" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.ico" failonerror="false" />
 		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86/${artifactId}/${artifactId}.icns" failonerror="false" />
 		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/${artifactId}.icns" failonerror="false" />
 		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" failonerror="false" />
@@ -290,7 +299,7 @@
 	<target name="release" depends="jar">
 		<!-- Mac OS X -->
 		<mkdir dir="${build.directory}/bundle/cocoa-macosx" />
-		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${dependencies.directory}/ant/JavaApplicationStub">
+		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub">
 			<jarfileset dir="${build.distDirectory}/cocoa-macosx/${artifactId}" includes="**/*.jar" />
 		</jarbundler>
 		<copy todir="${build.directory}/bundle/cocoa-macosx/${name}.app/Contents/Resources/Java" failonerror="false">
@@ -302,18 +311,18 @@
 		</copy>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.directory}/bundle/cocoa-macosx" filemode="755">
-				<include name="/${name}.app/Contents/MacOS/*" />
-				<include name="/${name}.app/Contents/Resources/Java/*.command" />
+				<include name="${name}.app/Contents/MacOS/*" />
+				<include name="${name}.app/Contents/Resources/Java/*.command" />
 			</tarfileset>
 			<tarfileset dir="${build.directory}/bundle/cocoa-macosx">
-				<include name="/**" />
-				<exclude name="/${name}.app/Contents/MacOS/*" />
-				<exclude name="/${name}.app/Contents/Resources/Java/*.command" />
+				<include name="**" />
+				<exclude name="${name}.app/Contents/MacOS/*" />
+				<exclude name="${name}.app/Contents/Resources/Java/*.command" />
 			</tarfileset>
 		</tar>
 
 		<mkdir dir="${build.directory}/bundle/cocoa-macosx-x86_64" />
-		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${dependencies.directory}/ant/JavaApplicationStub">
+		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub">
 			<jarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}" includes="**/*.jar" />
 		</jarbundler>
 		<copy todir="${build.directory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/Resources/Java" failonerror="false">
@@ -325,54 +334,71 @@
 		</copy>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.directory}/bundle/cocoa-macosx-x86_64" filemode="755">
-				<include name="/${name}.app/Contents/MacOS/*" />
-				<include name="/${name}.app/Contents/Resources/Java/*.command" />
+				<include name="${name}.app/Contents/MacOS/*" />
+				<include name="${name}.app/Contents/Resources/Java/*.command" />
 			</tarfileset>
 			<tarfileset dir="${build.directory}/bundle/cocoa-macosx-x86_64">
-				<include name="/**" />
-				<exclude name="/${name}.app/Contents/MacOS/*" />
-				<exclude name="/${name}.app/Contents/Resources/Java/*.command" />
+				<include name="**" />
+				<exclude name="${name}.app/Contents/MacOS/*" />
+				<exclude name="${name}.app/Contents/Resources/Java/*.command" />
 			</tarfileset>
 		</tar>
 
 		<!-- Linux -->
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86" filemode="755">
-				<include name="/${artifactId}/*.jar" />
-				<include name="/${artifactId}/*.sh" />
+				<include name="${artifactId}/*.jar" />
+				<include name="${artifactId}/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86">
-				<include name="/**" />
-				<exclude name="/${artifactId}/*.jar" />
-				<exclude name="/${artifactId}/*.sh" />
+				<include name="**" />
+				<exclude name="${artifactId}/*.jar" />
+				<exclude name="${artifactId}/*.sh" />
 			</tarfileset>
 		</tar>
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-x86_64-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64" filemode="755">
-				<include name="/${artifactId}/*.jar" />
-				<include name="/${artifactId}/*.sh" />
+				<include name="${artifactId}/*.jar" />
+				<include name="${artifactId}/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64">
-				<include name="/**" />
-				<exclude name="/${artifactId}/*.jar" />
-				<exclude name="/${artifactId}/*.sh" />
+				<include name="**" />
+				<exclude name="${artifactId}/*.jar" />
+				<exclude name="${artifactId}/*.sh" />
 			</tarfileset>
 		</tar>
 
 		<!-- Windows -->
+		<launch4j bindir="${launch4j.bindir}">
+			<config jarpath="${artifactId}.jar" headertype="gui" dontwrapjar="true" stayalive="true" outfile="${build.distDirectory}/win32-win32-x86/${artifactId}/${artifactId}.exe" errtitle="Launch4j" chdir="." icon="${icons.directory}/main.ico">
+				<singleInstance mutexname="${build.jar.archive.manifest.mainClass}" windowtitle="${name}" />
+				<jre minversion="${build.compiler.target}.0" runtimebits="32" bundledjre64bit="false" bundledjreasfallback="false" jdkpreference="preferJre" initialheapsize="${vm.initialHeapSize}" maxheapsize="${vm.maxHeapSize}" />
+				<classPath mainclass="${build.jar.archive.manifest.mainClass}" cp="lib/*" />
+				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${artifactId}" originalfilename="${artifactId}.exe" language="ENGLISH_US" />
+			</config>
+		</launch4j>
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86-bin.zip" basedir="${build.distDirectory}/win32-win32-x86" level="9" />
+
+		<launch4j bindir="${launch4j.bindir}">
+			<config jarpath="${artifactId}.jar" headertype="gui" dontwrapjar="true" stayalive="true" outfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.exe" errtitle="Launch4j" chdir="." icon="${icons.directory}/main.ico">
+				<singleInstance mutexname="${build.jar.archive.manifest.mainClass}" windowtitle="${name}" />
+				<jre minversion="${build.compiler.target}.0" runtimebits="64" bundledjre64bit="false" bundledjreasfallback="false" jdkpreference="preferJre" initialheapsize="${vm.initialHeapSize}" maxheapsize="${vm.maxHeapSize}" />
+				<classPath mainclass="${build.jar.archive.manifest.mainClass}" cp="lib/*" />
+				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${artifactId}" originalfilename="${artifactId}.exe" language="ENGLISH_US" />
+			</config>
+		</launch4j>
 		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86_64-bin.zip" basedir="${build.distDirectory}/win32-win32-x86_64" level="9" />
 
 		<!-- Other -->
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-other-bin.tar.gz" compression="gzip">
 			<tarfileset dir="${build.distDirectory}/other" filemode="755">
-				<include name="/${artifactId}/*.jar" />
-				<include name="/${artifactId}/*.sh" />
+				<include name="${artifactId}/*.jar" />
+				<include name="${artifactId}/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.distDirectory}/other">
-				<include name="/**" />
-				<exclude name="/${artifactId}/*.jar" />
-				<exclude name="/${artifactId}/*.sh" />
+				<include name="**" />
+				<exclude name="${artifactId}/*.jar" />
+				<exclude name="${artifactId}/*.sh" />
 			</tarfileset>
 		</tar>
 	</target>
