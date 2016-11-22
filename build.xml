@@ -299,7 +299,7 @@
 	<target name="release" depends="jar">
 		<!-- Mac OS X -->
 		<mkdir dir="${build.directory}/bundle/cocoa-macosx" />
-		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub">
+		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub" highresolutioncapable="true">
 			<jarfileset dir="${build.distDirectory}/cocoa-macosx/${artifactId}" includes="**/*.jar" />
 		</jarbundler>
 		<copy todir="${build.directory}/bundle/cocoa-macosx/${name}.app/Contents/Resources/Java" failonerror="false">
@@ -322,7 +322,7 @@
 		</tar>
 
 		<mkdir dir="${build.directory}/bundle/cocoa-macosx-x86_64" />
-		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub">
+		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.directory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub" highresolutioncapable="true">
 			<jarfileset dir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}" includes="**/*.jar" />
 		</jarbundler>
 		<copy todir="${build.directory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/Resources/Java" failonerror="false">
