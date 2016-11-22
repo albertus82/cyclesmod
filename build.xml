@@ -309,7 +309,7 @@
 		<copy todir="${build.directory}/bundle/cocoa-macosx/${name}.app/Contents/SharedSupport">
 			<fileset refid="docs" />
 		</copy>
-		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-bin.tar.gz" compression="gzip">
+		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-app.tar.gz" compression="gzip">
 			<tarfileset dir="${build.directory}/bundle/cocoa-macosx" filemode="755">
 				<include name="${name}.app/Contents/MacOS/*" />
 				<include name="${name}.app/Contents/Resources/Java/*.command" />
@@ -332,7 +332,7 @@
 		<copy todir="${build.directory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/SharedSupport">
 			<fileset refid="docs" />
 		</copy>
-		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-bin.tar.gz" compression="gzip">
+		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-app.tar.gz" compression="gzip">
 			<tarfileset dir="${build.directory}/bundle/cocoa-macosx-x86_64" filemode="755">
 				<include name="${name}.app/Contents/MacOS/*" />
 				<include name="${name}.app/Contents/Resources/Java/*.command" />
@@ -377,7 +377,37 @@
 				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${artifactId}" originalfilename="${artifactId}.exe" />
 			</config>
 		</launch4j>
-		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86-bin.zip" basedir="${build.distDirectory}/win32-win32-x86" level="9" />
+		<echo file="${build.distDirectory}/win32-win32-x86/setup.iss">
+			[Setup]
+			AppName=${name}
+			AppVersion=${version.number}
+			DefaultDirName={pf}\${name}
+			DefaultGroupName=${name}
+			UninstallDisplayIcon={app}\${artifactId}.exe
+			Compression=lzma2
+			SolidCompression=yes
+			ArchitecturesAllowed=x86
+
+			[Files]
+			Source: "${artifactId}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+
+			[Icons]
+			Name: "{group}\${name}"; Filename: "{app}\${artifactId}.exe"
+			Name: "{commondesktop}\${name}"; Filename: "{app}\${artifactId}.exe"
+			Name: "{group}\Uninstall ${name}"; Filename: "{uninstallexe}"
+		</echo>
+
+		<exec osfamily="windows" executable="${innosetup.dir}/ISCC.exe">
+			<arg value="${build.distDirectory}/win32-win32-x86/setup.iss" />
+			<arg value="/O${build.releaseDirectory}" />
+			<arg value="/F${artifactId}-${version.number}-win32-win32-x86-setup" />
+		</exec>
+		<exec osfamily="unix" executable="wine">
+			<arg value="${innosetup.dir}/ISCC.exe" />
+			<arg value="${build.distDirectory}/win32-win32-x86/setup.iss" />
+			<arg value="/O${build.releaseDirectory}" />
+			<arg value="/F${artifactId}-${version.number}-win32-win32-x86-setup" />
+		</exec>
 
 		<launch4j bindir="${launch4j.bindir}">
 			<config outfile="${build.distDirectory}/win32-win32-x86_64/${artifactId}/${artifactId}.exe" jarpath="${artifactId}.jar" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
@@ -387,7 +417,38 @@
 				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${artifactId}" originalfilename="${artifactId}.exe" />
 			</config>
 		</launch4j>
-		<zip destfile="${build.releaseDirectory}/${artifactId}-${version.number}-win32-win32-x86_64-bin.zip" basedir="${build.distDirectory}/win32-win32-x86_64" level="9" />
+		<echo file="${build.distDirectory}/win32-win32-x86_64/setup.iss">
+			[Setup]
+			AppName=${name}
+			AppVersion=${version.number}
+			DefaultDirName={pf}\${name}
+			DefaultGroupName=${name}
+			UninstallDisplayIcon={app}\${artifactId}.exe
+			Compression=lzma2
+			SolidCompression=yes
+			ArchitecturesAllowed=x64
+			ArchitecturesInstallIn64BitMode=x64
+
+			[Files]
+			Source: "${artifactId}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+
+			[Icons]
+			Name: "{group}\${name}"; Filename: "{app}\${artifactId}.exe"
+			Name: "{commondesktop}\${name}"; Filename: "{app}\${artifactId}.exe"
+			Name: "{group}\Uninstall ${name}"; Filename: "{uninstallexe}"
+		</echo>
+
+		<exec osfamily="windows" executable="${innosetup.dir}/ISCC.exe">
+			<arg value="${build.distDirectory}/win32-win32-x86_64/setup.iss" />
+			<arg value="/O${build.releaseDirectory}" />
+			<arg value="/F${artifactId}-${version.number}-win32-win32-x86_64-setup" />
+		</exec>
+		<exec osfamily="unix" executable="wine">
+			<arg value="${innosetup.dir}/ISCC.exe" />
+			<arg value="${build.distDirectory}/win32-win32-x86_64/setup.iss" />
+			<arg value="/O${build.releaseDirectory}" />
+			<arg value="/F${artifactId}-${version.number}-win32-win32-x86_64-setup" />
+		</exec>
 
 		<!-- Other -->
 		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-other-bin.tar.gz" compression="gzip">
