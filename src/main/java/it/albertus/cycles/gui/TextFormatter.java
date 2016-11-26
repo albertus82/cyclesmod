@@ -1,6 +1,5 @@
 package it.albertus.cycles.gui;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -46,7 +45,7 @@ public class TextFormatter {
 	}
 
 	public void updateFontStyle(final Text text) {
-		if (text != null && gui.isNumeric(text.getText()) && text.getFont() != null && ArrayUtils.isNotEmpty(text.getFont().getFontData()) && text.getData(FormProperty.TextDataKey.DEFAULT.toString()) instanceof Integer) {
+		if (text != null && gui.isNumeric(text.getText()) && text.getFont() != null && text.getFont().getFontData() != null && text.getFont().getFontData().length > 0 && text.getData(FormProperty.TextDataKey.DEFAULT.toString()) instanceof Integer) {
 			final Integer defaultValue = (Integer) text.getData(FormProperty.TextDataKey.DEFAULT.toString());
 			if (!defaultValue.equals(Integer.valueOf(text.getText(), gui.getNumeralSystem().getRadix()))) {
 				if (text.getFont().getFontData()[0].getStyle() != SWT.BOLD) {

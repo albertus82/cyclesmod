@@ -1,17 +1,16 @@
 package it.albertus.cycles.console;
 
+import java.io.File;
+import java.io.IOException;
+
 import it.albertus.cycles.data.DefaultBikes;
 import it.albertus.cycles.engine.CyclesModEngine;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.util.ExceptionUtils;
+import it.albertus.util.StringUtils;
 import it.albertus.util.Version;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.lang.StringUtils;
 
 public class CyclesModConsole extends CyclesModEngine {
 

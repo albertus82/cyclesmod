@@ -1,9 +1,10 @@
 package it.albertus.cycles.gui;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+
+import it.albertus.util.StringUtils;
 
 public class FormProperty {
 

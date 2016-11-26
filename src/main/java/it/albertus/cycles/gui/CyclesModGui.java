@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -25,6 +24,7 @@ import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.cycles.resources.Messages.Language;
 import it.albertus.util.ExceptionUtils;
+import it.albertus.util.StringUtils;
 import it.albertus.util.Version;
 
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
@@ -95,7 +95,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	public void load(final String fileName, final boolean successMessage) {
 		try {
-			if (StringUtils.endsWithIgnoreCase(fileName, ".inf")) {
+			if (fileName.toLowerCase().endsWith(".inf")) {
 				final File bikesInfFile = new File(fileName);
 				setBikesInf(new BikesInf(bikesInfFile));
 				tabs.updateFormValues();
@@ -108,7 +108,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 					messageBox.open();
 				}
 			}
-			else if (StringUtils.endsWithIgnoreCase(fileName, ".cfg")) {
+			else if (fileName.toLowerCase().endsWith(".cfg")) {
 				setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
 
 				final BikesCfg bikesCfg = new BikesCfg(fileName);
