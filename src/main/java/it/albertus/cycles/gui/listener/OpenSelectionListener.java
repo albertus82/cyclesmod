@@ -1,12 +1,12 @@
 package it.albertus.cycles.gui.listener;
 
-import it.albertus.cycles.gui.CyclesModGui;
-import it.albertus.cycles.resources.Messages;
-
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.FileDialog;
+
+import it.albertus.cycles.gui.CyclesModGui;
+import it.albertus.cycles.resources.Messages;
+import it.albertus.util.StringUtils;
 
 public class OpenSelectionListener extends AskForSavingSelectionAdapter {
 
