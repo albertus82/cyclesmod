@@ -400,6 +400,9 @@
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
 			Name: "{userdesktop}\${name}"; Filename: "{app}\${artifactId}.exe"; Tasks: desktopicon
 
+			[InstallDelete]
+			Type: files; Name: {app}\lib\*.jar
+
 			[Files]
 			Source: "${artifactId}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 		</echo>
@@ -447,6 +450,9 @@
 			Name: "{group}\${name}"; Filename: "{app}\${artifactId}.exe"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
 			Name: "{userdesktop}\${name}"; Filename: "{app}\${artifactId}.exe"; Tasks: desktopicon
+
+			[InstallDelete]
+			Type: files; Name: {app}\lib\*.jar
 
 			[Files]
 			Source: "${artifactId}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
