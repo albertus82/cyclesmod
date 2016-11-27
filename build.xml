@@ -405,7 +405,7 @@
 			[Icons]
 			Name: "{group}\${name}"; Filename: "{app}\${artifactId}.exe"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
-			Name: "{commondesktop}\${name}"; Filename: "{app}\${artifactId}.exe"; Tasks: desktopicon
+			Name: "{userdesktop}\${name}"; Filename: "{app}\${artifactId}.exe"; Tasks: desktopicon
 
 			[InstallDelete]
 			Type: files; Name: {app}\lib\*.jar
@@ -463,7 +463,7 @@
 			[Icons]
 			Name: "{group}\${name}"; Filename: "{app}\${artifactId}.exe"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
-			Name: "{commondesktop}\${name}"; Filename: "{app}\${artifactId}.exe"; Tasks: desktopicon
+			Name: "{userdesktop}\${name}"; Filename: "{app}\${artifactId}.exe"; Tasks: desktopicon
 
 			[InstallDelete]
 			Type: files; Name: {app}\lib\*.jar
