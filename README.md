@@ -102,6 +102,6 @@ Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `
 
 ## Riconoscimenti
 
-Quest'applicazione include componenti realizzati da [Apache Software Foundation](lib/license/apache-2.0.txt) e da [Eclipse Foundation](lib/license/eclipse-1.0.txt).
+Quest'applicazione include componenti realizzati da [Eclipse Foundation](lib/license/eclipse-1.0.txt).
 
 L'icona dell'applicazione &egrave; stata realizzata da [Everaldo Coelho](http://www.everaldo.com) (licenza [LGPL](http://www.gnu.org/licenses/lgpl.html)), e prelevata da [Iconfinder](http://www.iconfinder.com).
