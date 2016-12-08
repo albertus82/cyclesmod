@@ -87,8 +87,11 @@
 				<include name="*.jar" />
 			</fileset>
 		</copy>
-		<copy todir="${build.distDirectory}/other/${artifactId}/lib">
+		<copy todir="${build.distDirectory}/gtk-linux-armhf/${artifactId}/lib">
 			<fileset refid="lib" />
+			<fileset dir="${dependencies.directory}/os/gtk-linux-armhf">
+				<include name="*.jar" />
+			</fileset>
 		</copy>
 
 		<!-- Preparazione dei file MANIFEST.MF -->
@@ -134,9 +137,9 @@
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.other" jarfile="${build.distDirectory}/other/${artifactId}/${artifactId}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.gtk-linux-armhf" jarfile="${build.distDirectory}/gtk-linux-armhf/${artifactId}/${artifactId}.jar" maxParentLevels="0">
 			<classpath>
-				<fileset dir="${build.distDirectory}/other/${artifactId}/lib">
+				<fileset dir="${build.distDirectory}/gtk-linux-armhf/${artifactId}/lib">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
@@ -164,7 +167,7 @@
 		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}" failonerror="false">
 			<fileset refid="config" />
 		</copy>
-		<copy todir="${build.distDirectory}/other/${artifactId}" failonerror="false">
+		<copy todir="${build.distDirectory}/gtk-linux-armhf/${artifactId}" failonerror="false">
 			<fileset refid="config" />
 		</copy>
 	</target>
@@ -198,10 +201,8 @@
 		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}" failonerror="false">
 			<fileset refid="command" />
 		</copy>
-		<copy todir="${build.distDirectory}/other/${artifactId}" failonerror="false">
-			<fileset refid="bat" />
+		<copy todir="${build.distDirectory}/gtk-linux-armhf/${artifactId}" failonerror="false">
 			<fileset refid="sh" />
-			<fileset refid="command" />
 		</copy>
 	</target>
 
@@ -230,7 +231,7 @@
 		<copy todir="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
-		<copy todir="${build.distDirectory}/other/${artifactId}">
+		<copy todir="${build.distDirectory}/gtk-linux-armhf/${artifactId}">
 			<fileset refid="docs" />
 		</copy>
 	</target>
@@ -240,8 +241,7 @@
 		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-x86_64/${artifactId}/${artifactId}.icns" failonerror="false" />
 		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx/${artifactId}/${artifactId}.icns" failonerror="false" />
 		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" failonerror="false" />
-		<copy file="${icons.directory}/main.icns" tofile="${build.distDirectory}/other/${artifactId}/${artifactId}.icns" failonerror="false" />
-		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/other/${artifactId}/${artifactId}.ico" failonerror="false" />
+		<copy file="${icons.directory}/main.ico" tofile="${build.distDirectory}/gtk-linux-armhf/${artifactId}/${artifactId}.icns" failonerror="false" />
 	</target>
 
 	<target name="jar" depends="compile, resources, config, scripts, docs, icons, lib">
@@ -249,6 +249,10 @@
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86}" />
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${version.number}" />
+				<attribute name="X-Compile-Source-JDK" value="${build.compiler.source}" />
+				<attribute name="X-Compile-Target-JDK" value="${build.compiler.target}" />
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
@@ -256,6 +260,10 @@
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86_64}" />
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${version.number}" />
+				<attribute name="X-Compile-Source-JDK" value="${build.compiler.source}" />
+				<attribute name="X-Compile-Target-JDK" value="${build.compiler.target}" />
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
@@ -263,6 +271,10 @@
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86}" />
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${version.number}" />
+				<attribute name="X-Compile-Source-JDK" value="${build.compiler.source}" />
+				<attribute name="X-Compile-Target-JDK" value="${build.compiler.target}" />
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
@@ -270,6 +282,10 @@
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86_64}" />
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${version.number}" />
+				<attribute name="X-Compile-Source-JDK" value="${build.compiler.source}" />
+				<attribute name="X-Compile-Target-JDK" value="${build.compiler.target}" />
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
@@ -277,6 +293,10 @@
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx}" />
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${version.number}" />
+				<attribute name="X-Compile-Source-JDK" value="${build.compiler.source}" />
+				<attribute name="X-Compile-Target-JDK" value="${build.compiler.target}" />
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
@@ -284,13 +304,21 @@
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx-x86_64}" />
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${version.number}" />
+				<attribute name="X-Compile-Source-JDK" value="${build.compiler.source}" />
+				<attribute name="X-Compile-Target-JDK" value="${build.compiler.target}" />
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
-		<jar destfile="${build.distDirectory}/other/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.distDirectory}/gtk-linux-armhf/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
-				<attribute name="Class-Path" value="${classpath.other}" />
+				<attribute name="Class-Path" value="${classpath.gtk-linux-armhf}" />
+				<attribute name="Implementation-Title" value="${name}" />
+				<attribute name="Implementation-Version" value="${version.number}" />
+				<attribute name="X-Compile-Source-JDK" value="${build.compiler.source}" />
+				<attribute name="X-Compile-Target-JDK" value="${build.compiler.target}" />
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
@@ -362,6 +390,17 @@
 				<include name="${artifactId}/*.sh" />
 			</tarfileset>
 			<tarfileset dir="${build.distDirectory}/gtk-linux-x86_64">
+				<include name="**" />
+				<exclude name="${artifactId}/*.jar" />
+				<exclude name="${artifactId}/*.sh" />
+			</tarfileset>
+		</tar>
+		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-gtk-linux-armhf-bin.tar.gz" compression="gzip">
+			<tarfileset dir="${build.distDirectory}/gtk-linux-armhf" filemode="755">
+				<include name="${artifactId}/*.jar" />
+				<include name="${artifactId}/*.sh" />
+			</tarfileset>
+			<tarfileset dir="${build.distDirectory}/gtk-linux-armhf">
 				<include name="**" />
 				<exclude name="${artifactId}/*.jar" />
 				<exclude name="${artifactId}/*.sh" />
@@ -483,19 +522,6 @@
 			<arg value="/O${build.releaseDirectory}" />
 			<arg value="/F${artifactId}-${version.number}-win32-win32-x86_64-setup" />
 		</exec>
-
-		<!-- Other -->
-		<tar destfile="${build.releaseDirectory}/${artifactId}-${version.number}-other-bin.tar.gz" compression="gzip">
-			<tarfileset dir="${build.distDirectory}/other" filemode="755">
-				<include name="${artifactId}/*.jar" />
-				<include name="${artifactId}/*.sh" />
-			</tarfileset>
-			<tarfileset dir="${build.distDirectory}/other">
-				<include name="**" />
-				<exclude name="${artifactId}/*.jar" />
-				<exclude name="${artifactId}/*.sh" />
-			</tarfileset>
-		</tar>
 	</target>
 
 	<target name="sonar">
