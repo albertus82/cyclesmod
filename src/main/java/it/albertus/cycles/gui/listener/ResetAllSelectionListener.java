@@ -1,17 +1,19 @@
 package it.albertus.cycles.gui.listener;
 
-import it.albertus.cycles.data.DefaultBikes;
-import it.albertus.cycles.gui.CyclesModGui;
-import it.albertus.cycles.model.BikesInf;
-import it.albertus.cycles.resources.Messages;
-import it.albertus.util.ExceptionUtils;
-
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
+
+import it.albertus.cycles.data.DefaultBikes;
+import it.albertus.cycles.gui.CyclesModGui;
+import it.albertus.cycles.model.BikesInf;
+import it.albertus.cycles.resources.Messages;
+import it.albertus.util.ExceptionUtils;
+import it.albertus.util.IOUtils;
 
 public class ResetAllSelectionListener extends SelectionAdapter {
 
@@ -42,8 +44,15 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 	}
 
 	private void reset() throws IOException {
-		gui.setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
-		gui.getTabs().updateFormValues();
+		InputStream is = null;
+		try {
+			is = new DefaultBikes().getInputStream();
+			gui.setBikesInf(new BikesInf(is));
+			gui.getTabs().updateFormValues();
+		}
+		finally {
+			IOUtils.closeQuietly(is);
+		}
 	}
 
 }

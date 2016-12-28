@@ -2,6 +2,7 @@ package it.albertus.cycles.console;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import it.albertus.cycles.data.DefaultBikes;
 import it.albertus.cycles.engine.CyclesModEngine;
@@ -9,6 +10,7 @@ import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.util.ExceptionUtils;
+import it.albertus.util.IOUtils;
 import it.albertus.util.StringUtils;
 import it.albertus.util.Version;
 
@@ -55,7 +57,14 @@ public class CyclesModConsole extends CyclesModEngine {
 
 	private void execute() throws IOException {
 		System.out.println(Messages.get("msg.reading.original.file", BikesInf.FILE_NAME));
-		setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
+		InputStream is = null;
+		try {
+			is = new DefaultBikes().getInputStream();
+			setBikesInf(new BikesInf(is));
+		}
+		finally {
+			IOUtils.closeQuietly(is);
+		}
 
 		System.out.println(Messages.get("msg.applying.customizations"));
 		customize();

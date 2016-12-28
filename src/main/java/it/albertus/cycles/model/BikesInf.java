@@ -30,23 +30,40 @@ public class BikesInf {
 	}
 
 	public BikesInf(final File file) throws IOException {
-		read(new BufferedInputStream(new FileInputStream(file)));
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
+		try {
+			fis = new FileInputStream(file);
+			bis = new BufferedInputStream(fis);
+			read(bis);
+		}
+		finally {
+			IOUtils.closeQuietly(bis);
+			IOUtils.closeQuietly(fis);
+		}
 	}
 
 	public void reset(final BikeType type) throws IOException {
-		read(new DefaultBikes().getInputStream(), type);
+		InputStream is = null;
+		try {
+			is = new DefaultBikes().getInputStream();
+			read(is, type);
+		}
+		finally {
+			IOUtils.closeQuietly(is);
+		}
 	}
 
 	private void read(final InputStream inf, BikeType... types) throws IOException {
-		byte[] inf125 = new byte[Bike.LENGTH];
-		byte[] inf250 = new byte[Bike.LENGTH];
-		byte[] inf500 = new byte[Bike.LENGTH];
+		final byte[] inf125 = new byte[Bike.LENGTH];
+		final byte[] inf250 = new byte[Bike.LENGTH];
+		final byte[] inf500 = new byte[Bike.LENGTH];
 
-		if (inf.read(inf125) != Bike.LENGTH || inf.read(inf250) != Bike.LENGTH || inf.read(inf500) != Bike.LENGTH || inf.read() != -1) {
-			inf.close();
+		final boolean wrongFileSize = inf.read(inf125) != Bike.LENGTH || inf.read(inf250) != Bike.LENGTH || inf.read(inf500) != Bike.LENGTH || inf.read() != -1;
+		inf.close();
+		if (wrongFileSize) {
 			throw new IllegalStateException(Messages.get("err.wrong.file.size"));
 		}
-		inf.close();
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 
 		if (types == null || types.length == 0) {
@@ -57,7 +74,7 @@ public class BikesInf {
 		}
 		else {
 			/* Replace only selected bikes */
-			byte[][] infs = new byte[3][];
+			final byte[][] infs = new byte[3][];
 			infs[0] = inf125;
 			infs[1] = inf250;
 			infs[2] = inf500;
