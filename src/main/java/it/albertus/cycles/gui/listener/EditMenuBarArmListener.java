@@ -39,7 +39,7 @@ public class EditMenuBarArmListener implements ArmListener {
 
 	protected boolean canCopy() {
 		for (final FormProperty fp : gui.getTabs().getFormProperties().values()) {
-			if (fp != null && fp.getText() != null && fp.getText().isFocusControl() && fp.getText().getSelectionText() != null && fp.getText().getSelectionText().length() != 0) {
+			if (fp != null && fp.getText() != null && fp.getText().isFocusControl() && fp.getText().getSelectionText() != null && !fp.getText().getSelectionText().isEmpty()) {
 				return true;
 			}
 		}

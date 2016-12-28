@@ -1,9 +1,5 @@
 package it.albertus.cycles.model;
 
-import it.albertus.cycles.model.Bike.BikeType;
-import it.albertus.cycles.resources.Messages;
-import it.albertus.util.NewLine;
-
 import java.beans.Introspector;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,6 +13,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import it.albertus.cycles.model.Bike.BikeType;
+import it.albertus.cycles.resources.Messages;
+import it.albertus.util.IOUtils;
+import it.albertus.util.NewLine;
+
 public class BikesCfg {
 
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -26,100 +27,135 @@ public class BikesCfg {
 	private final Properties properties = new Properties();
 
 	public BikesCfg(final BikesInf bikesInf) {
-		StringReader reader = new StringReader(createProperties(bikesInf));
+		final StringReader reader = new StringReader(createProperties(bikesInf));
 		try {
 			populateProperties(reader);
 		}
-		catch (IOException ioe) {} // No exception possible with StringReader!
-	}
-
-	private void populateProperties(Reader reader) throws IOException {
-		this.properties.load(reader);
-		reader.close();
+		catch (final IOException ioe) {
+			throw new IllegalStateException(ioe); // No exception possible with StringReader!
+		}
+		finally {
+			IOUtils.closeQuietly(reader);
+		}
 	}
 
 	public BikesCfg(final String fileName) throws IOException {
-		populateProperties(new BufferedReader(new FileReader(fileName)));
+		FileReader fr = null;
+		BufferedReader br = null;
+		try {
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
+			populateProperties(br);
+		}
+		finally {
+			IOUtils.closeQuietly(br);
+			IOUtils.closeQuietly(fr);
+		}
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
 
 	public BikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
 		System.out.println(Messages.get("msg.reading.file", FILE_NAME));
-		BufferedReader reader = null;
+		FileReader fr = null;
+		BufferedReader br = null;
 		try {
-			reader = new BufferedReader(new FileReader(path + FILE_NAME));
+			fr = new FileReader(path + FILE_NAME);
+			br = new BufferedReader(fr);
+			populateProperties(br);
 		}
-		catch (FileNotFoundException fnfe) {
+		catch (final FileNotFoundException fnfe) {
 			System.out.println(Messages.get("msg.file.not.found.creating.default", FILE_NAME));
-			writeDefaultBikesCfg(originalBikesInf, path);
-			System.out.println(Messages.get("msg.default.file.created", FILE_NAME));
-			reader = new BufferedReader(new FileReader(path + FILE_NAME));
+			try {
+				writeDefaultBikesCfg(originalBikesInf, path);
+				System.out.println(Messages.get("msg.default.file.created", FILE_NAME));
+				fr = new FileReader(path + FILE_NAME);
+				br = new BufferedReader(fr);
+				populateProperties(br);
+			}
+			finally {
+				IOUtils.closeQuietly(br);
+				IOUtils.closeQuietly(fr);
+			}
 		}
-		populateProperties(reader);
+		finally {
+			IOUtils.closeQuietly(br);
+			IOUtils.closeQuietly(fr);
+		}
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
 
+	private void populateProperties(final Reader reader) throws IOException {
+		this.properties.load(reader);
+	}
+
 	private void writeDefaultBikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
-		final String properties = createProperties(originalBikesInf);
+		final String props = createProperties(originalBikesInf);
 
 		// Salvataggio...
-		BufferedWriter bw = new BufferedWriter(new FileWriter(path + FILE_NAME));
-		bw.write(properties.toString());
-		bw.flush();
-		bw.close();
+		FileWriter fw = null;
+		BufferedWriter bw = null;
+		try {
+			fw = new FileWriter(path + FILE_NAME);
+			bw = new BufferedWriter(fw);
+			bw.write(props);
+		}
+		finally {
+			IOUtils.closeQuietly(bw);
+			IOUtils.closeQuietly(fw);
+		}
 	}
 
 	private String createProperties(final BikesInf bikesInf) {
 		final String lineSeparator = LINE_SEPARATOR != null ? LINE_SEPARATOR : NewLine.CRLF.toString();
-		final StringBuilder properties = new StringBuilder(Messages.get("str.cfg.header"));
+		final StringBuilder props = new StringBuilder(Messages.get("str.cfg.header"));
 
 		for (Bike bike : bikesInf.getBikes()) {
-			properties.append(lineSeparator).append(lineSeparator);
-			properties.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.begin") + "... ###");
+			props.append(lineSeparator).append(lineSeparator);
+			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.begin") + "... ###");
 
 			// Settings
-			properties.append(lineSeparator);
-			properties.append("# ").append(Settings.class.getSimpleName()).append(" #");
-			properties.append(lineSeparator);
+			props.append(lineSeparator);
+			props.append("# ").append(Settings.class.getSimpleName()).append(" #");
+			props.append(lineSeparator);
 			for (Setting setting : bike.getSettings().getValues().keySet()) {
-				properties.append(buildPropertyKey(bike.getType(), Settings.class, setting.toString()));
-				properties.append('=');
-				properties.append(bike.getSettings().getValues().get(setting).intValue());
-				properties.append(lineSeparator);
+				props.append(buildPropertyKey(bike.getType(), Settings.class, setting.toString()));
+				props.append('=');
+				props.append(bike.getSettings().getValues().get(setting).intValue());
+				props.append(lineSeparator);
 			}
 
 			// Gearbox
-			properties.append(lineSeparator);
-			properties.append("# ").append(Gearbox.class.getSimpleName()).append(" #");
-			properties.append(lineSeparator);
+			props.append(lineSeparator);
+			props.append("# ").append(Gearbox.class.getSimpleName()).append(" #");
+			props.append(lineSeparator);
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
-				properties.append(buildPropertyKey(bike.getType(), Gearbox.class, index));
-				properties.append('=');
-				properties.append(bike.getGearbox().getRatios()[index]);
-				properties.append(lineSeparator);
+				props.append(buildPropertyKey(bike.getType(), Gearbox.class, index));
+				props.append('=');
+				props.append(bike.getGearbox().getRatios()[index]);
+				props.append(lineSeparator);
 			}
 
 			// Torque
-			properties.append(lineSeparator);
-			properties.append("# ").append(Torque.class.getSimpleName()).append(" (").append(Torque.getRpm(0)).append('-').append(Torque.getRpm(Torque.LENGTH) - 1).append(" RPM) #");
-			properties.append(lineSeparator);
+			props.append(lineSeparator);
+			props.append("# ").append(Torque.class.getSimpleName()).append(" (").append(Torque.getRpm(0)).append('-').append(Torque.getRpm(Torque.LENGTH) - 1).append(" RPM) #");
+			props.append(lineSeparator);
 			for (int index = 0; index < bike.getTorque().getCurve().length; index++) {
 				if (index > 0 && index % 8 == 0) {
-					properties.append("# " + Torque.getRpm(index) + " RPM");
-					properties.append(lineSeparator);
+					props.append("# " + Torque.getRpm(index) + " RPM");
+					props.append(lineSeparator);
 				}
-				properties.append(buildPropertyKey(bike.getType(), Torque.class, index));
-				properties.append('=');
-				properties.append(bike.getTorque().getCurve()[index]);
-				properties.append(lineSeparator);
+				props.append(buildPropertyKey(bike.getType(), Torque.class, index));
+				props.append('=');
+				props.append(bike.getTorque().getCurve()[index]);
+				props.append(lineSeparator);
 			}
 
-			properties.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.end") + ". ###");
+			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.end") + ". ###");
 		}
 
-		properties.append(lineSeparator).append(lineSeparator);
-		properties.append(Messages.get("str.cfg.footer"));
-		return properties.toString();
+		props.append(lineSeparator).append(lineSeparator);
+		props.append(Messages.get("str.cfg.footer")).append(lineSeparator);
+		return props.toString();
 	}
 
 	public static String buildPropertyKey(final BikeType bikeType, final Class<? extends BikesInfElement> propertyType, final String suffix) {

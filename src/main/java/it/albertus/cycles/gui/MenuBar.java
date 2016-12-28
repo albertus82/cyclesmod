@@ -3,6 +3,7 @@ package it.albertus.cycles.gui;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
@@ -221,12 +222,12 @@ public class MenuBar {
 		editResetAllMenuItem.setText(Messages.get("lbl.menu.item.reset.all"));
 		viewMenuHeader.setText(Messages.get("lbl.menu.header.view"));
 		viewRadixSubMenuItem.setText(Messages.get("lbl.menu.item.radix"));
-		for (final NumeralSystem numeralSystem : viewRadixMenuItems.keySet()) {
-			viewRadixMenuItems.get(numeralSystem).setText(Messages.get("lbl.menu.item.radix." + numeralSystem.getRadix()));
+		for (final Entry<NumeralSystem, MenuItem> entry : viewRadixMenuItems.entrySet()) {
+			entry.getValue().setText(Messages.get("lbl.menu.item.radix." + entry.getKey().getRadix()));
 		}
 		viewLanguageSubMenuItem.setText(Messages.get("lbl.menu.item.language"));
-		for (final Language language : viewLanguageMenuItems.keySet()) {
-			viewLanguageMenuItems.get(language).setText(language.getLocale().getDisplayLanguage(language.getLocale()));
+		for (final Entry<Language, MenuItem> entry : viewLanguageMenuItems.entrySet()) {
+			entry.getValue().setText(entry.getKey().getLocale().getDisplayLanguage(entry.getKey().getLocale()));
 		}
 		if (helpMenuHeader != null && !helpMenuHeader.isDisposed()) {
 			helpMenuHeader.setText(Messages.get("lbl.menu.header.help"));

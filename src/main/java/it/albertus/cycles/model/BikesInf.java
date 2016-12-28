@@ -1,10 +1,5 @@
 package it.albertus.cycles.model;
 
-import it.albertus.cycles.data.DefaultBikes;
-import it.albertus.cycles.model.Bike.BikeType;
-import it.albertus.cycles.resources.Messages;
-import it.albertus.util.ByteUtils;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -17,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
+
+import it.albertus.cycles.data.DefaultBikes;
+import it.albertus.cycles.model.Bike.BikeType;
+import it.albertus.cycles.resources.Messages;
+import it.albertus.util.ByteUtils;
 
 public class BikesInf {
 
@@ -72,7 +72,7 @@ public class BikesInf {
 		final byte[] newBikesInf = this.toByteArray();
 		final Checksum crc = new CRC32();
 		crc.update(newBikesInf, 0, newBikesInf.length);
-		System.out.println(Messages.get("msg.configuration.changed", (crc.getValue() == DefaultBikes.CRC ? ' ' + Messages.get("msg.not") + ' ' : ' '), String.format("%08X", crc.getValue())));
+		System.out.println(Messages.get("msg.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + Messages.get("msg.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
 
 		final BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileName), FILE_SIZE);
 		write(bos, newBikesInf);

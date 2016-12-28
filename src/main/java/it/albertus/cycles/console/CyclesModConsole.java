@@ -16,28 +16,30 @@ public class CyclesModConsole extends CyclesModEngine {
 
 	private static final String DEFAULT_DESTINATION_PATH = "";
 
-	private BikesCfg bikesCfg;
 	private final String path;
 
 	private CyclesModConsole(String path) {
 		this.path = path;
 	}
 
-	public static void start(String path) throws Exception {
+	public static void start(final String providedPath) throws Exception {
 		try {
 			System.out.println(getWelcomeMessage());
 
-			if (path == null) {
+			final String path;
+			if (providedPath == null) {
 				path = DEFAULT_DESTINATION_PATH;
 			}
-
-			if (!"".equals(path) && !path.endsWith("/") && !path.endsWith("\\") && !path.endsWith(File.separator)) {
-				path += File.separator;
+			else if (!providedPath.isEmpty() && !providedPath.endsWith("/") && !providedPath.endsWith("\\") && !providedPath.endsWith(File.separator)) {
+				path = providedPath + File.separator;
+			}
+			else {
+				path = providedPath;
 			}
 
 			new CyclesModConsole(path).execute();
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			if (StringUtils.isNotBlank(e.getLocalizedMessage()) || StringUtils.isNotBlank(e.getMessage())) {
 				System.err.println(ExceptionUtils.getLogMessage(e));
 			}
@@ -64,7 +66,7 @@ public class CyclesModConsole extends CyclesModEngine {
 
 	private void customize() throws IOException {
 		// Lettura del file di properties BIKES.CFG...
-		bikesCfg = new BikesCfg(getBikesInf(), path);
+		final BikesCfg bikesCfg = new BikesCfg(getBikesInf(), path);
 
 		// Elaborazione delle properties...
 		short changesCount = 0;

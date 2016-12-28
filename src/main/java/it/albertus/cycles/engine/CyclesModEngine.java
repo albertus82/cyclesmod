@@ -13,7 +13,10 @@ import it.albertus.util.StringUtils;
 
 public abstract class CyclesModEngine {
 
+	private static final String MSG_KEY_ERR_UNSUPPORTED_PROPERTY = "err.unsupported.property";
+
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
+	private BikesInf bikesInf;
 
 	public NumeralSystem getNumeralSystem() {
 		return numeralSystem;
@@ -22,8 +25,6 @@ public abstract class CyclesModEngine {
 	public void setNumeralSystem(NumeralSystem numeralSystem) {
 		this.numeralSystem = numeralSystem;
 	}
-
-	private BikesInf bikesInf;
 
 	public BikesInf getBikesInf() {
 		return bikesInf;
@@ -37,7 +38,7 @@ public abstract class CyclesModEngine {
 		try {
 			Long.parseLong(value, radix);
 		}
-		catch (Exception e) {
+		catch (final NumberFormatException nfe) {
 			return false;
 		}
 		return true;
@@ -51,7 +52,7 @@ public abstract class CyclesModEngine {
 		boolean applied = false;
 		try {
 			if (value == null || value.trim().length() == 0 || !isNumeric(value.trim())) {
-				throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+				throw new InvalidPropertyException(Messages.get(MSG_KEY_ERR_UNSUPPORTED_PROPERTY, key, value));
 			}
 
 			// Settings
@@ -70,7 +71,7 @@ public abstract class CyclesModEngine {
 			}
 
 			else {
-				throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+				throw new InvalidPropertyException(Messages.get(MSG_KEY_ERR_UNSUPPORTED_PROPERTY, key, value));
 			}
 		}
 		catch (InvalidPropertyException ipe) {
@@ -109,7 +110,7 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Messages.get(MSG_KEY_ERR_UNSUPPORTED_PROPERTY, key, value));
 		}
 		return applied;
 	}
@@ -130,7 +131,7 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Messages.get(MSG_KEY_ERR_UNSUPPORTED_PROPERTY, key, value));
 		}
 		return applied;
 	}
@@ -151,7 +152,7 @@ public abstract class CyclesModEngine {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Messages.get(MSG_KEY_ERR_UNSUPPORTED_PROPERTY, key, value));
 		}
 		return applied;
 	}
@@ -163,7 +164,7 @@ public abstract class CyclesModEngine {
 	private Bike getBike(final String key, final String value) {
 		final Bike bike = bikesInf.getBike(Integer.parseInt(StringUtils.substringBefore(key, ".")));
 		if (bike == null) {
-			throw new InvalidPropertyException(Messages.get("err.unsupported.property", key, value));
+			throw new InvalidPropertyException(Messages.get(MSG_KEY_ERR_UNSUPPORTED_PROPERTY, key, value));
 		}
 		return bike;
 	}
