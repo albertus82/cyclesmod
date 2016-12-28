@@ -1,12 +1,13 @@
 package it.albertus.cycles.data;
 
-import it.albertus.cycles.model.BikesInf;
-import it.albertus.cycles.resources.Messages;
-
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.StreamCorruptedException;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
+
+import it.albertus.cycles.model.BikesInf;
+import it.albertus.cycles.resources.Messages;
 
 public class DefaultBikes {
 
@@ -51,7 +52,7 @@ public class DefaultBikes {
 		}
 	}
 
-	public ByteArrayInputStream getInputStream() {
+	public InputStream getInputStream() {
 		return new ByteArrayInputStream(DEFAULT);
 	}
 

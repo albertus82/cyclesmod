@@ -2,6 +2,7 @@ package it.albertus.cycles.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.cycles.resources.Messages.Language;
 import it.albertus.util.ExceptionUtils;
+import it.albertus.util.IOUtils;
 import it.albertus.util.StringUtils;
 import it.albertus.util.Version;
 
@@ -42,7 +44,14 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private CyclesModGui(final Display display, final String fileName) throws IOException {
 		// Loading default properties...
-		setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
+		InputStream is = null;
+		try {
+			is = new DefaultBikes().getInputStream();
+			setBikesInf(new BikesInf(is));
+		}
+		finally {
+			IOUtils.closeQuietly(is);
+		}
 		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
 
 		// Shell creation...
@@ -113,7 +122,14 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				}
 			}
 			else if (fileName.toLowerCase().endsWith(".cfg")) {
-				setBikesInf(new BikesInf(new DefaultBikes().getInputStream()));
+				InputStream is = null;
+				try {
+					is = new DefaultBikes().getInputStream();
+					setBikesInf(new BikesInf(is));
+				}
+				finally {
+					IOUtils.closeQuietly(is);
+				}
 
 				final BikesCfg bikesCfg = new BikesCfg(fileName);
 				short changesCount = 0;
