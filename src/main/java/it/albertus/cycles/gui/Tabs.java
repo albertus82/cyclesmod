@@ -1,5 +1,23 @@
 package it.albertus.cycles.gui;
 
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
+
 import it.albertus.cycles.gui.FormProperty.LabelDataKey;
 import it.albertus.cycles.gui.FormProperty.TextDataKey;
 import it.albertus.cycles.gui.listener.PropertyFocusListener;
@@ -14,23 +32,6 @@ import it.albertus.cycles.model.Setting;
 import it.albertus.cycles.model.Settings;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
-
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
-import org.eclipse.swt.widgets.Text;
 
 public class Tabs {
 
@@ -227,45 +228,7 @@ public class Tabs {
 
 		// Update screen values...
 		disableTextListeners();
-		for (final String key : formProperties.keySet()) {
-			if (!properties.containsKey(key)) {
-				throw new RuntimeException(Messages.get("err.property.missing", key));
-			}
-			final Text field = formProperties.get(key).getText();
-
-			// Update field max length...
-			final int textLimit;
-			if (gui.isSettingsProperty(key)) {
-				textLimit = Integer.toString(Settings.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
-			}
-			else if (gui.isGearboxProperty(key)) {
-				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
-			}
-			else if (gui.isTorqueProperty(key)) {
-				textLimit = Integer.toString(Torque.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
-			}
-			else {
-				throw new IllegalStateException(Messages.get("err.unsupported.property", key, formProperties.get(key).getValue()));
-			}
-			if (field.getTextLimit() != textLimit) {
-				field.setTextLimit(textLimit);
-			}
-
-			// Update field value...
-			final String text = Integer.toString(properties.get(key), gui.getNumeralSystem().getRadix()).toUpperCase();
-			if (!field.getText().equals(text)) {
-				field.setText(text);
-			}
-
-			// Update tooltip text...
-			final String toolTipText = Messages.get("msg.tooltip.default", Integer.toString(((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString())), gui.getNumeralSystem().getRadix()).toUpperCase());
-			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
-				field.setToolTipText(toolTipText);
-			}
-
-			// Update font style...
-			textFormatter.updateFontStyle(field);
-		}
+		updateFields(properties);
 		enableTextListeners();
 
 		// Update torque graphs...
@@ -275,6 +238,48 @@ public class Tabs {
 				graph.getValues()[i] = bike.getTorque().getCurve()[i];
 			}
 			graph.refresh();
+		}
+	}
+
+	private void updateFields(final Map<String, Integer> properties) {
+		for (final Entry<String, FormProperty> entry : formProperties.entrySet()) {
+			if (!properties.containsKey(entry.getKey())) {
+				throw new IllegalStateException(Messages.get("err.property.missing", entry.getKey()));
+			}
+			final Text field = entry.getValue().getText();
+
+			// Update field max length...
+			final int textLimit;
+			if (gui.isSettingsProperty(entry.getKey())) {
+				textLimit = Integer.toString(Settings.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+			}
+			else if (gui.isGearboxProperty(entry.getKey())) {
+				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+			}
+			else if (gui.isTorqueProperty(entry.getKey())) {
+				textLimit = Integer.toString(Torque.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+			}
+			else {
+				throw new IllegalStateException(Messages.get("err.unsupported.property", entry.getKey(), entry.getValue().getValue()));
+			}
+			if (field.getTextLimit() != textLimit) {
+				field.setTextLimit(textLimit);
+			}
+
+			// Update field value...
+			final String text = Integer.toString(properties.get(entry.getKey()), gui.getNumeralSystem().getRadix()).toUpperCase();
+			if (!field.getText().equals(text)) {
+				field.setText(text);
+			}
+
+			// Update tooltip text...
+			final String toolTipText = Messages.get("msg.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase());
+			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
+				field.setToolTipText(toolTipText);
+			}
+
+			// Update font style...
+			textFormatter.updateFontStyle(field);
 		}
 	}
 

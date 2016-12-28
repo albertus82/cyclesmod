@@ -1,13 +1,13 @@
 package it.albertus.cycles.gui.listener;
 
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.widgets.Text;
+
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.gui.FormProperty;
 import it.albertus.cycles.gui.TorqueGraph;
 import it.albertus.cycles.model.Torque;
-
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.widgets.Text;
 
 public class TorquePropertyFocusListener extends PropertyFocusListener {
 
@@ -32,7 +32,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 					graph.getValues()[index] = value;
 					graph.refresh();
 				}
-				catch (InvalidPropertyException ipe) {}
+				catch (final InvalidPropertyException ipe) {/* Ignore */}
 			}
 		}
 	}
