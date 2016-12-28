@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CRC32;
@@ -17,6 +16,7 @@ import it.albertus.cycles.data.DefaultBikes;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.util.ByteUtils;
+import it.albertus.util.IOUtils;
 
 public class BikesInf {
 
@@ -74,18 +74,19 @@ public class BikesInf {
 		crc.update(newBikesInf, 0, newBikesInf.length);
 		System.out.println(Messages.get("msg.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + Messages.get("msg.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
 
-		final BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(fileName), FILE_SIZE);
-		write(bos, newBikesInf);
-		System.out.println(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
-	}
-
-	private void write(OutputStream outputStream, byte[] bikesInf) throws IOException {
-		if (bikesInf == null || outputStream == null) {
-			throw new IllegalArgumentException();
+		FileOutputStream fos = null;
+		BufferedOutputStream bos = null;
+		try {
+			fos = new FileOutputStream(fileName);
+			bos = new BufferedOutputStream(fos, FILE_SIZE);
+			bos.write(newBikesInf);
 		}
-		outputStream.write(bikesInf);
-		outputStream.flush();
-		outputStream.close();
+		finally {
+			IOUtils.closeQuietly(bos);
+			IOUtils.closeQuietly(fos);
+		}
+
+		System.out.println(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
 	}
 
 	/**
