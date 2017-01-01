@@ -48,8 +48,7 @@ public class BikesCfg {
 			populateProperties(br);
 		}
 		finally {
-			IOUtils.closeQuietly(br);
-			IOUtils.closeQuietly(fr);
+			IOUtils.closeQuietly(br, fr);
 		}
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
@@ -73,13 +72,11 @@ public class BikesCfg {
 				populateProperties(br);
 			}
 			finally {
-				IOUtils.closeQuietly(br);
-				IOUtils.closeQuietly(fr);
+				IOUtils.closeQuietly(br, fr);
 			}
 		}
 		finally {
-			IOUtils.closeQuietly(br);
-			IOUtils.closeQuietly(fr);
+			IOUtils.closeQuietly(br, fr);
 		}
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
@@ -100,8 +97,7 @@ public class BikesCfg {
 			bw.write(props);
 		}
 		finally {
-			IOUtils.closeQuietly(bw);
-			IOUtils.closeQuietly(fw);
+			IOUtils.closeQuietly(bw, fw);
 		}
 	}
 

@@ -38,8 +38,7 @@ public class BikesInf {
 			read(bis);
 		}
 		finally {
-			IOUtils.closeQuietly(bis);
-			IOUtils.closeQuietly(fis);
+			IOUtils.closeQuietly(bis, fis);
 		}
 	}
 
@@ -99,8 +98,7 @@ public class BikesInf {
 			bos.write(newBikesInf);
 		}
 		finally {
-			IOUtils.closeQuietly(bos);
-			IOUtils.closeQuietly(fos);
+			IOUtils.closeQuietly(bos, fos);
 		}
 
 		System.out.println(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
