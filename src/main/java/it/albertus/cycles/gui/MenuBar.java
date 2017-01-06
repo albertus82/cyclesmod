@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
@@ -27,6 +29,7 @@ import it.albertus.cycles.resources.Messages;
 import it.albertus.cycles.resources.Messages.Language;
 import it.albertus.jface.SwtUtils;
 import it.albertus.jface.cocoa.CocoaUIEnhancer;
+import it.albertus.util.logging.LoggerFactory;
 
 /**
  * Solo i <tt>MenuItem</tt> che fanno parte di una barra dei men&ugrave; con
@@ -36,6 +39,8 @@ import it.albertus.jface.cocoa.CocoaUIEnhancer;
  * combinazioni di tasti saranno ignorate.
  */
 public class MenuBar {
+
+	private static final Logger logger = LoggerFactory.getLogger(MenuBar.class);
 
 	private final Menu bar;
 
@@ -79,7 +84,7 @@ public class MenuBar {
 				cocoaMenuCreated = true;
 			}
 			catch (final Throwable t) {
-				t.printStackTrace();
+				logger.log(Level.WARNING, Messages.get("err.cocoa.enhancer"), t);
 			}
 		}
 
