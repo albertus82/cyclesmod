@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
@@ -28,8 +30,11 @@ import it.albertus.util.ExceptionUtils;
 import it.albertus.util.IOUtils;
 import it.albertus.util.StringUtils;
 import it.albertus.util.Version;
+import it.albertus.util.logging.LoggerFactory;
 
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
+
+	private static final Logger logger = LoggerFactory.getLogger(CyclesModGui.class);
 
 	private static final String MSG_KEY_MSG_WARNING = "msg.warning";
 	private static final String MSG_KEY_MSG_COMPLETED = "msg.completed";
@@ -79,19 +84,27 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
-	/** GUI entry point. */
-	public static void start(final String fileName) throws IOException {
+	/* GUI entry point. */
+	public static void start(final String fileName) {
 		Display.setAppName(Messages.get(MSG_KEY_WIN_TITLE));
 		Display.setAppVersion(Version.getInstance().getNumber());
 		final Display display = Display.getDefault();
-		final Shell shell = new CyclesModGui(display, fileName).getShell();
-		shell.open();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
+		try {
+			final CyclesModGui gui = new CyclesModGui(display, fileName);
+			final Shell shell = gui.getShell();
+			shell.open();
+			while (!shell.isDisposed()) {
+				if (!display.readAndDispatch()) {
+					display.sleep();
+				}
 			}
 		}
-		display.dispose();
+		catch (final Exception e) {
+			logger.log(Level.SEVERE, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
+		}
+		finally {
+			display.dispose();
+		}
 	}
 
 	public void setLanguage(final Language language) {
@@ -155,7 +168,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 		}
 		catch (final Exception e) {
-			System.err.println(ExceptionUtils.getLogMessage(e));
+			logger.log(Level.WARNING, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
 			final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 			messageBox.setText(Messages.get(MSG_KEY_MSG_WARNING));
 			messageBox.setMessage(Messages.get("err.file.load", ExceptionUtils.getUIMessage(e)));
@@ -168,7 +181,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			updateModelValues(false);
 		}
 		catch (InvalidPropertyException ipe) {
-			System.err.println(ExceptionUtils.getLogMessage(ipe));
+			logger.log(Level.WARNING, ipe.getLocalizedMessage() != null ? ipe.getLocalizedMessage() : ipe.getMessage(), ipe);
 			MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
 			messageBox.setText(Messages.get(MSG_KEY_MSG_WARNING));
 			messageBox.setMessage(ExceptionUtils.getUIMessage(ipe));
@@ -186,7 +199,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				getBikesInf().write(fileName);
 			}
 			catch (final Exception e) {
-				System.err.println(ExceptionUtils.getLogMessage(e));
+				logger.log(Level.WARNING, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
 				final MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_ERROR);
 				messageBox.setText(Messages.get(MSG_KEY_MSG_WARNING));
 				messageBox.setMessage(Messages.get("err.file.save", ExceptionUtils.getUIMessage(e)));

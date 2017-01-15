@@ -14,8 +14,8 @@ public class CyclesMod {
 		throw new IllegalAccessError();
 	}
 
-	/** Unique entry point */
-	public static final void main(final String[] args) throws Exception {
+	/* Unique entry point */
+	public static final void main(final String[] args) {
 		if (args.length != 0) {
 			if (args[0].trim().equalsIgnoreCase(ARG_HELP)) {
 				final Version version = Version.getInstance();
