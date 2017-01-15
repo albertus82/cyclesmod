@@ -1,18 +1,23 @@
 package it.albertus.cycles.gui.listener;
 
 import java.io.IOException;
-
-import it.albertus.cycles.gui.CyclesModGui;
-import it.albertus.cycles.model.Bike.BikeType;
-import it.albertus.cycles.resources.Messages;
-import it.albertus.util.ExceptionUtils;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
 
+import it.albertus.cycles.gui.CyclesModGui;
+import it.albertus.cycles.model.Bike.BikeType;
+import it.albertus.cycles.resources.Messages;
+import it.albertus.util.ExceptionUtils;
+import it.albertus.util.logging.LoggerFactory;
+
 public class ResetSingleSelectionListener extends SelectionAdapter {
+
+	private static final Logger logger = LoggerFactory.getLogger(ResetSingleSelectionListener.class);
 
 	private final CyclesModGui gui;
 
@@ -31,8 +36,8 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 			try {
 				reset(type);
 			}
-			catch (Exception e) {
-				System.err.println(ExceptionUtils.getLogMessage(e));
+			catch (final Exception e) {
+				logger.log(Level.WARNING, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
 				messageBox = new MessageBox(gui.getShell(), SWT.ICON_ERROR);
 				messageBox.setText(Messages.get("msg.warning"));
 				messageBox.setMessage(Messages.get("err.reset", ExceptionUtils.getUIMessage(e)));
