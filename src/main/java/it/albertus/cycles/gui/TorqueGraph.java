@@ -63,13 +63,13 @@ public class TorqueGraph extends Canvas {
 		}
 		final Font axisTitleFont = fontRegistry.get(FONT_KEY_AXIS_TITLE);
 
-		abscissae = xyGraph.primaryXAxis;
+		abscissae = xyGraph.getPrimaryXAxis();
 		abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
 		abscissae.setAutoScale(true);
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
-		ordinates = xyGraph.primaryYAxis;
+		ordinates = xyGraph.getPrimaryYAxis();
 		ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
 		ordinates.setAutoScale(true);
 		ordinates.setTitleFont(axisTitleFont);
