@@ -28,6 +28,7 @@ import it.albertus.cycles.gui.listener.SaveSelectionListener;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.cycles.resources.Messages.Language;
 import it.albertus.jface.SwtUtils;
+import it.albertus.jface.cocoa.CocoaEnhancerException;
 import it.albertus.jface.cocoa.CocoaUIEnhancer;
 import it.albertus.util.logging.LoggerFactory;
 
@@ -83,8 +84,8 @@ public class MenuBar {
 				new CocoaUIEnhancer(gui.getShell().getDisplay()).hookApplicationMenu(closeListener, aboutListener, null);
 				cocoaMenuCreated = true;
 			}
-			catch (final Throwable t) {
-				logger.log(Level.WARNING, Messages.get("err.cocoa.enhancer"), t);
+			catch (final CocoaEnhancerException cee) {
+				logger.log(Level.WARNING, Messages.get("err.cocoa.enhancer"), cee);
 			}
 		}
 
