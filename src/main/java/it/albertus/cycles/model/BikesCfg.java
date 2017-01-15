@@ -1,9 +1,8 @@
 package it.albertus.cycles.model;
 
 import java.beans.Introspector;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -41,42 +40,31 @@ public class BikesCfg {
 
 	public BikesCfg(final String fileName) throws IOException {
 		FileReader fr = null;
-		BufferedReader br = null;
 		try {
 			fr = new FileReader(fileName);
-			br = new BufferedReader(fr);
-			populateProperties(br);
+			populateProperties(fr); // buffered internally
 		}
 		finally {
-			IOUtils.closeQuietly(br, fr);
+			IOUtils.closeQuietly(fr);
 		}
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
 
 	public BikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
 		System.out.println(Messages.get("msg.reading.file", FILE_NAME));
-		FileReader fr = null;
-		BufferedReader br = null;
-		try {
-			fr = new FileReader(path + FILE_NAME);
-			br = new BufferedReader(fr);
-			populateProperties(br);
-		}
-		catch (final FileNotFoundException fnfe) {
+		final File file = new File(path + FILE_NAME);
+		if (!file.exists()) {
 			System.out.println(Messages.get("msg.file.not.found.creating.default", FILE_NAME));
-			try {
-				writeDefaultBikesCfg(originalBikesInf, path);
-				System.out.println(Messages.get("msg.default.file.created", FILE_NAME));
-				fr = new FileReader(path + FILE_NAME);
-				br = new BufferedReader(fr);
-				populateProperties(br);
-			}
-			finally {
-				IOUtils.closeQuietly(br, fr);
-			}
+			writeDefaultBikesCfg(originalBikesInf, file);
+			System.out.println(Messages.get("msg.default.file.created", FILE_NAME));
+		}
+		FileReader fr = null;
+		try {
+			fr = new FileReader(file);
+			populateProperties(fr); // buffered internally
 		}
 		finally {
-			IOUtils.closeQuietly(br, fr);
+			IOUtils.closeQuietly(fr);
 		}
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
@@ -85,14 +73,14 @@ public class BikesCfg {
 		this.properties.load(reader);
 	}
 
-	private void writeDefaultBikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
+	private void writeDefaultBikesCfg(final BikesInf originalBikesInf, final File destination) throws IOException {
 		final String props = createProperties(originalBikesInf);
 
 		// Salvataggio...
 		FileWriter fw = null;
 		BufferedWriter bw = null;
 		try {
-			fw = new FileWriter(path + FILE_NAME);
+			fw = new FileWriter(destination);
 			bw = new BufferedWriter(fw);
 			bw.write(props);
 		}
