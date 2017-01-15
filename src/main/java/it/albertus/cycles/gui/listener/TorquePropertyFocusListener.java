@@ -1,5 +1,8 @@
 package it.albertus.cycles.gui.listener;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Text;
 
@@ -8,8 +11,11 @@ import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.gui.FormProperty;
 import it.albertus.cycles.gui.TorqueGraph;
 import it.albertus.cycles.model.Torque;
+import it.albertus.util.logging.LoggerFactory;
 
 public class TorquePropertyFocusListener extends PropertyFocusListener {
+
+	private static final Logger logger = LoggerFactory.getLogger(TorquePropertyFocusListener.class);
 
 	public TorquePropertyFocusListener(final CyclesModGui gui) {
 		super(gui);
@@ -32,7 +38,9 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 					graph.getValues()[index] = value;
 					graph.refresh();
 				}
-				catch (final InvalidPropertyException ipe) {/* Ignore */}
+				catch (final InvalidPropertyException ipe) {
+					logger.log(Level.INFO, ipe.getMessage(), ipe);
+				}
 			}
 		}
 	}
