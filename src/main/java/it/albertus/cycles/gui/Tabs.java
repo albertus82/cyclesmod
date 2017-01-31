@@ -107,7 +107,7 @@ public class Tabs {
 			}
 
 			// Torque graph
-			final TorqueGraph graph = new TorqueGraph(tabComposite, bike);
+			final TorqueGraph graph = new TorqueGraph(tabComposite, bike, formProperties);
 			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(graph);
 			torqueGraphs.put(bike.getType(), graph);
 
