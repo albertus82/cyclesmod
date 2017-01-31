@@ -1,10 +1,12 @@
 package it.albertus.cycles.model;
 
-import it.albertus.cycles.engine.InvalidPropertyException;
-import it.albertus.cycles.resources.Messages;
-
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+
+import it.albertus.cycles.engine.InvalidPropertyException;
+import it.albertus.cycles.resources.Messages;
 
 public class Torque extends BikesInfElement {
 
@@ -20,7 +22,9 @@ public class Torque extends BikesInfElement {
 	public static final short BASE_RPM = 768;
 	public static final short POINT_WIDTH_RPM = 128;
 
-	/** 42-147: curva di coppia (intervallo regime considerato: 768-14335 RPM). */
+	/**
+	 * 42-147: curva di coppia (intervallo regime considerato: 768-14335 RPM).
+	 */
 	private final short[] curve = new short[LENGTH];
 
 	public Torque(final short[] curve) {
@@ -43,6 +47,10 @@ public class Torque extends BikesInfElement {
 
 	public static int getRpm(final int index) {
 		return BASE_RPM + POINT_WIDTH_RPM * index;
+	}
+
+	public static int indexOf(final double rpm) {
+		return BigDecimal.valueOf(rpm).add(BigDecimal.valueOf(POINT_WIDTH_RPM / 2L - BASE_RPM)).divide(BigDecimal.valueOf(POINT_WIDTH_RPM), RoundingMode.HALF_UP).intValue();
 	}
 
 	public static short parse(final String key, final String value, final int radix) {
