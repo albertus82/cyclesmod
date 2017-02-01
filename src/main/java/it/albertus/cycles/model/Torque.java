@@ -1,7 +1,5 @@
 package it.albertus.cycles.model;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +48,7 @@ public class Torque extends BikesInfElement {
 	}
 
 	public static int indexOf(final double rpm) {
-		return BigDecimal.valueOf(rpm).add(BigDecimal.valueOf(POINT_WIDTH_RPM / 2L - BASE_RPM)).divide(BigDecimal.valueOf(POINT_WIDTH_RPM), RoundingMode.HALF_UP).intValue();
+		return (int) (rpm + POINT_WIDTH_RPM / 2 - BASE_RPM) / POINT_WIDTH_RPM;
 	}
 
 	public static short parse(final String key, final String value, final int radix) {
