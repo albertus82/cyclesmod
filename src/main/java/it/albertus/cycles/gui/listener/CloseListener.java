@@ -24,7 +24,7 @@ public class CloseListener extends AskForSavingListener implements ShellListener
 	public void widgetSelected(final SelectionEvent event) {
 		if (askForSaving(Messages.get(MSG_KEY_CONFIRM_CLOSE_TEXT), Messages.get(MSG_KEY_CONFIRM_CLOSE_MESSAGE))) {
 			gui.getShell().dispose();
-			event.display.dispose();
+			event.display.dispose(); // Fix close not working on Windows 10 when iconified
 		}
 		else {
 			event.doit = false;
@@ -35,7 +35,7 @@ public class CloseListener extends AskForSavingListener implements ShellListener
 	public void handleEvent(final Event event) {
 		if (askForSaving(Messages.get(MSG_KEY_CONFIRM_CLOSE_TEXT), Messages.get(MSG_KEY_CONFIRM_CLOSE_MESSAGE))) {
 			gui.getShell().dispose();
-			event.display.dispose();
+			event.display.dispose(); // Fix close not working on Windows 10 when iconified
 		}
 		else {
 			event.doit = false;
@@ -46,7 +46,7 @@ public class CloseListener extends AskForSavingListener implements ShellListener
 	public void shellClosed(final ShellEvent event) {
 		if (askForSaving(Messages.get(MSG_KEY_CONFIRM_CLOSE_TEXT), Messages.get(MSG_KEY_CONFIRM_CLOSE_MESSAGE))) {
 			gui.getShell().dispose();
-			event.display.dispose();
+			event.display.dispose(); // Fix close not working on Windows 10 when iconified
 		}
 		else {
 			event.doit = false;
