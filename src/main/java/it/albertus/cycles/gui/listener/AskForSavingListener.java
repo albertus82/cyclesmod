@@ -1,17 +1,16 @@
 package it.albertus.cycles.gui.listener;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.MessageBox;
 
 import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.model.BikesCfg;
 
-public abstract class AskForSavingSelectionAdapter extends SelectionAdapter {
+public abstract class AskForSavingListener {
 
 	protected final CyclesModGui gui;
 
-	public AskForSavingSelectionAdapter(final CyclesModGui gui) {
+	public AskForSavingListener(final CyclesModGui gui) {
 		this.gui = gui;
 	}
 
