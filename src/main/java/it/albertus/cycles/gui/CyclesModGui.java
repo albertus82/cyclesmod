@@ -38,8 +38,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private static final Logger logger = LoggerFactory.getLogger(CyclesModGui.class);
 
-	private static final String MSG_KEY_MSG_WARNING = "msg.warning";
-	private static final String MSG_KEY_MSG_COMPLETED = "msg.completed";
+	private static final String MSG_KEY_WARNING = "msg.warning";
+	private static final String MSG_KEY_COMPLETED = "msg.completed";
 	private static final String MSG_KEY_WIN_TITLE = "win.title";
 
 	private final Map<String, Integer> defaultProperties = new HashMap<String, Integer>();
@@ -66,7 +66,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		shell.setImages(Images.MAIN_ICONS);
 		shell.setText(Messages.get(MSG_KEY_WIN_TITLE));
 		shell.setLayout(new FillLayout());
-		shell.addListener(SWT.Close, new CloseListener(this));
+		shell.addShellListener(new CloseListener(this));
 
 		menuBar = new MenuBar(this);
 
@@ -97,7 +97,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			shell = gui.getShell();
 			shell.open();
 			while (!shell.isDisposed()) {
-				if (!display.readAndDispatch()) {
+				if (!display.isDisposed() && !display.readAndDispatch()) {
 					display.sleep();
 				}
 			}
@@ -105,7 +105,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		catch (final Exception e) {
 			final String message = e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage();
 			logger.log(Level.SEVERE, message, e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, Messages.get(MSG_KEY_MSG_WARNING), message, IStatus.ERROR, e, Images.MAIN_ICONS);
+			EnhancedErrorDialog.openError(shell != null ? shell : null, Messages.get(MSG_KEY_WARNING), message, IStatus.ERROR, e, Images.MAIN_ICONS);
 		}
 		finally {
 			display.dispose();
@@ -134,7 +134,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				shell.setText(Messages.get(MSG_KEY_WIN_TITLE) + " - " + bikesInfFile.getCanonicalPath());
 				if (successMessage) {
 					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-					messageBox.setText(Messages.get(MSG_KEY_MSG_COMPLETED));
+					messageBox.setText(Messages.get(MSG_KEY_COMPLETED));
 					messageBox.setMessage(Messages.get("msg.file.loaded", fileName));
 					messageBox.open();
 				}
@@ -160,21 +160,21 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 				if (successMessage) {
 					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-					messageBox.setText(Messages.get(MSG_KEY_MSG_COMPLETED));
+					messageBox.setText(Messages.get(MSG_KEY_COMPLETED));
 					messageBox.setMessage(Messages.get("msg.customizations.applied", changesCount));
 					messageBox.open();
 				}
 			}
 			else {
 				final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-				messageBox.setText(Messages.get(MSG_KEY_MSG_WARNING));
+				messageBox.setText(Messages.get(MSG_KEY_WARNING));
 				messageBox.setMessage(Messages.get("err.file.invalid"));
 				messageBox.open();
 			}
 		}
 		catch (final Exception e) {
 			logger.log(Level.WARNING, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
-			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_MSG_WARNING), Messages.get("err.file.load"), IStatus.WARNING, e, Images.MAIN_ICONS);
+			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.load"), IStatus.WARNING, e, Images.MAIN_ICONS);
 		}
 	}
 
@@ -184,7 +184,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (final InvalidPropertyException ipe) {
 			logger.log(Level.WARNING, ipe.getLocalizedMessage() != null ? ipe.getLocalizedMessage() : ipe.getMessage(), ipe);
-			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_MSG_WARNING), ExceptionUtils.getUIMessage(ipe), IStatus.WARNING, ipe, Images.MAIN_ICONS);
+			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(ipe), IStatus.WARNING, ipe, Images.MAIN_ICONS);
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
@@ -199,14 +199,14 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final Exception e) {
 				logger.log(Level.WARNING, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
-				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_MSG_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.MAIN_ICONS);
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.MAIN_ICONS);
 				return false;
 			}
 			shell.setText(Messages.get(MSG_KEY_WIN_TITLE) + " - " + fileName);
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 			if (successMessage) {
 				final MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_INFORMATION);
-				messageBox.setText(Messages.get(MSG_KEY_MSG_COMPLETED));
+				messageBox.setText(Messages.get(MSG_KEY_COMPLETED));
 				messageBox.setMessage(Messages.get("msg.file.saved", fileName));
 				messageBox.open();
 			}

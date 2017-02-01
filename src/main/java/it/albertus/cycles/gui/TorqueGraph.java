@@ -1,10 +1,6 @@
 package it.albertus.cycles.gui;
 
-import java.util.Map;
-
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
@@ -22,7 +18,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import it.albertus.cycles.model.Bike;
-import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 
@@ -40,7 +35,7 @@ public class TorqueGraph extends Canvas {
 	private final Axis abscissae;
 	private final Axis ordinates;
 
-	TorqueGraph(final Composite parent, final Bike bike, final Map<String, FormProperty> formProperties) {
+	TorqueGraph(final Composite parent, final Bike bike) {
 		super(parent, SWT.NULL);
 
 		final LightweightSystem lws = new LightweightSystem(this);
@@ -108,20 +103,6 @@ public class TorqueGraph extends Canvas {
 			fontRegistry.put(FONT_KEY_GRAPH_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), (int) (sysFont.getFontData()[0].getHeight() * TITLE_FONT_HEIGHT_FACTOR), SWT.BOLD) });
 		}
 		xyGraph.setTitleFont(fontRegistry.get(FONT_KEY_GRAPH_TITLE));
-
-		xyGraph.getPlotArea().addMouseListener(new MouseListener() {
-			@Override
-			public void mousePressed(final MouseEvent me) {
-				final double rpm = xyGraph.getPrimaryXAxis().getPositionValue(me.getLocation().x, false) * 1000;
-				formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, Torque.indexOf(rpm))).getText().setFocus();
-			}
-
-			@Override
-			public void mouseDoubleClicked(final MouseEvent me) {/* Ignore */}
-
-			@Override
-			public void mouseReleased(final MouseEvent me) {/* Ignore */}
-		});
 
 		this.trace = trc;
 		this.values = y;

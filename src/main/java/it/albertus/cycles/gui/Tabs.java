@@ -23,6 +23,7 @@ import it.albertus.cycles.gui.FormProperty.TextDataKey;
 import it.albertus.cycles.gui.listener.PropertyFocusListener;
 import it.albertus.cycles.gui.listener.PropertyKeyListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
+import it.albertus.cycles.gui.listener.TorqueGraphMouseListener;
 import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Bike.BikeType;
@@ -107,7 +108,8 @@ public class Tabs {
 			}
 
 			// Torque graph
-			final TorqueGraph graph = new TorqueGraph(tabComposite, bike, formProperties);
+			final TorqueGraph graph = new TorqueGraph(tabComposite, bike);
+			graph.getXyGraph().getPlotArea().addMouseListener(new TorqueGraphMouseListener(bike, formProperties));
 			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(graph);
 			torqueGraphs.put(bike.getType(), graph);
 

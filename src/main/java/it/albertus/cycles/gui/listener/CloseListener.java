@@ -1,13 +1,19 @@
 package it.albertus.cycles.gui.listener;
 
-import it.albertus.cycles.gui.CyclesModGui;
-import it.albertus.cycles.resources.Messages;
-
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-public class CloseListener extends AskForSavingSelectionAdapter implements Listener {
+import it.albertus.cycles.gui.CyclesModGui;
+import it.albertus.cycles.resources.Messages;
+
+public class CloseListener extends AskForSavingListener implements ShellListener, SelectionListener, Listener {
+
+	private static final String MSG_KEY_CONFIRM_CLOSE_MESSAGE = "msg.confirm.close.message";
+	private static final String MSG_KEY_CONFIRM_CLOSE_TEXT = "msg.confirm.close.text";
 
 	public CloseListener(final CyclesModGui gui) {
 		super(gui);
@@ -15,16 +21,51 @@ public class CloseListener extends AskForSavingSelectionAdapter implements Liste
 
 	/** Comando di chiusura da men&ugrave;. */
 	@Override
-	public void widgetSelected(SelectionEvent e) {
-		if (askForSaving(Messages.get("msg.confirm.close.text"), Messages.get("msg.confirm.close.message"))) {
+	public void widgetSelected(final SelectionEvent event) {
+		if (askForSaving(Messages.get(MSG_KEY_CONFIRM_CLOSE_TEXT), Messages.get(MSG_KEY_CONFIRM_CLOSE_MESSAGE))) {
 			gui.getShell().dispose();
+			event.display.dispose();
+		}
+		else {
+			event.doit = false;
 		}
 	}
 
-	/** Pulsante di chiusura. */
 	@Override
-	public void handleEvent(Event event) {
-		event.doit = askForSaving(Messages.get("msg.confirm.close.text"), Messages.get("msg.confirm.close.message"));
+	public void handleEvent(final Event event) {
+		if (askForSaving(Messages.get(MSG_KEY_CONFIRM_CLOSE_TEXT), Messages.get(MSG_KEY_CONFIRM_CLOSE_MESSAGE))) {
+			gui.getShell().dispose();
+			event.display.dispose();
+		}
+		else {
+			event.doit = false;
+		}
 	}
+
+	@Override
+	public void shellClosed(final ShellEvent event) {
+		if (askForSaving(Messages.get(MSG_KEY_CONFIRM_CLOSE_TEXT), Messages.get(MSG_KEY_CONFIRM_CLOSE_MESSAGE))) {
+			gui.getShell().dispose();
+			event.display.dispose();
+		}
+		else {
+			event.doit = false;
+		}
+	}
+
+	@Override
+	public void widgetDefaultSelected(final SelectionEvent event) {/* Ignore */}
+
+	@Override
+	public void shellActivated(final ShellEvent event) {/* Ignore */}
+
+	@Override
+	public void shellDeactivated(final ShellEvent event) {/* Ignore */}
+
+	@Override
+	public void shellDeiconified(final ShellEvent event) {/* Ignore */}
+
+	@Override
+	public void shellIconified(final ShellEvent event) {/* Ignore */}
 
 }
