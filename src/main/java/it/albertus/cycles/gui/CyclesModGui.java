@@ -103,7 +103,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 		}
 		catch (final Exception e) {
-			final String message = e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage();
+			final String message = e.toString();
 			logger.log(Level.SEVERE, message, e);
 			EnhancedErrorDialog.openError(shell != null ? shell : null, Messages.get(MSG_KEY_WARNING), message, IStatus.ERROR, e, Images.MAIN_ICONS);
 		}
@@ -173,7 +173,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 		}
 		catch (final Exception e) {
-			logger.log(Level.WARNING, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
+			logger.log(Level.WARNING, e.toString(), e);
 			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.load"), IStatus.WARNING, e, Images.MAIN_ICONS);
 		}
 	}
@@ -182,9 +182,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		try {
 			updateModelValues(false);
 		}
-		catch (final InvalidPropertyException ipe) {
-			logger.log(Level.WARNING, ipe.getLocalizedMessage() != null ? ipe.getLocalizedMessage() : ipe.getMessage(), ipe);
-			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(ipe), IStatus.WARNING, ipe, Images.MAIN_ICONS);
+		catch (final InvalidPropertyException e) {
+			logger.log(Level.WARNING, e.toString(), e);
+			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.MAIN_ICONS);
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
@@ -198,7 +198,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				getBikesInf().write(fileName);
 			}
 			catch (final Exception e) {
-				logger.log(Level.WARNING, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
+				logger.log(Level.WARNING, e.toString(), e);
 				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.MAIN_ICONS);
 				return false;
 			}

@@ -45,7 +45,7 @@ public class CyclesModConsole extends CyclesModEngine {
 			new CyclesModConsole(path).execute();
 		}
 		catch (final Exception e) {
-			logger.log(Level.SEVERE, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
+			logger.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 
