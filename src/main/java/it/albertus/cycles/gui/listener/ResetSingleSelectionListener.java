@@ -37,7 +37,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 				reset(type);
 			}
 			catch (final Exception e) {
-				logger.log(Level.WARNING, e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getMessage(), e);
+				logger.log(Level.WARNING, e.toString(), e);
 				messageBox = new MessageBox(gui.getShell(), SWT.ICON_ERROR);
 				messageBox.setText(Messages.get("msg.warning"));
 				messageBox.setMessage(Messages.get("err.reset", ExceptionUtils.getUIMessage(e)));
