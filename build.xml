@@ -526,7 +526,40 @@
 		</exec>
 	</target>
 
-	<target name="sonar">
+	<available file="${build.testSourceDirectory}" type="dir" property="build.test" />
+
+	<target name="test" depends="dist" if="build.test">
+		<mkdir dir="${build.outputTestDirectory}" />
+		<javac srcdir="${build.testSourceDirectory}" destdir="${build.outputTestDirectory}" source="${build.compiler.source}" target="${build.compiler.target}" debug="true" includeantruntime="false">
+			<classpath path="${build.outputDirectory}">
+				<fileset dir="${dependencies.directory}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<!-- Compilazione per JRE specifico -->
+			<bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" />
+		</javac>
+
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath path="${build.outputTestDirectory}">
+				<fileset dir="${dependencies.directory}">
+					<include name="test/*.jar" />
+				</fileset>
+				<fileset dir="${build.distDirectory}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			<batchtest>
+				<fileset dir="${build.outputTestDirectory}">
+					<include name="**/*Test*" />
+					<exclude name="**/*$*" />
+				</fileset>
+			</batchtest>
+			<formatter type="plain" usefile="false" />
+		</junit>
+	</target>
+
+	<target name="sonar-main">
 		<echo file="sonar-project.properties">
 			sonar.projectKey=it.albertus:${artifactId}
 			sonar.projectName=${name}
@@ -536,9 +569,20 @@
 			sonar.java.source=${build.compiler.source}
 			sonar.java.target=${build.compiler.target}
 			sonar.java.libraries=${dependencies.directory}/**/*.jar
+			sonar.java.binaries=${build.outputDirectory}
 			sonar.sourceEncoding=UTF-8
 		</echo>
 	</target>
+
+	<target name="sonar-test" depends="sonar-main" if="build.test">
+		<echo file="sonar-project.properties" append="true">
+			sonar.tests=${build.testSourceDirectory}
+			sonar.java.test.libraries=${dependencies.directory}/test/*.jar
+			sonar.java.test.binaries=${build.outputTestDirectory}
+		</echo>
+	</target>
+
+	<target name="sonar" depends="sonar-main, sonar-test" />
 
 	<target name="all" depends="clean, dist, sonar" />
 
