@@ -3,6 +3,7 @@ package it.albertus.cycles.console;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,7 +51,8 @@ public class CyclesModConsole extends CyclesModEngine {
 	}
 
 	private static String getWelcomeMessage() throws IOException {
-		return Messages.get("msg.welcome", Version.getInstance().getNumber(), Version.getInstance().getDate(), Messages.get("msg.info.site")) + "\r\n";
+		final Version version = Version.getInstance();
+		return Messages.get("msg.welcome", version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(version.getDate()), Messages.get("msg.info.site")) + "\r\n";
 	}
 
 	private void execute() throws IOException {
