@@ -23,6 +23,4 @@ before_script:
 
 script:
   - ant all
-
-after_success:
   - if [ "$TRAVIS_JDK_VERSION" == "oraclejdk8" ]; then sonar-scanner -Dsonar.login=$SONAR_TOKEN; fi;
