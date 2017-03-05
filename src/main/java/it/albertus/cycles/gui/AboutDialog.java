@@ -1,8 +1,12 @@
 package it.albertus.cycles.gui;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -64,9 +68,12 @@ public class AboutDialog extends Dialog {
 
 		final Button okButton = new Button(shell, SWT.PUSH);
 		okButton.setText(Messages.get("lbl.button.ok"));
-		gridData = new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 0);
-		gridData.minimumWidth = 64;
-		okButton.setLayoutData(gridData);
+		final GC gc = new GC(okButton);
+		gc.setFont(okButton.getFont());
+		final FontMetrics fontMetrics = gc.getFontMetrics();
+		final int buttonWidth = org.eclipse.jface.dialogs.Dialog.convertHorizontalDLUsToPixels(fontMetrics, IDialogConstants.BUTTON_WIDTH);
+		gc.dispose();
+		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).span(2, 1).minSize(buttonWidth, SWT.DEFAULT).applyTo(okButton);
 		okButton.setFocus();
 		okButton.addSelectionListener(new SelectionAdapter() {
 			@Override
