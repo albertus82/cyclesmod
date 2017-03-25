@@ -58,12 +58,13 @@ public class Messages {
 		String message;
 		try {
 			message = MessageFormat.format(resources.getString(key), stringParams.toArray());
+			message = message != null ? message.trim() : "";
 		}
 		catch (final MissingResourceException e) {
 			logger.log(Level.WARNING, e.getMessage(), e);
 			message = key;
 		}
-		return message != null ? message.trim() : "";
+		return message;
 	}
 
 }
