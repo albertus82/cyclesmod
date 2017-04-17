@@ -48,7 +48,7 @@ public class Torque extends BikesInfElement {
 	}
 
 	public static int indexOf(final double rpm) {
-		return (int) (rpm + POINT_WIDTH_RPM / 2 - BASE_RPM) / POINT_WIDTH_RPM;
+		return (int) (rpm + (double) POINT_WIDTH_RPM / 2 - BASE_RPM) / POINT_WIDTH_RPM;
 	}
 
 	public static short parse(final String key, final String value, final int radix) {
