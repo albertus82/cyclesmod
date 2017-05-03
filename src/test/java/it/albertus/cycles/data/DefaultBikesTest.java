@@ -39,16 +39,17 @@ public class DefaultBikesTest {
 	}
 
 	@Test
-	public void testReflection() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, IOException {
+	public void testReflection() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, IOException, ClassNotFoundException {
 		final Field declaredField = DefaultBikes.class.getDeclaredField("DEFAULT");
 		declaredField.setAccessible(true);
 		final Field modifiersField = Field.class.getDeclaredField("modifiers");
 		modifiersField.setAccessible(true);
 		modifiersField.setInt(declaredField, declaredField.getModifiers() & ~Modifier.FINAL);
 
-		final int newLength = BikesInf.FILE_SIZE - 1 - (int) (Math.random() * 100);
+		final byte[] array = (byte[]) declaredField.get(null);
+		final int newLength = BikesInf.FILE_SIZE - 1 - (int) (Math.random() * BikesInf.FILE_SIZE / 2);
 		logger.info(Integer.toString(newLength));
-		declaredField.set(null, Arrays.copyOf((byte[]) declaredField.get(null), newLength));
+		declaredField.set(null, Arrays.copyOf(array, newLength));
 		try {
 			new DefaultBikes();
 			Assert.assertFalse(true);
@@ -56,6 +57,9 @@ public class DefaultBikesTest {
 		catch (final StreamCorruptedException e) {
 			logger.log(Level.INFO, e.toString(), e);
 			Assert.assertTrue(true);
+		}
+		finally {
+			declaredField.set(null, Arrays.copyOf(array, BikesInf.FILE_SIZE));
 		}
 	}
 
