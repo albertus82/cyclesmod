@@ -21,7 +21,7 @@ public class DefaultBikes {
 
 	static {
 		final Inflater inflater = new Inflater();
-		inflater.setInput(DatatypeConverter.parseBase64Binary("eJxjY1ihv8GsiPEdEwQmAaGMKgMDwwaGmQytDMUMqQyRkpQAGTCQhwBFZWUVZKAIA5L8rAxwwIbmpjIgBLtpAUMH0EWJDGEMfqqUAC0o0NUHASMTcwQwggJ9XQ1lGRF+Lla4mywMQW7iYeZhBrmpCwiVVIASkxhqGDIZIhn8GFz0SQSOyMAbCwiAACQRN0dzXWURqKsAK29PZw=="));
+		inflater.setInput(DatatypeConverter.parseBase64Binary("eNpjY1ihv8GsiPEdEwQmAaGMKgMDwwaGmQytDMUMqQyRkpQAGTCQhwBFZWUVZKAIA5L8rAxwgO6mMiAEu2kBQwfQRYkMYQx+qpQALSjQ1QcBIxNzBDCCAn1dDWUZEX4uVribLAxBbuJh5mEGuakLCJVUgBKTGGoYMhkiGfwYXPRJBI7IwBsLCIAAJBE3R3NdZRGoqwArb09n"));
 		try {
 			inflater.inflate(DEFAULT);
 		}
