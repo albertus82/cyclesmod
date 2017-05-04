@@ -33,8 +33,13 @@ public class DefaultBikesTest {
 			IOUtils.closeQuietly(os, is);
 		}
 		Assert.assertEquals(BikesInf.FILE_SIZE, os.size());
+
 		final CRC32 crc = new CRC32();
 		crc.update(os.toByteArray());
+		Assert.assertEquals(DefaultBikes.CRC, crc.getValue());
+
+		crc.reset();
+		crc.update(new DefaultBikes().getByteArray());
 		Assert.assertEquals(DefaultBikes.CRC, crc.getValue());
 	}
 

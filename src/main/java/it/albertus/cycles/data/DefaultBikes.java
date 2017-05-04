@@ -3,6 +3,7 @@ package it.albertus.cycles.data;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StreamCorruptedException;
+import java.util.Arrays;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 import java.util.zip.DataFormatException;
@@ -44,6 +45,10 @@ public class DefaultBikes {
 
 	public InputStream getInputStream() {
 		return new ByteArrayInputStream(DEFAULT);
+	}
+
+	public byte[] getByteArray() {
+		return Arrays.copyOf(DEFAULT, DEFAULT.length);
 	}
 
 }
