@@ -546,9 +546,9 @@
 			<bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" />
 		</javac>
 
-		<!-- <copy todir="${build.outputTestDirectory}">
+		<copy todir="${build.outputTestDirectory}" failonerror="false">
 			<fileset dir="${build.testResourcesDirectory}" />
-		</copy> -->
+		</copy>
 
 		<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
 			<classpath path="${dependencies.directory}/ant/jacoco/jacocoant.jar" />
