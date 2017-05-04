@@ -39,7 +39,7 @@ public class DefaultBikesTest {
 	}
 
 	@Test
-	public void testReflection() throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, IOException, ClassNotFoundException {
+	public void testReflection() throws NoSuchFieldException, IllegalAccessException, StreamCorruptedException {
 		final Field declaredField = DefaultBikes.class.getDeclaredField("DEFAULT");
 		declaredField.setAccessible(true);
 		final Field modifiersField = Field.class.getDeclaredField("modifiers");
@@ -61,6 +61,8 @@ public class DefaultBikesTest {
 		finally {
 			declaredField.set(null, Arrays.copyOf(array, BikesInf.FILE_SIZE));
 		}
+
+		Assert.assertNotNull(new DefaultBikes());
 	}
 
 }
