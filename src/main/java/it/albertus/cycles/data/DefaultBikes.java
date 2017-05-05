@@ -29,7 +29,9 @@ public class DefaultBikes {
 		catch (final DataFormatException e) {
 			throw new IllegalStateException(e);
 		}
-		inflater.end();
+		finally {
+			inflater.end();
+		}
 	}
 
 	public DefaultBikes() throws StreamCorruptedException {
