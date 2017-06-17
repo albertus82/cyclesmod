@@ -425,6 +425,7 @@
 			[Setup]
 			AppName=${name}
 			AppVersion=${version.number}
+			VersionInfoVersion=${version.number}
 			AppId=${innosetup.AppId.x86}
 			AppPublisherURL=${innosetup.AppPublisherURL}
 			AppSupportURL=${innosetup.AppSupportURL}
@@ -483,6 +484,7 @@
 			[Setup]
 			AppName=${name}
 			AppVersion=${version.number}
+			VersionInfoVersion=${version.number}
 			AppId=${innosetup.AppId.x64}
 			AppPublisherURL=${innosetup.AppPublisherURL}
 			AppSupportURL=${innosetup.AppSupportURL}
