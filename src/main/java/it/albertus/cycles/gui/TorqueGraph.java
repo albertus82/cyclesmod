@@ -9,6 +9,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
+import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -28,6 +29,8 @@ public class TorqueGraph extends Canvas {
 
 	private static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
 
+	private final Bike bike;
+
 	private final Trace trace;
 	private final double[] values;
 
@@ -37,6 +40,8 @@ public class TorqueGraph extends Canvas {
 
 	TorqueGraph(final Composite parent, final Bike bike) {
 		super(parent, SWT.NULL);
+
+		this.bike = bike;
 
 		final LightweightSystem lws = new LightweightSystem(this);
 
@@ -68,16 +73,18 @@ public class TorqueGraph extends Canvas {
 		abscissae.setAutoScale(true);
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
+		abscissae.setZoomType(ZoomType.DYNAMIC_ZOOM);
 
 		ordinates = xyGraph.getPrimaryYAxis();
 		ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
 		ordinates.setAutoScale(true);
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
+		ordinates.setZoomType(ZoomType.DYNAMIC_ZOOM);
 
 		final Trace trc = new Trace("Torque", abscissae, ordinates, traceDataProvider);
 		trc.setPointStyle(PointStyle.NONE);
-		trc.setLineWidth(3);
+		trc.setLineWidth(2);
 		final Color traceColor;
 		switch (bike.getType()) {
 		case CLASS_125:
@@ -94,6 +101,8 @@ public class TorqueGraph extends Canvas {
 		}
 
 		trc.setTraceColor(traceColor);
+		trc.setPointSize(5);
+		trc.setPointStyle(PointStyle.FILLED_DIAMOND);
 
 		xyGraph.addTrace(trc);
 		xyGraph.setShowLegend(false);
@@ -142,6 +151,10 @@ public class TorqueGraph extends Canvas {
 
 	public Axis getOrdinates() {
 		return ordinates;
+	}
+
+	public Bike getBike() {
+		return bike;
 	}
 
 }

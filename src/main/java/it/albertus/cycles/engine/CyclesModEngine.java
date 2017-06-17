@@ -11,13 +11,14 @@ import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.util.StringUtils;
 
-public abstract class CyclesModEngine {
+public abstract class CyclesModEngine implements NumeralSystemProvider {
 
 	private static final String MSG_KEY_ERR_UNSUPPORTED_PROPERTY = "err.unsupported.property";
 
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
 	private BikesInf bikesInf;
 
+	@Override
 	public NumeralSystem getNumeralSystem() {
 		return numeralSystem;
 	}
