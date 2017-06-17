@@ -109,7 +109,7 @@ public class Tabs {
 
 			// Torque graph
 			final TorqueGraph graph = new TorqueGraph(tabComposite, bike);
-			graph.getXyGraph().getPlotArea().addMouseListener(new TorqueGraphMouseListener(bike, formProperties));
+			graph.getXyGraph().getPlotArea().addMouseListener(new TorqueGraphMouseListener(graph, formProperties, gui));
 			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(graph);
 			torqueGraphs.put(bike.getType(), graph);
 
