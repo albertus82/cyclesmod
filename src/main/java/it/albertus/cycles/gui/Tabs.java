@@ -5,7 +5,10 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
@@ -23,7 +26,6 @@ import it.albertus.cycles.gui.FormProperty.TextDataKey;
 import it.albertus.cycles.gui.listener.PropertyFocusListener;
 import it.albertus.cycles.gui.listener.PropertyKeyListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
-import it.albertus.cycles.gui.listener.TorqueGraphMouseListener;
 import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Bike.BikeType;
@@ -109,7 +111,28 @@ public class Tabs {
 
 			// Torque graph
 			final TorqueGraph graph = new TorqueGraph(tabComposite, bike);
-			graph.getXyGraph().getPlotArea().addMouseListener(new TorqueGraphMouseListener(graph, formProperties, gui));
+			graph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
+				@Override
+				public void mouseDoubleClicked(MouseEvent me) {
+					TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
+					final	Map<Double, Double> values = new TreeMap<Double, Double>();
+					
+					for (int i = 0; i < Torque.LENGTH; i++) {
+						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
+						values.put(   (double)Torque.getRpm(i) /1000 , Double.valueOf(formProperty.getValue()));
+					}
+					
+					
+					if (torqueGraphDialog.open(values) == SWT.OK) {
+						for (int i = 0; i < torqueGraphDialog.getValues().length; i++) {
+							final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
+							final Text text = formProperty.getText();
+							text.setText(Long.toString(Math.max(0, Math.min(0xFF, Math.round(torqueGraphDialog.getValues()[i]))), gui.getNumeralSystem().getRadix()));
+							text.notifyListeners(SWT.FocusOut, null);
+						}
+					}
+				}
+			});
 			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(graph);
 			torqueGraphs.put(bike.getType(), graph);
 
