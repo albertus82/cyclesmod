@@ -2,6 +2,7 @@ package it.albertus.cycles.gui;
 
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
@@ -25,7 +26,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import it.albertus.cycles.gui.listener.MouseAdapter;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
@@ -92,7 +92,7 @@ public class TorqueGraph extends Canvas {
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 		abscissae.setZoomType(ZoomType.DYNAMIC_ZOOM);
-		abscissae.addMouseListener(new MouseAdapter() {
+		abscissae.addMouseListener(new MouseListener.Stub() {
 			@Override
 			public void mouseDoubleClicked(final MouseEvent me) {
 				abscissae.performAutoScale(true);
@@ -105,7 +105,7 @@ public class TorqueGraph extends Canvas {
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 		ordinates.setZoomType(ZoomType.DYNAMIC_ZOOM);
-		ordinates.addMouseListener(new MouseAdapter() {
+		ordinates.addMouseListener(new MouseListener.Stub() {
 			@Override
 			public void mouseDoubleClicked(final MouseEvent me) {
 				ordinates.performAutoScale(true);
