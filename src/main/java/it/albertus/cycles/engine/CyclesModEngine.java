@@ -23,7 +23,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		return numeralSystem;
 	}
 
-	public void setNumeralSystem(NumeralSystem numeralSystem) {
+	public void setNumeralSystem(final NumeralSystem numeralSystem) {
 		this.numeralSystem = numeralSystem;
 	}
 
@@ -31,7 +31,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		return bikesInf;
 	}
 
-	public void setBikesInf(BikesInf bikesInf) {
+	public void setBikesInf(final BikesInf bikesInf) {
 		this.bikesInf = bikesInf;
 	}
 

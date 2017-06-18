@@ -19,7 +19,6 @@ import it.albertus.util.NewLine;
 
 public class BikesCfg {
 
-	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private static final String FILE_NAME = "BIKES.CFG";
 	private static final int RADIX = 10;
 
@@ -90,10 +89,10 @@ public class BikesCfg {
 	}
 
 	private String createProperties(final BikesInf bikesInf) {
-		final String lineSeparator = LINE_SEPARATOR != null ? LINE_SEPARATOR : NewLine.CRLF.toString();
+		final String lineSeparator = NewLine.SYSTEM_LINE_SEPARATOR;
 		final StringBuilder props = new StringBuilder(Messages.get("str.cfg.header"));
 
-		for (Bike bike : bikesInf.getBikes()) {
+		for (final Bike bike : bikesInf.getBikes()) {
 			props.append(lineSeparator).append(lineSeparator);
 			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.begin") + "... ###");
 
@@ -101,7 +100,7 @@ public class BikesCfg {
 			props.append(lineSeparator);
 			props.append("# ").append(Settings.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
-			for (Setting setting : bike.getSettings().getValues().keySet()) {
+			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				props.append(buildPropertyKey(bike.getType(), Settings.class, setting.toString()));
 				props.append('=');
 				props.append(bike.getSettings().getValues().get(setting).intValue());

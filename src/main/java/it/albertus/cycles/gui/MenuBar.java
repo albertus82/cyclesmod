@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 
 import org.eclipse.jface.util.Util;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
@@ -24,7 +26,6 @@ import it.albertus.cycles.gui.listener.PasteSelectionListener;
 import it.albertus.cycles.gui.listener.RadixSelectionListener;
 import it.albertus.cycles.gui.listener.ResetAllSelectionListener;
 import it.albertus.cycles.gui.listener.ResetSingleSelectionListener;
-import it.albertus.cycles.gui.listener.SaveSelectionListener;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.cycles.resources.Messages.Language;
 import it.albertus.jface.SwtUtils;
@@ -49,6 +50,7 @@ public class MenuBar {
 	private final MenuItem fileMenuHeader;
 	private final MenuItem fileOpenMenuItem;
 	private final MenuItem fileSaveMenuItem;
+	private final MenuItem fileSaveAsMenuItem;
 	private MenuItem fileExitMenuItem;
 
 	private final Menu editMenu;
@@ -103,9 +105,23 @@ public class MenuBar {
 		fileOpenMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_OPEN);
 
 		fileSaveMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileSaveMenuItem.setText(Messages.get("lbl.menu.item.saveas") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
-		fileSaveMenuItem.addSelectionListener(new SaveSelectionListener(gui));
+		fileSaveMenuItem.setText(Messages.get("lbl.menu.item.save") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+		fileSaveMenuItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.save();
+			}
+		});
 		fileSaveMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_SAVE);
+
+		fileSaveAsMenuItem = new MenuItem(fileMenu, SWT.PUSH);
+		fileSaveAsMenuItem.setText(Messages.get("lbl.menu.item.saveas"));
+		fileSaveAsMenuItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.saveAs();
+			}
+		});
 
 		if (!cocoaMenuCreated) {
 			new MenuItem(fileMenu, SWT.SEPARATOR);
@@ -215,7 +231,8 @@ public class MenuBar {
 	public void updateTexts() {
 		fileMenuHeader.setText(Messages.get("lbl.menu.header.file"));
 		fileOpenMenuItem.setText(Messages.get("lbl.menu.item.open") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
-		fileSaveMenuItem.setText(Messages.get("lbl.menu.item.saveas") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+		fileSaveMenuItem.setText(Messages.get("lbl.menu.item.save") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+		fileSaveAsMenuItem.setText(Messages.get("lbl.menu.item.saveas"));
 		if (fileExitMenuItem != null && !fileExitMenuItem.isDisposed()) {
 			fileExitMenuItem.setText(Messages.get("lbl.menu.item.exit"));
 		}
@@ -261,6 +278,10 @@ public class MenuBar {
 
 	public MenuItem getFileSaveMenuItem() {
 		return fileSaveMenuItem;
+	}
+
+	public MenuItem getFileSaveAsMenuItem() {
+		return fileSaveAsMenuItem;
 	}
 
 	public MenuItem getFileExitMenuItem() {

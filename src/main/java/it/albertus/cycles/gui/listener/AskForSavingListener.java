@@ -23,13 +23,13 @@ public abstract class AskForSavingListener {
 			final int selectedButton = messageBox.open();
 			switch (selectedButton) {
 			case SWT.YES:
-				return gui.save(false);
+				return gui.saveAs();
 			case SWT.NO:
 				return true;
 			case SWT.CANCEL:
 				return false;
 			default:
-				throw new IllegalStateException(Integer.toString(selectedButton));
+				throw new IllegalStateException("Invalid button code: " + selectedButton);
 			}
 		}
 		return true;

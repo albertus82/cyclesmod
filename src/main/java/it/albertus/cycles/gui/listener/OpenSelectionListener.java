@@ -24,7 +24,7 @@ public class OpenSelectionListener extends AskForSavingListener implements Selec
 			openDialog.setFilterExtensions(EXTENSIONS);
 			final String fileName = openDialog.open();
 			if (StringUtils.isNotBlank(fileName)) {
-				gui.load(fileName, false);
+				gui.open(fileName);
 			}
 		}
 	}
