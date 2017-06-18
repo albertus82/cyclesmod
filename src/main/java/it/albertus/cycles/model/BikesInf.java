@@ -23,7 +23,7 @@ public class BikesInf {
 	public static final String FILE_NAME = "BIKES.INF";
 	public static final short FILE_SIZE = 444;
 
-	private final Bike[] bikes = new Bike[3];
+	private final Bike[] bikes = new Bike[BikeType.values().length];
 
 	public BikesInf(final InputStream bikesInfInputStream) throws IOException {
 		read(bikesInfInputStream);

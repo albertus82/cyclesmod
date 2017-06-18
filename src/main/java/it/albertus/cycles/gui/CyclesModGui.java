@@ -30,7 +30,6 @@ import it.albertus.cycles.resources.Messages.Language;
 import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.util.ExceptionUtils;
 import it.albertus.util.IOUtils;
-import it.albertus.util.StringUtils;
 import it.albertus.util.Version;
 import it.albertus.util.logging.LoggerFactory;
 
@@ -39,7 +38,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	private static final Logger logger = LoggerFactory.getLogger(CyclesModGui.class);
 
 	private static final String MSG_KEY_WARNING = "msg.warning";
-	private static final String MSG_KEY_COMPLETED = "msg.completed";
 	private static final String MSG_KEY_WIN_TITLE = "win.title";
 
 	private final Map<String, Integer> defaultProperties = new HashMap<String, Integer>();
@@ -48,6 +46,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	private final Shell shell;
 	private final MenuBar menuBar;
 	private final Tabs tabs;
+
+	private String bikesInfFileName;
 
 	private CyclesModGui(final Display display, final String fileName) throws IOException {
 		// Loading default properties...
@@ -78,8 +78,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		tabs.updateFormValues();
 
 		// Loading custom properties...
-		if (StringUtils.isNotBlank(fileName)) {
-			load(fileName, false);
+		if (fileName != null && !fileName.trim().isEmpty()) {
+			open(fileName);
 		}
 		else {
 			setLastPersistedProperties(defaultProperties);
@@ -126,22 +126,18 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
-	public void load(final String fileName, final boolean successMessage) {
+	public void open(final String fileName) {
 		try {
 			if (fileName.toLowerCase().endsWith(".inf")) {
 				final File bikesInfFile = new File(fileName);
 				setBikesInf(new BikesInf(bikesInfFile));
 				tabs.updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-				shell.setText(Messages.get(MSG_KEY_WIN_TITLE) + " - " + bikesInfFile.getCanonicalPath());
-				if (successMessage) {
-					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-					messageBox.setText(Messages.get(MSG_KEY_COMPLETED));
-					messageBox.setMessage(Messages.get("msg.file.loaded", fileName));
-					messageBox.open();
-				}
+				bikesInfFileName = bikesInfFile.getCanonicalPath();
+				shell.setText(Messages.get(MSG_KEY_WIN_TITLE) + " - " + bikesInfFileName);
 			}
 			else if (fileName.toLowerCase().endsWith(".cfg")) {
+				bikesInfFileName = null;
 				InputStream is = null;
 				try {
 					is = new DefaultBikes().getInputStream();
@@ -152,20 +148,11 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				}
 
 				final BikesCfg bikesCfg = new BikesCfg(fileName);
-				short changesCount = 0;
 				for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
-					if (applyProperty(key, bikesCfg.getProperties().getProperty(key), false)) {
-						changesCount++;
-					}
+					applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
 				}
 				tabs.updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-				if (successMessage) {
-					final MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-					messageBox.setText(Messages.get(MSG_KEY_COMPLETED));
-					messageBox.setMessage(Messages.get("msg.customizations.applied", changesCount));
-					messageBox.open();
-				}
 			}
 			else {
 				final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
@@ -180,7 +167,37 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
-	public boolean save(final boolean successMessage) {
+	public boolean save() {
+		if (bikesInfFileName == null) {
+			return saveAs();
+		}
+		else {
+			final File bikesInfFile = new File(bikesInfFileName);
+			if (bikesInfFile.exists() && !bikesInfFile.canWrite()) {
+				return saveAs();
+			}
+			try {
+				updateModelValues(false);
+			}
+			catch (final InvalidPropertyException e) {
+				logger.log(Level.WARNING, e.toString(), e);
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.MAIN_ICONS);
+				return false;
+			}
+			try {
+				getBikesInf().write(bikesInfFileName);
+			}
+			catch (final Exception e) {
+				logger.log(Level.WARNING, e.toString(), e);
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.MAIN_ICONS);
+				return false;
+			}
+			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+			return true;
+		}
+	}
+
+	public boolean saveAs() {
 		try {
 			updateModelValues(false);
 		}
@@ -195,7 +212,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 
-		if (StringUtils.isNotBlank(fileName)) {
+		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
 				getBikesInf().write(fileName);
 			}
@@ -204,14 +221,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.MAIN_ICONS);
 				return false;
 			}
-			shell.setText(Messages.get(MSG_KEY_WIN_TITLE) + " - " + fileName);
+			bikesInfFileName = fileName;
+			shell.setText(Messages.get(MSG_KEY_WIN_TITLE) + " - " + bikesInfFileName);
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-			if (successMessage) {
-				final MessageBox messageBox = new MessageBox(getShell(), SWT.ICON_INFORMATION);
-				messageBox.setText(Messages.get(MSG_KEY_COMPLETED));
-				messageBox.setMessage(Messages.get("msg.file.saved", fileName));
-				messageBox.open();
-			}
 			return true;
 		}
 		else {
