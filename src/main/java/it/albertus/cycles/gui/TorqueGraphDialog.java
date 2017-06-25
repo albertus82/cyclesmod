@@ -116,13 +116,13 @@ public class TorqueGraphDialog extends Dialog {
 		return shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 	}
 
-	protected void createContents(final Shell shell, final Map<Double, Double>  values) {
+	protected void createContents(final Shell shell, final Map<Double, Double> values) {
 		shell.setLayout(getLayout());
 		final XYGraph graph = createGraph(shell, values);
 		createButtonBox(shell);
 	}
 
-	private XYGraph createGraph(final Shell shell, final   Map<Double, Double> values) {
+	private XYGraph createGraph(final Shell shell, final Map<Double, Double> values) {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
@@ -135,7 +135,7 @@ public class TorqueGraphDialog extends Dialog {
 		final double[] x = new double[Torque.LENGTH];
 		final double[] y = new double[Torque.LENGTH];
 		int i = 0;
-		for (final Entry<Double,Double> entry : values.entrySet()	) {
+		for (final Entry<Double, Double> entry : values.entrySet()) {
 			x[i] = entry.getKey();
 			y[i] = entry.getValue();
 			i++;
@@ -183,7 +183,6 @@ public class TorqueGraphDialog extends Dialog {
 		trace.setLineWidth(DEFAULT_LINE_WIDTH);
 		trace.setPointSize(DEFAULT_POINT_SIZE);
 		trace.setPointStyle(PointStyle.FILLED_DIAMOND);
-		 
 
 		xyGraph.addTrace(trace);
 		xyGraph.setShowLegend(false);
@@ -198,19 +197,21 @@ public class TorqueGraphDialog extends Dialog {
 
 		this.values = y;
 
-		xyGraph.getPlotArea().addMouseListener(new MouseListener.Stub() { 
+		xyGraph.getPlotArea().addMouseListener(new MouseListener.Stub() {
 			@Override
-			public void mousePressed(MouseEvent me) {
-				final XYGraph xyGraph = (XYGraph) ((PlotArea) me.getSource()).getParent();
-				final double rpm = xyGraph.getPrimaryXAxis().getPositionValue(me.getLocation().x, false) * 1000;
-				final int index = Math.min(Torque.indexOf(rpm), Torque.LENGTH-1);
-				final double val = Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, xyGraph.getPrimaryYAxis().getPositionValue(me.getLocation().y, false)));
-				TorqueGraphDialog.this.values[index] = val;
-				final IDataProvider dataProvider = trace.getDataProvider();
-				if (dataProvider instanceof CircularBufferDataProvider) {
-					final CircularBufferDataProvider circularBufferDataProvider = (CircularBufferDataProvider) dataProvider;
-					circularBufferDataProvider.setCurrentYDataArray(TorqueGraphDialog.this.values);
-					circularBufferDataProvider.triggerUpdate();
+			public void mousePressed(final MouseEvent me) {
+				if (me.button == 1) { // left click
+					final XYGraph xyGraph = (XYGraph) ((PlotArea) me.getSource()).getParent();
+					final double rpm = xyGraph.getPrimaryXAxis().getPositionValue(me.getLocation().x, false) * 1000;
+					final int index = Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1);
+					final double val = Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, xyGraph.getPrimaryYAxis().getPositionValue(me.getLocation().y, false)));
+					TorqueGraphDialog.this.values[index] = val;
+					final IDataProvider dataProvider = trace.getDataProvider();
+					if (dataProvider instanceof CircularBufferDataProvider) {
+						final CircularBufferDataProvider circularBufferDataProvider = (CircularBufferDataProvider) dataProvider;
+						circularBufferDataProvider.setCurrentYDataArray(TorqueGraphDialog.this.values);
+						circularBufferDataProvider.triggerUpdate();
+					}
 				}
 			}
 		});
@@ -234,7 +235,7 @@ public class TorqueGraphDialog extends Dialog {
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(buttonComposite);
 
 		final Button confirmButton = new Button(buttonComposite, SWT.PUSH);
-		confirmButton.setText(JFaceMessages.get("lbl.button.confirm"));
+		confirmButton.setText(JFaceMessages.get("lbl.button.ok"));
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.FILL).grab(true, false).minSize(SwtUtils.convertHorizontalDLUsToPixels(confirmButton, IDialogConstants.BUTTON_WIDTH), SWT.DEFAULT).applyTo(confirmButton);
 		confirmButton.addSelectionListener(new SelectionAdapter() {
 			@Override

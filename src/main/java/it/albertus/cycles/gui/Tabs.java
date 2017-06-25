@@ -115,14 +115,13 @@ public class Tabs {
 				@Override
 				public void mouseDoubleClicked(MouseEvent me) {
 					TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
-					final	Map<Double, Double> values = new TreeMap<Double, Double>();
-					
+					final Map<Double, Double> values = new TreeMap<Double, Double>();
+
 					for (int i = 0; i < Torque.LENGTH; i++) {
 						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
-						values.put(   (double)Torque.getRpm(i) /1000 , Double.valueOf(formProperty.getValue()));
+						values.put((double) Torque.getRpm(i) / 1000, Double.valueOf(formProperty.getValue()));
 					}
-					
-					
+
 					if (torqueGraphDialog.open(values) == SWT.OK) {
 						for (int i = 0; i < torqueGraphDialog.getValues().length; i++) {
 							final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
