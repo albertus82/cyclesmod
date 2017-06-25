@@ -1,12 +1,19 @@
 package it.albertus.cycles.gui;
 
+import org.eclipse.jface.resource.FontRegistry;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.nebula.visualization.xygraph.figures.Trace;
+import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
@@ -17,9 +24,10 @@ public class SmallTorqueGraph extends TorqueGraphCanvas {
 
 	private static final byte[] POINT_SIZE_OPTIONS = { 0, 2, 4, 6, 8, 10, 12, 14, 16 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5 };
+	private static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
 
-	public static final byte DEFAULT_POINT_SIZE = 4;
-	public static final byte DEFAULT_LINE_WIDTH = 2;
+	private static final byte DEFAULT_POINT_SIZE = 4;
+	private static final byte DEFAULT_LINE_WIDTH = 2;
 
 	private final ContextMenu contextMenu;
 
@@ -29,9 +37,19 @@ public class SmallTorqueGraph extends TorqueGraphCanvas {
 		super(parent, bike);
 		this.bike = bike;
 		this.contextMenu = new ContextMenu(this);
-		getXyGraph().setTitle(Messages.get("lbl.graph.title"));
-		getTrace().setLineWidth(DEFAULT_LINE_WIDTH);
-		getTrace().setPointSize(DEFAULT_POINT_SIZE);
+
+		final XYGraph xyGraph = getXyGraph();
+		xyGraph.setTitle(Messages.get("lbl.graph.title"));
+		final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+		if (!fontRegistry.hasValueFor(FONT_KEY_GRAPH_TITLE)) {
+			final Font sysFont = Display.getCurrent().getSystemFont();
+			fontRegistry.put(FONT_KEY_GRAPH_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), (int) (sysFont.getFontData()[0].getHeight() * TITLE_FONT_HEIGHT_FACTOR), SWT.BOLD) });
+		}
+		xyGraph.setTitleFont(fontRegistry.get(FONT_KEY_GRAPH_TITLE));
+
+		final Trace trace = getTrace();
+		trace.setLineWidth(DEFAULT_LINE_WIDTH);
+		trace.setPointSize(DEFAULT_POINT_SIZE);
 	}
 
 	public void updateTexts() {
