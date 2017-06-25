@@ -29,6 +29,7 @@ public class SmallTorqueGraph extends TorqueGraphCanvas {
 		super(parent, bike);
 		this.bike = bike;
 		this.contextMenu = new ContextMenu(this);
+		getXyGraph().setTitle(Messages.get("lbl.graph.title"));
 		getTrace().setLineWidth(DEFAULT_LINE_WIDTH);
 		getTrace().setPointSize(DEFAULT_POINT_SIZE);
 	}

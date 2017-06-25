@@ -20,7 +20,6 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -48,7 +47,6 @@ public class TorqueGraphDialog extends Dialog {
 	public static final byte DEFAULT_LINE_WIDTH = 2;
 
 	private int returnCode = SWT.CANCEL;
-	private Image[] images;
 	private TorqueGraphCanvas torqueGraph;
 	private ContextMenu contextMenu;
 
@@ -58,15 +56,13 @@ public class TorqueGraphDialog extends Dialog {
 
 	public TorqueGraphDialog(final Shell parent, final int style) {
 		super(parent, style);
+		setText(Messages.get("lbl.graph.title"));
 	}
 
 	public int open(final Map<Double, Double> values, final Color traceColor) {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
-		final Image[] icons = getImages();
-		if (icons != null && icons.length > 0) {
-			shell.setImages(icons);
-		}
+		shell.setImages(Images.MAIN_ICONS);
 		createContents(shell, values, traceColor);
 		final Point minimumSize = getMinimumSize(shell);
 		shell.setSize(getSize(shell));
@@ -171,14 +167,6 @@ public class TorqueGraphDialog extends Dialog {
 
 	public int getReturnCode() {
 		return returnCode;
-	}
-
-	public Image[] getImages() {
-		return images;
-	}
-
-	public void setImages(final Image[] images) {
-		this.images = images;
 	}
 
 	public TorqueGraph getTorqueGraph() {

@@ -128,7 +128,7 @@ public class Tabs {
 				@Override
 				public void mouseDoubleClicked(final MouseEvent me) {
 					final TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
-					if (torqueGraphDialog.open(TorqueGraphCanvas.getValueMap(formProperties, bike.getType()), TorqueGraphCanvas.getColor(bike)) == SWT.OK) {
+					if (torqueGraphDialog.open(TorqueGraphCanvas.getValueMap(formProperties, bike.getType(), gui), TorqueGraphCanvas.getColor(bike.getType())) == SWT.OK) {
 						for (int i = 0; i < torqueGraphDialog.getTorqueGraph().getValues().length; i++) {
 							final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
 							final Text text = formProperty.getText();
