@@ -10,7 +10,6 @@ import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
-import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
@@ -24,6 +23,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
+import it.albertus.cycles.engine.NumeralSystemProvider;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.BikesCfg;
@@ -39,17 +39,16 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 
 	public static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
 
+	private final XYGraph xyGraph = new XYGraph();
+	private final Axis abscissae = xyGraph.getPrimaryXAxis();
+	private final Axis ordinates = xyGraph.getPrimaryYAxis();
+	private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
+	private final Trace trace = new Trace("Torque", abscissae, ordinates, dataProvider);
 	private final double[] values = new double[Torque.LENGTH];
 
-	private XYGraph xyGraph;
-	private CircularBufferDataProvider dataProvider;
-	private Axis abscissae;
-	private Axis ordinates;
-	private Trace trace;
-
-	public static Color getColor(final Bike bike) {
+	public static Color getColor(final BikeType bikeType) {
 		final Display display = Display.getCurrent();
-		switch (bike.getType()) {
+		switch (bikeType) {
 		case CLASS_125:
 			return display.getSystemColor(SWT.COLOR_RED);
 		case CLASS_250:
@@ -57,7 +56,7 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 		case CLASS_500:
 			return display.getSystemColor(SWT.COLOR_BLACK);
 		default:
-			throw new IllegalStateException("Unknown bike type: " + bike.getType());
+			throw new IllegalStateException("Unknown bike type: " + bikeType);
 		}
 	}
 
@@ -69,43 +68,39 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 		return map;
 	}
 
-	public static Map<Double, Double> getValueMap(Map<String, FormProperty> formProperties, BikeType bikeType) {
+	public static Map<Double, Double> getValueMap(Map<String, FormProperty> formProperties, BikeType bikeType, NumeralSystemProvider nsp) {
 		final Map<Double, Double> map = new TreeMap<Double, Double>();
 		for (byte i = 0; i < Torque.LENGTH; i++) {
 			final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Torque.class, i));
-			map.put((double) Torque.getRpm(i) / 1000, Double.valueOf(formProperty.getValue()));
+			map.put((double) Torque.getRpm(i) / 1000, Short.valueOf(formProperty.getValue(), nsp.getNumeralSystem().getRadix()).doubleValue());
 		}
 		return map;
 	}
 
 	public TorqueGraphCanvas(final Composite parent, final Bike bike) {
-		this(parent, getValueMap(bike), getColor(bike));
+		this(parent, getValueMap(bike), getColor(bike.getType()));
 	}
 
-	public TorqueGraphCanvas(final Composite parent, final Map<Double, Double> values, final Color traceColor) {
+	public TorqueGraphCanvas(final Composite parent, final Map<Double, Double> valueMap, final Color traceColor) {
 		super(parent, SWT.NULL);
-		if (values.size() != Torque.LENGTH) {
+		if (valueMap.size() != Torque.LENGTH) {
 			throw new IllegalArgumentException("values size must be " + Torque.LENGTH);
 		}
 
 		final LightweightSystem lws = new LightweightSystem(this);
-
-		xyGraph = new XYGraph();
-		xyGraph.setTitle(Messages.get("lbl.graph.title"));
 		lws.setContents(xyGraph);
 
 		final double[] x = new double[Torque.LENGTH];
 		byte i = 0;
-		for (final Entry<Double, Double> entry : values.entrySet()) {
+		for (final Entry<Double, Double> entry : valueMap.entrySet()) {
 			x[i] = entry.getKey();
-			this.values[i] = entry.getValue();
+			values[i] = entry.getValue();
 			i++;
 		}
 
-		dataProvider = new CircularBufferDataProvider(false);
 		dataProvider.setBufferSize(x.length);
 		dataProvider.setCurrentXDataArray(x);
-		dataProvider.setCurrentYDataArray(this.values);
+		dataProvider.setCurrentYDataArray(values);
 
 		final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
 		if (!fontRegistry.hasValueFor(FONT_KEY_AXIS_TITLE)) {
@@ -114,7 +109,6 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 		}
 		final Font axisTitleFont = fontRegistry.get(FONT_KEY_AXIS_TITLE);
 
-		abscissae = xyGraph.getPrimaryXAxis();
 		abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
 		abscissae.setAutoScale(DEFAULT_AUTOSCALE);
 		abscissae.setTitleFont(axisTitleFont);
@@ -127,7 +121,6 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 			}
 		});
 
-		ordinates = xyGraph.getPrimaryYAxis();
 		ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
 		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
 		ordinates.setTitleFont(axisTitleFont);
@@ -140,7 +133,6 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 			}
 		});
 
-		trace = new Trace("Torque", abscissae, ordinates, dataProvider);
 		trace.setPointStyle(PointStyle.FILLED_DIAMOND);
 		trace.setTraceColor(traceColor);
 
@@ -175,7 +167,7 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 	}
 
 	@Override
-	public IDataProvider getDataProvider() {
+	public CircularBufferDataProvider getDataProvider() {
 		return dataProvider;
 	}
 
