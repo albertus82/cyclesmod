@@ -43,8 +43,8 @@ public class TorqueGraphDialog extends Dialog {
 	private static final byte[] POINT_SIZE_OPTIONS = { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6 };
 
-	public static final byte DEFAULT_POINT_SIZE = 6;
-	public static final byte DEFAULT_LINE_WIDTH = 2;
+	private static final byte DEFAULT_POINT_SIZE = 6;
+	private static final byte DEFAULT_LINE_WIDTH = 2;
 
 	private int returnCode = SWT.CANCEL;
 	private TorqueGraphCanvas torqueGraph;

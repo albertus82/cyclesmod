@@ -37,8 +37,6 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 	public static final String FONT_KEY_GRAPH_TITLE = "graphTitle";
 	public static final String FONT_KEY_AXIS_TITLE = "axisTitle";
 
-	public static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
-
 	private final XYGraph xyGraph = new XYGraph();
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
@@ -138,12 +136,6 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 
 		xyGraph.addTrace(trace);
 		xyGraph.setShowLegend(false);
-
-		if (!fontRegistry.hasValueFor(FONT_KEY_GRAPH_TITLE)) {
-			final Font sysFont = Display.getCurrent().getSystemFont();
-			fontRegistry.put(FONT_KEY_GRAPH_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), (int) (sysFont.getFontData()[0].getHeight() * TITLE_FONT_HEIGHT_FACTOR), SWT.BOLD) });
-		}
-		xyGraph.setTitleFont(fontRegistry.get(FONT_KEY_GRAPH_TITLE));
 	}
 
 	@Override
