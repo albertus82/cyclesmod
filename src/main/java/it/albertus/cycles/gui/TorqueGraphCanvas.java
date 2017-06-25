@@ -48,13 +48,14 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
 	private Trace trace;
 
 	public static Color getColor(final Bike bike) {
+		final Display display = Display.getCurrent();
 		switch (bike.getType()) {
 		case CLASS_125:
-			return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+			return display.getSystemColor(SWT.COLOR_RED);
 		case CLASS_250:
-			return Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
+			return display.getSystemColor(SWT.COLOR_BLUE);
 		case CLASS_500:
-			return Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+			return display.getSystemColor(SWT.COLOR_BLACK);
 		default:
 			throw new IllegalStateException("Unknown bike type: " + bike.getType());
 		}
