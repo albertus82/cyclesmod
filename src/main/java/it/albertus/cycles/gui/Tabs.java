@@ -5,12 +5,13 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
+import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
@@ -49,7 +50,7 @@ public class Tabs {
 	private final Map<BikeType, Group> settingsGroups = new EnumMap<BikeType, Group>(BikeType.class);
 	private final Map<BikeType, Group> gearboxGroups = new EnumMap<BikeType, Group>(BikeType.class);
 	private final Map<BikeType, Group> torqueGroups = new EnumMap<BikeType, Group>(BikeType.class);
-	private final Map<BikeType, TorqueGraph> torqueGraphs = new EnumMap<BikeType, TorqueGraph>(BikeType.class);
+	private final Map<BikeType, SmallTorqueGraph> torqueGraphs = new EnumMap<BikeType, SmallTorqueGraph>(BikeType.class);
 
 	private final PropertyVerifyListener propertyVerifyListener;
 	private final PropertyFocusListener propertyFocusListener;
@@ -110,23 +111,28 @@ public class Tabs {
 			}
 
 			// Torque graph
-			final TorqueGraph graph = new TorqueGraph(tabComposite, bike);
+			final SmallTorqueGraph graph = new SmallTorqueGraph(tabComposite, bike);
 			graph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
-				public void mouseDoubleClicked(MouseEvent me) {
-					TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
-					final Map<Double, Double> values = new TreeMap<Double, Double>();
-
-					for (int i = 0; i < Torque.LENGTH; i++) {
-						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
-						values.put((double) Torque.getRpm(i) / 1000, Double.valueOf(formProperty.getValue()));
+				public void mousePressed(final MouseEvent me) {
+					if (me.button == 1) { // left button
+						final XYGraph xyGraph = (XYGraph) ((PlotArea) me.getSource()).getParent();
+						final double rpm = xyGraph.getPrimaryXAxis().getPositionValue(me.getLocation().x, false) * 1000;
+						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(graph.getBike().getType(), Torque.class, Torque.indexOf(rpm)));
+						if (formProperty != null) {
+							formProperty.getText().setFocus();
+						}
 					}
+				}
 
-					if (torqueGraphDialog.open(values) == SWT.OK) {
-						for (int i = 0; i < torqueGraphDialog.getValues().length; i++) {
+				@Override
+				public void mouseDoubleClicked(final MouseEvent me) {
+					final TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
+					if (torqueGraphDialog.open(TorqueGraphCanvas.getValueMap(formProperties, bike.getType()), TorqueGraphCanvas.getColor(bike)) == SWT.OK) {
+						for (int i = 0; i < torqueGraphDialog.getTorqueGraph().getValues().length; i++) {
 							final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
 							final Text text = formProperty.getText();
-							text.setText(Long.toString(Math.max(0, Math.min(0xFF, Math.round(torqueGraphDialog.getValues()[i]))), gui.getNumeralSystem().getRadix()));
+							text.setText(Long.toString(Math.max(0, Math.min(0xFF, Math.round(torqueGraphDialog.getTorqueGraph().getValues()[i]))), gui.getNumeralSystem().getRadix()));
 							text.notifyListeners(SWT.FocusOut, null);
 						}
 					}
@@ -218,7 +224,7 @@ public class Tabs {
 		for (final Group torqueGroup : torqueGroups.values()) {
 			torqueGroup.setText(Messages.get("lbl.torque"));
 		}
-		for (final TorqueGraph torqueGraph : torqueGraphs.values()) {
+		for (final SmallTorqueGraph torqueGraph : torqueGraphs.values()) {
 			torqueGraph.updateTexts();
 		}
 
@@ -257,7 +263,7 @@ public class Tabs {
 
 		// Update torque graphs...
 		for (final Bike bike : gui.getBikesInf().getBikes()) {
-			final TorqueGraph graph = torqueGraphs.get(bike.getType());
+			final SmallTorqueGraph graph = torqueGraphs.get(bike.getType());
 			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
 				graph.getValues()[i] = bike.getTorque().getCurve()[i];
 			}
@@ -333,7 +339,7 @@ public class Tabs {
 		return Collections.unmodifiableMap(formProperties);
 	}
 
-	public Map<BikeType, TorqueGraph> getTorqueGraphs() {
+	public Map<BikeType, SmallTorqueGraph> getTorqueGraphs() {
 		return Collections.unmodifiableMap(torqueGraphs);
 	}
 
