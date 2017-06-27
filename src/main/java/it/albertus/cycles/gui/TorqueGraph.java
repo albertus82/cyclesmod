@@ -8,6 +8,7 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
@@ -39,7 +40,7 @@ class TorqueGraph extends Figure implements ITorqueGraph {
 	private final Trace trace = new Trace("Torque", abscissae, ordinates, dataProvider);
 	private final double[] values = new double[Torque.LENGTH];
 
-	public TorqueGraph(final Map<Double, Double> valueMap, final Color traceColor) {
+	public TorqueGraph(final Map<Double, Double> valueMap, final Color traceColor, final int lineWidth, final int pointSize) {
 		if (valueMap.size() != Torque.LENGTH) {
 			throw new IllegalArgumentException("values size must be " + Torque.LENGTH);
 		}
@@ -87,11 +88,42 @@ class TorqueGraph extends Figure implements ITorqueGraph {
 
 		trace.setPointStyle(PointStyle.FILLED_DIAMOND);
 		trace.setTraceColor(traceColor);
+		trace.setLineWidth(lineWidth);
+		trace.setPointSize(pointSize);
 
 		xyGraph.addTrace(trace);
 		xyGraph.setShowLegend(false);
 
 		add(toolbarArmedXYGraph);
+
+		xyGraph.getPlotArea().addMouseListener(new MouseListener.Stub() {
+			@Override
+			public void mousePressed(final MouseEvent me) {
+				if (me.button == 1) { // left click
+					final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * 1000;
+					final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
+					final short oldValue = (short) values[index];
+					final short newValue = (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, ordinates.getPositionValue(me.getLocation().y, false))));
+					if (oldValue != newValue) {
+						values[index] = newValue;
+						dataProvider.triggerUpdate();
+						xyGraph.getOperationsManager().addCommand(new IUndoableCommand() {
+							@Override
+							public void undo() {
+								values[index] = oldValue;
+								refresh();
+							}
+
+							@Override
+							public void redo() {
+								values[index] = newValue;
+								refresh();
+							}
+						});
+					}
+				}
+			}
+		});
 
 		abscissae.performAutoScale(true);
 		ordinates.performAutoScale(true);
