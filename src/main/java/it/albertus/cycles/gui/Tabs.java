@@ -5,6 +5,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -12,6 +13,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -110,6 +112,27 @@ public class Tabs {
 
 			// Torque graph
 			final TorqueGraphCanvas canvas = new TorqueGraphCanvas(tabComposite, bike);
+			canvas.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseDoubleClick(org.eclipse.swt.events.MouseEvent e) {
+					final TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
+					final Map<Double, Double> valueMap = new TreeMap<Double, Double>();
+					for (byte i = 0; i < Torque.LENGTH; i++) {
+						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
+						valueMap.put((double) Torque.getRpm(i) / 1000, Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()).doubleValue());
+					}
+
+					if (torqueGraphDialog.open(valueMap, bike.getType()) == SWT.OK) {
+						for (byte i = 0; i < Torque.LENGTH; i++) {
+							final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
+							final Text text = formProperty.getText();
+							text.setText(Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(torqueGraphDialog.getTorqueGraph().getValues()[i]))), gui.getNumeralSystem().getRadix()));
+							text.notifyListeners(SWT.FocusOut, null);
+						}
+					}
+				}
+			});
+
 			canvas.getTorqueGraph().getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(final MouseEvent me) {
@@ -118,19 +141,6 @@ public class Tabs {
 						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, Torque.indexOf(rpm)));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
-						}
-					}
-				}
-
-				@Override
-				public void mouseDoubleClicked(final MouseEvent me) {
-					final TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
-					if (torqueGraphDialog.open(TorqueGraph.getValueMap(formProperties, bike.getType(), gui), TorqueGraph.getColor(bike.getType())) == SWT.OK) {
-						for (int i = 0; i < torqueGraphDialog.getTorqueGraph().getValues().length; i++) {
-							final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
-							final Text text = formProperty.getText();
-							text.setText(Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(torqueGraphDialog.getTorqueGraph().getValues()[i]))), gui.getNumeralSystem().getRadix()));
-							text.notifyListeners(SWT.FocusOut, null);
 						}
 					}
 				}
