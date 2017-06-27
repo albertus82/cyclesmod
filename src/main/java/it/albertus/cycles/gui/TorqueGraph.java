@@ -2,9 +2,10 @@ package it.albertus.cycles.gui;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.jface.resource.FontRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
@@ -12,12 +13,11 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Display;
 
-import it.albertus.cycles.engine.NumeralSystemProvider;
-import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Bike.BikeType;
-import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 
@@ -47,23 +47,6 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 		}
 	}
 
-	public static Map<Double, Double> getValueMap(final Bike bike) {
-		final Map<Double, Double> map = new TreeMap<Double, Double>();
-		for (byte i = 0; i < bike.getTorque().getCurve().length; i++) {
-			map.put(((double) Torque.getRpm(i)) / 1000, (double) bike.getTorque().getCurve()[i]);
-		}
-		return map;
-	}
-
-	public static Map<Double, Double> getValueMap(Map<String, FormProperty> formProperties, BikeType bikeType, NumeralSystemProvider nsp) {
-		final Map<Double, Double> map = new TreeMap<Double, Double>();
-		for (byte i = 0; i < Torque.LENGTH; i++) {
-			final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Torque.class, i));
-			map.put((double) Torque.getRpm(i) / 1000, Short.valueOf(formProperty.getValue(), nsp.getNumeralSystem().getRadix()).doubleValue());
-		}
-		return map;
-	}
-
 	public TorqueGraph(final Map<Double, Double> valueMap) {
 		if (valueMap.size() != Torque.LENGTH) {
 			throw new IllegalArgumentException("values size must be " + Torque.LENGTH);
@@ -81,10 +64,19 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 		dataProvider.setCurrentXDataArray(x);
 		dataProvider.setCurrentYDataArray(values);
 
+		final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+		if (!fontRegistry.hasValueFor(FONT_KEY_AXIS_TITLE)) {
+			final Font sysFont = Display.getCurrent().getSystemFont();
+			fontRegistry.put(FONT_KEY_AXIS_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), sysFont.getFontData()[0].getHeight(), SWT.BOLD) });
+		}
+		final Font axisTitleFont = fontRegistry.get(FONT_KEY_AXIS_TITLE);
+
 		abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
+		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
 		ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
+		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 
 		xyGraph.addTrace(trace);

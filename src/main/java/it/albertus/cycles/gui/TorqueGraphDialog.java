@@ -4,17 +4,18 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
+import org.eclipse.draw2d.TreeSearch;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.resource.FontRegistry;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
+import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.nebula.visualization.xygraph.figures.ToolbarArmedXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
@@ -22,11 +23,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
@@ -39,6 +38,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;
@@ -62,30 +62,22 @@ public class TorqueGraphDialog extends Dialog {
 	private ComplexTorqueGraph torqueGraph;
 	private ContextMenu contextMenu;
 
-	private class ComplexTorqueGraph extends TorqueGraph {
+	private static class ComplexTorqueGraph extends TorqueGraph {
 
 		private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-		private ComplexTorqueGraph(final Map<Double, Double> valueMap, final Color traceColor) {
+		private ComplexTorqueGraph(final Map<Double, Double> valueMap, final BikeType bikeType) {
 			super(valueMap);
-			final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
-			if (!fontRegistry.hasValueFor(FONT_KEY_AXIS_TITLE)) {
-				final Font sysFont = Display.getCurrent().getSystemFont();
-				fontRegistry.put(FONT_KEY_AXIS_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), sysFont.getFontData()[0].getHeight(), SWT.BOLD) });
-			}
-			final Font axisTitleFont = fontRegistry.get(FONT_KEY_AXIS_TITLE);
 
 			final Axis abscissae = getAbscissae();
 			abscissae.setAutoScale(DEFAULT_AUTOSCALE);
-			abscissae.setTitleFont(axisTitleFont);
 
 			final Axis ordinates = getOrdinates();
 			ordinates.setAutoScale(DEFAULT_AUTOSCALE);
-			ordinates.setTitleFont(axisTitleFont);
 
 			final Trace trace = getTrace();
 			trace.setPointStyle(PointStyle.FILLED_DIAMOND);
-			trace.setTraceColor(traceColor);
+			trace.setTraceColor(getColor(bikeType));
 			trace.setLineWidth(DEFAULT_LINE_WIDTH);
 			trace.setPointSize(DEFAULT_POINT_SIZE);
 
@@ -98,7 +90,7 @@ public class TorqueGraphDialog extends Dialog {
 					if (me.button == 1) { // left click
 						final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * 1000;
 						final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
-						final double [] values = getValues();
+						final double[] values = getValues();
 						final short oldValue = (short) values[index];
 						final short newValue = (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, ordinates.getPositionValue(me.getLocation().y, false))));
 						if (oldValue != newValue) {
@@ -126,6 +118,10 @@ public class TorqueGraphDialog extends Dialog {
 			ordinates.performAutoScale(true);
 		}
 
+		protected ToolbarArmedXYGraph getToolbarArmedXYGraph() {
+			return toolbarArmedXYGraph;
+		}
+
 		@Override
 		protected void layout() {
 			toolbarArmedXYGraph.setBounds(getBounds().getCopy());
@@ -137,16 +133,16 @@ public class TorqueGraphDialog extends Dialog {
 		this(parent, SWT.SHEET | SWT.RESIZE | SWT.MAX);
 	}
 
-	public TorqueGraphDialog(final Shell parent, final int style) {
+	private TorqueGraphDialog(final Shell parent, final int style) {
 		super(parent, style);
 		setText(Messages.get("lbl.graph.title"));
 	}
 
-	public int open(final Map<Double, Double> values, final Color traceColor) {
+	public int open(final Map<Double, Double> values, final BikeType bikeType) {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText());
 		shell.setImages(Images.MAIN_ICONS);
-		createContents(shell, values, traceColor);
+		createContents(shell, values, bikeType);
 		final Point minimumSize = getMinimumSize(shell);
 		shell.setSize(getSize(shell));
 		shell.setMinimumSize(minimumSize);
@@ -170,9 +166,9 @@ public class TorqueGraphDialog extends Dialog {
 		return shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 	}
 
-	private void createContents(final Shell shell, final Map<Double, Double> values, final Color traceColor) {
+	private void createContents(final Shell shell, final Map<Double, Double> values, final BikeType bikeType) {
 		shell.setLayout(getLayout());
-		createGraph(shell, values, traceColor);
+		createGraph(shell, values, bikeType);
 		createButtonBox(shell);
 	}
 
@@ -180,12 +176,38 @@ public class TorqueGraphDialog extends Dialog {
 		return GridLayoutFactory.swtDefaults().create();
 	}
 
-	private void createGraph(final Shell shell, final Map<Double, Double> values, final Color traceColor) {
+	private void createGraph(final Shell shell, final Map<Double, Double> values, final BikeType bikeType) {
 		canvas = new Canvas(shell, SWT.NULL);
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		torqueGraph = new ComplexTorqueGraph(values, traceColor);
+		torqueGraph = new ComplexTorqueGraph(values, bikeType);
 		lws.setContents(torqueGraph);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
+
+		canvas.addMouseWheelListener(new MouseWheelListener() {
+			@Override
+			public void mouseScrolled(org.eclipse.swt.events.MouseEvent e) {
+				IFigure figureUnderMouse = torqueGraph.getToolbarArmedXYGraph().findFigureAt(e.x, e.y, new TreeSearch() {
+					@Override
+					public boolean prune(IFigure figure) {
+						return false;
+					}
+
+					@Override
+					public boolean accept(IFigure figure) {
+						return figure instanceof Axis || figure instanceof PlotArea;
+					}
+				});
+				if (figureUnderMouse instanceof Axis) {
+					Axis axis = ((Axis) figureUnderMouse);
+					double valuePosition = axis.getPositionValue(axis.isHorizontal() ? e.x : e.y, false);
+					axis.zoomInOut(valuePosition, e.count * 0.1 / 3);
+				}
+				else if (figureUnderMouse instanceof PlotArea) {
+					PlotArea plotArea = (PlotArea) figureUnderMouse;
+					plotArea.zoomInOut(true, true, e.x, e.y, e.count * 0.1 / 3);
+				}
+			}
+		});
 
 		contextMenu = new ContextMenu(canvas);
 	}
@@ -246,7 +268,7 @@ public class TorqueGraphDialog extends Dialog {
 		return contextMenu;
 	}
 
-	class ContextMenu {
+	private class ContextMenu {
 
 		private final Menu menu;
 		private final MenuItem autoScaleMenuItem;
@@ -335,34 +357,6 @@ public class TorqueGraphDialog extends Dialog {
 					menu.setVisible(true);
 				}
 			});
-		}
-
-		public Menu getMenu() {
-			return menu;
-		}
-
-		public MenuItem getAutoScaleMenuItem() {
-			return autoScaleMenuItem;
-		}
-
-		public MenuItem getPerformAutoScaleMenuItem() {
-			return performAutoScaleMenuItem;
-		}
-
-		public Menu getLineWidthSubMenu() {
-			return lineWidthSubMenu;
-		}
-
-		public MenuItem getLineWidthMenuItem() {
-			return lineWidthMenuItem;
-		}
-
-		public Menu getPointSizeSubMenu() {
-			return pointSizeSubMenu;
-		}
-
-		public MenuItem getPointSizeMenuItem() {
-			return pointSizeMenuItem;
 		}
 
 	}
