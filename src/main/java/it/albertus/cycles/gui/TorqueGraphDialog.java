@@ -1,11 +1,9 @@
 package it.albertus.cycles.gui;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -15,13 +13,11 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
-import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.ToolbarArmedXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
-import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -63,38 +59,15 @@ public class TorqueGraphDialog extends Dialog {
 
 	private int returnCode = SWT.CANCEL;
 	private Canvas canvas;
-	private FullFeaturedTorqueGraph torqueGraph;
+	private ComplexTorqueGraph torqueGraph;
 	private ContextMenu contextMenu;
 
-	class FullFeaturedTorqueGraph extends Figure implements ITorqueGraph {
+	private class ComplexTorqueGraph extends TorqueGraph {
 
-		public static final String FONT_KEY_AXIS_TITLE = "axisTitle";
+		private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-		private final IXYGraph xyGraph = new XYGraph();
-		private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(xyGraph);
-		private final Axis abscissae = xyGraph.getPrimaryXAxis();
-		private final Axis ordinates = xyGraph.getPrimaryYAxis();
-		private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
-		private final Trace trace = new Trace(Messages.get("lbl.graph.title"), abscissae, ordinates, dataProvider);
-		private final double[] values = new double[Torque.LENGTH];
-
-		private FullFeaturedTorqueGraph(final Map<Double, Double> valueMap, final Color traceColor) {
-			if (valueMap.size() != Torque.LENGTH) {
-				throw new IllegalArgumentException("values size must be " + Torque.LENGTH);
-			}
-
-			final double[] x = new double[Torque.LENGTH];
-			byte i = 0;
-			for (final Entry<Double, Double> entry : valueMap.entrySet()) {
-				x[i] = entry.getKey();
-				values[i] = entry.getValue();
-				i++;
-			}
-
-			dataProvider.setBufferSize(x.length);
-			dataProvider.setCurrentXDataArray(x);
-			dataProvider.setCurrentYDataArray(values);
-
+		private ComplexTorqueGraph(final Map<Double, Double> valueMap, final Color traceColor) {
+			super(valueMap);
 			final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
 			if (!fontRegistry.hasValueFor(FONT_KEY_AXIS_TITLE)) {
 				final Font sysFont = Display.getCurrent().getSystemFont();
@@ -102,37 +75,35 @@ public class TorqueGraphDialog extends Dialog {
 			}
 			final Font axisTitleFont = fontRegistry.get(FONT_KEY_AXIS_TITLE);
 
-			abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
+			final Axis abscissae = getAbscissae();
 			abscissae.setAutoScale(DEFAULT_AUTOSCALE);
 			abscissae.setTitleFont(axisTitleFont);
-			abscissae.setShowMajorGrid(true);
 
-			ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
+			final Axis ordinates = getOrdinates();
 			ordinates.setAutoScale(DEFAULT_AUTOSCALE);
 			ordinates.setTitleFont(axisTitleFont);
-			ordinates.setShowMajorGrid(true);
 
+			final Trace trace = getTrace();
 			trace.setPointStyle(PointStyle.FILLED_DIAMOND);
 			trace.setTraceColor(traceColor);
 			trace.setLineWidth(DEFAULT_LINE_WIDTH);
 			trace.setPointSize(DEFAULT_POINT_SIZE);
 
-			xyGraph.addTrace(trace);
-			xyGraph.setShowLegend(false);
-
 			add(toolbarArmedXYGraph);
 
+			final IXYGraph xyGraph = getXyGraph();
 			xyGraph.getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(final MouseEvent me) {
 					if (me.button == 1) { // left click
 						final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * 1000;
 						final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
+						final double [] values = getValues();
 						final short oldValue = (short) values[index];
 						final short newValue = (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, ordinates.getPositionValue(me.getLocation().y, false))));
 						if (oldValue != newValue) {
 							values[index] = newValue;
-							dataProvider.triggerUpdate();
+							refresh();
 							xyGraph.getOperationsManager().addCommand(new IUndoableCommand() {
 								@Override
 								public void undo() {
@@ -159,45 +130,6 @@ public class TorqueGraphDialog extends Dialog {
 		protected void layout() {
 			toolbarArmedXYGraph.setBounds(getBounds().getCopy());
 			super.layout();
-		}
-
-		@Override
-		public void refresh() {
-			dataProvider.triggerUpdate();
-		}
-
-		@Override
-		public IXYGraph getXyGraph() {
-			return xyGraph;
-		}
-
-		@Override
-		public Axis getAbscissae() {
-			return abscissae;
-		}
-
-		@Override
-		public Axis getOrdinates() {
-			return ordinates;
-		}
-
-		@Override
-		public CircularBufferDataProvider getDataProvider() {
-			return dataProvider;
-		}
-
-		@Override
-		public Trace getTrace() {
-			return trace;
-		}
-
-		public ToolbarArmedXYGraph getToolbarArmedXYGraph() {
-			return toolbarArmedXYGraph;
-		}
-
-		@Override
-		public double[] getValues() {
-			return values;
 		}
 	}
 
@@ -251,7 +183,7 @@ public class TorqueGraphDialog extends Dialog {
 	private void createGraph(final Shell shell, final Map<Double, Double> values, final Color traceColor) {
 		canvas = new Canvas(shell, SWT.NULL);
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		torqueGraph = new FullFeaturedTorqueGraph(values, traceColor);
+		torqueGraph = new ComplexTorqueGraph(values, traceColor);
 		lws.setContents(torqueGraph);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
