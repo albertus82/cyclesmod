@@ -1,13 +1,27 @@
 package it.albertus.cycles.gui;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.resource.FontRegistry;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
+import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
+import org.eclipse.nebula.visualization.xygraph.figures.Axis;
+import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
+import org.eclipse.nebula.visualization.xygraph.figures.ToolbarArmedXYGraph;
+import org.eclipse.nebula.visualization.xygraph.figures.Trace;
+import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
+import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -15,6 +29,8 @@ import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
@@ -27,6 +43,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;
 import it.albertus.jface.SwtUtils;
@@ -42,10 +59,143 @@ public class TorqueGraphDialog extends Dialog {
 	private static final byte DEFAULT_POINT_SIZE = 6;
 	private static final byte DEFAULT_LINE_WIDTH = 2;
 
+	private static final boolean DEFAULT_AUTOSCALE = false;
+
 	private int returnCode = SWT.CANCEL;
 	private Canvas canvas;
-	private TorqueGraph torqueGraph;
+	private LargeTorqueGraph torqueGraph;
 	private ContextMenu contextMenu;
+
+	class LargeTorqueGraph extends Figure implements ITorqueGraph {
+
+		public static final String FONT_KEY_AXIS_TITLE = "axisTitle";
+
+		private final IXYGraph xyGraph = new XYGraph();
+		private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(xyGraph);
+		private final Axis abscissae = xyGraph.getPrimaryXAxis();
+		private final Axis ordinates = xyGraph.getPrimaryYAxis();
+		private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
+		private final Trace trace = new Trace("Torque", abscissae, ordinates, dataProvider);
+		private final double[] values = new double[Torque.LENGTH];
+
+		private LargeTorqueGraph(final Map<Double, Double> valueMap, final Color traceColor) {
+			if (valueMap.size() != Torque.LENGTH) {
+				throw new IllegalArgumentException("values size must be " + Torque.LENGTH);
+			}
+
+			final double[] x = new double[Torque.LENGTH];
+			byte i = 0;
+			for (final Entry<Double, Double> entry : valueMap.entrySet()) {
+				x[i] = entry.getKey();
+				values[i] = entry.getValue();
+				i++;
+			}
+
+			dataProvider.setBufferSize(x.length);
+			dataProvider.setCurrentXDataArray(x);
+			dataProvider.setCurrentYDataArray(values);
+
+			final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+			if (!fontRegistry.hasValueFor(FONT_KEY_AXIS_TITLE)) {
+				final Font sysFont = Display.getCurrent().getSystemFont();
+				fontRegistry.put(FONT_KEY_AXIS_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), sysFont.getFontData()[0].getHeight(), SWT.BOLD) });
+			}
+			final Font axisTitleFont = fontRegistry.get(FONT_KEY_AXIS_TITLE);
+
+			abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
+			abscissae.setAutoScale(DEFAULT_AUTOSCALE);
+			abscissae.setTitleFont(axisTitleFont);
+			abscissae.setShowMajorGrid(true);
+
+			ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
+			ordinates.setAutoScale(DEFAULT_AUTOSCALE);
+			ordinates.setTitleFont(axisTitleFont);
+			ordinates.setShowMajorGrid(true);
+
+			trace.setPointStyle(PointStyle.FILLED_DIAMOND);
+			trace.setTraceColor(traceColor);
+			trace.setLineWidth(DEFAULT_LINE_WIDTH);
+			trace.setPointSize(DEFAULT_POINT_SIZE);
+
+			xyGraph.addTrace(trace);
+			xyGraph.setShowLegend(false);
+
+			add(toolbarArmedXYGraph);
+
+			xyGraph.getPlotArea().addMouseListener(new MouseListener.Stub() {
+				@Override
+				public void mousePressed(final MouseEvent me) {
+					if (me.button == 1) { // left click
+						final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * 1000;
+						final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
+						final short oldValue = (short) values[index];
+						final short newValue = (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, ordinates.getPositionValue(me.getLocation().y, false))));
+						if (oldValue != newValue) {
+							values[index] = newValue;
+							dataProvider.triggerUpdate();
+							xyGraph.getOperationsManager().addCommand(new IUndoableCommand() {
+								@Override
+								public void undo() {
+									values[index] = oldValue;
+									refresh();
+								}
+
+								@Override
+								public void redo() {
+									values[index] = newValue;
+									refresh();
+								}
+							});
+						}
+					}
+				}
+			});
+
+			abscissae.performAutoScale(true);
+			ordinates.performAutoScale(true);
+		}
+
+		@Override
+		protected void layout() {
+			toolbarArmedXYGraph.setBounds(getBounds().getCopy());
+			super.layout();
+		}
+
+		@Override
+		public void refresh() {
+			dataProvider.triggerUpdate();
+		}
+
+		@Override
+		public IXYGraph getXyGraph() {
+			return xyGraph;
+		}
+
+		@Override
+		public Axis getAbscissae() {
+			return abscissae;
+		}
+
+		@Override
+		public Axis getOrdinates() {
+			return ordinates;
+		}
+
+		@Override
+		public CircularBufferDataProvider getDataProvider() {
+			return dataProvider;
+		}
+
+		@Override
+		public Trace getTrace() {
+			return trace;
+		}
+
+		@Override
+		public double[] getValues() {
+			return values;
+		}
+	}
 
 	public TorqueGraphDialog(final Shell parent) {
 		this(parent, SWT.SHEET | SWT.RESIZE | SWT.MAX);
@@ -97,7 +247,7 @@ public class TorqueGraphDialog extends Dialog {
 	private void createGraph(final Shell shell, final Map<Double, Double> values, final Color traceColor) {
 		canvas = new Canvas(shell, SWT.NULL);
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		torqueGraph = new TorqueGraph(values, traceColor, DEFAULT_LINE_WIDTH, DEFAULT_POINT_SIZE);
+		torqueGraph = new LargeTorqueGraph(values, traceColor);
 		lws.setContents(torqueGraph);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
@@ -148,7 +298,7 @@ public class TorqueGraphDialog extends Dialog {
 		return returnCode;
 	}
 
-	public TorqueGraph getTorqueGraph() {
+	public ITorqueGraph getTorqueGraph() {
 		return torqueGraph;
 	}
 
@@ -175,7 +325,7 @@ public class TorqueGraphDialog extends Dialog {
 			control.setMenu(menu);
 
 			autoScaleMenuItem = new MenuItem(menu, SWT.CHECK);
-			autoScaleMenuItem.setSelection(TorqueGraph.DEFAULT_AUTOSCALE);
+			autoScaleMenuItem.setSelection(DEFAULT_AUTOSCALE);
 			autoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscaling"));
 			autoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
