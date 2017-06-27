@@ -1,176 +1,267 @@
 package it.albertus.cycles.gui;
 
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.resource.FontRegistry;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
+import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
-import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 
-import it.albertus.cycles.engine.NumeralSystemProvider;
 import it.albertus.cycles.model.Bike;
-import it.albertus.cycles.model.Bike.BikeType;
-import it.albertus.cycles.model.BikesCfg;
-import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 
-public class TorqueGraphCanvas extends Canvas implements ITorqueGraph {
+public class TorqueGraphCanvas extends Canvas {
 
-	public static final boolean DEFAULT_AUTOSCALE = true;
+	private static final byte[] POINT_SIZE_OPTIONS = { 0, 2, 4, 6, 8, 10, 12, 14, 16 };
+	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5 };
 
-	public static final String FONT_KEY_GRAPH_TITLE = "graphTitle";
-	public static final String FONT_KEY_AXIS_TITLE = "axisTitle";
+	private static final byte DEFAULT_POINT_SIZE = 4;
+	private static final byte DEFAULT_LINE_WIDTH = 2;
 
-	private final XYGraph xyGraph = new XYGraph();
-	private final Axis abscissae = xyGraph.getPrimaryXAxis();
-	private final Axis ordinates = xyGraph.getPrimaryYAxis();
-	private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
-	private final Trace trace = new Trace(Messages.get("lbl.graph.title"), abscissae, ordinates, dataProvider);
-	private final double[] values = new double[Torque.LENGTH];
+	private static final boolean DEFAULT_AUTOSCALE = true;
 
-	public static Color getColor(final BikeType bikeType) {
-		final Display display = Display.getCurrent();
-		switch (bikeType) {
-		case CLASS_125:
-			return display.getSystemColor(SWT.COLOR_RED);
-		case CLASS_250:
-			return display.getSystemColor(SWT.COLOR_BLUE);
-		case CLASS_500:
-			return display.getSystemColor(SWT.COLOR_BLACK);
-		default:
-			throw new IllegalStateException("Unknown bike type: " + bikeType);
+	private final ContextMenu contextMenu;
+	private final SimpleTorqueGraph torqueGraph;
+
+	private class SimpleTorqueGraph extends TorqueGraph {
+
+		private static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
+
+		private static final byte DEFAULT_POINT_SIZE = 4;
+		private static final byte DEFAULT_LINE_WIDTH = 2;
+
+		SimpleTorqueGraph(final Bike bike) {
+			this(getValueMap(bike), getColor(bike.getType()));
 		}
-	}
 
-	public static Map<Double, Double> getValueMap(final Bike bike) {
-		final Map<Double, Double> map = new TreeMap<Double, Double>();
-		for (byte i = 0; i < bike.getTorque().getCurve().length; i++) {
-			map.put(((double) Torque.getRpm(i)) / 1000, (double) bike.getTorque().getCurve()[i]);
-		}
-		return map;
-	}
+		private SimpleTorqueGraph(final Map<Double, Double> valueMap, final Color traceColor) {
+			super(valueMap);
+			final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
+			if (!fontRegistry.hasValueFor(FONT_KEY_AXIS_TITLE)) {
+				final Font sysFont = Display.getCurrent().getSystemFont();
+				fontRegistry.put(FONT_KEY_AXIS_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), sysFont.getFontData()[0].getHeight(), SWT.BOLD) });
+			}
+			final Font axisTitleFont = fontRegistry.get(FONT_KEY_AXIS_TITLE);
 
-	public static Map<Double, Double> getValueMap(Map<String, FormProperty> formProperties, BikeType bikeType, NumeralSystemProvider nsp) {
-		final Map<Double, Double> map = new TreeMap<Double, Double>();
-		for (byte i = 0; i < Torque.LENGTH; i++) {
-			final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Torque.class, i));
-			map.put((double) Torque.getRpm(i) / 1000, Short.valueOf(formProperty.getValue(), nsp.getNumeralSystem().getRadix()).doubleValue());
+			final Axis abscissae = getAbscissae();
+			abscissae.setAutoScale(DEFAULT_AUTOSCALE);
+			abscissae.setTitleFont(axisTitleFont);
+			abscissae.setZoomType(ZoomType.DYNAMIC_ZOOM);
+			abscissae.addMouseListener(new MouseListener.Stub() {
+				@Override
+				public void mouseDoubleClicked(final MouseEvent me) {
+					abscissae.performAutoScale(true);
+				}
+			});
+
+			final Axis ordinates = getOrdinates();
+			ordinates.setAutoScale(DEFAULT_AUTOSCALE);
+			ordinates.setTitleFont(axisTitleFont);
+			ordinates.setZoomType(ZoomType.DYNAMIC_ZOOM);
+			ordinates.addMouseListener(new MouseListener.Stub() {
+				@Override
+				public void mouseDoubleClicked(final MouseEvent me) {
+					ordinates.performAutoScale(true);
+				}
+			});
+
+			final Trace trace = getTrace();
+			trace.setPointStyle(PointStyle.FILLED_DIAMOND);
+			trace.setTraceColor(traceColor);
+
+			final IXYGraph xyGraph = getXyGraph();
+			xyGraph.setTitle(Messages.get("lbl.graph.title"));
+			if (!fontRegistry.hasValueFor(FONT_KEY_GRAPH_TITLE)) {
+				final Font sysFont = Display.getCurrent().getSystemFont();
+				fontRegistry.put(FONT_KEY_GRAPH_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), (int) (sysFont.getFontData()[0].getHeight() * TITLE_FONT_HEIGHT_FACTOR), SWT.BOLD) });
+			}
+			xyGraph.setTitleFont(fontRegistry.get(FONT_KEY_GRAPH_TITLE));
+
+			trace.setLineWidth(DEFAULT_LINE_WIDTH);
+			trace.setPointSize(DEFAULT_POINT_SIZE);
+
+			add(xyGraph);
 		}
-		return map;
+
+		@Override
+		protected void layout() {
+			getXyGraph().setBounds(getBounds().getCopy());
+			super.layout();
+		}
+
 	}
 
 	public TorqueGraphCanvas(final Composite parent, final Bike bike) {
-		this(parent, getValueMap(bike), getColor(bike.getType()));
-	}
-
-	public TorqueGraphCanvas(final Composite parent, final Map<Double, Double> valueMap, final Color traceColor) {
 		super(parent, SWT.NULL);
-		if (valueMap.size() != Torque.LENGTH) {
-			throw new IllegalArgumentException("values size must be " + Torque.LENGTH);
-		}
 
 		final LightweightSystem lws = new LightweightSystem(this);
-		lws.setContents(xyGraph);
+		torqueGraph = new SimpleTorqueGraph(bike);
+		lws.setContents(torqueGraph);
 
-		final double[] x = new double[Torque.LENGTH];
-		byte i = 0;
-		for (final Entry<Double, Double> entry : valueMap.entrySet()) {
-			x[i] = entry.getKey();
-			values[i] = entry.getValue();
-			i++;
+		this.contextMenu = new ContextMenu(this);
+	}
+
+	public void updateTexts() {
+		torqueGraph.getXyGraph().setTitle(Messages.get("lbl.graph.title"));
+		torqueGraph.getAbscissae().setTitle(Messages.get("lbl.graph.axis.x"));
+		torqueGraph.getOrdinates().setTitle(Messages.get("lbl.graph.axis.y"));
+		contextMenu.updateTexts();
+	}
+
+	public ITorqueGraph getTorqueGraph() {
+		return torqueGraph;
+	}
+
+	public ContextMenu getContextMenu() {
+		return contextMenu;
+	}
+
+	class ContextMenu {
+
+		private final Menu menu;
+		private final MenuItem autoScaleMenuItem;
+		private final MenuItem performAutoScaleMenuItem;
+		private final Menu lineWidthSubMenu;
+		private final MenuItem lineWidthMenuItem;
+		private final Menu pointSizeSubMenu;
+		private final MenuItem pointSizeMenuItem;
+
+		public ContextMenu(final Control parent) {
+			menu = new Menu(parent);
+			parent.setMenu(menu);
+
+			autoScaleMenuItem = new MenuItem(menu, SWT.CHECK);
+			autoScaleMenuItem.setSelection(DEFAULT_AUTOSCALE);
+			autoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscaling"));
+			autoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					if (autoScaleMenuItem.getSelection()) {
+						torqueGraph.getAbscissae().setAutoScale(true);
+						torqueGraph.getOrdinates().setAutoScale(true);
+					}
+					else {
+						torqueGraph.getAbscissae().setAutoScale(false);
+						torqueGraph.getOrdinates().setAutoScale(false);
+					}
+				}
+			});
+
+			performAutoScaleMenuItem = new MenuItem(menu, SWT.PUSH);
+			performAutoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscale.now"));
+			performAutoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					torqueGraph.getAbscissae().performAutoScale(true);
+					torqueGraph.getOrdinates().performAutoScale(true);
+				}
+			});
+
+			lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
+			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
+
+			lineWidthSubMenu = new Menu(lineWidthMenuItem);
+			lineWidthMenuItem.setMenu(lineWidthSubMenu);
+
+			for (final byte lineWidth : LINE_WIDTH_OPTIONS) {
+				final MenuItem menuItem = new MenuItem(lineWidthSubMenu, SWT.RADIO);
+				menuItem.setText("&" + lineWidth);
+				if (lineWidth == DEFAULT_LINE_WIDTH) {
+					menuItem.setSelection(true);
+					lineWidthSubMenu.setDefaultItem(menuItem);
+				}
+				menuItem.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						torqueGraph.getTrace().setLineWidth(lineWidth);
+					}
+				});
+			}
+
+			pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
+			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
+
+			pointSizeSubMenu = new Menu(pointSizeMenuItem);
+			pointSizeMenuItem.setMenu(pointSizeSubMenu);
+
+			for (final byte pointSize : POINT_SIZE_OPTIONS) {
+				final MenuItem menuItem = new MenuItem(pointSizeSubMenu, SWT.RADIO);
+				menuItem.setText("&" + pointSize);
+				if (pointSize == DEFAULT_POINT_SIZE) {
+					menuItem.setSelection(true);
+					pointSizeSubMenu.setDefaultItem(menuItem);
+				}
+				menuItem.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						torqueGraph.getTrace().setPointSize(pointSize);
+					}
+				});
+			}
+
+			parent.addMenuDetectListener(new MenuDetectListener() {
+				@Override
+				public void menuDetected(final MenuDetectEvent e) {
+					menu.setVisible(true);
+				}
+			});
 		}
 
-		dataProvider.setBufferSize(x.length);
-		dataProvider.setCurrentXDataArray(x);
-		dataProvider.setCurrentYDataArray(values);
-
-		final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
-		if (!fontRegistry.hasValueFor(FONT_KEY_AXIS_TITLE)) {
-			final Font sysFont = Display.getCurrent().getSystemFont();
-			fontRegistry.put(FONT_KEY_AXIS_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), sysFont.getFontData()[0].getHeight(), SWT.BOLD) });
+		public void updateTexts() {
+			autoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscaling"));
+			performAutoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscale.now"));
+			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
+			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
 		}
-		final Font axisTitleFont = fontRegistry.get(FONT_KEY_AXIS_TITLE);
 
-		abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
-		abscissae.setAutoScale(DEFAULT_AUTOSCALE);
-		abscissae.setTitleFont(axisTitleFont);
-		abscissae.setShowMajorGrid(true);
-		abscissae.setZoomType(ZoomType.DYNAMIC_ZOOM);
-		abscissae.addMouseListener(new MouseListener.Stub() {
-			@Override
-			public void mouseDoubleClicked(final MouseEvent me) {
-				abscissae.performAutoScale(true);
-			}
-		});
+		public Menu getMenu() {
+			return menu;
+		}
 
-		ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
-		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
-		ordinates.setTitleFont(axisTitleFont);
-		ordinates.setShowMajorGrid(true);
-		ordinates.setZoomType(ZoomType.DYNAMIC_ZOOM);
-		ordinates.addMouseListener(new MouseListener.Stub() {
-			@Override
-			public void mouseDoubleClicked(final MouseEvent me) {
-				ordinates.performAutoScale(true);
-			}
-		});
+		public MenuItem getAutoScaleMenuItem() {
+			return autoScaleMenuItem;
+		}
 
-		trace.setPointStyle(PointStyle.FILLED_DIAMOND);
-		trace.setTraceColor(traceColor);
+		public MenuItem getPerformAutoScaleMenuItem() {
+			return performAutoScaleMenuItem;
+		}
 
-		xyGraph.addTrace(trace);
-		xyGraph.setShowLegend(false);
-	}
+		public Menu getLineWidthSubMenu() {
+			return lineWidthSubMenu;
+		}
 
-	@Override
-	public void refresh() {
-		dataProvider.triggerUpdate();
-	}
+		public MenuItem getLineWidthMenuItem() {
+			return lineWidthMenuItem;
+		}
 
-	@Override
-	public XYGraph getXyGraph() {
-		return xyGraph;
-	}
+		public Menu getPointSizeSubMenu() {
+			return pointSizeSubMenu;
+		}
 
-	@Override
-	public Axis getAbscissae() {
-		return abscissae;
-	}
+		public MenuItem getPointSizeMenuItem() {
+			return pointSizeMenuItem;
+		}
 
-	@Override
-	public Axis getOrdinates() {
-		return ordinates;
-	}
-
-	@Override
-	public CircularBufferDataProvider getDataProvider() {
-		return dataProvider;
-	}
-
-	@Override
-	public Trace getTrace() {
-		return trace;
-	}
-
-	@Override
-	public double[] getValues() {
-		return values;
 	}
 
 }
