@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -22,7 +23,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
@@ -47,7 +50,8 @@ public class TorqueGraphDialog extends Dialog {
 	private static final byte DEFAULT_LINE_WIDTH = 2;
 
 	private int returnCode = SWT.CANCEL;
-	private TorqueGraphCanvas torqueGraph;
+	private Canvas canvas;
+	private TorqueGraph torqueGraph;
 	private ContextMenu contextMenu;
 
 	public TorqueGraphDialog(final Shell parent) {
@@ -98,12 +102,15 @@ public class TorqueGraphDialog extends Dialog {
 	}
 
 	private void createGraph(final Shell shell, final Map<Double, Double> values, final Color traceColor) {
-		torqueGraph = new TorqueGraphCanvas(shell, values, traceColor);
+		canvas = new Canvas(shell, SWT.NULL);
+		final LightweightSystem lws = new LightweightSystem(canvas);
+		torqueGraph = new TorqueGraph(values, traceColor);
+		lws.setContents(torqueGraph);
 		torqueGraph.getTrace().setLineWidth(DEFAULT_LINE_WIDTH);
 		torqueGraph.getTrace().setPointSize(DEFAULT_POINT_SIZE);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(torqueGraph);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
-		contextMenu = new ContextMenu(torqueGraph);
+		contextMenu = new ContextMenu(canvas);
 
 		torqueGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 			@Override
@@ -173,6 +180,10 @@ public class TorqueGraphDialog extends Dialog {
 		return torqueGraph;
 	}
 
+	public Canvas getCanvas() {
+		return canvas;
+	}
+
 	public ContextMenu getContextMenu() {
 		return contextMenu;
 	}
@@ -187,12 +198,12 @@ public class TorqueGraphDialog extends Dialog {
 		private final Menu pointSizeSubMenu;
 		private final MenuItem pointSizeMenuItem;
 
-		public ContextMenu(final TorqueGraphCanvas torqueGraph) {
-			menu = new Menu(torqueGraph);
-			torqueGraph.setMenu(menu);
+		public ContextMenu(final Control control) {
+			menu = new Menu(control);
+			control.setMenu(menu);
 
 			autoScaleMenuItem = new MenuItem(menu, SWT.CHECK);
-			autoScaleMenuItem.setSelection(TorqueGraphCanvas.DEFAULT_AUTOSCALE);
+			autoScaleMenuItem.setSelection(TorqueGraph.DEFAULT_AUTOSCALE);
 			autoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscaling"));
 			autoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -260,7 +271,7 @@ public class TorqueGraphDialog extends Dialog {
 				});
 			}
 
-			torqueGraph.addMenuDetectListener(new MenuDetectListener() {
+			control.addMenuDetectListener(new MenuDetectListener() {
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
 					menu.setVisible(true);

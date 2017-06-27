@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Text;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.gui.FormProperty;
-import it.albertus.cycles.gui.TorqueGraph;
+import it.albertus.cycles.gui.ITorqueGraph;
 import it.albertus.cycles.model.Torque;
 import it.albertus.util.logging.LoggerFactory;
 
@@ -32,7 +32,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 				try {
 					final String key = (String) field.getData(FormProperty.TextDataKey.KEY.toString());
 					final int index = (Integer) field.getData(FormProperty.TextDataKey.INDEX.toString());
-					final TorqueGraph graph = (TorqueGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
+					final ITorqueGraph graph = (ITorqueGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
 
 					final short newValue = Torque.parse(key, field.getText().trim(), gui.getNumeralSystem().getRadix());
 					final short oldValue = (short) graph.getValues()[index];

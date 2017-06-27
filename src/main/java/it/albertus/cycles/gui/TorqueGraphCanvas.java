@@ -30,7 +30,7 @@ import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 
-public class TorqueGraphCanvas extends Canvas implements TorqueGraph {
+public class TorqueGraphCanvas extends Canvas implements ITorqueGraph {
 
 	public static final boolean DEFAULT_AUTOSCALE = true;
 
