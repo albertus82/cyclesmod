@@ -63,10 +63,10 @@ public class TorqueGraphDialog extends Dialog {
 
 	private int returnCode = SWT.CANCEL;
 	private Canvas canvas;
-	private LargeTorqueGraph torqueGraph;
+	private FullFeaturedTorqueGraph torqueGraph;
 	private ContextMenu contextMenu;
 
-	class LargeTorqueGraph extends Figure implements ITorqueGraph {
+	class FullFeaturedTorqueGraph extends Figure implements ITorqueGraph {
 
 		public static final String FONT_KEY_AXIS_TITLE = "axisTitle";
 
@@ -75,10 +75,10 @@ public class TorqueGraphDialog extends Dialog {
 		private final Axis abscissae = xyGraph.getPrimaryXAxis();
 		private final Axis ordinates = xyGraph.getPrimaryYAxis();
 		private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
-		private final Trace trace = new Trace("Torque", abscissae, ordinates, dataProvider);
+		private final Trace trace = new Trace(Messages.get("lbl.graph.title"), abscissae, ordinates, dataProvider);
 		private final double[] values = new double[Torque.LENGTH];
 
-		private LargeTorqueGraph(final Map<Double, Double> valueMap, final Color traceColor) {
+		private FullFeaturedTorqueGraph(final Map<Double, Double> valueMap, final Color traceColor) {
 			if (valueMap.size() != Torque.LENGTH) {
 				throw new IllegalArgumentException("values size must be " + Torque.LENGTH);
 			}
@@ -191,6 +191,10 @@ public class TorqueGraphDialog extends Dialog {
 			return trace;
 		}
 
+		public ToolbarArmedXYGraph getToolbarArmedXYGraph() {
+			return toolbarArmedXYGraph;
+		}
+
 		@Override
 		public double[] getValues() {
 			return values;
@@ -247,7 +251,7 @@ public class TorqueGraphDialog extends Dialog {
 	private void createGraph(final Shell shell, final Map<Double, Double> values, final Color traceColor) {
 		canvas = new Canvas(shell, SWT.NULL);
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		torqueGraph = new LargeTorqueGraph(values, traceColor);
+		torqueGraph = new FullFeaturedTorqueGraph(values, traceColor);
 		lws.setContents(torqueGraph);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
