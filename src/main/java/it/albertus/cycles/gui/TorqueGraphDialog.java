@@ -113,6 +113,7 @@ public class TorqueGraphDialog extends Dialog {
 					}
 				}
 			});
+			xyGraph.setShowTitle(false);
 
 			abscissae.performAutoScale(true);
 			ordinates.performAutoScale(true);
