@@ -58,9 +58,7 @@ public class TorqueGraphDialog extends Dialog {
 	private static final boolean DEFAULT_AUTOSCALE = false;
 
 	private int returnCode = SWT.CANCEL;
-	private Canvas canvas;
 	private ComplexTorqueGraph torqueGraph;
-	private ContextMenu contextMenu;
 
 	private static class ComplexTorqueGraph extends TorqueGraph {
 
@@ -178,10 +176,12 @@ public class TorqueGraphDialog extends Dialog {
 	}
 
 	private void createGraph(final Shell shell, final Map<Double, Double> values, final BikeType bikeType) {
-		canvas = new Canvas(shell, SWT.NULL);
+		final Canvas canvas = new Canvas(shell, SWT.NONE);
+
 		final LightweightSystem lws = new LightweightSystem(canvas);
 		torqueGraph = new ComplexTorqueGraph(values, bikeType);
 		lws.setContents(torqueGraph);
+
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
 		canvas.addMouseWheelListener(new MouseWheelListener() {
@@ -210,7 +210,7 @@ public class TorqueGraphDialog extends Dialog {
 			}
 		});
 
-		contextMenu = new ContextMenu(canvas);
+		new ContextMenu(canvas);
 	}
 
 	private Composite createButtonBox(final Shell shell) {
@@ -261,29 +261,13 @@ public class TorqueGraphDialog extends Dialog {
 		return torqueGraph;
 	}
 
-	public Canvas getCanvas() {
-		return canvas;
-	}
-
-	public ContextMenu getContextMenu() {
-		return contextMenu;
-	}
-
 	private class ContextMenu {
 
-		private final Menu menu;
-		private final MenuItem autoScaleMenuItem;
-		private final MenuItem performAutoScaleMenuItem;
-		private final Menu lineWidthSubMenu;
-		private final MenuItem lineWidthMenuItem;
-		private final Menu pointSizeSubMenu;
-		private final MenuItem pointSizeMenuItem;
-
-		public ContextMenu(final Control control) {
-			menu = new Menu(control);
+		private ContextMenu(final Control control) {
+			final Menu menu = new Menu(control);
 			control.setMenu(menu);
 
-			autoScaleMenuItem = new MenuItem(menu, SWT.CHECK);
+			final MenuItem autoScaleMenuItem = new MenuItem(menu, SWT.CHECK);
 			autoScaleMenuItem.setSelection(DEFAULT_AUTOSCALE);
 			autoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscaling"));
 			autoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
@@ -300,7 +284,7 @@ public class TorqueGraphDialog extends Dialog {
 				}
 			});
 
-			performAutoScaleMenuItem = new MenuItem(menu, SWT.PUSH);
+			final MenuItem performAutoScaleMenuItem = new MenuItem(menu, SWT.PUSH);
 			performAutoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscale.now"));
 			performAutoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
@@ -310,10 +294,10 @@ public class TorqueGraphDialog extends Dialog {
 				}
 			});
 
-			lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
+			final MenuItem lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
 			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
 
-			lineWidthSubMenu = new Menu(lineWidthMenuItem);
+			final Menu lineWidthSubMenu = new Menu(lineWidthMenuItem);
 			lineWidthMenuItem.setMenu(lineWidthSubMenu);
 
 			for (final byte lineWidth : LINE_WIDTH_OPTIONS) {
@@ -331,10 +315,10 @@ public class TorqueGraphDialog extends Dialog {
 				});
 			}
 
-			pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
+			final MenuItem pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
 			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
 
-			pointSizeSubMenu = new Menu(pointSizeMenuItem);
+			final Menu pointSizeSubMenu = new Menu(pointSizeMenuItem);
 			pointSizeMenuItem.setMenu(pointSizeSubMenu);
 
 			for (final byte pointSize : POINT_SIZE_OPTIONS) {
@@ -355,11 +339,11 @@ public class TorqueGraphDialog extends Dialog {
 			control.addMenuDetectListener(new MenuDetectListener() {
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
+					autoScaleMenuItem.setSelection(torqueGraph.getAbscissae().isAutoScale() && torqueGraph.getOrdinates().isAutoScale());
 					menu.setVisible(true);
 				}
 			});
 		}
-
 	}
 
 }
