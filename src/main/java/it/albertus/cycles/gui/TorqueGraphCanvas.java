@@ -119,6 +119,7 @@ public class TorqueGraphCanvas extends Canvas {
 	private class ContextMenu {
 
 		private final Menu menu;
+		private final MenuItem editMenuItem;
 		private final Menu lineWidthSubMenu;
 		private final MenuItem lineWidthMenuItem;
 		private final Menu pointSizeSubMenu;
@@ -127,6 +128,16 @@ public class TorqueGraphCanvas extends Canvas {
 		public ContextMenu(final Control parent) {
 			menu = new Menu(parent);
 			parent.setMenu(menu);
+
+			editMenuItem = new MenuItem(menu, SWT.PUSH);
+			editMenuItem.setText(Messages.get("lbl.menu.item.edit"));
+			editMenuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					parent.notifyListeners(SWT.MouseDoubleClick, null);
+				}
+			});
+			menu.setDefaultItem(editMenuItem);
 
 			lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
 			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
