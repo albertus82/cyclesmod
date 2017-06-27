@@ -1,6 +1,5 @@
 package it.albertus.cycles.gui;
 
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,35 +43,26 @@ public class MenuBar {
 
 	private static final Logger logger = LoggerFactory.getLogger(MenuBar.class);
 
-	private final Menu bar;
-
-	private final Menu fileMenu;
 	private final MenuItem fileMenuHeader;
 	private final MenuItem fileOpenMenuItem;
 	private final MenuItem fileSaveMenuItem;
 	private final MenuItem fileSaveAsMenuItem;
 	private MenuItem fileExitMenuItem;
 
-	private final Menu editMenu;
 	private final MenuItem editMenuHeader;
 	private final MenuItem editCutMenuItem;
 	private final MenuItem editCopyMenuItem;
 	private final MenuItem editPasteMenuItem;
-	private final Menu editResetSubMenu;
 	private final MenuItem editResetSubMenuItem;
 	private final MenuItem editResetSingleMenuItem;
 	private final MenuItem editResetAllMenuItem;
 
-	private final Menu viewMenu;
 	private final MenuItem viewMenuHeader;
-	private final Menu viewRadixSubMenu;
 	private final MenuItem viewRadixSubMenuItem;
 	private final Map<NumeralSystem, MenuItem> viewRadixMenuItems = new EnumMap<NumeralSystem, MenuItem>(NumeralSystem.class);
-	private final Menu viewLanguageSubMenu;
 	private final MenuItem viewLanguageSubMenuItem;
 	private final Map<Language, MenuItem> viewLanguageMenuItems = new EnumMap<Language, MenuItem>(Language.class);
 
-	private Menu helpMenu;
 	private MenuItem helpMenuHeader;
 	private MenuItem helpAboutMenuItem;
 
@@ -91,10 +81,10 @@ public class MenuBar {
 			}
 		}
 
-		bar = new Menu(gui.getShell(), SWT.BAR); // Barra
+		final Menu bar = new Menu(gui.getShell(), SWT.BAR); // Barra
 
 		// File
-		fileMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		final Menu fileMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		fileMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		fileMenuHeader.setText(Messages.get("lbl.menu.header.file"));
 		fileMenuHeader.setMenu(fileMenu);
@@ -132,7 +122,7 @@ public class MenuBar {
 		}
 
 		// Edit
-		editMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		final Menu editMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		editMenuHeader.setText(Messages.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
@@ -158,7 +148,7 @@ public class MenuBar {
 		editResetSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
 		editResetSubMenuItem.setText(Messages.get("lbl.menu.item.reset"));
 
-		editResetSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		final Menu editResetSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editResetSubMenuItem.setMenu(editResetSubMenu);
 
 		editResetSingleMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
@@ -170,7 +160,7 @@ public class MenuBar {
 		editResetAllMenuItem.addSelectionListener(new ResetAllSelectionListener(gui));
 
 		// View
-		viewMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		final Menu viewMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		viewMenuHeader.setText(Messages.get("lbl.menu.header.view"));
 		viewMenuHeader.setMenu(viewMenu);
@@ -178,7 +168,7 @@ public class MenuBar {
 		viewRadixSubMenuItem = new MenuItem(viewMenu, SWT.CASCADE);
 		viewRadixSubMenuItem.setText(Messages.get("lbl.menu.item.radix"));
 
-		viewRadixSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		final Menu viewRadixSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewRadixSubMenuItem.setMenu(viewRadixSubMenu);
 
 		final RadixSelectionListener radixSelectionListener = new RadixSelectionListener(gui);
@@ -198,7 +188,7 @@ public class MenuBar {
 		viewLanguageSubMenuItem = new MenuItem(viewMenu, SWT.CASCADE);
 		viewLanguageSubMenuItem.setText(Messages.get("lbl.menu.item.language"));
 
-		viewLanguageSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		final Menu viewLanguageSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewLanguageSubMenuItem.setMenu(viewLanguageSubMenu);
 
 		final LanguageSelectionListener languageSelectionListener = new LanguageSelectionListener(gui);
@@ -215,7 +205,7 @@ public class MenuBar {
 
 		// Help
 		if (!cocoaMenuCreated) {
-			helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+			final Menu helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 			helpMenuHeader = new MenuItem(bar, SWT.CASCADE);
 			helpMenuHeader.setText(Messages.get("lbl.menu.header.help"));
 			helpMenuHeader.setMenu(helpMenu);
@@ -260,42 +250,6 @@ public class MenuBar {
 		}
 	}
 
-	public Menu getBar() {
-		return bar;
-	}
-
-	public Menu getFileMenu() {
-		return fileMenu;
-	}
-
-	public MenuItem getFileMenuHeader() {
-		return fileMenuHeader;
-	}
-
-	public MenuItem getFileOpenMenuItem() {
-		return fileOpenMenuItem;
-	}
-
-	public MenuItem getFileSaveMenuItem() {
-		return fileSaveMenuItem;
-	}
-
-	public MenuItem getFileSaveAsMenuItem() {
-		return fileSaveAsMenuItem;
-	}
-
-	public MenuItem getFileExitMenuItem() {
-		return fileExitMenuItem;
-	}
-
-	public Menu getEditMenu() {
-		return editMenu;
-	}
-
-	public MenuItem getEditMenuHeader() {
-		return editMenuHeader;
-	}
-
 	public MenuItem getEditCutMenuItem() {
 		return editCutMenuItem;
 	}
@@ -306,66 +260,6 @@ public class MenuBar {
 
 	public MenuItem getEditPasteMenuItem() {
 		return editPasteMenuItem;
-	}
-
-	public Menu getEditResetSubMenu() {
-		return editResetSubMenu;
-	}
-
-	public MenuItem getEditResetSubMenuItem() {
-		return editResetSubMenuItem;
-	}
-
-	public MenuItem getEditResetSingleMenuItem() {
-		return editResetSingleMenuItem;
-	}
-
-	public MenuItem getEditResetAllMenuItem() {
-		return editResetAllMenuItem;
-	}
-
-	public Menu getViewMenu() {
-		return viewMenu;
-	}
-
-	public MenuItem getViewMenuHeader() {
-		return viewMenuHeader;
-	}
-
-	public Menu getViewRadixSubMenu() {
-		return viewRadixSubMenu;
-	}
-
-	public MenuItem getViewRadixSubMenuItem() {
-		return viewRadixSubMenuItem;
-	}
-
-	public Map<NumeralSystem, MenuItem> getViewRadixMenuItems() {
-		return Collections.unmodifiableMap(viewRadixMenuItems);
-	}
-
-	public Menu getViewLanguageSubMenu() {
-		return viewLanguageSubMenu;
-	}
-
-	public MenuItem getViewLanguageSubMenuItem() {
-		return viewLanguageSubMenuItem;
-	}
-
-	public Map<Language, MenuItem> getViewLanguageMenuItems() {
-		return Collections.unmodifiableMap(viewLanguageMenuItems);
-	}
-
-	public Menu getHelpMenu() {
-		return helpMenu;
-	}
-
-	public MenuItem getHelpMenuHeader() {
-		return helpMenuHeader;
-	}
-
-	public MenuItem getHelpAboutMenuItem() {
-		return helpAboutMenuItem;
 	}
 
 }

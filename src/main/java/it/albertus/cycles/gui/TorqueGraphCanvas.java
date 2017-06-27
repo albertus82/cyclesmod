@@ -100,21 +100,14 @@ public class TorqueGraphCanvas extends Canvas {
 		return torqueGraph;
 	}
 
-	public ContextMenu getContextMenu() {
-		return contextMenu;
-	}
-
 	private class ContextMenu {
 
-		private final Menu menu;
 		private final MenuItem editMenuItem;
-		private final Menu lineWidthSubMenu;
 		private final MenuItem lineWidthMenuItem;
-		private final Menu pointSizeSubMenu;
 		private final MenuItem pointSizeMenuItem;
 
-		public ContextMenu(final Control parent) {
-			menu = new Menu(parent);
+		private ContextMenu(final Control parent) {
+			final Menu menu = new Menu(parent);
 			parent.setMenu(menu);
 
 			editMenuItem = new MenuItem(menu, SWT.PUSH);
@@ -127,10 +120,12 @@ public class TorqueGraphCanvas extends Canvas {
 			});
 			menu.setDefaultItem(editMenuItem);
 
+			new MenuItem(menu, SWT.SEPARATOR);
+
 			lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
 			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
 
-			lineWidthSubMenu = new Menu(lineWidthMenuItem);
+			final Menu lineWidthSubMenu = new Menu(lineWidthMenuItem);
 			lineWidthMenuItem.setMenu(lineWidthSubMenu);
 
 			for (final byte lineWidth : LINE_WIDTH_OPTIONS) {
@@ -151,7 +146,7 @@ public class TorqueGraphCanvas extends Canvas {
 			pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
 			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
 
-			pointSizeSubMenu = new Menu(pointSizeMenuItem);
+			final Menu pointSizeSubMenu = new Menu(pointSizeMenuItem);
 			pointSizeMenuItem.setMenu(pointSizeSubMenu);
 
 			for (final byte pointSize : POINT_SIZE_OPTIONS) {
@@ -182,7 +177,6 @@ public class TorqueGraphCanvas extends Canvas {
 			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
 			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
 		}
-
 	}
 
 }
