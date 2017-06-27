@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.jface.resource.FontRegistry;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
@@ -15,8 +13,6 @@ import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -30,7 +26,7 @@ import it.albertus.cycles.resources.Messages;
 
 public class TorqueGraphCanvas extends Canvas {
 
-	private static final byte[] POINT_SIZE_OPTIONS = { 0, 2, 4, 6, 8, 10, 12, 14, 16 };
+	private static final byte[] POINT_SIZE_OPTIONS = { 0, 2, 4, 6, 8, 10 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5 };
 
 	private static final byte DEFAULT_POINT_SIZE = 4;
@@ -42,11 +38,6 @@ public class TorqueGraphCanvas extends Canvas {
 	private final SimpleTorqueGraph torqueGraph;
 
 	private static class SimpleTorqueGraph extends TorqueGraph {
-
-		private static final float TITLE_FONT_HEIGHT_FACTOR = 1.25f;
-
-		private static final byte DEFAULT_POINT_SIZE = 4;
-		private static final byte DEFAULT_LINE_WIDTH = 2;
 
 		private SimpleTorqueGraph(final Bike bike) {
 			super(getValueMap(bike));
@@ -63,12 +54,7 @@ public class TorqueGraphCanvas extends Canvas {
 
 			final IXYGraph xyGraph = getXyGraph();
 			xyGraph.setTitle(Messages.get("lbl.graph.title"));
-			final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
-			if (!fontRegistry.hasValueFor(FONT_KEY_GRAPH_TITLE)) {
-				final Font sysFont = Display.getCurrent().getSystemFont();
-				fontRegistry.put(FONT_KEY_GRAPH_TITLE, new FontData[] { new FontData(sysFont.getFontData()[0].getName(), (int) (sysFont.getFontData()[0].getHeight() * TITLE_FONT_HEIGHT_FACTOR), SWT.BOLD) });
-			}
-			xyGraph.setTitleFont(fontRegistry.get(FONT_KEY_GRAPH_TITLE));
+			xyGraph.setTitleFont(Display.getCurrent().getSystemFont());
 
 			trace.setLineWidth(DEFAULT_LINE_WIDTH);
 			trace.setPointSize(DEFAULT_POINT_SIZE);
@@ -98,7 +84,9 @@ public class TorqueGraphCanvas extends Canvas {
 		torqueGraph = new SimpleTorqueGraph(bike);
 		lws.setContents(torqueGraph);
 
-		this.contextMenu = new ContextMenu(this);
+		setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+
+		contextMenu = new ContextMenu(this);
 	}
 
 	public void updateTexts() {
@@ -190,7 +178,7 @@ public class TorqueGraphCanvas extends Canvas {
 		}
 
 		public void updateTexts() {
-			//			autoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscaling"));
+			editMenuItem.setText(Messages.get("lbl.menu.item.edit"));
 			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
 			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
 		}
