@@ -5,15 +5,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
-import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
-import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
-import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -33,7 +27,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
-import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;
 import it.albertus.jface.SwtUtils;
@@ -104,32 +97,11 @@ public class TorqueGraphDialog extends Dialog {
 	private void createGraph(final Shell shell, final Map<Double, Double> values, final Color traceColor) {
 		canvas = new Canvas(shell, SWT.NULL);
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		torqueGraph = new TorqueGraph(values, traceColor);
+		torqueGraph = new TorqueGraph(values, traceColor, DEFAULT_LINE_WIDTH, DEFAULT_POINT_SIZE);
 		lws.setContents(torqueGraph);
-		torqueGraph.getTrace().setLineWidth(DEFAULT_LINE_WIDTH);
-		torqueGraph.getTrace().setPointSize(DEFAULT_POINT_SIZE);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
 		contextMenu = new ContextMenu(canvas);
-
-		torqueGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
-			@Override
-			public void mousePressed(final MouseEvent me) {
-				if (me.button == 1) { // left click
-					final XYGraph xyGraph = (XYGraph) ((PlotArea) me.getSource()).getParent();
-					final double rpm = xyGraph.getPrimaryXAxis().getPositionValue(me.getLocation().x, false) * 1000;
-					final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
-					final double val = Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, xyGraph.getPrimaryYAxis().getPositionValue(me.getLocation().y, false))));
-					torqueGraph.getValues()[index] = val;
-					final IDataProvider dataProvider = torqueGraph.getTrace().getDataProvider();
-					if (dataProvider instanceof CircularBufferDataProvider) {
-						final CircularBufferDataProvider circularBufferDataProvider = (CircularBufferDataProvider) dataProvider;
-						circularBufferDataProvider.setCurrentYDataArray(torqueGraph.getValues());
-						circularBufferDataProvider.triggerUpdate();
-					}
-				}
-			}
-		});
 	}
 
 	private Composite createButtonBox(final Shell shell) {
