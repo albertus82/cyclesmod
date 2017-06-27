@@ -132,7 +132,7 @@ public class Tabs {
 						for (int i = 0; i < torqueGraphDialog.getTorqueGraph().getValues().length; i++) {
 							final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
 							final Text text = formProperty.getText();
-							text.setText(Long.toString(Math.max(0, Math.min(0xFF, Math.round(torqueGraphDialog.getTorqueGraph().getValues()[i]))), gui.getNumeralSystem().getRadix()));
+							text.setText(Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(torqueGraphDialog.getTorqueGraph().getValues()[i]))), gui.getNumeralSystem().getRadix()));
 							text.notifyListeners(SWT.FocusOut, null);
 						}
 					}

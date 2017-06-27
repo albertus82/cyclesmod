@@ -41,7 +41,7 @@ public class TorqueGraphCanvas extends Canvas implements ITorqueGraph {
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
 	private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
-	private final Trace trace = new Trace("Torque", abscissae, ordinates, dataProvider);
+	private final Trace trace = new Trace(Messages.get("lbl.graph.title"), abscissae, ordinates, dataProvider);
 	private final double[] values = new double[Torque.LENGTH];
 
 	public static Color getColor(final BikeType bikeType) {
