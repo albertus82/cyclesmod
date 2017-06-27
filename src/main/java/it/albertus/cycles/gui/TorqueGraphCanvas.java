@@ -70,7 +70,7 @@ public class TorqueGraphCanvas extends Canvas {
 
 		private static Map<Double, Double> getValueMap(final Bike bike) {
 			final Map<Double, Double> map = new TreeMap<Double, Double>();
-			for (byte i = 0; i < bike.getTorque().getCurve().length; i++) {
+			for (byte i = 0; i < Torque.LENGTH; i++) {
 				map.put(((double) Torque.getRpm(i)) / 1000, (double) bike.getTorque().getCurve()[i]);
 			}
 			return map;
