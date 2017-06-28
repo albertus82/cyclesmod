@@ -117,7 +117,7 @@ public class TorqueGraphDialog extends Dialog {
 			ordinates.performAutoScale(true);
 		}
 
-		protected ToolbarArmedXYGraph getToolbarArmedXYGraph() {
+		private ToolbarArmedXYGraph getToolbarArmedXYGraph() {
 			return toolbarArmedXYGraph;
 		}
 
@@ -187,7 +187,7 @@ public class TorqueGraphDialog extends Dialog {
 		canvas.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseScrolled(org.eclipse.swt.events.MouseEvent e) {
-				IFigure figureUnderMouse = torqueGraph.getToolbarArmedXYGraph().findFigureAt(e.x, e.y, new TreeSearch() {
+				final IFigure figureUnderMouse = torqueGraph.getToolbarArmedXYGraph().findFigureAt(e.x, e.y, new TreeSearch() {
 					@Override
 					public boolean prune(IFigure figure) {
 						return false;
@@ -199,12 +199,12 @@ public class TorqueGraphDialog extends Dialog {
 					}
 				});
 				if (figureUnderMouse instanceof Axis) {
-					Axis axis = ((Axis) figureUnderMouse);
-					double valuePosition = axis.getPositionValue(axis.isHorizontal() ? e.x : e.y, false);
+					final Axis axis = ((Axis) figureUnderMouse);
+					final double valuePosition = axis.getPositionValue(axis.isHorizontal() ? e.x : e.y, false);
 					axis.zoomInOut(valuePosition, e.count * 0.1 / 3);
 				}
 				else if (figureUnderMouse instanceof PlotArea) {
-					PlotArea plotArea = (PlotArea) figureUnderMouse;
+					final PlotArea plotArea = (PlotArea) figureUnderMouse;
 					plotArea.zoomInOut(true, true, e.x, e.y, e.count * 0.1 / 3);
 				}
 			}
