@@ -64,7 +64,7 @@ public class TorqueGraphDialog extends Dialog {
 
 		private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-		private ComplexTorqueGraph(final Map<Double, Double> valueMap, final BikeType bikeType) {
+		private ComplexTorqueGraph(final Map<Integer, Short> valueMap, final BikeType bikeType) {
 			super(valueMap);
 
 			final Axis abscissae = getAbscissae();
@@ -137,7 +137,7 @@ public class TorqueGraphDialog extends Dialog {
 		setText(Messages.get("lbl.graph.title"));
 	}
 
-	public int open(final Map<Double, Double> values, final BikeType bikeType) {
+	public int open(final Map<Integer, Short> values, final BikeType bikeType) {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText() + " - " + bikeType.getDisplacement() + " cc");
 		shell.setImages(Images.MAIN_ICONS);
@@ -165,7 +165,7 @@ public class TorqueGraphDialog extends Dialog {
 		return shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 	}
 
-	private void createContents(final Shell shell, final Map<Double, Double> values, final BikeType bikeType) {
+	private void createContents(final Shell shell, final Map<Integer, Short> values, final BikeType bikeType) {
 		shell.setLayout(getLayout());
 		createGraph(shell, values, bikeType);
 		createButtonBox(shell);
@@ -175,7 +175,7 @@ public class TorqueGraphDialog extends Dialog {
 		return GridLayoutFactory.swtDefaults().create();
 	}
 
-	private void createGraph(final Shell shell, final Map<Double, Double> values, final BikeType bikeType) {
+	private void createGraph(final Shell shell, final Map<Integer, Short> values, final BikeType bikeType) {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
