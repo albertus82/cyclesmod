@@ -5,7 +5,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -13,7 +12,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -24,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cycles.gui.FormProperty.LabelDataKey;
 import it.albertus.cycles.gui.FormProperty.TextDataKey;
+import it.albertus.cycles.gui.listener.OpenTorqueGraphDialogListener;
 import it.albertus.cycles.gui.listener.PropertyFocusListener;
 import it.albertus.cycles.gui.listener.PropertyKeyListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
@@ -112,27 +111,7 @@ public class Tabs {
 
 			// Torque graph
 			final TorqueGraphCanvas canvas = new TorqueGraphCanvas(tabComposite, bike);
-			canvas.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseDoubleClick(org.eclipse.swt.events.MouseEvent e) {
-					final TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
-					final Map<Integer, Short> valueMap = new TreeMap<Integer, Short>();
-					for (byte i = 0; i < Torque.LENGTH; i++) {
-						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
-						valueMap.put(Torque.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
-					}
-
-					if (torqueGraphDialog.open(valueMap, bike.getType()) == SWT.OK) {
-						for (byte i = 0; i < Torque.LENGTH; i++) {
-							final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, i));
-							final Text text = formProperty.getText();
-							text.setText(Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(torqueGraphDialog.getTorqueGraph().getValues()[i]))), gui.getNumeralSystem().getRadix()));
-							text.notifyListeners(SWT.FocusOut, null);
-						}
-					}
-				}
-			});
-
+			canvas.addMouseListener(new OpenTorqueGraphDialogListener(gui, bike.getType()));
 			canvas.getTorqueGraph().getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(final MouseEvent me) {

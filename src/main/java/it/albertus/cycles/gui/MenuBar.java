@@ -21,10 +21,12 @@ import it.albertus.cycles.gui.listener.CutSelectionListener;
 import it.albertus.cycles.gui.listener.EditMenuBarArmListener;
 import it.albertus.cycles.gui.listener.LanguageSelectionListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
+import it.albertus.cycles.gui.listener.OpenTorqueGraphDialogListener;
 import it.albertus.cycles.gui.listener.PasteSelectionListener;
 import it.albertus.cycles.gui.listener.RadixSelectionListener;
 import it.albertus.cycles.gui.listener.ResetAllSelectionListener;
 import it.albertus.cycles.gui.listener.ResetSingleSelectionListener;
+import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.cycles.resources.Messages.Language;
 import it.albertus.jface.SwtUtils;
@@ -53,6 +55,8 @@ public class MenuBar {
 	private final MenuItem editCutMenuItem;
 	private final MenuItem editCopyMenuItem;
 	private final MenuItem editPasteMenuItem;
+	private final MenuItem editTorqueSubMenuItem;
+	private final Map<BikeType, MenuItem> editTorqueMenuItems = new EnumMap<BikeType, MenuItem>(BikeType.class);
 	private final MenuItem editResetSubMenuItem;
 	private final MenuItem editResetSingleMenuItem;
 	private final MenuItem editResetAllMenuItem;
@@ -142,6 +146,21 @@ public class MenuBar {
 		editPasteMenuItem.setText(Messages.get("lbl.menu.item.paste") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_PASTE));
 		editPasteMenuItem.addSelectionListener(new PasteSelectionListener(gui));
 		editPasteMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_PASTE);
+
+		new MenuItem(editMenu, SWT.SEPARATOR);
+
+		editTorqueSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
+		editTorqueSubMenuItem.setText(Messages.get("lbl.menu.item.torque.curve"));
+
+		final Menu editTorqueSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		editTorqueSubMenuItem.setMenu(editTorqueSubMenu);
+
+		for (final BikeType bikeType : BikeType.values()) {
+			final MenuItem editTorqueMenuItem = new MenuItem(editTorqueSubMenu, SWT.PUSH);
+			editTorqueMenuItem.setText(Messages.get("lbl.menu.item.torque.curve.bike", bikeType.getDisplacement()));
+			editTorqueMenuItem.addSelectionListener(new OpenTorqueGraphDialogListener(gui, bikeType));
+			editTorqueMenuItems.put(bikeType, editTorqueMenuItem);
+		}
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
@@ -237,6 +256,10 @@ public class MenuBar {
 		viewRadixSubMenuItem.setText(Messages.get("lbl.menu.item.radix"));
 		for (final Entry<NumeralSystem, MenuItem> entry : viewRadixMenuItems.entrySet()) {
 			entry.getValue().setText(Messages.get("lbl.menu.item.radix." + entry.getKey().getRadix()));
+		}
+		editTorqueSubMenuItem.setText(Messages.get("lbl.menu.item.torque.curve"));
+		for (final Entry<BikeType, MenuItem> entry : editTorqueMenuItems.entrySet()) {
+			entry.getValue().setText(Messages.get("lbl.menu.item.torque.curve.bike", entry.getKey().getDisplacement()));
 		}
 		viewLanguageSubMenuItem.setText(Messages.get("lbl.menu.item.language"));
 		for (final Entry<Language, MenuItem> entry : viewLanguageMenuItems.entrySet()) {
