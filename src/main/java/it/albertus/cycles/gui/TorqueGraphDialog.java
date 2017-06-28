@@ -65,7 +65,7 @@ public class TorqueGraphDialog extends Dialog {
 		private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
 		private ComplexTorqueGraph(final Map<Integer, Short> valueMap, final BikeType bikeType) {
-			super(valueMap);
+			super(valueMap, bikeType);
 
 			final Axis abscissae = getAbscissae();
 			abscissae.setAutoScale(DEFAULT_AUTOSCALE);
@@ -75,7 +75,6 @@ public class TorqueGraphDialog extends Dialog {
 
 			final Trace trace = getTrace();
 			trace.setPointStyle(PointStyle.FILLED_DIAMOND);
-			trace.setTraceColor(getColor(bikeType));
 			trace.setLineWidth(DEFAULT_LINE_WIDTH);
 			trace.setPointSize(DEFAULT_POINT_SIZE);
 
