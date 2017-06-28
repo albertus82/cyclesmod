@@ -1,8 +1,5 @@
 package it.albertus.cycles.gui;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
@@ -21,7 +18,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cycles.model.Bike;
-import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 
 public class TorqueGraphCanvas extends Canvas {
@@ -40,7 +36,7 @@ public class TorqueGraphCanvas extends Canvas {
 	private static class SimpleTorqueGraph extends TorqueGraph {
 
 		private SimpleTorqueGraph(final Bike bike) {
-			super(getValueMap(bike));
+			super(bike);
 
 			final Axis abscissae = getAbscissae();
 			abscissae.setAutoScale(DEFAULT_AUTOSCALE);
@@ -50,7 +46,6 @@ public class TorqueGraphCanvas extends Canvas {
 
 			final Trace trace = getTrace();
 			trace.setPointStyle(PointStyle.FILLED_DIAMOND);
-			trace.setTraceColor(getColor(bike.getType()));
 
 			final IXYGraph xyGraph = getXyGraph();
 			xyGraph.setTitle(Messages.get("lbl.graph.title"));
@@ -67,18 +62,10 @@ public class TorqueGraphCanvas extends Canvas {
 			getXyGraph().setBounds(getBounds().getCopy());
 			super.layout();
 		}
-
-		private static Map<Integer, Short> getValueMap(final Bike bike) {
-			final Map<Integer, Short> map = new TreeMap<Integer, Short>();
-			for (int i = 0; i < Torque.LENGTH; i++) {
-				map.put(Torque.getRpm(i), bike.getTorque().getCurve()[i]);
-			}
-			return map;
-		}
 	}
 
 	public TorqueGraphCanvas(final Composite parent, final Bike bike) {
-		super(parent, SWT.NULL);
+		super(parent, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(this);
 		torqueGraph = new SimpleTorqueGraph(bike);
