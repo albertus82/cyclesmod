@@ -77,12 +77,11 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		tabs.updateFormValues();
 
+		setLastPersistedProperties(defaultProperties);
+
 		// Loading custom properties...
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			open(fileName);
-		}
-		else {
-			setLastPersistedProperties(defaultProperties);
 		}
 	}
 
