@@ -37,13 +37,13 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 		init(bike.getType());
 	}
 
-	public TorqueGraph(final Map<Integer, Short> valueMap, final BikeType bikeType) {
-		if (valueMap.size() != Torque.LENGTH) {
-			throw new IllegalArgumentException("values size must be " + Torque.LENGTH);
+	public TorqueGraph(final Map<Integer, Short> map, final BikeType bikeType) {
+		if (map.size() != Torque.LENGTH) {
+			throw new IllegalArgumentException("map size must be " + Torque.LENGTH);
 		}
 
 		int i = 0;
-		for (final Entry<Integer, Short> entry : valueMap.entrySet()) {
+		for (final Entry<Integer, Short> entry : map.entrySet()) {
 			xDataArray[i] = entry.getKey().doubleValue() / 1000;
 			values[i] = entry.getValue();
 			i++;
