@@ -127,6 +127,7 @@ public class TorqueGraphCanvas extends Canvas {
 		public void updateTexts() {
 			editMenuItem.setText(Messages.get("lbl.menu.item.edit"));
 			traceTypeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.trace.type"));
+			traceTypeSubMenu.getChildren().get(0).getMenuItem().setText(Messages.get("lbl.menu.item.area.alpha"));
 			lineWidthSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.line.width"));
 			pointStyleSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.point.style"));
 			pointSizeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.point.size"));

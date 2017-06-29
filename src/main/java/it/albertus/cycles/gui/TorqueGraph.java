@@ -1,7 +1,9 @@
 package it.albertus.cycles.gui;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -34,6 +36,7 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 
 	private static final byte[] POINT_SIZE_OPTIONS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	private static final short[] AREA_ALPHA_OPTIONS = { 25, 50, 75, 100, 125, 150, 175, 200, 225, 0xFF };
 
 	private final IXYGraph xyGraph = new XYGraph();
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
@@ -140,6 +143,7 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 		public class SubMenu<K> {
 			private final MenuItem menuItem;
 			private final Map<K, MenuItem> menuItems;
+			private final List<SubMenu<?>> children = new ArrayList<SubMenu<?>>();
 
 			public SubMenu(final MenuItem menuItem, final Map<K, MenuItem> menuItems) {
 				this.menuItem = menuItem;
@@ -152,6 +156,10 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 
 			public Map<K, MenuItem> getMenuItems() {
 				return menuItems;
+			}
+
+			public List<SubMenu<?>> getChildren() {
+				return children;
 			}
 		}
 
@@ -251,16 +259,43 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 				traceTypeSubMenuItems.put(traceType, menuItem);
 			}
 
+			final MenuItem areaAlphaMenuItem = new MenuItem(traceTypeSubMenu, SWT.CASCADE);
+			areaAlphaMenuItem.setText(Messages.get("lbl.menu.item.area.alpha"));
+
+			final Menu areaAlphaSubMenu = new Menu(areaAlphaMenuItem);
+			areaAlphaMenuItem.setMenu(areaAlphaSubMenu);
+
+			final Map<Integer, MenuItem> areaAlphaSubMenuItems = new HashMap<Integer, MenuItem>();
+			for (final int areaAlpha : AREA_ALPHA_OPTIONS) {
+				final MenuItem menuItem = new MenuItem(areaAlphaSubMenu, SWT.RADIO);
+				menuItem.setText("&" + (int) Math.min(areaAlpha / 2.5, 100) + "%");
+				if (areaAlpha == trace.getAreaAlpha()) {
+					areaAlphaSubMenu.setDefaultItem(menuItem);
+				}
+				menuItem.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(final SelectionEvent e) {
+						trace.setAreaAlpha(areaAlpha);
+					}
+				});
+				areaAlphaSubMenuItems.put(areaAlpha, menuItem);
+			}
+
 			control.addMenuDetectListener(new MenuDetectListener() {
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
 					for (final Entry<TraceType, MenuItem> entry : traceTypeSubMenuItems.entrySet()) {
 						entry.getValue().setSelection(entry.getKey().equals(trace.getTraceType()));
 					}
+					for (final Entry<Integer, MenuItem> entry : areaAlphaSubMenuItems.entrySet()) {
+						entry.getValue().setSelection(entry.getKey().equals(trace.getAreaAlpha()));
+					}
 				}
 			});
 
-			return new SubMenu<TraceType>(traceTypeMenuItem, traceTypeSubMenuItems);
+			final SubMenu<TraceType> subMenu = new SubMenu<TraceType>(traceTypeMenuItem, traceTypeSubMenuItems);
+			subMenu.getChildren().add(new SubMenu<Integer>(areaAlphaMenuItem, areaAlphaSubMenuItems));
+			return subMenu;
 		}
 
 		protected SubMenu<PointStyle> addPointStyleSubMenu(final Control control) {
