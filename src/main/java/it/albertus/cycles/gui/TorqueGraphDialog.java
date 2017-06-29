@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.TreeSearch;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -27,11 +26,16 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
@@ -39,6 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -92,7 +97,7 @@ public class TorqueGraphDialog extends Dialog {
 			final IXYGraph xyGraph = getXyGraph();
 			xyGraph.getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
-				public void mousePressed(final MouseEvent me) {
+				public void mousePressed(final org.eclipse.draw2d.MouseEvent me) {
 					if (me.button == 1) { // left click
 						final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * 1000;
 						final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
@@ -262,9 +267,34 @@ public class TorqueGraphDialog extends Dialog {
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
+		canvas.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(final KeyEvent ke) {
+				if (SWT.MOD1 == ke.stateMask) { // CTRL/Cmd
+					if ('z' == ke.keyCode) {
+						torqueGraph.getXyGraph().getOperationsManager().undo();
+					}
+					if ('y' == ke.keyCode) {
+						torqueGraph.getXyGraph().getOperationsManager().redo();
+					}
+					if ('s' == ke.keyCode) {
+						final ImageLoader loader = new ImageLoader();
+						loader.data = new ImageData[] { torqueGraph.getXyGraph().getImage().getImageData() };
+						final FileDialog dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
+						dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", Messages.get("lbl.graph.save.allFiles", "(*.*)") });
+						dialog.setFilterExtensions(new String[] { "*.PNG;*.png", "*.*" }); // Windows
+						final String path = dialog.open();
+						if ((path != null) && !path.isEmpty()) {
+							loader.save(path, SWT.IMAGE_PNG);
+						}
+					}
+				}
+			}
+		});
+
 		canvas.addMouseWheelListener(new MouseWheelListener() {
 			@Override
-			public void mouseScrolled(org.eclipse.swt.events.MouseEvent e) {
+			public void mouseScrolled(final MouseEvent e) {
 				final IFigure figureUnderMouse = torqueGraph.getToolbarArmedXYGraph().findFigureAt(e.x, e.y, new TreeSearch() {
 					@Override
 					public boolean prune(IFigure figure) {
