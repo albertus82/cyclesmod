@@ -1,6 +1,8 @@
 package it.albertus.cycles.gui;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -299,7 +301,8 @@ public class TorqueGraphDialog extends Dialog {
 			final Menu lineWidthSubMenu = new Menu(lineWidthMenuItem);
 			lineWidthMenuItem.setMenu(lineWidthSubMenu);
 
-			for (final byte lineWidth : LINE_WIDTH_OPTIONS) {
+			final Map<Integer, MenuItem> lineWidthSubMenuItems = new HashMap<Integer, MenuItem>();
+			for (final int lineWidth : LINE_WIDTH_OPTIONS) {
 				final MenuItem menuItem = new MenuItem(lineWidthSubMenu, SWT.RADIO);
 				menuItem.setText("&" + lineWidth);
 				if (lineWidth == DEFAULT_LINE_WIDTH) {
@@ -312,6 +315,7 @@ public class TorqueGraphDialog extends Dialog {
 						torqueGraph.getTrace().setLineWidth(lineWidth);
 					}
 				});
+				lineWidthSubMenuItems.put(lineWidth, menuItem);
 			}
 
 			final MenuItem pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
@@ -320,7 +324,8 @@ public class TorqueGraphDialog extends Dialog {
 			final Menu pointSizeSubMenu = new Menu(pointSizeMenuItem);
 			pointSizeMenuItem.setMenu(pointSizeSubMenu);
 
-			for (final byte pointSize : POINT_SIZE_OPTIONS) {
+			final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<Integer, MenuItem>();
+			for (final int pointSize : POINT_SIZE_OPTIONS) {
 				final MenuItem menuItem = new MenuItem(pointSizeSubMenu, SWT.RADIO);
 				menuItem.setText("&" + pointSize);
 				if (pointSize == DEFAULT_POINT_SIZE) {
@@ -333,6 +338,7 @@ public class TorqueGraphDialog extends Dialog {
 						torqueGraph.getTrace().setPointSize(pointSize);
 					}
 				});
+				pointSizeSubMenuItems.put(pointSize, menuItem);
 			}
 
 			control.addMenuDetectListener(new MenuDetectListener() {
@@ -340,6 +346,12 @@ public class TorqueGraphDialog extends Dialog {
 				public void menuDetected(final MenuDetectEvent e) {
 					autoScaleMenuItem.setSelection(torqueGraph.getAbscissae().isAutoScale() && torqueGraph.getOrdinates().isAutoScale());
 					menu.setVisible(true);
+					for (final Entry<Integer, MenuItem> entry : lineWidthSubMenuItems.entrySet()) {
+						entry.getValue().setSelection(entry.getKey().intValue() == torqueGraph.getTrace().getLineWidth());
+					}
+					for (final Entry<Integer, MenuItem> entry : pointSizeSubMenuItems.entrySet()) {
+						entry.getValue().setSelection(entry.getKey().intValue() == torqueGraph.getTrace().getPointSize());
+					}
 				}
 			});
 		}
