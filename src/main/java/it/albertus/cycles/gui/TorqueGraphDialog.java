@@ -2,10 +2,7 @@ package it.albertus.cycles.gui;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +25,6 @@ import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.nebula.visualization.xygraph.figures.ToolbarArmedXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
-import org.eclipse.nebula.visualization.xygraph.figures.Trace.TraceType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -48,6 +44,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cycles.gui.TorqueGraph.TorqueGraphContextMenu;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
@@ -58,9 +55,6 @@ import it.albertus.util.logging.LoggerFactory;
 public class TorqueGraphDialog extends Dialog {
 
 	private static final Logger logger = LoggerFactory.getLogger(TorqueGraphDialog.class);
-
-	private static final byte[] POINT_SIZE_OPTIONS = { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
-	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6 };
 
 	private static final boolean DEFAULT_AUTOSCALE = false;
 
@@ -345,9 +339,10 @@ public class TorqueGraphDialog extends Dialog {
 		return torqueGraph;
 	}
 
-	private class ContextMenu {
+	private class ContextMenu extends TorqueGraphContextMenu {
 
 		private ContextMenu(final Control control) {
+			torqueGraph.super();
 			final Menu menu = new Menu(control);
 			control.setMenu(menu);
 
@@ -377,134 +372,18 @@ public class TorqueGraphDialog extends Dialog {
 				}
 			});
 
-			final Map<TraceType, MenuItem> traceTypeSubMenuItems = addTraceTypeSubMenu(menu);
-			final Map<Integer, MenuItem> lineWidthSubMenuItems = addLineWidthSubMenu(menu);
-			final Map<PointStyle, MenuItem> pointStyleSubMenuItems = addPointStyleSubMenu(menu);
-			final Map<Integer, MenuItem> pointSizeSubMenuItems = addPointSizeSubMenu(menu);
+			addTraceTypeSubMenu(control);
+			addLineWidthSubMenu(control);
+			addPointStyleSubMenu(control);
+			addPointSizeSubMenu(control);
 
 			control.addMenuDetectListener(new MenuDetectListener() {
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
 					autoScaleMenuItem.setSelection(torqueGraph.getAbscissae().isAutoScale() && torqueGraph.getOrdinates().isAutoScale());
 					menu.setVisible(true);
-					for (final Entry<Integer, MenuItem> entry : lineWidthSubMenuItems.entrySet()) {
-						entry.getValue().setSelection(entry.getKey().intValue() == torqueGraph.getTrace().getLineWidth());
-					}
-					for (final Entry<Integer, MenuItem> entry : pointSizeSubMenuItems.entrySet()) {
-						entry.getValue().setSelection(entry.getKey().intValue() == torqueGraph.getTrace().getPointSize());
-					}
-					for (final Entry<TraceType, MenuItem> entry : traceTypeSubMenuItems.entrySet()) {
-						entry.getValue().setSelection(entry.getKey().equals(torqueGraph.getTrace().getTraceType()));
-					}
-					for (final Entry<PointStyle, MenuItem> entry : pointStyleSubMenuItems.entrySet()) {
-						entry.getValue().setSelection(entry.getKey().equals(torqueGraph.getTrace().getPointStyle()));
-					}
 				}
 			});
-		}
-
-		protected Map<Integer, MenuItem> addPointSizeSubMenu(final Menu parent) {
-			final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<Integer, MenuItem>();
-			final MenuItem pointSizeMenuItem = new MenuItem(parent, SWT.CASCADE);
-			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
-
-			final Menu pointSizeSubMenu = new Menu(pointSizeMenuItem);
-			pointSizeMenuItem.setMenu(pointSizeSubMenu);
-
-			for (final int pointSize : POINT_SIZE_OPTIONS) {
-				final MenuItem menuItem = new MenuItem(pointSizeSubMenu, SWT.RADIO);
-				menuItem.setText("&" + pointSize);
-				if (pointSize == getTorqueGraph().getTrace().getPointSize()) {
-					menuItem.setSelection(true);
-					pointSizeSubMenu.setDefaultItem(menuItem);
-				}
-				menuItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						torqueGraph.getTrace().setPointSize(pointSize);
-					}
-				});
-				pointSizeSubMenuItems.put(pointSize, menuItem);
-			}
-			return pointSizeSubMenuItems;
-		}
-
-		protected Map<Integer, MenuItem> addLineWidthSubMenu(final Menu parent) {
-			final Map<Integer, MenuItem> lineWidthSubMenuItems = new HashMap<Integer, MenuItem>();
-			final MenuItem lineWidthMenuItem = new MenuItem(parent, SWT.CASCADE);
-			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
-
-			final Menu lineWidthSubMenu = new Menu(lineWidthMenuItem);
-			lineWidthMenuItem.setMenu(lineWidthSubMenu);
-
-			for (final int lineWidth : LINE_WIDTH_OPTIONS) {
-				final MenuItem menuItem = new MenuItem(lineWidthSubMenu, SWT.RADIO);
-				menuItem.setText("&" + lineWidth);
-				if (lineWidth == getTorqueGraph().getTrace().getLineWidth()) {
-					menuItem.setSelection(true);
-					lineWidthSubMenu.setDefaultItem(menuItem);
-				}
-				menuItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						torqueGraph.getTrace().setLineWidth(lineWidth);
-					}
-				});
-				lineWidthSubMenuItems.put(lineWidth, menuItem);
-			}
-			return lineWidthSubMenuItems;
-		}
-
-		protected Map<TraceType, MenuItem> addTraceTypeSubMenu(final Menu parent) {
-			final Map<TraceType, MenuItem> traceTypeSubMenuItems = new EnumMap<TraceType, MenuItem>(TraceType.class);
-			final MenuItem traceTypeMenuItem = new MenuItem(parent, SWT.CASCADE);
-			traceTypeMenuItem.setText(Messages.get("lbl.menu.item.trace.type"));
-
-			final Menu traceTypeSubMenu = new Menu(traceTypeMenuItem);
-			traceTypeMenuItem.setMenu(traceTypeSubMenu);
-
-			for (final TraceType traceType : TraceType.values()) {
-				final MenuItem menuItem = new MenuItem(traceTypeSubMenu, SWT.RADIO);
-				menuItem.setText("&" + traceType.toString());
-				if (traceType.equals(getTorqueGraph().getTrace().getTraceType())) {
-					menuItem.setSelection(true);
-					traceTypeSubMenu.setDefaultItem(menuItem);
-				}
-				menuItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						torqueGraph.getTrace().setTraceType(traceType);
-					}
-				});
-				traceTypeSubMenuItems.put(traceType, menuItem);
-			}
-			return traceTypeSubMenuItems;
-		}
-
-		protected Map<PointStyle, MenuItem> addPointStyleSubMenu(final Menu parent) {
-			final Map<PointStyle, MenuItem> pointStyleSubMenuItems = new EnumMap<PointStyle, MenuItem>(PointStyle.class);
-			final MenuItem pointStyleMenuItem = new MenuItem(parent, SWT.CASCADE);
-			pointStyleMenuItem.setText(Messages.get("lbl.menu.item.point.style"));
-
-			final Menu traceTypeSubMenu = new Menu(pointStyleMenuItem);
-			pointStyleMenuItem.setMenu(traceTypeSubMenu);
-
-			for (final PointStyle pointStyle : PointStyle.values()) {
-				final MenuItem menuItem = new MenuItem(traceTypeSubMenu, SWT.RADIO);
-				menuItem.setText("&" + pointStyle.toString());
-				if (pointStyle.equals(getTorqueGraph().getTrace().getPointStyle())) {
-					menuItem.setSelection(true);
-					traceTypeSubMenu.setDefaultItem(menuItem);
-				}
-				menuItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						torqueGraph.getTrace().setPointStyle(pointStyle);
-					}
-				});
-				pointStyleSubMenuItems.put(pointStyle, menuItem);
-			}
-			return pointStyleSubMenuItems;
 		}
 	}
 
