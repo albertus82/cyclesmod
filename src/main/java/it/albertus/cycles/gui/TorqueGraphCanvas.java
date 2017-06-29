@@ -5,6 +5,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
+import org.eclipse.nebula.visualization.xygraph.figures.Trace.TraceType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
@@ -17,13 +18,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import it.albertus.cycles.gui.TorqueGraph.TorqueGraphContextMenu;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.resources.Messages;
 
 public class TorqueGraphCanvas extends Canvas {
-
-	private static final byte[] POINT_SIZE_OPTIONS = { 0, 2, 4, 6, 8, 10 };
-	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5 };
 
 	private static final byte DEFAULT_POINT_SIZE = 4;
 	private static final byte DEFAULT_LINE_WIDTH = 2;
@@ -87,71 +86,37 @@ public class TorqueGraphCanvas extends Canvas {
 		return torqueGraph;
 	}
 
-	private class ContextMenu {
+	private class ContextMenu extends TorqueGraphContextMenu {
 
 		private final MenuItem editMenuItem;
-		private final MenuItem lineWidthMenuItem;
-		private final MenuItem pointSizeMenuItem;
+		private final SubMenu<TraceType> traceTypeSubMenu;
+		private final SubMenu<Integer> lineWidthSubMenu;
+		private final SubMenu<PointStyle> pointStyleSubMenu;
+		private final SubMenu<Integer> pointSizeSubMenu;
 
-		private ContextMenu(final Control parent) {
-			final Menu menu = new Menu(parent);
-			parent.setMenu(menu);
+		private ContextMenu(final Control control) {
+			torqueGraph.super();
+			final Menu menu = new Menu(control);
+			control.setMenu(menu);
 
 			editMenuItem = new MenuItem(menu, SWT.PUSH);
 			editMenuItem.setText(Messages.get("lbl.menu.item.edit"));
 			editMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					parent.notifyListeners(SWT.MouseDoubleClick, null);
+					control.notifyListeners(SWT.MouseDoubleClick, null);
 				}
 			});
 			menu.setDefaultItem(editMenuItem);
 
 			new MenuItem(menu, SWT.SEPARATOR);
 
-			lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
-			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
+			traceTypeSubMenu = addTraceTypeSubMenu(control);
+			lineWidthSubMenu = addLineWidthSubMenu(control);
+			pointStyleSubMenu = addPointStyleSubMenu(control);
+			pointSizeSubMenu = addPointSizeSubMenu(control);
 
-			final Menu lineWidthSubMenu = new Menu(lineWidthMenuItem);
-			lineWidthMenuItem.setMenu(lineWidthSubMenu);
-
-			for (final byte lineWidth : LINE_WIDTH_OPTIONS) {
-				final MenuItem menuItem = new MenuItem(lineWidthSubMenu, SWT.RADIO);
-				menuItem.setText("&" + lineWidth);
-				if (lineWidth == DEFAULT_LINE_WIDTH) {
-					menuItem.setSelection(true);
-					lineWidthSubMenu.setDefaultItem(menuItem);
-				}
-				menuItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						torqueGraph.getTrace().setLineWidth(lineWidth);
-					}
-				});
-			}
-
-			pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
-			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
-
-			final Menu pointSizeSubMenu = new Menu(pointSizeMenuItem);
-			pointSizeMenuItem.setMenu(pointSizeSubMenu);
-
-			for (final byte pointSize : POINT_SIZE_OPTIONS) {
-				final MenuItem menuItem = new MenuItem(pointSizeSubMenu, SWT.RADIO);
-				menuItem.setText("&" + pointSize);
-				if (pointSize == DEFAULT_POINT_SIZE) {
-					menuItem.setSelection(true);
-					pointSizeSubMenu.setDefaultItem(menuItem);
-				}
-				menuItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						torqueGraph.getTrace().setPointSize(pointSize);
-					}
-				});
-			}
-
-			parent.addMenuDetectListener(new MenuDetectListener() {
+			control.addMenuDetectListener(new MenuDetectListener() {
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
 					menu.setVisible(true);
@@ -161,8 +126,10 @@ public class TorqueGraphCanvas extends Canvas {
 
 		public void updateTexts() {
 			editMenuItem.setText(Messages.get("lbl.menu.item.edit"));
-			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
-			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
+			traceTypeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.trace.type"));
+			lineWidthSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.line.width"));
+			pointStyleSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.point.style"));
+			pointSizeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.point.size"));
 		}
 	}
 
