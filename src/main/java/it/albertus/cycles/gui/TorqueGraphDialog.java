@@ -1,5 +1,7 @@
 package it.albertus.cycles.gui;
 
+import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -7,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -14,7 +17,10 @@ import org.eclipse.draw2d.TreeSearch;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.nebula.visualization.internal.xygraph.toolbar.GrayableButton;
+import org.eclipse.nebula.visualization.internal.xygraph.undo.IOperationsManagerListener;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
+import org.eclipse.nebula.visualization.internal.xygraph.undo.OperationsManager;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
@@ -64,6 +70,9 @@ public class TorqueGraphDialog extends Dialog {
 
 	private static class ComplexTorqueGraph extends TorqueGraph {
 
+		private static final String MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO = "lbl.graph.toolbar.undo";
+		private static final String MSG_KEY_LBL_GRAPH_TOOLBAR_REDO = "lbl.graph.toolbar.redo";
+
 		private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
 		private ComplexTorqueGraph(final Map<Integer, Short> map, final BikeType bikeType) {
@@ -79,6 +88,8 @@ public class TorqueGraphDialog extends Dialog {
 			trace.setPointStyle(PointStyle.FILLED_DIAMOND);
 			trace.setLineWidth(DEFAULT_LINE_WIDTH);
 			trace.setPointSize(DEFAULT_POINT_SIZE);
+
+			fixUndoRedoButtons();
 
 			add(toolbarArmedXYGraph);
 
@@ -107,6 +118,11 @@ public class TorqueGraphDialog extends Dialog {
 									values[index] = newValue;
 									refresh();
 								}
+
+								@Override
+								public String toString() {
+									return Messages.get("lbl.graph.action.valueChange");
+								};
 							});
 						}
 					}
@@ -118,7 +134,72 @@ public class TorqueGraphDialog extends Dialog {
 			ordinates.performAutoScale(true);
 		}
 
-		private ToolbarArmedXYGraph getToolbarArmedXYGraph() {
+		@SuppressWarnings("unchecked")
+		protected void fixUndoRedoButtons() {
+			try {
+				final Field listenersField = OperationsManager.class.getDeclaredField("listeners");
+				listenersField.setAccessible(true);
+				for (final IOperationsManagerListener listener : (Collection<IOperationsManagerListener>) listenersField.get(getXyGraph().getOperationsManager())) {
+					toolbarArmedXYGraph.getIXYGraph().getOperationsManager().removeListener(listener);
+				}
+
+				for (final Object o : toolbarArmedXYGraph.getToolbar().getChildren()) {
+					if (o instanceof GrayableButton) {
+						final GrayableButton button = (GrayableButton) o;
+						if (button.getToolTip() instanceof Label) {
+							final String labelText = ((Label) button.getToolTip()).getText();
+							if ("undo".equalsIgnoreCase(labelText)) {
+								button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO, "")));
+								addUndoListener(button, toolbarArmedXYGraph.getIXYGraph().getOperationsManager());
+							}
+							else if ("redo".equalsIgnoreCase(labelText)) {
+								button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_REDO, "")));
+								addRedoListener(button, toolbarArmedXYGraph.getIXYGraph().getOperationsManager());
+							}
+						}
+					}
+				}
+			}
+			catch (final Exception e) {
+				logger.log(Level.WARNING, e.toString(), e);
+			}
+		}
+
+		private static void addUndoListener(final GrayableButton button, final OperationsManager manager) {
+			manager.addListener(new IOperationsManagerListener() {
+				@Override
+				public void operationsHistoryChanged(final OperationsManager manager) {
+					if (manager.getUndoCommandsSize() > 0) {
+						button.setEnabled(true);
+						final String cmdName = manager.getUndoCommands()[manager.getUndoCommandsSize() - 1].toString();
+						button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
+					}
+					else {
+						button.setEnabled(false);
+						button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO, "")));
+					}
+				}
+			});
+		}
+
+		private static void addRedoListener(final GrayableButton button, final OperationsManager manager) {
+			manager.addListener(new IOperationsManagerListener() {
+				@Override
+				public void operationsHistoryChanged(final OperationsManager manager) {
+					if (manager.getRedoCommandsSize() > 0) {
+						button.setEnabled(true);
+						final String cmdName = manager.getRedoCommands()[manager.getRedoCommandsSize() - 1].toString();
+						button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_REDO, cmdName)));
+					}
+					else {
+						button.setEnabled(false);
+						button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_REDO, "")));
+					}
+				}
+			});
+		}
+
+		public ToolbarArmedXYGraph getToolbarArmedXYGraph() {
 			return toolbarArmedXYGraph;
 		}
 
@@ -290,8 +371,7 @@ public class TorqueGraphDialog extends Dialog {
 			performAutoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					torqueGraph.getAbscissae().performAutoScale(true);
-					torqueGraph.getOrdinates().performAutoScale(true);
+					torqueGraph.getXyGraph().performAutoScale();
 				}
 			});
 
