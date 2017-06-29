@@ -48,19 +48,23 @@ public class OpenTorqueGraphDialogListener implements MouseListener, SelectionLi
 
 	private void execute() {
 		final TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
-		final Map<Integer, Short> valueMap = new TreeMap<Integer, Short>();
+		final Map<Integer, Short> map = new TreeMap<Integer, Short>();
 		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties();
-		for (byte i = 0; i < Torque.LENGTH; i++) {
+		for (int i = 0; i < Torque.LENGTH; i++) {
 			final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Torque.class, i));
-			valueMap.put(Torque.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
+			map.put(Torque.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
 		}
 
-		if (torqueGraphDialog.open(valueMap, bikeType) == SWT.OK) {
-			for (byte i = 0; i < Torque.LENGTH; i++) {
+		if (torqueGraphDialog.open(map, bikeType) == SWT.OK) {
+			for (int i = 0; i < Torque.LENGTH; i++) {
 				final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Torque.class, i));
 				final Text text = formProperty.getText();
-				text.setText(Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(torqueGraphDialog.getTorqueGraph().getValues()[i]))), gui.getNumeralSystem().getRadix()));
-				text.notifyListeners(SWT.FocusOut, null);
+				final String oldValue = text.getText();
+				final String newValue = Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(torqueGraphDialog.getTorqueGraph().getValues()[i]))), gui.getNumeralSystem().getRadix());
+				if (!oldValue.equals(newValue)) {
+					text.setText(newValue);
+					text.notifyListeners(SWT.FocusOut, null);
+				}
 			}
 		}
 	}

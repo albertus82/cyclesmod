@@ -64,8 +64,8 @@ public class TorqueGraphDialog extends Dialog {
 
 		private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-		private ComplexTorqueGraph(final Map<Integer, Short> valueMap, final BikeType bikeType) {
-			super(valueMap, bikeType);
+		private ComplexTorqueGraph(final Map<Integer, Short> map, final BikeType bikeType) {
+			super(map, bikeType);
 
 			final Axis abscissae = getAbscissae();
 			abscissae.setAutoScale(DEFAULT_AUTOSCALE);
@@ -136,11 +136,11 @@ public class TorqueGraphDialog extends Dialog {
 		setText(Messages.get("lbl.graph.title"));
 	}
 
-	public int open(final Map<Integer, Short> values, final BikeType bikeType) {
+	public int open(final Map<Integer, Short> map, final BikeType bikeType) {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText() + " - " + bikeType.getDisplacement() + " cc");
 		shell.setImages(Images.MAIN_ICONS);
-		createContents(shell, values, bikeType);
+		createContents(shell, map, bikeType);
 		final Point minimumSize = getMinimumSize(shell);
 		shell.setSize(getSize(shell));
 		shell.setMinimumSize(minimumSize);
@@ -164,9 +164,9 @@ public class TorqueGraphDialog extends Dialog {
 		return shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 	}
 
-	private void createContents(final Shell shell, final Map<Integer, Short> values, final BikeType bikeType) {
+	private void createContents(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType) {
 		shell.setLayout(getLayout());
-		createGraph(shell, values, bikeType);
+		createGraph(shell, map, bikeType);
 		createButtonBox(shell);
 	}
 
@@ -174,11 +174,11 @@ public class TorqueGraphDialog extends Dialog {
 		return GridLayoutFactory.swtDefaults().create();
 	}
 
-	private void createGraph(final Shell shell, final Map<Integer, Short> values, final BikeType bikeType) {
+	private void createGraph(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType) {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		torqueGraph = new ComplexTorqueGraph(values, bikeType);
+		torqueGraph = new ComplexTorqueGraph(map, bikeType);
 		lws.setContents(torqueGraph);
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
