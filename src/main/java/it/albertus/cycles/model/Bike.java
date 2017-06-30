@@ -52,7 +52,7 @@ public class Bike extends BikesInfElement {
 
 	@Override
 	public List<Byte> toByteList() {
-		List<Byte> byteList = new ArrayList<Byte>(LENGTH);
+		final List<Byte> byteList = new ArrayList<Byte>(LENGTH);
 		byteList.addAll(settings.toByteList());
 		byteList.addAll(gearbox.toByteList());
 		byteList.addAll(torque.toByteList());
