@@ -24,8 +24,8 @@ public enum Setting { // The order matters.
 		return index;
 	}
 
-	public static Setting getSetting(String name) {
-		for (Setting setting : Setting.values()) {
+	public static Setting getSetting(final String name) {
+		for (final Setting setting : Setting.values()) {
 			if (setting.toString().equalsIgnoreCase(name)) { // Case insensitive.
 				return setting;
 			}
@@ -33,8 +33,8 @@ public enum Setting { // The order matters.
 		return null;
 	}
 
-	public static Setting getSetting(int index) {
-		for (Setting setting : Setting.values()) {
+	public static Setting getSetting(final int index) {
+		for (final Setting setting : Setting.values()) {
 			if (setting.getIndex() == index) {
 				return setting;
 			}
