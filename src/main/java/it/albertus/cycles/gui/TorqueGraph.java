@@ -167,7 +167,7 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 			final Menu parentMenu = control.getMenu();
 			final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<Integer, MenuItem>();
 			final MenuItem pointSizeMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
-			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.point.size"));
+			pointSizeMenuItem.setText(Messages.get("lbl.menu.item.graph.pointSize"));
 
 			final Menu pointSizeSubMenu = new Menu(pointSizeMenuItem);
 			pointSizeMenuItem.setMenu(pointSizeSubMenu);
@@ -203,7 +203,7 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 			final Menu parentMenu = control.getMenu();
 			final Map<Integer, MenuItem> lineWidthSubMenuItems = new HashMap<Integer, MenuItem>();
 			final MenuItem lineWidthMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
-			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.line.width"));
+			lineWidthMenuItem.setText(Messages.get("lbl.menu.item.graph.lineWidth"));
 
 			final Menu lineWidthSubMenu = new Menu(lineWidthMenuItem);
 			lineWidthMenuItem.setMenu(lineWidthSubMenu);
@@ -239,7 +239,7 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 			final Menu parentMenu = control.getMenu();
 			final Map<TraceType, MenuItem> traceTypeSubMenuItems = new EnumMap<TraceType, MenuItem>(TraceType.class);
 			final MenuItem traceTypeMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
-			traceTypeMenuItem.setText(Messages.get("lbl.menu.item.trace.type"));
+			traceTypeMenuItem.setText(Messages.get("lbl.menu.item.graph.traceType"));
 
 			final Menu traceTypeSubMenu = new Menu(traceTypeMenuItem);
 			traceTypeMenuItem.setMenu(traceTypeSubMenu);
@@ -260,7 +260,7 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 			}
 
 			final MenuItem areaAlphaMenuItem = new MenuItem(traceTypeSubMenu, SWT.CASCADE);
-			areaAlphaMenuItem.setText(Messages.get("lbl.menu.item.area.alpha"));
+			areaAlphaMenuItem.setText(Messages.get("lbl.menu.item.graph.areaAlpha"));
 
 			final Menu areaAlphaSubMenu = new Menu(areaAlphaMenuItem);
 			areaAlphaMenuItem.setMenu(areaAlphaSubMenu);
@@ -302,7 +302,7 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 			final Menu parentMenu = control.getMenu();
 			final Map<PointStyle, MenuItem> pointStyleSubMenuItems = new EnumMap<PointStyle, MenuItem>(PointStyle.class);
 			final MenuItem pointStyleMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
-			pointStyleMenuItem.setText(Messages.get("lbl.menu.item.point.style"));
+			pointStyleMenuItem.setText(Messages.get("lbl.menu.item.graph.pointStyle"));
 
 			final Menu traceTypeSubMenu = new Menu(pointStyleMenuItem);
 			pointStyleMenuItem.setMenu(traceTypeSubMenu);

@@ -100,7 +100,7 @@ public class TorqueGraphCanvas extends Canvas {
 			control.setMenu(menu);
 
 			editMenuItem = new MenuItem(menu, SWT.PUSH);
-			editMenuItem.setText(Messages.get("lbl.menu.item.edit"));
+			editMenuItem.setText(Messages.get("lbl.menu.item.graph.edit"));
 			editMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
@@ -125,12 +125,12 @@ public class TorqueGraphCanvas extends Canvas {
 		}
 
 		public void updateTexts() {
-			editMenuItem.setText(Messages.get("lbl.menu.item.edit"));
-			traceTypeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.trace.type"));
-			traceTypeSubMenu.getChildren().get(0).getMenuItem().setText(Messages.get("lbl.menu.item.area.alpha"));
-			lineWidthSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.line.width"));
-			pointStyleSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.point.style"));
-			pointSizeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.point.size"));
+			editMenuItem.setText(Messages.get("lbl.menu.item.graph.edit"));
+			traceTypeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.graph.traceType"));
+			traceTypeSubMenu.getChildren().get(0).getMenuItem().setText(Messages.get("lbl.menu.item.graph.areaAlpha"));
+			lineWidthSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.graph.lineWidth"));
+			pointStyleSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.graph.pointStyle"));
+			pointSizeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.graph.pointSize"));
 		}
 	}
 
