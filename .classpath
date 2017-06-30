@@ -11,7 +11,7 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.draw2d_3.9.101.201408150207.jar" sourcepath="lib/src/org.eclipse.draw2d.source_3.9.101.201408150207.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar" sourcepath="lib/src/org.eclipse.equinox.common.source_3.6.200.v20130402-1505.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.jface_3.10.2.v20141021-1035.jar" sourcepath="lib/src/org.eclipse.jface.source_3.10.2.v20141021-1035.jar"/>
-	<classpathentry kind="lib" path="lib/jface-utils-9.0.0.jar" sourcepath="lib/src/jface-utils-9.0.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jface-utils-9.0.1-SNAPSHOT.jar" sourcepath="lib/src/jface-utils-9.0.1-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -24,6 +24,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.nebula.visualization.xygraph.figures.ToolbarArmedXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
+import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.KeyAdapter;
@@ -34,6 +35,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.graphics.Point;
@@ -68,8 +70,8 @@ public class TorqueGraphDialog extends Dialog {
 
 	private static class ComplexTorqueGraph extends TorqueGraph {
 
-		private static final String MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO = "lbl.graph.toolbar.undo";
 		private static final String MSG_KEY_LBL_GRAPH_TOOLBAR_REDO = "lbl.graph.toolbar.redo";
+		private static final String MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO = "lbl.graph.toolbar.undo";
 
 		private static final byte DEFAULT_POINT_SIZE = 6;
 		private static final byte DEFAULT_LINE_WIDTH = 2;
@@ -271,22 +273,14 @@ public class TorqueGraphDialog extends Dialog {
 			@Override
 			public void keyPressed(final KeyEvent ke) {
 				if (SWT.MOD1 == ke.stateMask) { // CTRL/Cmd
-					if ('z' == ke.keyCode) {
+					if (SwtUtils.KEY_UNDO == ke.keyCode) {
 						torqueGraph.getXyGraph().getOperationsManager().undo();
 					}
-					if ('y' == ke.keyCode) {
+					if (SwtUtils.KEY_REDO == ke.keyCode) {
 						torqueGraph.getXyGraph().getOperationsManager().redo();
 					}
-					if ('s' == ke.keyCode) {
-						final ImageLoader loader = new ImageLoader();
-						loader.data = new ImageData[] { torqueGraph.getXyGraph().getImage().getImageData() };
-						final FileDialog dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
-						dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", Messages.get("lbl.graph.save.allFiles", "(*.*)") });
-						dialog.setFilterExtensions(new String[] { "*.PNG;*.png", "*.*" }); // Windows
-						final String path = dialog.open();
-						if ((path != null) && !path.isEmpty()) {
-							loader.save(path, SWT.IMAGE_PNG);
-						}
+					if (SwtUtils.KEY_SAVE == ke.keyCode) {
+						saveSnapshot();
 					}
 				}
 			}
@@ -369,6 +363,18 @@ public class TorqueGraphDialog extends Dialog {
 		return torqueGraph;
 	}
 
+	private void saveSnapshot() {
+		final ImageLoader loader = new ImageLoader();
+		loader.data = new ImageData[] { torqueGraph.getXyGraph().getImage().getImageData() };
+		final FileDialog dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
+		dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", Messages.get("lbl.graph.save.allFiles", "(*.*)") });
+		dialog.setFilterExtensions(new String[] { "*.PNG;*.png", "*.*" }); // Windows
+		final String path = dialog.open();
+		if ((path != null) && !path.isEmpty()) {
+			loader.save(path, SWT.IMAGE_PNG);
+		}
+	}
+
 	private class ContextMenu extends TorqueGraphContextMenu {
 
 		private ContextMenu(final Control control) {
@@ -376,9 +382,41 @@ public class TorqueGraphDialog extends Dialog {
 			final Menu menu = new Menu(control);
 			control.setMenu(menu);
 
+			final XYGraphMediaFactory mediaFactory = XYGraphMediaFactory.getInstance();
+
+			final MenuItem undoMenuItem = new MenuItem(menu, SWT.PUSH);
+			undoMenuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					torqueGraph.getXyGraph().getOperationsManager().undo();
+				}
+			});
+
+			final MenuItem redoMenuItem = new MenuItem(menu, SWT.PUSH);
+			redoMenuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					torqueGraph.getXyGraph().getOperationsManager().redo();
+				}
+			});
+
+			new MenuItem(menu, SWT.SEPARATOR);
+
+			final MenuItem saveImageMenuItem = new MenuItem(menu, SWT.PUSH);
+			saveImageMenuItem.setImage(mediaFactory.getImage("images/camera.png"));
+			saveImageMenuItem.setText(Messages.get("lbl.menu.item.graph.saveImageAs") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+			saveImageMenuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					saveSnapshot();
+				}
+			});
+
+			new MenuItem(menu, SWT.SEPARATOR);
+
 			final MenuItem autoScaleMenuItem = new MenuItem(menu, SWT.CHECK);
 			autoScaleMenuItem.setSelection(DEFAULT_AUTOSCALE);
-			autoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscaling"));
+			autoScaleMenuItem.setText(Messages.get("lbl.menu.item.graph.autoscaling"));
 			autoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
@@ -394,7 +432,8 @@ public class TorqueGraphDialog extends Dialog {
 			});
 
 			final MenuItem performAutoScaleMenuItem = new MenuItem(menu, SWT.PUSH);
-			performAutoScaleMenuItem.setText(Messages.get("lbl.menu.item.autoscale.now"));
+			performAutoScaleMenuItem.setText(Messages.get("lbl.menu.item.graph.autoscaleNow"));
+			performAutoScaleMenuItem.setImage(mediaFactory.getImage("images/AutoScale.png"));
 			performAutoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
@@ -407,10 +446,41 @@ public class TorqueGraphDialog extends Dialog {
 			addPointStyleSubMenu(control);
 			addPointSizeSubMenu(control);
 
+			final Image imageUndo = mediaFactory.getImage("images/Undo.png");
+			final Image imageUndoGray = mediaFactory.getImage("images/Undo_Gray.png");
+			final Image imageRedo = mediaFactory.getImage("images/Redo.png");
+			final Image imageRedoGray = mediaFactory.getImage("images/Redo_Gray.png");
+
 			control.addMenuDetectListener(new MenuDetectListener() {
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
 					autoScaleMenuItem.setSelection(torqueGraph.getAbscissae().isAutoScale() && torqueGraph.getOrdinates().isAutoScale());
+
+					// Undo/Redo
+					final OperationsManager manager = torqueGraph.getXyGraph().getOperationsManager();
+					if (manager.getUndoCommandsSize() > 0) {
+						undoMenuItem.setEnabled(true);
+						undoMenuItem.setImage(imageUndo);
+						final String cmdName = manager.getUndoCommands()[manager.getUndoCommandsSize() - 1].toString();
+						undoMenuItem.setText(Messages.get("lbl.menu.item.graph.undo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
+					}
+					else {
+						undoMenuItem.setEnabled(false);
+						undoMenuItem.setImage(imageUndoGray);
+						undoMenuItem.setText(Messages.get("lbl.menu.item.graph.undo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
+					}
+					if (manager.getRedoCommandsSize() > 0) {
+						redoMenuItem.setEnabled(true);
+						redoMenuItem.setImage(imageRedo);
+						final String cmdName = manager.getRedoCommands()[manager.getRedoCommandsSize() - 1].toString();
+						redoMenuItem.setText(Messages.get("lbl.menu.item.graph.redo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
+					}
+					else {
+						redoMenuItem.setEnabled(false);
+						redoMenuItem.setImage(imageRedoGray);
+						redoMenuItem.setText(Messages.get("lbl.menu.item.graph.redo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
+					}
+
 					menu.setVisible(true);
 				}
 			});
