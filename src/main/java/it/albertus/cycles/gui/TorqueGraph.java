@@ -140,10 +140,11 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 
 	public class TorqueGraphContextMenu {
 
+		@SuppressWarnings("rawtypes")
 		public class SubMenu<K> {
 			private final MenuItem menuItem;
 			private final Map<K, MenuItem> menuItems;
-			private final List<SubMenu<?>> children = new ArrayList<SubMenu<?>>();
+			private final List<SubMenu> children = new ArrayList<SubMenu>();
 
 			public SubMenu(final MenuItem menuItem, final Map<K, MenuItem> menuItems) {
 				this.menuItem = menuItem;
@@ -158,7 +159,7 @@ public class TorqueGraph extends Figure implements ITorqueGraph {
 				return menuItems;
 			}
 
-			public List<SubMenu<?>> getChildren() {
+			public List<SubMenu> getChildren() {
 				return children;
 			}
 		}
