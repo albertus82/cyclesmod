@@ -36,29 +36,23 @@ public class XYGraphZoomMouseWheelListener implements MouseWheelListener {
 			}
 		});
 
-		SaveStateCommand command = null;
+		if (figureUnderMouse != null) {
+			final ZoomType zoomType = e.count > 0 ? ZoomType.ZOOM_IN : ZoomType.ZOOM_OUT;
+			final SaveStateCommand command = new ZoomCommand(zoomType.getDescription(), xyGraph.getXAxisList(), xyGraph.getYAxisList());
 
-		if (figureUnderMouse instanceof PlotArea) {
-			final PlotArea plotArea = (PlotArea) figureUnderMouse;
-			command = createCommand(e);
-			plotArea.zoomInOut(true, true, e.x, e.y, e.count * ZOOM_RATIO / DIVISOR);
-		}
-		else if (figureUnderMouse instanceof Axis) {
-			final Axis axis = ((Axis) figureUnderMouse);
-			final double valuePosition = axis.getPositionValue(axis.isHorizontal() ? e.x : e.y, false);
-			command = createCommand(e);
-			axis.zoomInOut(valuePosition, e.count * ZOOM_RATIO / DIVISOR);
-		}
+			if (figureUnderMouse instanceof PlotArea) {
+				final PlotArea plotArea = (PlotArea) figureUnderMouse;
+				plotArea.zoomInOut(true, true, e.x, e.y, e.count * ZOOM_RATIO / DIVISOR);
+			}
+			else {
+				final Axis axis = ((Axis) figureUnderMouse);
+				final double valuePosition = axis.getPositionValue(axis.isHorizontal() ? e.x : e.y, false);
+				axis.zoomInOut(valuePosition, e.count * ZOOM_RATIO / DIVISOR);
+			}
 
-		if (command != null) {
 			command.saveState();
 			xyGraph.getOperationsManager().addCommand(command);
 		}
-	}
-
-	private SaveStateCommand createCommand(final MouseEvent e) {
-		final ZoomType zoomType = e.count > 0 ? ZoomType.ZOOM_IN : ZoomType.ZOOM_OUT;
-		return new ZoomCommand(zoomType.getDescription(), xyGraph.getXAxisList(), xyGraph.getYAxisList());
 	}
 
 }
