@@ -53,6 +53,12 @@ public class TorqueGraphCanvas extends Canvas {
 			trace.setLineWidth(DEFAULT_LINE_WIDTH);
 			trace.setPointSize(DEFAULT_POINT_SIZE);
 		}
+
+		private void updateTexts() {
+			getXyGraph().setTitle(Messages.get("lbl.graph.title"));
+			getAbscissae().setTitle(Messages.get("lbl.graph.axis.x", RPM_DIVISOR));
+			getOrdinates().setTitle(Messages.get("lbl.graph.axis.y"));
+		}
 	}
 
 	public TorqueGraphCanvas(final Composite parent, final Bike bike) {
@@ -68,9 +74,7 @@ public class TorqueGraphCanvas extends Canvas {
 	}
 
 	public void updateTexts() {
-		torqueGraph.getXyGraph().setTitle(Messages.get("lbl.graph.title"));
-		torqueGraph.getAbscissae().setTitle(Messages.get("lbl.graph.axis.x", TorqueGraph.RPM_DIVISOR));
-		torqueGraph.getOrdinates().setTitle(Messages.get("lbl.graph.axis.y"));
+		torqueGraph.updateTexts();
 		contextMenu.updateTexts();
 	}
 
@@ -92,7 +96,9 @@ public class TorqueGraphCanvas extends Canvas {
 			control.setMenu(menu);
 
 			editMenuItem = new MenuItem(menu, SWT.PUSH);
-			editMenuItem.setText(Messages.get("lbl.menu.item.graph.edit"));
+			final String editMenuItemTextMessageKey = "lbl.menu.item.graph.edit";
+			editMenuItem.setData(DATA_KEY_MSG_KEY, editMenuItemTextMessageKey);
+			editMenuItem.setText(Messages.get(editMenuItemTextMessageKey));
 			editMenuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
@@ -116,13 +122,18 @@ public class TorqueGraphCanvas extends Canvas {
 			});
 		}
 
-		public void updateTexts() {
-			editMenuItem.setText(Messages.get("lbl.menu.item.graph.edit"));
-			traceTypeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.graph.traceType"));
-			traceTypeSubMenu.getChildren().get(0).getMenuItem().setText(Messages.get("lbl.menu.item.graph.areaAlpha"));
-			lineWidthSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.graph.lineWidth"));
-			pointStyleSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.graph.pointStyle"));
-			pointSizeSubMenu.getMenuItem().setText(Messages.get("lbl.menu.item.graph.pointSize"));
+		private void updateTexts() {
+			editMenuItem.setText(Messages.get(editMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+			final MenuItem traceTypeMenuItem = traceTypeSubMenu.getMenuItem();
+			traceTypeMenuItem.setText(Messages.get(traceTypeMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+			final MenuItem areaAlphaMenuItem = traceTypeSubMenu.getChildren().get(0).getMenuItem();
+			areaAlphaMenuItem.setText(Messages.get(areaAlphaMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+			final MenuItem lineWidthMenuItem = lineWidthSubMenu.getMenuItem();
+			lineWidthMenuItem.setText(Messages.get(lineWidthMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+			final MenuItem pointStyleMenuItem = pointStyleSubMenu.getMenuItem();
+			pointStyleMenuItem.setText(Messages.get(pointStyleMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+			final MenuItem pointSizeMenuItem = pointSizeSubMenu.getMenuItem();
+			pointSizeMenuItem.setText(Messages.get(pointSizeMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
 		}
 	}
 
