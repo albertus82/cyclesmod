@@ -11,14 +11,14 @@ import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 
-public class XYGraphZoomMouseWheelListener implements MouseWheelListener {
+public class ZoomMouseWheelListener implements MouseWheelListener {
 
 	private static final double ZOOM_RATIO = 0.1;
 	private static final int DIVISOR = 3;
 
 	private final IXYGraph xyGraph;
 
-	public XYGraphZoomMouseWheelListener(final IXYGraph xyGraph) {
+	public ZoomMouseWheelListener(final IXYGraph xyGraph) {
 		this.xyGraph = xyGraph;
 	}
 

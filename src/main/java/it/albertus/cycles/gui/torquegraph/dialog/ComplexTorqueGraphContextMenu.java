@@ -49,7 +49,7 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		saveImageMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				torqueGraph.saveSnapshot();
+				torqueGraph.saveSnapshot(control.getShell());
 			}
 		});
 
