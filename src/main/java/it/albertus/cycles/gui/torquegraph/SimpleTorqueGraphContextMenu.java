@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cycles.resources.Messages;
 
-public class TorqueGraphCanvasContextMenu extends TorqueGraphContextMenu {
+public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 
 	private final MenuItem editMenuItem;
 	private final SubMenu<TraceType> traceTypeSubMenu;
@@ -21,7 +21,7 @@ public class TorqueGraphCanvasContextMenu extends TorqueGraphContextMenu {
 	private final SubMenu<PointStyle> pointStyleSubMenu;
 	private final SubMenu<Integer> pointSizeSubMenu;
 
-	public TorqueGraphCanvasContextMenu(final Control parent, final ITorqueGraph torqueGraph) {
+	public SimpleTorqueGraphContextMenu(final Control parent, final SimpleTorqueGraph torqueGraph) {
 		super(parent, torqueGraph);
 
 		final Menu menu = new Menu(parent);
