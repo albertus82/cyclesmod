@@ -259,7 +259,7 @@ public class TorqueGraphDialog extends Dialog {
 	public int open(final Map<Integer, Short> map, final BikeType bikeType) {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText() + " - " + bikeType.getDisplacement() + " cc");
-		shell.setImages(Images.MAIN_ICONS);
+		shell.setImages(Images.getMainIcons());
 		createContents(shell, map, bikeType);
 		final Point minimumSize = getMinimumSize(shell);
 		shell.setSize(getSize(shell));
