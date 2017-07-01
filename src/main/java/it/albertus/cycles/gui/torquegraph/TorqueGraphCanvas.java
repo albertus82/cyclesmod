@@ -9,7 +9,7 @@ import it.albertus.cycles.model.Bike;
 
 public class TorqueGraphCanvas extends Canvas {
 
-	private final TorqueGraphCanvasContextMenu contextMenu;
+	private final SimpleTorqueGraphContextMenu contextMenu;
 	private final SimpleTorqueGraph torqueGraph;
 
 	public TorqueGraphCanvas(final Composite parent, final Bike bike) {
@@ -21,7 +21,7 @@ public class TorqueGraphCanvas extends Canvas {
 
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 
-		contextMenu = new TorqueGraphCanvasContextMenu(this, torqueGraph);
+		contextMenu = new SimpleTorqueGraphContextMenu(this, torqueGraph);
 	}
 
 	public void updateTexts() {
@@ -33,7 +33,7 @@ public class TorqueGraphCanvas extends Canvas {
 		return torqueGraph;
 	}
 
-	public TorqueGraphCanvasContextMenu getContextMenu() {
+	public SimpleTorqueGraphContextMenu getContextMenu() {
 		return contextMenu;
 	}
 
