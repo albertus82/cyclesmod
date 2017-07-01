@@ -27,8 +27,9 @@ import it.albertus.cycles.gui.listener.PropertyFocusListener;
 import it.albertus.cycles.gui.listener.PropertyKeyListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
 import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
+import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
 import it.albertus.cycles.gui.torquegraph.TorqueGraph;
-import it.albertus.cycles.gui.torquegraph.TorqueGraphCanvas;
+import it.albertus.cycles.gui.torquegraph.simple.TorqueGraphCanvas;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.BikesCfg;
@@ -114,11 +115,12 @@ public class Tabs {
 			// Torque graph
 			final TorqueGraphCanvas canvas = new TorqueGraphCanvas(tabComposite, bike);
 			canvas.addMouseListener(new OpenTorqueGraphDialogListener(gui, bike.getType()));
-			canvas.getTorqueGraph().getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
+			final ITorqueGraph torqueGraph = canvas.getTorqueGraph();
+			torqueGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final double rpm = canvas.getTorqueGraph().getAbscissae().getPositionValue(me.getLocation().x, false) * TorqueGraph.RPM_DIVISOR;
+						final double rpm = torqueGraph.getAbscissae().getPositionValue(me.getLocation().x, false) * TorqueGraph.RPM_DIVISOR;
 						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, Torque.indexOf(rpm)));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
@@ -184,7 +186,7 @@ public class Tabs {
 				final int textSize = Integer.toString(Torque.MAX_VALUE).length();
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
-				text.setData(TextDataKey.GRAPH.toString(), canvas.getTorqueGraph());
+				text.setData(TextDataKey.GRAPH.toString(), torqueGraph);
 				text.setData(TextDataKey.INDEX.toString(), index);
 				text.setData(TextDataKey.SIZE.toString(), textSize);
 				text.setData(TextDataKey.MAX.toString(), Integer.valueOf(Torque.MAX_VALUE));
@@ -251,11 +253,11 @@ public class Tabs {
 
 		// Update torque graphs...
 		for (final Bike bike : gui.getBikesInf().getBikes()) {
-			final TorqueGraphCanvas canvas = torqueCanvases.get(bike.getType());
+			final ITorqueGraph torqueGraph = torqueCanvases.get(bike.getType()).getTorqueGraph();
 			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
-				canvas.getTorqueGraph().getValues()[i] = bike.getTorque().getCurve()[i];
+				torqueGraph.getValues()[i] = bike.getTorque().getCurve()[i];
 			}
-			canvas.getTorqueGraph().refresh();
+			torqueGraph.refresh();
 		}
 	}
 

@@ -1,10 +1,11 @@
-package it.albertus.cycles.gui.torquegraph;
+package it.albertus.cycles.gui.torquegraph.simple;
 
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
+import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
 import it.albertus.cycles.model.Bike;
 
 public class TorqueGraphCanvas extends Canvas {
@@ -31,10 +32,6 @@ public class TorqueGraphCanvas extends Canvas {
 
 	public ITorqueGraph getTorqueGraph() {
 		return torqueGraph;
-	}
-
-	public SimpleTorqueGraphContextMenu getContextMenu() {
-		return contextMenu;
 	}
 
 }
