@@ -101,7 +101,7 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 			}
 		});
 
-		canvas.addMouseWheelListener(new XYGraphZoomMouseWheelListener(torqueGraph.getToolbarArmedXYGraph()));
+		canvas.addMouseWheelListener(new XYGraphZoomMouseWheelListener(torqueGraph.getXyGraph()));
 
 		new ComplexTorqueGraphContextMenu(canvas, torqueGraph);
 	}

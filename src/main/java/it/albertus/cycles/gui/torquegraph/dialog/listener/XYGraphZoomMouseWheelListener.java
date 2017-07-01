@@ -3,21 +3,24 @@ package it.albertus.cycles.gui.torquegraph.dialog.listener;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.TreeSearch;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
+import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 
 public class XYGraphZoomMouseWheelListener implements MouseWheelListener {
 
-	private final IFigure figure;
+	static final double ZOOM_RATIO = 0.1;
 
-	public XYGraphZoomMouseWheelListener(final IFigure figure) {
-		this.figure = figure;
+	private final IXYGraph xyGraph;
+
+	public XYGraphZoomMouseWheelListener(final IXYGraph xyGraph) {
+		this.xyGraph = xyGraph;
 	}
 
 	@Override
 	public void mouseScrolled(final MouseEvent e) {
-		final IFigure figureUnderMouse = figure.findFigureAt(e.x, e.y, new TreeSearch() {
+		final IFigure figureUnderMouse = xyGraph.findFigureAt(e.x, e.y, new TreeSearch() {
 			@Override
 			public boolean prune(final IFigure figure) {
 				return false;
