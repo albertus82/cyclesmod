@@ -2,18 +2,13 @@ package it.albertus.cycles.gui.torquegraph.dialog;
 
 import java.util.Map;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.draw2d.TreeSearch;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.nebula.visualization.xygraph.figures.Axis;
-import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -26,13 +21,14 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cycles.gui.Images;
-import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
+import it.albertus.cycles.gui.torquegraph.TorqueGraphProvider;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.FigureZoomMouseWheelListener;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;
 import it.albertus.jface.SwtUtils;
 
-public class TorqueGraphDialog extends Dialog {
+public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 
 	private int returnCode = SWT.CANCEL;
 	private ComplexTorqueGraph torqueGraph;
@@ -110,31 +106,7 @@ public class TorqueGraphDialog extends Dialog {
 			}
 		});
 
-		canvas.addMouseWheelListener(new MouseWheelListener() {
-			@Override
-			public void mouseScrolled(final org.eclipse.swt.events.MouseEvent e) {
-				final IFigure figureUnderMouse = torqueGraph.getToolbarArmedXYGraph().findFigureAt(e.x, e.y, new TreeSearch() {
-					@Override
-					public boolean prune(IFigure figure) {
-						return false;
-					}
-
-					@Override
-					public boolean accept(IFigure figure) {
-						return figure instanceof Axis || figure instanceof PlotArea;
-					}
-				});
-				if (figureUnderMouse instanceof Axis) {
-					final Axis axis = ((Axis) figureUnderMouse);
-					final double valuePosition = axis.getPositionValue(axis.isHorizontal() ? e.x : e.y, false);
-					axis.zoomInOut(valuePosition, e.count * 0.1 / 3);
-				}
-				else if (figureUnderMouse instanceof PlotArea) {
-					final PlotArea plotArea = (PlotArea) figureUnderMouse;
-					plotArea.zoomInOut(true, true, e.x, e.y, e.count * 0.1 / 3);
-				}
-			}
-		});
+		canvas.addMouseWheelListener(new FigureZoomMouseWheelListener(torqueGraph.getToolbarArmedXYGraph()));
 
 		new ComplexTorqueGraphContextMenu(canvas, torqueGraph);
 	}
@@ -174,7 +146,8 @@ public class TorqueGraphDialog extends Dialog {
 		return returnCode;
 	}
 
-	public ITorqueGraph getTorqueGraph() {
+	@Override
+	public ComplexTorqueGraph getTorqueGraph() {
 		return torqueGraph;
 	}
 

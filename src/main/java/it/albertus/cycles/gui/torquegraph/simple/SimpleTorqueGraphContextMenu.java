@@ -67,4 +67,5 @@ public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		final MenuItem pointSizeMenuItem = pointSizeSubMenu.getMenuItem();
 		pointSizeMenuItem.setText(Messages.get(pointSizeMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
 	}
+
 }
