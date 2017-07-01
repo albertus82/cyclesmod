@@ -53,8 +53,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
-import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.gui.Images;
+import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;
@@ -403,7 +403,7 @@ public class TorqueGraphDialog extends Dialog {
 	private class ContextMenu extends TorqueGraphContextMenu {
 
 		private ContextMenu(final Control control) {
-			super(torqueGraph);
+			super(control, torqueGraph);
 
 			final Menu menu = new Menu(control);
 			control.setMenu(menu);
@@ -467,10 +467,10 @@ public class TorqueGraphDialog extends Dialog {
 				}
 			});
 
-			addTraceTypeSubMenu(control);
-			addLineWidthSubMenu(control);
-			addPointStyleSubMenu(control);
-			addPointSizeSubMenu(control);
+			addTraceTypeSubMenu();
+			addLineWidthSubMenu();
+			addPointStyleSubMenu();
+			addPointSizeSubMenu();
 
 			final Image imageUndo = mediaFactory.getImage("images/Undo.png");
 			final Image imageUndoGray = mediaFactory.getImage("images/Undo_Gray.png");
