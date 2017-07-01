@@ -29,7 +29,6 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -359,19 +358,9 @@ public class TorqueGraphDialog extends Dialog {
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.FILL).grab(true, false).minSize(SwtUtils.convertHorizontalDLUsToPixels(okButton, IDialogConstants.BUTTON_WIDTH), SWT.DEFAULT).applyTo(okButton);
 		okButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(final SelectionEvent event) {
-				try {
-					returnCode = SWT.OK;
-				}
-				catch (final SWTException se) {
-					logger.log(Level.FINE, se.toString(), se);
-				}
-				catch (final Exception e) {
-					logger.log(Level.SEVERE, e.toString(), e);
-				}
-				finally {
-					shell.close();
-				}
+			public void widgetSelected(final SelectionEvent e) {
+				returnCode = SWT.OK;
+				shell.close();
 			}
 		});
 
@@ -380,7 +369,8 @@ public class TorqueGraphDialog extends Dialog {
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.FILL).grab(true, false).minSize(SwtUtils.convertHorizontalDLUsToPixels(cancelButton, IDialogConstants.BUTTON_WIDTH), SWT.DEFAULT).applyTo(cancelButton);
 		cancelButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(final SelectionEvent se) {
+			public void widgetSelected(final SelectionEvent e) {
+				returnCode = SWT.CANCEL;
 				shell.close();
 			}
 		});
