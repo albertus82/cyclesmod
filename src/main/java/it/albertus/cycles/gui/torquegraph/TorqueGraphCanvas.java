@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.torquegraph;
 
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;

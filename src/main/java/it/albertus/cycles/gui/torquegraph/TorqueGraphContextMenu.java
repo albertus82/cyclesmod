@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.torquegraph;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cycles.resources.Messages;
 
-public class TorqueGraphContextMenu {
+public abstract class TorqueGraphContextMenu {
 
 	protected static final String DATA_KEY_MSG_KEY = "Text Message Key";
 

@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.torquegraph;
 
 import java.util.Map;
 import java.util.Map.Entry;

@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.torquegraph;
 
 import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;

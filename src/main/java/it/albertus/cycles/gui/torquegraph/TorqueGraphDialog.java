@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui;
+package it.albertus.cycles.gui.torquegraph;
 
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cycles.model.Bike.BikeType;
+import it.albertus.cycles.gui.Images;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;

@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.gui.FormProperty;
-import it.albertus.cycles.gui.TorqueGraphDialog;
+import it.albertus.cycles.gui.torquegraph.TorqueGraphDialog;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.Torque;
