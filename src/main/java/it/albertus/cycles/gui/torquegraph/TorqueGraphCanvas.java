@@ -1,9 +1,6 @@
 package it.albertus.cycles.gui.torquegraph;
 
 import org.eclipse.draw2d.LightweightSystem;
-import org.eclipse.nebula.visualization.xygraph.figures.Axis;
-import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
-import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.TraceType;
 import org.eclipse.swt.SWT;
@@ -14,7 +11,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
@@ -23,42 +19,8 @@ import it.albertus.cycles.resources.Messages;
 
 public class TorqueGraphCanvas extends Canvas {
 
-	private static final byte DEFAULT_POINT_SIZE = 4;
-	private static final byte DEFAULT_LINE_WIDTH = 2;
-
-	private static final boolean DEFAULT_AUTOSCALE = true;
-
 	private final ContextMenu contextMenu;
 	private final SimpleTorqueGraph torqueGraph;
-
-	private static class SimpleTorqueGraph extends TorqueGraph {
-
-		private SimpleTorqueGraph(final Bike bike) {
-			super(bike);
-
-			final Axis abscissae = getAbscissae();
-			abscissae.setAutoScale(DEFAULT_AUTOSCALE);
-
-			final Axis ordinates = getOrdinates();
-			ordinates.setAutoScale(DEFAULT_AUTOSCALE);
-
-			final Trace trace = getTrace();
-			trace.setPointStyle(PointStyle.FILLED_DIAMOND);
-
-			final IXYGraph xyGraph = getXyGraph();
-			xyGraph.setTitle(Messages.get("lbl.graph.title"));
-			xyGraph.setTitleFont(Display.getCurrent().getSystemFont());
-
-			trace.setLineWidth(DEFAULT_LINE_WIDTH);
-			trace.setPointSize(DEFAULT_POINT_SIZE);
-		}
-
-		private void updateTexts() {
-			getXyGraph().setTitle(Messages.get("lbl.graph.title"));
-			getAbscissae().setTitle(Messages.get("lbl.graph.axis.x", RPM_DIVISOR));
-			getOrdinates().setTitle(Messages.get("lbl.graph.axis.y"));
-		}
-	}
 
 	public TorqueGraphCanvas(final Composite parent, final Bike bike) {
 		super(parent, SWT.NONE);
