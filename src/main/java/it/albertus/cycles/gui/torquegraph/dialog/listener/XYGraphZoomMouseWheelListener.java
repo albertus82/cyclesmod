@@ -7,11 +7,11 @@ import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 
-public class FigureZoomMouseWheelListener implements MouseWheelListener {
+public class XYGraphZoomMouseWheelListener implements MouseWheelListener {
 
 	private final IFigure figure;
 
-	public FigureZoomMouseWheelListener(final IFigure figure) {
+	public XYGraphZoomMouseWheelListener(final IFigure figure) {
 		this.figure = figure;
 	}
 

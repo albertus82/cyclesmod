@@ -17,12 +17,11 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cycles.gui.Images;
 import it.albertus.cycles.gui.torquegraph.TorqueGraphProvider;
-import it.albertus.cycles.gui.torquegraph.dialog.listener.FigureZoomMouseWheelListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.XYGraphZoomMouseWheelListener;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;
@@ -46,6 +45,7 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText() + " - " + bikeType.getDisplacement() + " cc");
 		shell.setImages(Images.getMainIcons());
+		GridLayoutFactory.swtDefaults().applyTo(shell);
 		createContents(shell, map, bikeType);
 		final Point minimumSize = getMinimumSize(shell);
 		shell.setSize(getSize(shell));
@@ -71,13 +71,8 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 	}
 
 	private void createContents(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType) {
-		shell.setLayout(getLayout());
 		createGraph(shell, map, bikeType);
 		createButtonBox(shell);
-	}
-
-	private Layout getLayout() {
-		return GridLayoutFactory.swtDefaults().create();
 	}
 
 	private void createGraph(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType) {
@@ -106,7 +101,7 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 			}
 		});
 
-		canvas.addMouseWheelListener(new FigureZoomMouseWheelListener(torqueGraph.getToolbarArmedXYGraph()));
+		canvas.addMouseWheelListener(new XYGraphZoomMouseWheelListener(torqueGraph.getToolbarArmedXYGraph()));
 
 		new ComplexTorqueGraphContextMenu(canvas, torqueGraph);
 	}
