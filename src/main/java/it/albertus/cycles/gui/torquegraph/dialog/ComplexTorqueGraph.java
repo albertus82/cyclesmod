@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui.torquegraph;
+package it.albertus.cycles.gui.torquegraph.dialog;
 
 import java.lang.reflect.Field;
 import java.text.NumberFormat;
@@ -28,6 +28,7 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 
+import it.albertus.cycles.gui.torquegraph.TorqueGraph;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
@@ -177,7 +178,7 @@ public class ComplexTorqueGraph extends TorqueGraph {
 	public ToolbarArmedXYGraph getToolbarArmedXYGraph() {
 		return toolbarArmedXYGraph;
 	}
-	
+
 	public void saveSnapshot() {
 		final ImageLoader loader = new ImageLoader();
 		loader.data = new ImageData[] { getXyGraph().getImage().getImageData() };

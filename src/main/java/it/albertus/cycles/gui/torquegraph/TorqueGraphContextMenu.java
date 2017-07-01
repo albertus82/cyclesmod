@@ -29,12 +29,16 @@ public abstract class TorqueGraphContextMenu {
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 	private static final short[] AREA_ALPHA_OPTIONS = { 25, 50, 75, 100, 125, 150, 175, 200, 225, 0xFF };
 
-	private final Control parent;
 	private final ITorqueGraph torqueGraph;
+	private final Control parent;
+	private final Menu menu;
 
 	public TorqueGraphContextMenu(final Control parent, final ITorqueGraph torqueGraph) {
 		this.parent = parent;
 		this.torqueGraph = torqueGraph;
+
+		menu = new Menu(parent);
+		parent.setMenu(menu);
 	}
 
 	public ITorqueGraph getTorqueGraph() {
@@ -43,6 +47,10 @@ public abstract class TorqueGraphContextMenu {
 
 	public Control getParent() {
 		return parent;
+	}
+
+	public Menu getMenu() {
+		return menu;
 	}
 
 	protected SubMenu<Integer> addPointSizeSubMenu() {

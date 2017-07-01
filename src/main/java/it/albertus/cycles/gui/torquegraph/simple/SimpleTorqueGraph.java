@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui.torquegraph;
+package it.albertus.cycles.gui.torquegraph.simple;
 
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
@@ -6,6 +6,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.swt.widgets.Display;
 
+import it.albertus.cycles.gui.torquegraph.TorqueGraph;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.resources.Messages;
 

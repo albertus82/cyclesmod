@@ -1,4 +1,4 @@
-package it.albertus.cycles.gui.torquegraph;
+package it.albertus.cycles.gui.torquegraph.simple;
 
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.TraceType;
@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import it.albertus.cycles.gui.torquegraph.TorqueGraphContextMenu;
 import it.albertus.cycles.resources.Messages;
 
 public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
@@ -24,8 +25,7 @@ public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 	public SimpleTorqueGraphContextMenu(final Control parent, final SimpleTorqueGraph torqueGraph) {
 		super(parent, torqueGraph);
 
-		final Menu menu = new Menu(parent);
-		parent.setMenu(menu);
+		final Menu menu = getMenu();
 
 		editMenuItem = new MenuItem(menu, SWT.PUSH);
 		final String editMenuItemTextMessageKey = "lbl.menu.item.graph.edit";
