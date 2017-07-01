@@ -29,7 +29,7 @@ public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 
 		editMenuItem = new MenuItem(menu, SWT.PUSH);
 		final String editMenuItemTextMessageKey = "lbl.menu.item.graph.edit";
-		editMenuItem.setData(DATA_KEY_MSG_KEY, editMenuItemTextMessageKey);
+		editMenuItem.setData(TEXT_MESSAGE_KEY, editMenuItemTextMessageKey);
 		editMenuItem.setText(Messages.get(editMenuItemTextMessageKey));
 		editMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -55,17 +55,17 @@ public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 	}
 
 	public void updateTexts() {
-		editMenuItem.setText(Messages.get(editMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+		editMenuItem.setText(Messages.get(editMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
 		final MenuItem traceTypeMenuItem = traceTypeSubMenu.getMenuItem();
-		traceTypeMenuItem.setText(Messages.get(traceTypeMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+		traceTypeMenuItem.setText(Messages.get(traceTypeMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
 		final MenuItem areaAlphaMenuItem = traceTypeSubMenu.getChildren().get(0).getMenuItem();
-		areaAlphaMenuItem.setText(Messages.get(areaAlphaMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+		areaAlphaMenuItem.setText(Messages.get(areaAlphaMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
 		final MenuItem lineWidthMenuItem = lineWidthSubMenu.getMenuItem();
-		lineWidthMenuItem.setText(Messages.get(lineWidthMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+		lineWidthMenuItem.setText(Messages.get(lineWidthMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
 		final MenuItem pointStyleMenuItem = pointStyleSubMenu.getMenuItem();
-		pointStyleMenuItem.setText(Messages.get(pointStyleMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+		pointStyleMenuItem.setText(Messages.get(pointStyleMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
 		final MenuItem pointSizeMenuItem = pointSizeSubMenu.getMenuItem();
-		pointSizeMenuItem.setText(Messages.get(pointSizeMenuItem.getData(DATA_KEY_MSG_KEY).toString()));
+		pointSizeMenuItem.setText(Messages.get(pointSizeMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
 	}
 
 }
