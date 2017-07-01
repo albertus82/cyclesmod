@@ -23,10 +23,6 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageLoader;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cycles.gui.torquegraph.TorqueGraph;
 import it.albertus.cycles.model.Bike.BikeType;
@@ -177,18 +173,6 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 	public ToolbarArmedXYGraph getToolbarArmedXYGraph() {
 		return toolbarArmedXYGraph;
-	}
-
-	public void saveSnapshot(final Shell shell) {
-		final ImageLoader loader = new ImageLoader();
-		loader.data = new ImageData[] { getXyGraph().getImage().getImageData() };
-		final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-		dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", Messages.get("lbl.graph.save.allFiles", "(*.*)") });
-		dialog.setFilterExtensions(new String[] { "*.PNG;*.png", "*.*" }); // Windows
-		final String path = dialog.open();
-		if ((path != null) && !path.isEmpty()) {
-			loader.save(path, SWT.IMAGE_PNG);
-		}
 	}
 
 	private short getTorqueValue(final MouseEvent me) {
