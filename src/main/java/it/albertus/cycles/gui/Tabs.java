@@ -116,7 +116,7 @@ public class Tabs {
 				@Override
 				public void mousePressed(final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final double rpm = canvas.getTorqueGraph().getAbscissae().getPositionValue(me.getLocation().x, false) * 1000;
+						final double rpm = canvas.getTorqueGraph().getAbscissae().getPositionValue(me.getLocation().x, false) * TorqueGraph.RPM_DIVISOR;
 						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, Torque.indexOf(rpm)));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();

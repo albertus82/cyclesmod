@@ -102,7 +102,7 @@ public class TorqueGraphDialog extends Dialog {
 				@Override
 				public void mousePressed(final MouseEvent me) {
 					if (me.button == 1) { // left click
-						final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * 1000;
+						final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * RPM_DIVISOR;
 						final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
 						final double[] values = getValues();
 						final short oldValue = (short) values[index];
@@ -229,7 +229,7 @@ public class TorqueGraphDialog extends Dialog {
 
 			@Override
 			public void mouseMoved(final MouseEvent me) {
-				final int rpm = Torque.getRpm(Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(me.getLocation().x, false) * 1000), Torque.LENGTH - 1), 0));
+				final int rpm = Torque.getRpm(Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(me.getLocation().x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0));
 				final short torqueValue = getTorqueValue(me);
 
 				final String currentPosition = Messages.get("lbl.graph.torqueAtRpm", torqueValue, numberFormat.format(torqueValue / NM_TO_LBFT), rpm);

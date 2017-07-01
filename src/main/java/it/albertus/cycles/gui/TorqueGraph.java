@@ -33,6 +33,8 @@ import it.albertus.cycles.resources.Messages;
 
 public class TorqueGraph implements ITorqueGraph {
 
+	public static final int RPM_DIVISOR = 1000;
+
 	private static final byte[] POINT_SIZE_OPTIONS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 	private static final short[] AREA_ALPHA_OPTIONS = { 25, 50, 75, 100, 125, 150, 175, 200, 225, 0xFF };
@@ -47,7 +49,7 @@ public class TorqueGraph implements ITorqueGraph {
 
 	public TorqueGraph(final Bike bike) {
 		for (int i = 0; i < Torque.LENGTH; i++) {
-			xDataArray[i] = (double) Torque.getRpm(i) / 1000;
+			xDataArray[i] = (double) Torque.getRpm(i) / RPM_DIVISOR;
 			values[i] = bike.getTorque().getCurve()[i];
 		}
 		init(bike.getType());
@@ -60,7 +62,7 @@ public class TorqueGraph implements ITorqueGraph {
 
 		int i = 0;
 		for (final Entry<Integer, Short> entry : map.entrySet()) {
-			xDataArray[i] = entry.getKey().doubleValue() / 1000;
+			xDataArray[i] = entry.getKey().doubleValue() / RPM_DIVISOR;
 			values[i] = entry.getValue();
 			i++;
 		}
@@ -74,7 +76,7 @@ public class TorqueGraph implements ITorqueGraph {
 
 		final Font axisTitleFont = Display.getCurrent().getSystemFont();
 
-		abscissae.setTitle(Messages.get("lbl.graph.axis.x"));
+		abscissae.setTitle(Messages.get("lbl.graph.axis.x", RPM_DIVISOR));
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 

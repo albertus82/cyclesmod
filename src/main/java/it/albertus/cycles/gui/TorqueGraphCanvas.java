@@ -69,7 +69,7 @@ public class TorqueGraphCanvas extends Canvas {
 
 	public void updateTexts() {
 		torqueGraph.getXyGraph().setTitle(Messages.get("lbl.graph.title"));
-		torqueGraph.getAbscissae().setTitle(Messages.get("lbl.graph.axis.x"));
+		torqueGraph.getAbscissae().setTitle(Messages.get("lbl.graph.axis.x", TorqueGraph.RPM_DIVISOR));
 		torqueGraph.getOrdinates().setTitle(Messages.get("lbl.graph.axis.y"));
 		contextMenu.updateTexts();
 	}
