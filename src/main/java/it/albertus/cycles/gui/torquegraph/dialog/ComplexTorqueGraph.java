@@ -25,8 +25,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cycles.gui.torquegraph.TorqueGraph;
 import it.albertus.cycles.model.Bike.BikeType;
@@ -179,10 +179,10 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		return toolbarArmedXYGraph;
 	}
 
-	public void saveSnapshot() {
+	public void saveSnapshot(final Shell shell) {
 		final ImageLoader loader = new ImageLoader();
 		loader.data = new ImageData[] { getXyGraph().getImage().getImageData() };
-		final FileDialog dialog = new FileDialog(Display.getDefault().getShells()[0], SWT.SAVE);
+		final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", Messages.get("lbl.graph.save.allFiles", "(*.*)") });
 		dialog.setFilterExtensions(new String[] { "*.PNG;*.png", "*.*" }); // Windows
 		final String path = dialog.open();

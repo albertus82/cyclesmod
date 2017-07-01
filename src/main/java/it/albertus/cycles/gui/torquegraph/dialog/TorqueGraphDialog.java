@@ -6,10 +6,7 @@ import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -22,7 +19,8 @@ import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cycles.gui.Images;
 import it.albertus.cycles.gui.torquegraph.TorqueGraphProvider;
-import it.albertus.cycles.gui.torquegraph.dialog.listener.XYGraphZoomMouseWheelListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.ShortcutKeysListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.ZoomMouseWheelListener;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;
@@ -85,33 +83,9 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
-		canvas.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(final KeyEvent ke) {
-				if (SWT.MOD1 == ke.stateMask) { // CTRL/Cmd
-					if (SwtUtils.KEY_UNDO == ke.keyCode) {
-						torqueGraph.getXyGraph().getOperationsManager().undo();
-					}
-					if (SwtUtils.KEY_REDO == ke.keyCode) {
-						torqueGraph.getXyGraph().getOperationsManager().redo();
-					}
-					if (SwtUtils.KEY_SAVE == ke.keyCode) {
-						torqueGraph.saveSnapshot();
-					}
-				}
-				else {
-					final PlotArea plotArea = torqueGraph.getXyGraph().getPlotArea();
-					if ('+' == ke.keyCode || SWT.KEYPAD_ADD == ke.keyCode) {
-						plotArea.zoomInOut(true, true, plotArea.getSize().width / 2 + plotArea.getLocation().x, plotArea.getSize().height / 2 + plotArea.getLocation().y, 0.1);
-					}
-					else if ('-' == ke.keyCode || SWT.KEYPAD_SUBTRACT == ke.keyCode) {
-						plotArea.zoomInOut(true, true, plotArea.getSize().width / 2 + plotArea.getLocation().x, plotArea.getSize().height / 2 + plotArea.getLocation().y, -0.1);
-					}
-				}
-			}
-		});
+		canvas.addKeyListener(new ShortcutKeysListener(shell, torqueGraph));
 
-		canvas.addMouseWheelListener(new XYGraphZoomMouseWheelListener(torqueGraph.getXyGraph()));
+		canvas.addMouseWheelListener(new ZoomMouseWheelListener(torqueGraph.getXyGraph()));
 
 		new ComplexTorqueGraphContextMenu(canvas, torqueGraph);
 	}
