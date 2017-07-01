@@ -10,7 +10,8 @@ import org.eclipse.swt.events.MouseWheelListener;
 
 public class XYGraphZoomMouseWheelListener implements MouseWheelListener {
 
-	static final double ZOOM_RATIO = 0.1;
+	private static final double ZOOM_RATIO = 0.1;
+	private static final int DIVISOR = 3;
 
 	private final IXYGraph xyGraph;
 
@@ -34,11 +35,11 @@ public class XYGraphZoomMouseWheelListener implements MouseWheelListener {
 		if (figureUnderMouse instanceof Axis) {
 			final Axis axis = ((Axis) figureUnderMouse);
 			final double valuePosition = axis.getPositionValue(axis.isHorizontal() ? e.x : e.y, false);
-			axis.zoomInOut(valuePosition, e.count * 0.1 / 3);
+			axis.zoomInOut(valuePosition, e.count * ZOOM_RATIO / DIVISOR);
 		}
 		else if (figureUnderMouse instanceof PlotArea) {
 			final PlotArea plotArea = (PlotArea) figureUnderMouse;
-			plotArea.zoomInOut(true, true, e.x, e.y, e.count * 0.1 / 3);
+			plotArea.zoomInOut(true, true, e.x, e.y, e.count * ZOOM_RATIO / DIVISOR);
 		}
 	}
 
