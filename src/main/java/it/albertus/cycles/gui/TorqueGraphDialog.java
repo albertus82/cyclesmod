@@ -133,7 +133,8 @@ public class TorqueGraphDialog extends Dialog {
 			});
 
 			// Title
-			xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(new FontData(Display.getCurrent().getSystemFont().getFontData()[0].getName(), 10, SWT.NORMAL)));
+			final FontData titleFontData = xyGraph.getTitleFontData();
+			xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(titleFontData.getName(), Math.round(titleFontData.getHeight() * 0.80f), SWT.NORMAL));
 			xyGraph.setTitle(" ");
 			xyGraph.getPlotArea().addMouseMotionListener(new UpdateGraphTitleListener());
 
