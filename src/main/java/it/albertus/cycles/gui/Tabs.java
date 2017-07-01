@@ -27,6 +27,8 @@ import it.albertus.cycles.gui.listener.PropertyFocusListener;
 import it.albertus.cycles.gui.listener.PropertyKeyListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
 import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
+import it.albertus.cycles.gui.torquegraph.TorqueGraph;
+import it.albertus.cycles.gui.torquegraph.TorqueGraphCanvas;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.BikesCfg;

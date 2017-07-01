@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Text;
 import it.albertus.cycles.engine.InvalidPropertyException;
 import it.albertus.cycles.gui.CyclesModGui;
 import it.albertus.cycles.gui.FormProperty;
-import it.albertus.cycles.gui.ITorqueGraph;
+import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
 import it.albertus.cycles.model.Torque;
 import it.albertus.util.logging.LoggerFactory;
 
