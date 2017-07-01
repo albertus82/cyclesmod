@@ -52,14 +52,6 @@ public class TorqueGraphCanvas extends Canvas {
 
 			trace.setLineWidth(DEFAULT_LINE_WIDTH);
 			trace.setPointSize(DEFAULT_POINT_SIZE);
-
-			add(xyGraph);
-		}
-
-		@Override
-		protected void layout() {
-			getXyGraph().setBounds(getBounds().getCopy());
-			super.layout();
 		}
 	}
 
@@ -68,7 +60,7 @@ public class TorqueGraphCanvas extends Canvas {
 
 		final LightweightSystem lws = new LightweightSystem(this);
 		torqueGraph = new SimpleTorqueGraph(bike);
-		lws.setContents(torqueGraph);
+		lws.setContents(torqueGraph.getXyGraph());
 
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 

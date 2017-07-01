@@ -1,6 +1,7 @@
 package it.albertus.cycles.gui;
 
 import java.lang.reflect.Field;
+import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
@@ -9,7 +10,9 @@ import java.util.logging.Logger;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
+import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.TreeSearch;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -31,10 +34,10 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
@@ -94,18 +97,16 @@ public class TorqueGraphDialog extends Dialog {
 
 			fixUndoRedoButtons();
 
-			add(toolbarArmedXYGraph);
-
 			final IXYGraph xyGraph = getXyGraph();
 			xyGraph.getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
-				public void mousePressed(final org.eclipse.draw2d.MouseEvent me) {
+				public void mousePressed(final MouseEvent me) {
 					if (me.button == 1) { // left click
 						final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * 1000;
 						final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
 						final double[] values = getValues();
 						final short oldValue = (short) values[index];
-						final short newValue = (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, ordinates.getPositionValue(me.getLocation().y, false))));
+						final short newValue = getTorqueValue(me);
 						if (oldValue != newValue) {
 							values[index] = newValue;
 							refresh();
@@ -131,7 +132,11 @@ public class TorqueGraphDialog extends Dialog {
 					}
 				}
 			});
-			xyGraph.setShowTitle(false);
+
+			// Title
+			xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(new FontData(Display.getCurrent().getSystemFont().getFontData()[0].getName(), 10, SWT.NORMAL)));
+			xyGraph.setTitle(" ");
+			xyGraph.getPlotArea().addMouseMotionListener(new UpdateGraphTitleListener());
 
 			abscissae.performAutoScale(true);
 			ordinates.performAutoScale(true);
@@ -206,10 +211,39 @@ public class TorqueGraphDialog extends Dialog {
 			return toolbarArmedXYGraph;
 		}
 
-		@Override
-		protected void layout() {
-			toolbarArmedXYGraph.setBounds(getBounds().getCopy());
-			super.layout();
+		private short getTorqueValue(final MouseEvent me) {
+			return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(me.getLocation().y, false))));
+		}
+
+		private class UpdateGraphTitleListener extends MouseMotionListener.Stub {
+
+			private static final double NM_TO_LBFT = 1.35581794884;
+
+			private String lastPosition;
+			private final NumberFormat numberFormat;
+
+			private UpdateGraphTitleListener() {
+				numberFormat = NumberFormat.getNumberInstance(Messages.getLanguage().getLocale());
+				numberFormat.setMaximumFractionDigits(1);
+			}
+
+			@Override
+			public void mouseMoved(final MouseEvent me) {
+				final int rpm = Torque.getRpm(Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(me.getLocation().x, false) * 1000), Torque.LENGTH - 1), 0));
+				final short torqueValue = getTorqueValue(me);
+
+				final String currentPosition = Messages.get("lbl.graph.torqueAtRpm", torqueValue, numberFormat.format(torqueValue / NM_TO_LBFT), rpm);
+				if (!currentPosition.equals(lastPosition)) {
+					lastPosition = currentPosition;
+					getXyGraph().setTitle(lastPosition);
+				}
+			}
+
+			@Override
+			public void mouseExited(final MouseEvent me) {
+				lastPosition = " ";
+				getXyGraph().setTitle(lastPosition);
+			}
 		}
 	}
 
@@ -265,7 +299,7 @@ public class TorqueGraphDialog extends Dialog {
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
 		torqueGraph = new ComplexTorqueGraph(map, bikeType);
-		lws.setContents(torqueGraph);
+		lws.setContents(torqueGraph.getToolbarArmedXYGraph());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
@@ -288,7 +322,7 @@ public class TorqueGraphDialog extends Dialog {
 
 		canvas.addMouseWheelListener(new MouseWheelListener() {
 			@Override
-			public void mouseScrolled(final MouseEvent e) {
+			public void mouseScrolled(final org.eclipse.swt.events.MouseEvent e) {
 				final IFigure figureUnderMouse = torqueGraph.getToolbarArmedXYGraph().findFigureAt(e.x, e.y, new TreeSearch() {
 					@Override
 					public boolean prune(IFigure figure) {
