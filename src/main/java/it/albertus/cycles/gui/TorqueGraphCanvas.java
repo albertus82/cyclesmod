@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import it.albertus.cycles.gui.TorqueGraph.TorqueGraphContextMenu;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.resources.Messages;
 
@@ -91,7 +90,8 @@ public class TorqueGraphCanvas extends Canvas {
 		private final SubMenu<Integer> pointSizeSubMenu;
 
 		private ContextMenu(final Control control) {
-			torqueGraph.super();
+			super(torqueGraph);
+
 			final Menu menu = new Menu(control);
 			control.setMenu(menu);
 
