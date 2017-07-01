@@ -6,6 +6,7 @@ import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -96,6 +97,15 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 					}
 					if (SwtUtils.KEY_SAVE == ke.keyCode) {
 						torqueGraph.saveSnapshot();
+					}
+				}
+				else {
+					final PlotArea plotArea = torqueGraph.getXyGraph().getPlotArea();
+					if ('+' == ke.keyCode || SWT.KEYPAD_ADD == ke.keyCode) {
+						plotArea.zoomInOut(true, true, plotArea.getSize().width / 2 + plotArea.getLocation().x, plotArea.getSize().height / 2 + plotArea.getLocation().y, 0.1);
+					}
+					else if ('-' == ke.keyCode || SWT.KEYPAD_SUBTRACT == ke.keyCode) {
+						plotArea.zoomInOut(true, true, plotArea.getSize().width / 2 + plotArea.getLocation().x, plotArea.getSize().height / 2 + plotArea.getLocation().y, -0.1);
 					}
 				}
 			}
