@@ -53,7 +53,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 
-import it.albertus.cycles.gui.TorqueGraph.TorqueGraphContextMenu;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
@@ -403,7 +402,8 @@ public class TorqueGraphDialog extends Dialog {
 	private class ContextMenu extends TorqueGraphContextMenu {
 
 		private ContextMenu(final Control control) {
-			torqueGraph.super();
+			super(torqueGraph);
+
 			final Menu menu = new Menu(control);
 			control.setMenu(menu);
 
