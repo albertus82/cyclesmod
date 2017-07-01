@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
 import it.albertus.cycles.gui.torquegraph.TorqueGraphContextMenu;
 import it.albertus.cycles.resources.Messages;
 
@@ -22,7 +23,7 @@ public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 	private final SubMenu<PointStyle> pointStyleSubMenu;
 	private final SubMenu<Integer> pointSizeSubMenu;
 
-	public SimpleTorqueGraphContextMenu(final Control parent, final SimpleTorqueGraph torqueGraph) {
+	public SimpleTorqueGraphContextMenu(final Control parent, final ITorqueGraph torqueGraph) {
 		super(parent, torqueGraph);
 
 		final Menu menu = getMenu();

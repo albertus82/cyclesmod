@@ -6,6 +6,7 @@ import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -19,8 +20,12 @@ import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cycles.gui.Images;
 import it.albertus.cycles.gui.torquegraph.TorqueGraphProvider;
-import it.albertus.cycles.gui.torquegraph.dialog.listener.ShortcutKeysListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.RedoListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.SaveSnapshotListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.UndoListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.ZoomInListener;
 import it.albertus.cycles.gui.torquegraph.dialog.listener.ZoomMouseWheelListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.ZoomOutListener;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.JFaceMessages;
@@ -83,9 +88,14 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
-		canvas.addKeyListener(new ShortcutKeysListener(shell, torqueGraph));
+		final IXYGraph xyGraph = torqueGraph.getXyGraph();
+		canvas.addKeyListener(new ZoomInListener(xyGraph));
+		canvas.addKeyListener(new ZoomOutListener(xyGraph));
+		canvas.addKeyListener(new UndoListener(xyGraph.getOperationsManager()));
+		canvas.addKeyListener(new RedoListener(xyGraph.getOperationsManager()));
+		canvas.addKeyListener(new SaveSnapshotListener(shell, xyGraph));
 
-		canvas.addMouseWheelListener(new ZoomMouseWheelListener(torqueGraph.getXyGraph()));
+		canvas.addMouseWheelListener(new ZoomMouseWheelListener(xyGraph));
 
 		new ComplexTorqueGraphContextMenu(canvas, torqueGraph);
 	}

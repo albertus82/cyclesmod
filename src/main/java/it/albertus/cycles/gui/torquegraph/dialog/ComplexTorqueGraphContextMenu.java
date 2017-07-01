@@ -12,46 +12,37 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
 import it.albertus.cycles.gui.torquegraph.TorqueGraphContextMenu;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.RedoListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.SaveSnapshotListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.UndoListener;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.SwtUtils;
 
 public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 
-	public ComplexTorqueGraphContextMenu(final Control control, final ComplexTorqueGraph torqueGraph) {
+	public ComplexTorqueGraphContextMenu(final Control control, final ITorqueGraph torqueGraph) {
 		super(control, torqueGraph);
 
 		final Menu menu = getMenu();
 
 		final XYGraphMediaFactory mediaFactory = XYGraphMediaFactory.getInstance();
 
+		final OperationsManager manager = torqueGraph.getXyGraph().getOperationsManager();
+
 		final MenuItem undoMenuItem = new MenuItem(menu, SWT.PUSH);
-		undoMenuItem.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				torqueGraph.getXyGraph().getOperationsManager().undo();
-			}
-		});
+		undoMenuItem.addSelectionListener(new UndoListener(manager));
 
 		final MenuItem redoMenuItem = new MenuItem(menu, SWT.PUSH);
-		redoMenuItem.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				torqueGraph.getXyGraph().getOperationsManager().redo();
-			}
-		});
+		redoMenuItem.addSelectionListener(new RedoListener(manager));
 
 		new MenuItem(menu, SWT.SEPARATOR);
 
 		final MenuItem saveImageMenuItem = new MenuItem(menu, SWT.PUSH);
 		saveImageMenuItem.setImage(mediaFactory.getImage("images/camera.png"));
 		saveImageMenuItem.setText(Messages.get("lbl.menu.item.graph.saveImageAs") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
-		saveImageMenuItem.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				torqueGraph.saveSnapshot(control.getShell());
-			}
-		});
+		saveImageMenuItem.addSelectionListener(new SaveSnapshotListener(control.getShell(), torqueGraph.getXyGraph()));
 
 		new MenuItem(menu, SWT.SEPARATOR);
 
@@ -97,7 +88,6 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 				autoScaleMenuItem.setSelection(torqueGraph.getAbscissae().isAutoScale() && torqueGraph.getOrdinates().isAutoScale());
 
 				// Undo/Redo
-				final OperationsManager manager = torqueGraph.getXyGraph().getOperationsManager();
 				if (manager.getUndoCommandsSize() > 0) {
 					undoMenuItem.setEnabled(true);
 					undoMenuItem.setImage(imageUndo);
