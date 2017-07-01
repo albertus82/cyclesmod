@@ -56,9 +56,8 @@ public abstract class TorqueGraphContextMenu {
 	protected SubMenu<Integer> addPointSizeSubMenu() {
 		final Trace trace = torqueGraph.getTrace();
 
-		final Menu parentMenu = parent.getMenu();
 		final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<Integer, MenuItem>();
-		final MenuItem pointSizeMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
+		final MenuItem pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
 		final String pointSizeMenuItemTextMessageKey = "lbl.menu.item.graph.pointSize";
 		pointSizeMenuItem.setData(DATA_KEY_MSG_KEY, pointSizeMenuItemTextMessageKey);
 		pointSizeMenuItem.setText(Messages.get(pointSizeMenuItemTextMessageKey));
@@ -94,9 +93,8 @@ public abstract class TorqueGraphContextMenu {
 	}
 
 	protected SubMenu<Integer> addLineWidthSubMenu() {
-		final Menu parentMenu = parent.getMenu();
 		final Map<Integer, MenuItem> lineWidthSubMenuItems = new HashMap<Integer, MenuItem>();
-		final MenuItem lineWidthMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
+		final MenuItem lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
 		final String lineWidthMenuItemTextMessageKey = "lbl.menu.item.graph.lineWidth";
 		lineWidthMenuItem.setData(DATA_KEY_MSG_KEY, lineWidthMenuItemTextMessageKey);
 		lineWidthMenuItem.setText(Messages.get(lineWidthMenuItemTextMessageKey));
@@ -132,9 +130,8 @@ public abstract class TorqueGraphContextMenu {
 	}
 
 	protected SubMenu<TraceType> addTraceTypeSubMenu() {
-		final Menu parentMenu = parent.getMenu();
 		final Map<TraceType, MenuItem> traceTypeSubMenuItems = new EnumMap<TraceType, MenuItem>(TraceType.class);
-		final MenuItem traceTypeMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
+		final MenuItem traceTypeMenuItem = new MenuItem(menu, SWT.CASCADE);
 		final String traceTypeMenuItemTextMessageKey = "lbl.menu.item.graph.traceType";
 		traceTypeMenuItem.setData(DATA_KEY_MSG_KEY, traceTypeMenuItemTextMessageKey);
 		traceTypeMenuItem.setText(Messages.get(traceTypeMenuItemTextMessageKey));
@@ -199,9 +196,8 @@ public abstract class TorqueGraphContextMenu {
 	}
 
 	protected SubMenu<PointStyle> addPointStyleSubMenu() {
-		final Menu parentMenu = parent.getMenu();
 		final Map<PointStyle, MenuItem> pointStyleSubMenuItems = new EnumMap<PointStyle, MenuItem>(PointStyle.class);
-		final MenuItem pointStyleMenuItem = new MenuItem(parentMenu, SWT.CASCADE);
+		final MenuItem pointStyleMenuItem = new MenuItem(menu, SWT.CASCADE);
 		final String pointStyleMenuItemTextMessageKey = "lbl.menu.item.graph.pointStyle";
 		pointStyleMenuItem.setData(DATA_KEY_MSG_KEY, pointStyleMenuItemTextMessageKey);
 		pointStyleMenuItem.setText(Messages.get(pointStyleMenuItemTextMessageKey));

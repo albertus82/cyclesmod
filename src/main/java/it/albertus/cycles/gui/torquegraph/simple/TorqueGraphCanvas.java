@@ -5,10 +5,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
+import it.albertus.cycles.gui.torquegraph.TorqueGraphProvider;
 import it.albertus.cycles.model.Bike;
 
-public class TorqueGraphCanvas extends Canvas {
+public class TorqueGraphCanvas extends Canvas implements TorqueGraphProvider {
 
 	private final SimpleTorqueGraphContextMenu contextMenu;
 	private final SimpleTorqueGraph torqueGraph;
@@ -30,7 +30,8 @@ public class TorqueGraphCanvas extends Canvas {
 		contextMenu.updateTexts();
 	}
 
-	public ITorqueGraph getTorqueGraph() {
+	@Override
+	public SimpleTorqueGraph getTorqueGraph() {
 		return torqueGraph;
 	}
 
