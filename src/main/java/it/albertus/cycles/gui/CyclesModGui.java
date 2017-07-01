@@ -63,7 +63,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		// Shell creation...
 		shell = new Shell(display);
-		shell.setImages(Images.MAIN_ICONS);
+		shell.setImages(Images.getMainIcons());
 		shell.setText(Messages.get(MSG_KEY_WIN_TITLE));
 		shell.setLayout(new FillLayout());
 		shell.addShellListener(new CloseListener(this));
@@ -104,7 +104,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		catch (final Exception e) {
 			final String message = e.toString();
 			logger.log(Level.SEVERE, message, e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, Messages.get(MSG_KEY_WARNING), message, IStatus.ERROR, e, Images.MAIN_ICONS);
+			EnhancedErrorDialog.openError(shell != null ? shell : null, Messages.get(MSG_KEY_WARNING), message, IStatus.ERROR, e, Images.getMainIcons());
 		}
 		finally {
 			display.dispose();
@@ -162,7 +162,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (final Exception e) {
 			logger.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.load"), IStatus.WARNING, e, Images.MAIN_ICONS);
+			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.load"), IStatus.WARNING, e, Images.getMainIcons());
 		}
 	}
 
@@ -180,7 +180,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final InvalidPropertyException e) {
 				logger.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.MAIN_ICONS);
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getMainIcons());
 				return false;
 			}
 			try {
@@ -188,7 +188,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final Exception e) {
 				logger.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.MAIN_ICONS);
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.getMainIcons());
 				return false;
 			}
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
@@ -202,7 +202,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (final InvalidPropertyException e) {
 			logger.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.MAIN_ICONS);
+			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getMainIcons());
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
@@ -217,7 +217,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final Exception e) {
 				logger.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.MAIN_ICONS);
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.getMainIcons());
 				return false;
 			}
 			bikesInfFileName = fileName;

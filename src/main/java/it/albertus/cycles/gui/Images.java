@@ -12,7 +12,7 @@ import it.albertus.util.IOUtils;
 public class Images {
 
 	/* Icona principale dell'applicazione (in vari formati) */
-	static final Image[] MAIN_ICONS = loadIcons("main.ico");
+	private static final Image[] MAIN_ICONS = loadIcons("main.ico");
 
 	private Images() {
 		throw new IllegalAccessError();
@@ -28,6 +28,10 @@ public class Images {
 			icons[i++] = new Image(Display.getCurrent(), id);
 		}
 		return icons;
+	}
+
+	public static Image[] getMainIcons() {
+		return MAIN_ICONS;
 	}
 
 }
