@@ -20,23 +20,19 @@ public class UndoListener implements KeyListener, SelectionListener {
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		if (SWT.MOD1 == e.stateMask && SwtUtils.KEY_UNDO == e.keyCode) {
-			execute();
+			manager.undo();
 		}
+	}
+
+	@Override
+	public void widgetSelected(final SelectionEvent e) {
+		manager.undo();
 	}
 
 	@Override
 	public void keyReleased(final KeyEvent e) {/* Ignore */}
 
 	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		execute();
-	}
-
-	@Override
 	public void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
-
-	private void execute() {
-		manager.undo();
-	}
 
 }
