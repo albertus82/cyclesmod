@@ -31,7 +31,7 @@ public abstract class ZoomListener implements KeyListener, SelectionListener {
 		return new Point(plotArea.getSize().width / 2 + plotArea.getLocation().x, plotArea.getSize().height / 2 + plotArea.getLocation().y);
 	}
 
-	protected void afterZoom(final SaveStateCommand command) {
+	protected void saveUndo(final SaveStateCommand command) {
 		command.saveState();
 		xyGraph.getOperationsManager().addCommand(command);
 	}
