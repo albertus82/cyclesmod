@@ -1,32 +1,29 @@
 package it.albertus.cycles.gui.torquegraph.dialog;
 
 import java.lang.reflect.Field;
-import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseListener;
-import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.internal.xygraph.toolbar.GrayableButton;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IOperationsManagerListener;
-import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.OperationsManager;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
+import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.nebula.visualization.xygraph.figures.ToolbarArmedXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
-import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
 
 import it.albertus.cycles.gui.torquegraph.TorqueGraph;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.ChangeValueListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.UpdateTitleListener;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
@@ -63,46 +60,16 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		fixUndoRedoButtons();
 
 		final IXYGraph xyGraph = getXyGraph();
-		xyGraph.getPlotArea().addMouseListener(new MouseListener.Stub() {
-			@Override
-			public void mousePressed(final MouseEvent me) {
-				if (me.button == 1) { // left click
-					final double rpm = abscissae.getPositionValue(me.getLocation().x, false) * RPM_DIVISOR;
-					final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
-					final double[] values = getValues();
-					final short oldValue = (short) values[index];
-					final short newValue = getTorqueValue(me.getLocation());
-					if (oldValue != newValue) {
-						values[index] = newValue;
-						refresh();
-						xyGraph.getOperationsManager().addCommand(new IUndoableCommand() {
-							@Override
-							public void undo() {
-								values[index] = oldValue;
-								refresh();
-							}
-
-							@Override
-							public void redo() {
-								values[index] = newValue;
-								refresh();
-							}
-
-							@Override
-							public String toString() {
-								return Messages.get("lbl.graph.action.valueChange");
-							};
-						});
-					}
-				}
-			}
-		});
+		final PlotArea plotArea = xyGraph.getPlotArea();
+		final ChangeValueListener changeValueListener = new ChangeValueListener(this);
+		plotArea.addMouseListener(changeValueListener);
+		plotArea.addMouseMotionListener(changeValueListener);
 
 		// Title
 		final FontData titleFontData = xyGraph.getTitleFontData();
 		xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(titleFontData.getName(), Math.round(titleFontData.getHeight() * 0.80f), SWT.NORMAL));
 		xyGraph.setTitle(" ");
-		xyGraph.getPlotArea().addMouseMotionListener(new UpdateGraphTitleListener());
+		plotArea.addMouseMotionListener(new UpdateTitleListener(this));
 
 		abscissae.performAutoScale(true);
 		ordinates.performAutoScale(true);
@@ -177,79 +144,8 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		return toolbarArmedXYGraph;
 	}
 
-	private short getTorqueValue(final Point location) {
+	public short getTorqueValue(final Point location) {
 		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
-	}
-
-	private class UpdateGraphTitleListener extends MouseMotionListener.Stub {
-
-		private static final double NM_TO_LBFT = 1.35581794884;
-
-		private String lastPosition;
-		private final NumberFormat numberFormat;
-		private Point mouseEnteredLocation;
-
-		private UpdateGraphTitleListener() {
-			numberFormat = NumberFormat.getNumberInstance(Messages.getLanguage().getLocale());
-			numberFormat.setMaximumFractionDigits(1);
-		}
-
-		@Override
-		public void mouseMoved(final MouseEvent me) {
-			final int rpm = Torque.getRpm(Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(me.getLocation().x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0));
-			final short torqueValue = getTorqueValue(me.getLocation());
-
-			final String currentPosition = Messages.get("lbl.graph.torqueAtRpm", torqueValue, numberFormat.format(torqueValue / NM_TO_LBFT), rpm);
-			if (!currentPosition.equals(lastPosition)) {
-				lastPosition = currentPosition;
-				getXyGraph().setTitle(lastPosition);
-			}
-		}
-
-		@Override
-		public void mouseExited(final MouseEvent me) {
-			lastPosition = " ";
-			getXyGraph().setTitle(lastPosition);
-		}
-
-		@Override
-		public void mouseEntered(final MouseEvent me) {
-			mouseEnteredLocation = me.getLocation();
-		}
-
-		@Override
-		public void mouseDragged(final MouseEvent me) {
-			if (ZoomType.NONE.equals(getXyGraph().getZoomType()) && !me.getLocation().equals(mouseEnteredLocation)) {
-				final double rpm = getAbscissae().getPositionValue(me.getLocation().x, false) * RPM_DIVISOR;
-				final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
-				final double[] values = getValues();
-				final short oldValue = (short) values[index];
-				final short newValue = getTorqueValue(me.getLocation());
-				if (oldValue != newValue) {
-					values[index] = newValue;
-					refresh();
-					getXyGraph().getOperationsManager().addCommand(new IUndoableCommand() {
-						@Override
-						public void undo() {
-							values[index] = oldValue;
-							refresh();
-						}
-
-						@Override
-						public void redo() {
-							values[index] = newValue;
-							refresh();
-						}
-
-						@Override
-						public String toString() {
-							return Messages.get("lbl.graph.action.valueChange");
-						};
-					});
-				}
-				mouseMoved(me);
-			}
-		}
 	}
 
 }
