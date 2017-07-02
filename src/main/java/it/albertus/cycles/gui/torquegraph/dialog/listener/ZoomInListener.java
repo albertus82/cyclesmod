@@ -1,18 +1,18 @@
 package it.albertus.cycles.gui.torquegraph.dialog.listener;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.SaveStateCommand;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.ZoomCommand;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
-import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
-import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionEvent;
+
+import it.albertus.cycles.resources.Messages;
 
 public class ZoomInListener extends ZoomListener {
 
-	public ZoomInListener(final IXYGraph graph) {
-		super(graph);
+	public ZoomInListener(final IXYGraph xyGraph) {
+		super(xyGraph);
 	}
 
 	@Override
@@ -23,15 +23,10 @@ public class ZoomInListener extends ZoomListener {
 	}
 
 	@Override
-	public void widgetSelected(final SelectionEvent e) {
-		execute();
-	}
-
-	@Override
 	protected void execute() {
-		final SaveStateCommand command = new ZoomCommand(ZoomType.ZOOM_IN.getDescription(), graph.getXAxisList(), graph.getYAxisList());
-		final PlotArea plotArea = graph.getPlotArea();
-		plotArea.zoomInOut(true, true, getX(plotArea), getY(plotArea), ZOOM_RATIO);
+		final SaveStateCommand command = new ZoomCommand(Messages.get("lbl.graph.action.zoomIn"), xyGraph.getXAxisList(), xyGraph.getYAxisList());
+		final Point plotAreaCenter = getPlotAreaCenter();
+		xyGraph.getPlotArea().zoomInOut(true, true, plotAreaCenter.x, plotAreaCenter.y, ZOOM_RATIO);
 		afterZoom(command);
 	}
 
