@@ -32,15 +32,9 @@ public class SaveSnapshotListener implements KeyListener, SelectionListener {
 	}
 
 	@Override
-	public void keyReleased(final KeyEvent e) {/* Ignore */}
-
-	@Override
 	public void widgetSelected(final SelectionEvent e) {
 		execute();
 	}
-
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
 
 	private void execute() {
 		final ImageLoader loader = new ImageLoader();
@@ -53,5 +47,11 @@ public class SaveSnapshotListener implements KeyListener, SelectionListener {
 			loader.save(path, SWT.IMAGE_PNG);
 		}
 	}
+
+	@Override
+	public void keyReleased(final KeyEvent e) {/* Ignore */}
+
+	@Override
+	public void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
 
 }
