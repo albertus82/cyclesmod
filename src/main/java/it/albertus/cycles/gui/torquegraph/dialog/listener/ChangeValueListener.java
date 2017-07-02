@@ -4,13 +4,12 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
 import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 
 import it.albertus.cycles.gui.torquegraph.TorqueGraph;
+import it.albertus.cycles.gui.torquegraph.dialog.ChangeValueCommand;
 import it.albertus.cycles.gui.torquegraph.dialog.ComplexTorqueGraph;
 import it.albertus.cycles.model.Torque;
-import it.albertus.cycles.resources.Messages;
 
 public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
@@ -50,24 +49,7 @@ public class ChangeValueListener implements MouseListener, MouseMotionListener {
 		if (oldValue != newValue) {
 			values[index] = newValue;
 			torqueGraph.refresh();
-			torqueGraph.getXyGraph().getOperationsManager().addCommand(new IUndoableCommand() {
-				@Override
-				public void undo() {
-					values[index] = oldValue;
-					torqueGraph.refresh();
-				}
-
-				@Override
-				public void redo() {
-					values[index] = newValue;
-					torqueGraph.refresh();
-				}
-
-				@Override
-				public String toString() {
-					return Messages.get("lbl.graph.action.valueChange");
-				};
-			});
+			torqueGraph.getXyGraph().getOperationsManager().addCommand(new ChangeValueCommand(torqueGraph, index, oldValue, newValue));
 		}
 	}
 
