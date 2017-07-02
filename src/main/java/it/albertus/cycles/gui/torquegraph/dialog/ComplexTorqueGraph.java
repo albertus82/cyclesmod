@@ -21,6 +21,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.ToolbarArmedXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
+import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
@@ -186,6 +187,7 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 		private String lastPosition;
 		private final NumberFormat numberFormat;
+		private Point mouseEnteredLocation;
 
 		private UpdateGraphTitleListener() {
 			numberFormat = NumberFormat.getNumberInstance(Messages.getLanguage().getLocale());
@@ -208,6 +210,45 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		public void mouseExited(final MouseEvent me) {
 			lastPosition = " ";
 			getXyGraph().setTitle(lastPosition);
+		}
+
+		@Override
+		public void mouseEntered(final MouseEvent me) {
+			mouseEnteredLocation = me.getLocation();
+		}
+
+		@Override
+		public void mouseDragged(final MouseEvent me) {
+			if (ZoomType.NONE.equals(getXyGraph().getZoomType()) && !me.getLocation().equals(mouseEnteredLocation)) {
+				final double rpm = getAbscissae().getPositionValue(me.getLocation().x, false) * RPM_DIVISOR;
+				final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
+				final double[] values = getValues();
+				final short oldValue = (short) values[index];
+				final short newValue = getTorqueValue(me.getLocation());
+				if (oldValue != newValue) {
+					values[index] = newValue;
+					refresh();
+					getXyGraph().getOperationsManager().addCommand(new IUndoableCommand() {
+						@Override
+						public void undo() {
+							values[index] = oldValue;
+							refresh();
+						}
+
+						@Override
+						public void redo() {
+							values[index] = newValue;
+							refresh();
+						}
+
+						@Override
+						public String toString() {
+							return Messages.get("lbl.graph.action.valueChange");
+						};
+					});
+				}
+				mouseMoved(me);
+			}
 		}
 	}
 
