@@ -1,5 +1,6 @@
 package it.albertus.cycles.gui.torquegraph.dialog.listener;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.SaveStateCommand;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
@@ -12,26 +13,28 @@ public abstract class ZoomListener implements KeyListener, SelectionListener {
 
 	protected static final double ZOOM_RATIO = 0.1;
 
-	protected final IXYGraph graph;
+	protected final IXYGraph xyGraph;
 
 	public ZoomListener(final IXYGraph graph) {
-		this.graph = graph;
+		this.xyGraph = graph;
+	}
+
+	protected abstract void execute();
+
+	@Override
+	public void widgetSelected(final SelectionEvent e) {
+		execute();
+	}
+
+	protected Point getPlotAreaCenter() {
+		final PlotArea plotArea = xyGraph.getPlotArea();
+		return new Point(plotArea.getSize().width / 2 + plotArea.getLocation().x, plotArea.getSize().height / 2 + plotArea.getLocation().y);
 	}
 
 	protected void afterZoom(final SaveStateCommand command) {
 		command.saveState();
-		graph.getOperationsManager().addCommand(command);
+		xyGraph.getOperationsManager().addCommand(command);
 	}
-
-	protected static int getX(final PlotArea plotArea) {
-		return plotArea.getSize().width / 2 + plotArea.getLocation().x;
-	}
-
-	protected static int getY(final PlotArea plotArea) {
-		return plotArea.getSize().height / 2 + plotArea.getLocation().y;
-	}
-
-	protected abstract void execute();
 
 	@Override
 	public final void keyReleased(final KeyEvent e) {/* Ignore */}

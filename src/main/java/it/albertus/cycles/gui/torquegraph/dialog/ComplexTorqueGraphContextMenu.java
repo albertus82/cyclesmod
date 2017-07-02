@@ -1,6 +1,7 @@
 package it.albertus.cycles.gui.torquegraph.dialog;
 
 import org.eclipse.nebula.visualization.internal.xygraph.undo.OperationsManager;
+import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
@@ -17,6 +18,8 @@ import it.albertus.cycles.gui.torquegraph.TorqueGraphContextMenu;
 import it.albertus.cycles.gui.torquegraph.dialog.listener.RedoListener;
 import it.albertus.cycles.gui.torquegraph.dialog.listener.SaveSnapshotListener;
 import it.albertus.cycles.gui.torquegraph.dialog.listener.UndoListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.ZoomInListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.ZoomOutListener;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.jface.SwtUtils;
 
@@ -32,9 +35,11 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		final OperationsManager manager = torqueGraph.getXyGraph().getOperationsManager();
 
 		final MenuItem undoMenuItem = new MenuItem(menu, SWT.PUSH);
+		undoMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_UNDO);
 		undoMenuItem.addSelectionListener(new UndoListener(manager));
 
 		final MenuItem redoMenuItem = new MenuItem(menu, SWT.PUSH);
+		redoMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_REDO);
 		redoMenuItem.addSelectionListener(new RedoListener(manager));
 
 		new MenuItem(menu, SWT.SEPARATOR);
@@ -42,6 +47,7 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		final MenuItem saveImageMenuItem = new MenuItem(menu, SWT.PUSH);
 		saveImageMenuItem.setImage(mediaFactory.getImage("images/camera.png"));
 		saveImageMenuItem.setText(Messages.get("lbl.menu.item.graph.saveImageAs") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+		saveImageMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_SAVE);
 		saveImageMenuItem.addSelectionListener(new SaveSnapshotListener(control.getShell(), torqueGraph.getXyGraph()));
 
 		new MenuItem(menu, SWT.SEPARATOR);
@@ -62,6 +68,18 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 			}
 		});
 
+		final MenuItem zoomInMenuItem = new MenuItem(menu, SWT.PUSH);
+		zoomInMenuItem.setText(Messages.get("lbl.menu.item.graph.zoomIn") + SwtUtils.getShortcutLabel("+"));
+		zoomInMenuItem.setAccelerator('+');
+		zoomInMenuItem.setImage(ZoomType.ZOOM_IN.getIconImage());
+		zoomInMenuItem.addSelectionListener(new ZoomInListener(torqueGraph.getXyGraph()));
+
+		final MenuItem ZoomOutMenuItem = new MenuItem(menu, SWT.PUSH);
+		ZoomOutMenuItem.setText(Messages.get("lbl.menu.item.graph.zoomOut") + SwtUtils.getShortcutLabel("-"));
+		ZoomOutMenuItem.setAccelerator('-');
+		ZoomOutMenuItem.setImage(ZoomType.ZOOM_OUT.getIconImage());
+		ZoomOutMenuItem.addSelectionListener(new ZoomOutListener(torqueGraph.getXyGraph()));
+
 		final MenuItem performAutoScaleMenuItem = new MenuItem(menu, SWT.PUSH);
 		performAutoScaleMenuItem.setText(Messages.get("lbl.menu.item.graph.autoscaleNow"));
 		performAutoScaleMenuItem.setImage(mediaFactory.getImage("images/AutoScale.png"));
@@ -71,6 +89,8 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 				torqueGraph.getXyGraph().performAutoScale();
 			}
 		});
+
+		new MenuItem(menu, SWT.SEPARATOR);
 
 		addTraceTypeSubMenu();
 		addLineWidthSubMenu();

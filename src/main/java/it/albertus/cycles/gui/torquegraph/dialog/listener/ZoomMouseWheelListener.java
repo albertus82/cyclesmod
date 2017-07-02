@@ -7,9 +7,10 @@ import org.eclipse.nebula.visualization.internal.xygraph.undo.ZoomCommand;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
-import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
+
+import it.albertus.cycles.resources.Messages;
 
 public class ZoomMouseWheelListener implements MouseWheelListener {
 
@@ -37,8 +38,8 @@ public class ZoomMouseWheelListener implements MouseWheelListener {
 		});
 
 		if (figureUnderMouse != null) {
-			final ZoomType zoomType = e.count > 0 ? ZoomType.ZOOM_IN : ZoomType.ZOOM_OUT;
-			final SaveStateCommand command = new ZoomCommand(zoomType.getDescription(), xyGraph.getXAxisList(), xyGraph.getYAxisList());
+			final String zoomTypeDescription = Messages.get(e.count > 0 ? "lbl.graph.action.zoomIn" : "lbl.graph.action.zoomOut");
+			final SaveStateCommand command = new ZoomCommand(zoomTypeDescription, xyGraph.getXAxisList(), xyGraph.getYAxisList());
 
 			if (figureUnderMouse instanceof PlotArea) {
 				final PlotArea plotArea = (PlotArea) figureUnderMouse;

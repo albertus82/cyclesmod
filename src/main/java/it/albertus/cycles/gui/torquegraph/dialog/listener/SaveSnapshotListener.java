@@ -17,11 +17,11 @@ import it.albertus.jface.SwtUtils;
 public class SaveSnapshotListener implements KeyListener, SelectionListener {
 
 	private final Shell shell;
-	private final IXYGraph graph;
+	private final IXYGraph xyGraph;
 
-	public SaveSnapshotListener(final Shell shell, final IXYGraph graph) {
+	public SaveSnapshotListener(final Shell shell, final IXYGraph xyGraph) {
 		this.shell = shell;
-		this.graph = graph;
+		this.xyGraph = xyGraph;
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class SaveSnapshotListener implements KeyListener, SelectionListener {
 
 	private void execute() {
 		final ImageLoader loader = new ImageLoader();
-		loader.data = new ImageData[] { graph.getImage().getImageData() };
+		loader.data = new ImageData[] { xyGraph.getImage().getImageData() };
 		final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", Messages.get("lbl.graph.save.allFiles", "(*.*)") });
 		dialog.setFilterExtensions(new String[] { "*.PNG;*.png", "*.*" }); // Windows
