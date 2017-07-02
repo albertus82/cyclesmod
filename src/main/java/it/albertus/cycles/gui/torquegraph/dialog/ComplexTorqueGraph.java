@@ -11,6 +11,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.internal.xygraph.toolbar.GrayableButton;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IOperationsManagerListener;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
@@ -69,7 +70,7 @@ public class ComplexTorqueGraph extends TorqueGraph {
 					final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
 					final double[] values = getValues();
 					final short oldValue = (short) values[index];
-					final short newValue = getTorqueValue(me);
+					final short newValue = getTorqueValue(me.getLocation());
 					if (oldValue != newValue) {
 						values[index] = newValue;
 						refresh();
@@ -175,8 +176,8 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		return toolbarArmedXYGraph;
 	}
 
-	private short getTorqueValue(final MouseEvent me) {
-		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(me.getLocation().y, false))));
+	private short getTorqueValue(final Point location) {
+		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
 	}
 
 	private class UpdateGraphTitleListener extends MouseMotionListener.Stub {
@@ -194,7 +195,7 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		@Override
 		public void mouseMoved(final MouseEvent me) {
 			final int rpm = Torque.getRpm(Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(me.getLocation().x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0));
-			final short torqueValue = getTorqueValue(me);
+			final short torqueValue = getTorqueValue(me.getLocation());
 
 			final String currentPosition = Messages.get("lbl.graph.torqueAtRpm", torqueValue, numberFormat.format(torqueValue / NM_TO_LBFT), rpm);
 			if (!currentPosition.equals(lastPosition)) {
