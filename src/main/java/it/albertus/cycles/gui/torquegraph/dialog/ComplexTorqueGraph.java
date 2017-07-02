@@ -1,7 +1,6 @@
 package it.albertus.cycles.gui.torquegraph.dialog;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +56,7 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		trace.setLineWidth(DEFAULT_LINE_WIDTH);
 		trace.setPointSize(DEFAULT_POINT_SIZE);
 
-		fixUndoRedoButtons();
+		fixToolbarButtons(toolbarArmedXYGraph);
 
 		final IXYGraph xyGraph = getXyGraph();
 		final PlotArea plotArea = xyGraph.getPlotArea();
@@ -76,26 +75,27 @@ public class ComplexTorqueGraph extends TorqueGraph {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void fixUndoRedoButtons() {
+	private static void fixToolbarButtons(final ToolbarArmedXYGraph toolbarArmedXYGraph) {
 		try {
 			final Field listenersField = OperationsManager.class.getDeclaredField("listeners");
 			listenersField.setAccessible(true);
-			for (final IOperationsManagerListener listener : (Collection<IOperationsManagerListener>) listenersField.get(getXyGraph().getOperationsManager())) {
-				toolbarArmedXYGraph.getIXYGraph().getOperationsManager().removeListener(listener);
+			final OperationsManager manager = toolbarArmedXYGraph.getIXYGraph().getOperationsManager();
+			for (final IOperationsManagerListener listener : (Iterable<IOperationsManagerListener>) listenersField.get(manager)) {
+				manager.removeListener(listener);
 			}
 
-			for (final Object o : toolbarArmedXYGraph.getToolbar().getChildren()) {
-				if (o instanceof GrayableButton) {
-					final GrayableButton button = (GrayableButton) o;
+			for (final Object child : toolbarArmedXYGraph.getToolbar().getChildren()) {
+				if (child instanceof GrayableButton) {
+					final GrayableButton button = (GrayableButton) child;
 					if (button.getToolTip() instanceof Label) {
 						final String labelText = ((Label) button.getToolTip()).getText();
 						if ("undo".equalsIgnoreCase(labelText)) {
 							button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO, "")));
-							addUndoListener(button, toolbarArmedXYGraph.getIXYGraph().getOperationsManager());
+							addUndoListener(button, manager);
 						}
 						else if ("redo".equalsIgnoreCase(labelText)) {
 							button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_REDO, "")));
-							addRedoListener(button, toolbarArmedXYGraph.getIXYGraph().getOperationsManager());
+							addRedoListener(button, manager);
 						}
 					}
 				}
@@ -110,9 +110,10 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		manager.addListener(new IOperationsManagerListener() {
 			@Override
 			public void operationsHistoryChanged(final OperationsManager manager) {
-				if (manager.getUndoCommandsSize() > 0) {
+				final int undoCommandsSize = manager.getUndoCommandsSize();
+				if (undoCommandsSize > 0) {
 					button.setEnabled(true);
-					final String cmdName = manager.getUndoCommands()[manager.getUndoCommandsSize() - 1].toString();
+					final String cmdName = manager.getUndoCommands()[undoCommandsSize - 1].toString();
 					button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
 				}
 				else {
@@ -127,9 +128,10 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		manager.addListener(new IOperationsManagerListener() {
 			@Override
 			public void operationsHistoryChanged(final OperationsManager manager) {
-				if (manager.getRedoCommandsSize() > 0) {
+				final int redoCommandsSize = manager.getRedoCommandsSize();
+				if (redoCommandsSize > 0) {
 					button.setEnabled(true);
-					final String cmdName = manager.getRedoCommands()[manager.getRedoCommandsSize() - 1].toString();
+					final String cmdName = manager.getRedoCommands()[redoCommandsSize - 1].toString();
 					button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_REDO, cmdName)));
 				}
 				else {
