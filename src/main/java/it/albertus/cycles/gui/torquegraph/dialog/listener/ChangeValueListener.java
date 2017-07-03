@@ -13,9 +13,12 @@ import it.albertus.cycles.model.Torque;
 
 public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
+	private static final int BUTTON_LEFT = 1;
+
 	private final ComplexTorqueGraph torqueGraph;
 
-	private Point mouseEnteredLocation; // needed to manage the double click (maximize) on the title bar.
+	private int mouseButton; // needed to detect drag only for left button.
+	private Point mouseEnteredLocation; // needed to manage double click (maximize) on the title bar.
 
 	public ChangeValueListener(final ComplexTorqueGraph torqueGraph) {
 		this.torqueGraph = torqueGraph;
@@ -23,7 +26,7 @@ public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mouseDragged(final MouseEvent me) {
-		if (ZoomType.NONE.equals(torqueGraph.getXyGraph().getZoomType()) && !me.getLocation().equals(mouseEnteredLocation)) {
+		if (BUTTON_LEFT == mouseButton && ZoomType.NONE.equals(torqueGraph.getXyGraph().getZoomType()) && !me.getLocation().equals(mouseEnteredLocation)) {
 			execute(me.getLocation());
 		}
 	}
@@ -35,7 +38,8 @@ public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mousePressed(final MouseEvent me) {
-		if (me.button == 1) { // left click
+		mouseButton = me.button;
+		if (BUTTON_LEFT == mouseButton) { // left click
 			execute(me.getLocation());
 		}
 	}
