@@ -6,7 +6,6 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 
-import it.albertus.cycles.gui.torquegraph.TorqueGraph;
 import it.albertus.cycles.gui.torquegraph.dialog.ComplexTorqueGraph;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
@@ -43,9 +42,8 @@ public class UpdateTitleListener implements MouseMotionListener {
 	}
 
 	private void execute(final Point location) {
-		final int rpm = Torque.getRpm(Math.max(Math.min(Torque.indexOf(torqueGraph.getAbscissae().getPositionValue(location.x, false) * TorqueGraph.RPM_DIVISOR), Torque.LENGTH - 1), 0));
 		final short torqueValue = torqueGraph.getTorqueValue(location);
-		final String currentPosition = Messages.get("lbl.graph.torqueAtRpm", torqueValue, numberFormat.format(torqueValue / NM_TO_LBFT), rpm);
+		final String currentPosition = Messages.get("lbl.graph.torqueAtRpm", torqueValue, numberFormat.format(torqueValue / NM_TO_LBFT), Torque.getRpm(torqueGraph.getTorqueIndex(location)));
 		if (!currentPosition.equals(lastPosition)) {
 			lastPosition = currentPosition;
 			torqueGraph.getXyGraph().setTitle(lastPosition);
