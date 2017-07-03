@@ -31,19 +31,13 @@ public class EditCurveListener implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseEntered(final MouseEvent me) {
 		mouseEnteredLocation = me.getLocation();
+		mouseReleased(me);
 	}
 
 	@Override
 	public void mouseDragged(final MouseEvent me) {
 		if (BUTTON_LEFT == mouseButton && ZoomType.NONE.equals(torqueGraph.getXyGraph().getZoomType()) && !me.getLocation().equals(mouseEnteredLocation)) {
-			final int index = torqueGraph.getTorqueIndex(me.getLocation());
-			final short oldValue = (short) torqueGraph.getValues()[index];
-			final short newValue = torqueGraph.getTorqueValue(me.getLocation());
-			if (oldValue != newValue) {
-				torqueGraph.getValues()[index] = newValue;
-				torqueGraph.refresh();
-				dragged = true;
-			}
+			execute(me.getLocation(), true);
 		}
 	}
 
@@ -55,13 +49,7 @@ public class EditCurveListener implements MouseListener, MouseMotionListener {
 			for (int index = 0; index < initialValues.length; index++) {
 				initialValues[index] = (short) torqueGraph.getValues()[index];
 			}
-			final int index = torqueGraph.getTorqueIndex(me.getLocation());
-			final short oldValue = (short) torqueGraph.getValues()[index];
-			final short newValue = torqueGraph.getTorqueValue(me.getLocation());
-			if (oldValue != newValue) {
-				torqueGraph.getValues()[index] = newValue;
-				torqueGraph.refresh();
-			}
+			execute(me.getLocation(), false);
 		}
 	}
 
@@ -89,8 +77,21 @@ public class EditCurveListener implements MouseListener, MouseMotionListener {
 		}
 	}
 
+	private void execute(final Point location, final boolean dragged) {
+		final int index = torqueGraph.getTorqueIndex(location);
+		final short oldValue = (short) torqueGraph.getValues()[index];
+		final short newValue = torqueGraph.getTorqueValue(location);
+		if (oldValue != newValue) {
+			torqueGraph.getValues()[index] = newValue;
+			torqueGraph.refresh();
+			if (dragged) {
+				this.dragged = true;
+			}
+		}
+	}
+
 	@Override
-	public void mouseExited(final MouseEvent me) {/* Ignore */}
+	public void mouseExited(final MouseEvent me) {mouseReleased(me);}
 
 	@Override
 	public void mouseHover(final MouseEvent me) {/* Ignore */}
