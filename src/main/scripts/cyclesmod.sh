@@ -17,7 +17,7 @@ if [ "$1" = "-c" ] || [ "$1" = "-C" ] || [ "$1" = "--help" ] || [ "$1" = "--HELP
   fi
 else
   if [ "$JAVA_HOME" != "" ]
-  then "$JAVA_HOME/bin/java" -Xms8m -Xmx16m -classpath "$PRGDIR/cyclesmod.jar:$PRGDIR/lib/*" it.albertus.cycles.CyclesMod $1
-  else java -Xms8m -Xmx16m -classpath "$PRGDIR/cyclesmod.jar:$PRGDIR/lib/*" it.albertus.cycles.CyclesMod $1
+  then "$JAVA_HOME/bin/java" -DSWT_GTK3=0 -Xms8m -Xmx16m -classpath "$PRGDIR/cyclesmod.jar:$PRGDIR/lib/*" it.albertus.cycles.CyclesMod $1
+  else java -DSWT_GTK3=0 -Xms8m -Xmx16m -classpath "$PRGDIR/cyclesmod.jar:$PRGDIR/lib/*" it.albertus.cycles.CyclesMod $1
   fi
 fi
