@@ -6,10 +6,8 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 
-import it.albertus.cycles.gui.torquegraph.TorqueGraph;
 import it.albertus.cycles.gui.torquegraph.dialog.ChangeValueCommand;
 import it.albertus.cycles.gui.torquegraph.dialog.ComplexTorqueGraph;
-import it.albertus.cycles.model.Torque;
 
 public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
@@ -45,13 +43,11 @@ public class ChangeValueListener implements MouseListener, MouseMotionListener {
 	}
 
 	private void execute(final Point location) {
-		final double rpm = torqueGraph.getAbscissae().getPositionValue(location.x, false) * TorqueGraph.RPM_DIVISOR;
-		final int index = Math.max(Math.min(Torque.indexOf(rpm), Torque.LENGTH - 1), 0);
-		final double[] values = torqueGraph.getValues();
-		final short oldValue = (short) values[index];
+		final int index = torqueGraph.getTorqueIndex(location);
+		final short oldValue = (short) torqueGraph.getValues()[index];
 		final short newValue = torqueGraph.getTorqueValue(location);
 		if (oldValue != newValue) {
-			values[index] = newValue;
+			torqueGraph.getValues()[index] = newValue;
 			torqueGraph.refresh();
 			torqueGraph.getXyGraph().getOperationsManager().addCommand(new ChangeValueCommand(torqueGraph, index, oldValue, newValue));
 		}
