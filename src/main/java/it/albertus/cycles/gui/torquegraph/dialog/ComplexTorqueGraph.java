@@ -21,7 +21,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
 
 import it.albertus.cycles.gui.torquegraph.TorqueGraph;
-import it.albertus.cycles.gui.torquegraph.dialog.listener.EditCurveListener;
+import it.albertus.cycles.gui.torquegraph.dialog.listener.ChangeValueListener;
 import it.albertus.cycles.gui.torquegraph.dialog.listener.UpdateTitleListener;
 import it.albertus.cycles.model.Bike.BikeType;
 import it.albertus.cycles.model.Torque;
@@ -60,9 +60,9 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 		final IXYGraph xyGraph = getXyGraph();
 		final PlotArea plotArea = xyGraph.getPlotArea();
-		final EditCurveListener editCurveListener = new EditCurveListener(this);
-		plotArea.addMouseListener(editCurveListener);
-		plotArea.addMouseMotionListener(editCurveListener);
+		final ChangeValueListener changeValueListener = new ChangeValueListener(this);
+		plotArea.addMouseListener(changeValueListener);
+		plotArea.addMouseMotionListener(changeValueListener);
 
 		// Title
 		final FontData titleFontData = xyGraph.getTitleFontData();
@@ -148,10 +148,6 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 	public short getTorqueValue(final Point location) {
 		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
-	}
-
-	public int getTorqueIndex(final Point location) {
-		return Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(location.x, false) * TorqueGraph.RPM_DIVISOR), Torque.LENGTH - 1), 0);
 	}
 
 }
