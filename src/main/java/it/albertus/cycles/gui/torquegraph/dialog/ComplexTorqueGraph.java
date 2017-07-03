@@ -32,8 +32,8 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 	private static final Logger logger = LoggerFactory.getLogger(ComplexTorqueGraph.class);
 
-	private static final String MSG_KEY_LBL_GRAPH_TOOLBAR_REDO = "lbl.graph.toolbar.redo";
-	private static final String MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO = "lbl.graph.toolbar.undo";
+	private static final String LBL_GRAPH_TOOLBAR_UNDO = "lbl.graph.toolbar.undo";
+	private static final String LBL_GRAPH_TOOLBAR_REDO = "lbl.graph.toolbar.redo";
 
 	private static final byte DEFAULT_POINT_SIZE = 6;
 	private static final byte DEFAULT_LINE_WIDTH = 2;
@@ -90,11 +90,11 @@ public class ComplexTorqueGraph extends TorqueGraph {
 					if (button.getToolTip() instanceof Label) {
 						final String labelText = ((Label) button.getToolTip()).getText();
 						if ("undo".equalsIgnoreCase(labelText)) {
-							button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO, "")));
+							button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
 							addUndoListener(button, manager);
 						}
 						else if ("redo".equalsIgnoreCase(labelText)) {
-							button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_REDO, "")));
+							button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
 							addRedoListener(button, manager);
 						}
 					}
@@ -114,11 +114,11 @@ public class ComplexTorqueGraph extends TorqueGraph {
 				if (undoCommandsSize > 0) {
 					button.setEnabled(true);
 					final String cmdName = manager.getUndoCommands()[undoCommandsSize - 1].toString();
-					button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
+					button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
 				}
 				else {
 					button.setEnabled(false);
-					button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_UNDO, "")));
+					button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
 				}
 			}
 		});
@@ -132,11 +132,11 @@ public class ComplexTorqueGraph extends TorqueGraph {
 				if (redoCommandsSize > 0) {
 					button.setEnabled(true);
 					final String cmdName = manager.getRedoCommands()[redoCommandsSize - 1].toString();
-					button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_REDO, cmdName)));
+					button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, cmdName)));
 				}
 				else {
 					button.setEnabled(false);
-					button.setToolTip(new Label(Messages.get(MSG_KEY_LBL_GRAPH_TOOLBAR_REDO, "")));
+					button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
 				}
 			}
 		});
@@ -148,6 +148,10 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 	public short getTorqueValue(final Point location) {
 		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
+	}
+
+	public int getTorqueIndex(final Point location) {
+		return Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(location.x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0);
 	}
 
 }
