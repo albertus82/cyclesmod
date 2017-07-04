@@ -38,6 +38,8 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 	private static final boolean DEFAULT_AUTOSCALE = false;
 
+	private static final float TITLE_HEIGHT_FACTOR = 0.80f;
+
 	private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
 	public ComplexTorqueGraph(final Map<Integer, Short> map, final BikeType bikeType) {
@@ -64,7 +66,7 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 		// Title
 		final FontData titleFontData = xyGraph.getTitleFontData();
-		xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(titleFontData.getName(), Math.round(titleFontData.getHeight() * 0.80f), SWT.NORMAL));
+		xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(titleFontData.getName(), Math.round(titleFontData.getHeight() * TITLE_HEIGHT_FACTOR), SWT.NORMAL));
 		xyGraph.setTitle(" ");
 		plotArea.addMouseMotionListener(new UpdateTitleListener(this));
 
