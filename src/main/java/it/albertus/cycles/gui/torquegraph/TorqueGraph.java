@@ -26,7 +26,7 @@ public class TorqueGraph implements ITorqueGraph {
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
 	private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
-	private final Trace trace = new Trace(Messages.get("lbl.graph.title"), abscissae, ordinates, dataProvider);
+	private final Trace trace = new Trace(Messages.get("lbl.graph.trace"), abscissae, ordinates, dataProvider);
 	private final double[] values = new double[Torque.LENGTH];
 	private final double[] xDataArray = new double[Torque.LENGTH];
 
