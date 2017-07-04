@@ -3,6 +3,7 @@ package it.albertus.cycles.gui.torquegraph;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
@@ -120,6 +121,16 @@ public class TorqueGraph implements ITorqueGraph {
 	@Override
 	public double[] getValues() {
 		return values;
+	}
+
+	@Override
+	public short getTorqueValue(final Point location) {
+		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
+	}
+
+	@Override
+	public int getTorqueIndex(final Point location) {
+		return Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(location.x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0);
 	}
 
 }
