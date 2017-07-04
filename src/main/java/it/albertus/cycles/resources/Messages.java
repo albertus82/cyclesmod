@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 import it.albertus.util.logging.LoggerFactory;
 
-public class Messages {
+public final class Messages {
 
 	private static final Logger logger = LoggerFactory.getLogger(Messages.class);
 
@@ -33,6 +33,11 @@ public class Messages {
 	private static final String BASE_NAME = Messages.class.getName().toLowerCase();
 
 	private static ResourceBundle resources = ResourceBundle.getBundle(BASE_NAME, ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
+
+	/** Instantiation not permitted. */
+	private Messages() {
+		throw new IllegalAccessError();
+	}
 
 	/** Aggiorna la lingua in cui vengono mostrati i messaggi. */
 	public static void setLanguage(final Language language) {
