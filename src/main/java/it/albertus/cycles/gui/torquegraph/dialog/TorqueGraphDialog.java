@@ -33,6 +33,8 @@ import it.albertus.jface.SwtUtils;
 
 public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 
+	private static final int SHELL_SIZE_FACTOR = 3;
+
 	private int returnCode = SWT.CANCEL;
 	private ComplexTorqueGraph torqueGraph;
 
@@ -67,7 +69,7 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 	private Point getSize(final Shell shell) {
 		final Point normalShellSize = shell.getSize();
 		final Point packedShellSize = getMinimumSize(shell);
-		return new Point(Math.min(packedShellSize.x * 3, normalShellSize.x), Math.min(packedShellSize.y * 3, normalShellSize.y));
+		return new Point(Math.min(packedShellSize.x * SHELL_SIZE_FACTOR, normalShellSize.x), Math.min(packedShellSize.y * SHELL_SIZE_FACTOR, normalShellSize.y));
 	}
 
 	private Point getMinimumSize(final Shell shell) {
