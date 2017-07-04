@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.internal.xygraph.toolbar.GrayableButton;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IOperationsManagerListener;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.OperationsManager;
@@ -24,7 +23,6 @@ import it.albertus.cycles.gui.torquegraph.TorqueGraph;
 import it.albertus.cycles.gui.torquegraph.dialog.listener.ChangeValueListener;
 import it.albertus.cycles.gui.torquegraph.dialog.listener.UpdateTitleListener;
 import it.albertus.cycles.model.Bike.BikeType;
-import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
 
@@ -144,14 +142,6 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 	public ToolbarArmedXYGraph getToolbarArmedXYGraph() {
 		return toolbarArmedXYGraph;
-	}
-
-	public short getTorqueValue(final Point location) {
-		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
-	}
-
-	public int getTorqueIndex(final Point location) {
-		return Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(location.x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0);
 	}
 
 }

@@ -1,5 +1,6 @@
 package it.albertus.cycles.gui.torquegraph;
 
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
@@ -20,5 +21,9 @@ public interface ITorqueGraph {
 	double[] getValues();
 
 	void refresh();
+
+	short getTorqueValue(Point location);
+
+	int getTorqueIndex(Point location);
 
 }

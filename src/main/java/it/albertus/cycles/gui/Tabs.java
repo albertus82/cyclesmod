@@ -28,7 +28,6 @@ import it.albertus.cycles.gui.listener.PropertyKeyListener;
 import it.albertus.cycles.gui.listener.PropertyVerifyListener;
 import it.albertus.cycles.gui.listener.TorquePropertyFocusListener;
 import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
-import it.albertus.cycles.gui.torquegraph.TorqueGraph;
 import it.albertus.cycles.gui.torquegraph.simple.TorqueGraphCanvas;
 import it.albertus.cycles.model.Bike;
 import it.albertus.cycles.model.Bike.BikeType;
@@ -120,8 +119,7 @@ public class Tabs {
 				@Override
 				public void mousePressed(final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final double rpm = torqueGraph.getAbscissae().getPositionValue(me.getLocation().x, false) * TorqueGraph.RPM_DIVISOR;
-						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, Torque.indexOf(rpm)));
+						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, torqueGraph.getTorqueIndex(me.getLocation())));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
 						}
