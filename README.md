@@ -19,14 +19,10 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 
 **Effettuare una copia di backup della directory di *The Cycles* prima di utilizzare questo programma!**
 
-1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) una release `bin` in formato **zip** o **tar.gz**, possibilmente la pi&ugrave; recente;
-2. scompattare l'archivio in una cartella a piacimento;
-3. avviare il programma eseguendo lo script di avvio che, a seconda del sistema operativo, sar&agrave;:
-	* Windows: [**`cyclesmod.bat`**](src/main/scripts/cyclesmod.bat)
-	* Linux: [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh)
-	* OS X: [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command)
+1. [scaricare](http://github.com/Albertus82/CyclesMod/releases) la release adatta alla propria piattaforma, possibilmente la pi&ugrave; recente;
+2. installare (o scompattare, a seconda dei casi) il programma in una cartella a piacimento.
 
-Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva. Se la variabile di ambiente `JAVA_HOME` viene rilevata, essa sar&agrave; utilizzata come riferimento per avviare la Java Virtual Machine, in caso contrario sar&agrave; richiamato direttamente l'eseguibile `java` (o `javaw`).
+Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva.
 
 
 ## Utilizzo
@@ -43,17 +39,19 @@ Ogni sezione presenta diverse propriet&agrave;, tutte rigorosamente numeriche e 
 All'apertura del programma, tutte le maschere vengono precaricate con i valori predefiniti per tutte le moto.
 
 Tramite la barra dei men&ugrave; &egrave; possibile:
-* Aprire un file `BIKES.INF` esistente.
-* Salvare le impostazioni correnti in un file `BIKES.INF`.
-* Ripristinare le impostazioni predefinite per una o per tutte le moto (qualsiasi personalizzazione non salvata viene persa).
-* Modificare il sistema numerico (decimale/esadecimale).
-* Visualizzare informazioni sulla versione di *CyclesMod*.
+* aprire un file `BIKES.INF` esistente;
+* salvare le impostazioni correnti in un file `BIKES.INF`;
+* ripristinare le impostazioni predefinite per una o per tutte le moto (qualsiasi personalizzazione non salvata viene persa);
+* modificare o disegnare la curva di coppia in un'apposita finestra di dialogo;
+* modificare il sistema numerico (decimale/esadecimale);
+* cambiare la lingua dell'interfaccia;
+* visualizzare informazioni sulla versione di *CyclesMod*.
 
-Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente utilizzare la funzione *Salva con nome...* (men&ugrave; *File*) e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene ricaricata ogni volta che si inizia una nuova gara, pertanto non occorre riavviare completamente il gioco.
+Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente utilizzare la funzione *Salva* o *Salva con nome...* (men&ugrave; *File*) e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene ricaricata ogni volta che si inizia una nuova gara, pertanto non occorre riavviare completamente il gioco.
 
 #### Ripristino del `BIKES.INF` originale
 
-Nel caso in cui si volessero ripristinare le configurazioni originali di tutte le moto, &egrave; sufficiente utilizzare la funzione *Reimposta* (men&ugrave; *Modifica*), che provveder&agrave; a ricaricare le impostazioni del `BIKES.INF` originale fornito insieme al gioco. Dopo di che, utilizzare la funzione *Salva con nome...* per poter sovrascrivere qualsiasi `BIKES.INF` personalizzato con la versione originale.
+Nel caso in cui si volessero ripristinare le configurazioni originali di tutte le moto, &egrave; sufficiente utilizzare la funzione *Reimposta* (men&ugrave; *Modifica*), che provveder&agrave; a ricaricare le impostazioni del `BIKES.INF` originale fornito insieme al gioco. Dopo di che, utilizzare la funzione *Salva* o *Salva con nome...* per ricreare la versione originale del file `BIKES.INF`.
 
 
 ## Configurazione delle moto
@@ -82,6 +80,7 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
 
 ### Coppia motrice
 La curva di coppia del motore viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la coppia del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m. La curva risultante viene rappresentata graficamente nel relativo riquadro.
+Utilizzando la funzione di men&ugrave; *Modifica - Curva di coppia* (o facendo doppio clic sul grafico) si accede ad una finestra che consente di disegnare e modificare la curva in modalit&agrave; grafica.
 
 
 ## Versione da riga di comando
