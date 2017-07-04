@@ -23,7 +23,7 @@ public abstract class AskForSavingListener {
 			final int selectedButton = messageBox.open();
 			switch (selectedButton) {
 			case SWT.YES:
-				return gui.saveAs();
+				return gui.save();
 			case SWT.NO:
 				return true;
 			case SWT.CANCEL:
