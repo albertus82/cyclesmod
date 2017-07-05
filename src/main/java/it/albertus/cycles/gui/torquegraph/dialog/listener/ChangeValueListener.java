@@ -6,19 +6,19 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 
+import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
 import it.albertus.cycles.gui.torquegraph.dialog.ChangeValueCommand;
-import it.albertus.cycles.gui.torquegraph.dialog.ComplexTorqueGraph;
 
 public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
 	private static final int BUTTON_LEFT = 1;
 
-	private final ComplexTorqueGraph torqueGraph;
+	private final ITorqueGraph torqueGraph;
 
 	private int mouseButton; // needed to detect drag only for left button.
 	private Point mouseEnteredLocation; // needed to manage double click (maximize) on the title bar.
 
-	public ChangeValueListener(final ComplexTorqueGraph torqueGraph) {
+	public ChangeValueListener(final ITorqueGraph torqueGraph) {
 		this.torqueGraph = torqueGraph;
 	}
 

@@ -6,7 +6,7 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 
-import it.albertus.cycles.gui.torquegraph.dialog.ComplexTorqueGraph;
+import it.albertus.cycles.gui.torquegraph.ITorqueGraph;
 import it.albertus.cycles.model.Torque;
 import it.albertus.cycles.resources.Messages;
 
@@ -14,12 +14,12 @@ public class UpdateTitleListener implements MouseMotionListener {
 
 	private static final double NM_TO_LBFT = 1.35581794884;
 
-	private final ComplexTorqueGraph torqueGraph;
+	private final ITorqueGraph torqueGraph;
 	private final NumberFormat numberFormat;
 
 	private String lastPosition;
 
-	public UpdateTitleListener(final ComplexTorqueGraph torqueGraph) {
+	public UpdateTitleListener(final ITorqueGraph torqueGraph) {
 		this.torqueGraph = torqueGraph;
 		numberFormat = NumberFormat.getNumberInstance(Messages.getLanguage().getLocale());
 		numberFormat.setMaximumFractionDigits(1);
