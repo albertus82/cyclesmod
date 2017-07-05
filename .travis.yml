@@ -13,7 +13,8 @@ matrix:
     - os: osx
 
 addons:
-  sonarcloud: true
+  sonarcloud:
+    organization: "albertus82-github"
   apt:
     sources:
       - sourceline: 'ppa:ubuntu-wine/ppa'
