@@ -9,6 +9,14 @@ environment:
     secure: 28Ld5Eo4KQT8wdWT8RiXaYh6GBPs68VwMY9saM2MZNBmk4EXOEyLIeLHbjNA38t6pgSmwScH0bUPVPaBmC4RDHV2/7RXHr/oW4yltv4A4Ug=
 
   matrix:
+    - platform: x86
+      JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.6.0
+      ANT_VERSION: 1.9.9
+    - platform: x86
+      JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.7.0
+      ANT_VERSION: 1.9.9
+    - platform: x86
+      JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.8.0
     - platform: x64
       JAVA_HOME: $(ProgramFiles)\Java\jdk1.6.0
       ANT_VERSION: 1.9.9
@@ -35,7 +43,7 @@ build_script:
 
 after_build:
   - ps: If ($env:APPVEYOR_REPO_TAG -eq 'true' -and $env:JAVA_HOME -eq ($env:ProgramFiles + '\Java\jdk1.8.0')) { $env:ARTIFACTS_PATH = 'target\*.*' }
-  - cmd: if "%APPVEYOR_REPO_TAG%" == "true" if "%JAVA_HOME%" == "%ProgramFiles%\Java\jdk1.6.0" for /R target %%i in (*.exe) do if "%%~xi" == ".exe" curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% https://www.virustotal.com/vtapi/v2/file/scan
+  - cmd: if "%APPVEYOR_REPO_TAG%" == "true" if "%JAVA_HOME%" == "%ProgramFiles%\Java\jdk1.8.0" for /R target %%i in (*.exe) do if "%%~xi" == ".exe" curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% https://www.virustotal.com/vtapi/v2/file/scan
 
 artifacts:
   - path: $(ARTIFACTS_PATH)
