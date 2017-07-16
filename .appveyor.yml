@@ -6,7 +6,7 @@ environment:
   JRE6_HOME: $(ProgramFiles)\Java\jdk1.6.0\jre
   ANT_VERSION: 1.10.1
   VT_API_KEY:
-    secure: 28Ld5Eo4KQT8wdWT8RiXaYh6GBPs68VwMY9saM2MZNBmk4EXOEyLIeLHbjNA38t6pgSmwScH0bUPVPaBmC4RDHV2/7RXHr/oW4yltv4A4Ug=
+    secure: 3sqJDjLAS708tR/LiAqKLZTnLLrhGJuWVzzI4nCjLbUUsZB+PPRG3y0BWWnMo14CDhBT4v6yjHTA23RdopoHDWJlBcGhKELKZOLhHsnJLU8=
 
   matrix:
     - platform: x86
