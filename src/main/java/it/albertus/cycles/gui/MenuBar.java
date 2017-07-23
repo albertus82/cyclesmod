@@ -18,7 +18,7 @@ import it.albertus.cycles.gui.listener.AboutListener;
 import it.albertus.cycles.gui.listener.CloseListener;
 import it.albertus.cycles.gui.listener.CopySelectionListener;
 import it.albertus.cycles.gui.listener.CutSelectionListener;
-import it.albertus.cycles.gui.listener.EditMenuBarArmListener;
+import it.albertus.cycles.gui.listener.EditMenuListener;
 import it.albertus.cycles.gui.listener.LanguageSelectionListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
 import it.albertus.cycles.gui.listener.OpenTorqueGraphDialogListener;
@@ -130,7 +130,9 @@ public class MenuBar {
 		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
 		editMenuHeader.setText(Messages.get("lbl.menu.header.edit"));
 		editMenuHeader.setMenu(editMenu);
-		editMenuHeader.addArmListener(new EditMenuBarArmListener(gui));
+		final EditMenuListener editMenuListener = new EditMenuListener(gui);
+		editMenu.addMenuListener(editMenuListener);
+		editMenuHeader.addArmListener(editMenuListener);
 
 		editCutMenuItem = new MenuItem(editMenu, SWT.PUSH);
 		editCutMenuItem.setText(Messages.get("lbl.menu.item.cut") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_CUT));

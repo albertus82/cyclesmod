@@ -3,6 +3,8 @@ package it.albertus.cycles.gui.listener;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.events.ArmEvent;
 import org.eclipse.swt.events.ArmListener;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cycles.gui.CyclesModGui;
@@ -13,16 +15,28 @@ import it.albertus.jface.SwtUtils;
  * Attenzione: disabilitando gli elementi dei menu, vengono automaticamente
  * disabilitati anche i relativi acceleratori.
  */
-public class EditMenuBarArmListener implements ArmListener {
+public class EditMenuListener implements ArmListener, MenuListener {
 
 	private final CyclesModGui gui;
 
-	public EditMenuBarArmListener(final CyclesModGui gui) {
+	public EditMenuListener(final CyclesModGui gui) {
 		this.gui = gui;
 	}
 
 	@Override
-	public void widgetArmed(ArmEvent e) {
+	public void widgetArmed(final ArmEvent e) {
+		execute();
+	}
+
+	@Override
+	public void menuShown(final MenuEvent e) {
+		execute();
+	}
+
+	@Override
+	public void menuHidden(final MenuEvent e) {/* Ignore */}
+
+	private void execute() {
 		final MenuItem cutMenuItem = gui.getMenuBar().getEditCutMenuItem();
 		cutMenuItem.setEnabled(canCut());
 
@@ -33,11 +47,11 @@ public class EditMenuBarArmListener implements ArmListener {
 		pasteMenuItem.setEnabled(canPaste());
 	}
 
-	protected boolean canCut() {
+	private boolean canCut() {
 		return canCopy();
 	}
 
-	protected boolean canCopy() {
+	private boolean canCopy() {
 		for (final FormProperty fp : gui.getTabs().getFormProperties().values()) {
 			if (fp != null && fp.getText() != null && fp.getText().isFocusControl() && fp.getText().getSelectionText() != null && !fp.getText().getSelectionText().isEmpty()) {
 				return true;
@@ -46,7 +60,7 @@ public class EditMenuBarArmListener implements ArmListener {
 		return false;
 	}
 
-	protected boolean canPaste() {
+	private boolean canPaste() {
 		if (SwtUtils.checkClipboard(TextTransfer.getInstance())) {
 			for (final FormProperty fp : gui.getTabs().getFormProperties().values()) {
 				if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
