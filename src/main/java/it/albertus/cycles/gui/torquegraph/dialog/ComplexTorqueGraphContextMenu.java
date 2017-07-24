@@ -74,11 +74,11 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		zoomInMenuItem.setImage(ZoomType.ZOOM_IN.getIconImage());
 		zoomInMenuItem.addSelectionListener(new ZoomInListener(torqueGraph.getXyGraph()));
 
-		final MenuItem ZoomOutMenuItem = new MenuItem(menu, SWT.PUSH);
-		ZoomOutMenuItem.setText(Messages.get("lbl.menu.item.graph.zoomOut") + SwtUtils.getShortcutLabel("-"));
-		ZoomOutMenuItem.setAccelerator('-');
-		ZoomOutMenuItem.setImage(ZoomType.ZOOM_OUT.getIconImage());
-		ZoomOutMenuItem.addSelectionListener(new ZoomOutListener(torqueGraph.getXyGraph()));
+		final MenuItem zoomOutMenuItem = new MenuItem(menu, SWT.PUSH);
+		zoomOutMenuItem.setText(Messages.get("lbl.menu.item.graph.zoomOut") + SwtUtils.getShortcutLabel("-"));
+		zoomOutMenuItem.setAccelerator('-');
+		zoomOutMenuItem.setImage(ZoomType.ZOOM_OUT.getIconImage());
+		zoomOutMenuItem.addSelectionListener(new ZoomOutListener(torqueGraph.getXyGraph()));
 
 		final MenuItem performAutoScaleMenuItem = new MenuItem(menu, SWT.PUSH);
 		performAutoScaleMenuItem.setText(Messages.get("lbl.menu.item.graph.autoscaleNow"));
