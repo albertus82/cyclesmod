@@ -13,6 +13,7 @@ import it.albertus.cycles.model.BikesCfg;
 import it.albertus.cycles.model.BikesInf;
 import it.albertus.cycles.resources.Messages;
 import it.albertus.util.IOUtils;
+import it.albertus.util.NewLine;
 import it.albertus.util.Version;
 import it.albertus.util.logging.LoggerFactory;
 
@@ -50,9 +51,9 @@ public class CyclesModConsole extends CyclesModEngine {
 		}
 	}
 
-	private static String getWelcomeMessage() throws IOException {
+	private static String getWelcomeMessage() {
 		final Version version = Version.getInstance();
-		return Messages.get("msg.welcome", version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(version.getDate()), Messages.get("msg.info.site")) + "\r\n";
+		return Messages.get("msg.welcome", version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(version.getDate()), Messages.get("msg.info.site")) + NewLine.SYSTEM_LINE_SEPARATOR;
 	}
 
 	private void execute() throws IOException {
