@@ -20,9 +20,11 @@ addons:
       - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/ trusty main'
         key_url: https://dl.winehq.org/wine-builds/Release.key
     packages:
-      - winehq-stable
-      - lib32z1
+      - ant-optional
       - lib32ncurses5
+      - lib32z1
+      - openjdk-6-jdk
+      - winehq-stable
 
 env:
   global:
