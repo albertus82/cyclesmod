@@ -1,11 +1,11 @@
 language: java
 
+dist: trusty
+
 matrix:
   include:
     - os: linux
       jdk: oraclejdk8
-    - os: linux
-      jdk: oraclejdk7
     - os: linux
       jdk: openjdk7
     - os: linux
@@ -17,9 +17,10 @@ addons:
     organization: "albertus82-github"
   apt:
     sources:
-      - sourceline: 'ppa:ubuntu-wine/ppa'
+      - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/ trusty main'
+        key_url: https://dl.winehq.org/wine-builds/Release.key
     packages:
-      - wine1.7
+      - winehq-stable
       - lib32z1
       - lib32ncurses5
 
