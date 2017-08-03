@@ -1,6 +1,7 @@
 CyclesMod
 =========
 
+[![Release](https://img.shields.io/github/release/Albertus82/CyclesMod.svg)](https://github.com/Albertus82/CyclesMod/releases/latest)
 [![Build Status](https://travis-ci.org/Albertus82/CyclesMod.svg?branch=master)](https://travis-ci.org/Albertus82/CyclesMod)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/Albertus82/CyclesMod?branch=master&svg=true)](https://ci.appveyor.com/project/Albertus82/CyclesMod)
 
