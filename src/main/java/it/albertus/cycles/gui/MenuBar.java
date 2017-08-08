@@ -19,6 +19,7 @@ import it.albertus.cycles.gui.listener.CloseListener;
 import it.albertus.cycles.gui.listener.CopySelectionListener;
 import it.albertus.cycles.gui.listener.CutSelectionListener;
 import it.albertus.cycles.gui.listener.EditMenuListener;
+import it.albertus.cycles.gui.listener.HelpMenuListener;
 import it.albertus.cycles.gui.listener.LanguageSelectionListener;
 import it.albertus.cycles.gui.listener.OpenSelectionListener;
 import it.albertus.cycles.gui.listener.OpenTorqueGraphDialogListener;
@@ -32,6 +33,7 @@ import it.albertus.cycles.resources.Messages.Language;
 import it.albertus.jface.SwtUtils;
 import it.albertus.jface.cocoa.CocoaEnhancerException;
 import it.albertus.jface.cocoa.CocoaUIEnhancer;
+import it.albertus.jface.sysinfo.SystemInformationDialog;
 import it.albertus.util.logging.LoggerFactory;
 
 /**
@@ -42,6 +44,28 @@ import it.albertus.util.logging.LoggerFactory;
  * combinazioni di tasti saranno ignorate.
  */
 public class MenuBar {
+
+	private static final String LBL_MENU_HEADER_FILE = "lbl.menu.header.file";
+	private static final String LBL_MENU_ITEM_OPEN = "lbl.menu.item.open";
+	private static final String LBL_MENU_ITEM_SAVE = "lbl.menu.item.save";
+	private static final String LBL_MENU_ITEM_SAVEAS = "lbl.menu.item.saveas";
+	private static final String LBL_MENU_ITEM_EXIT = "lbl.menu.item.exit";
+	private static final String LBL_MENU_HEADER_EDIT = "lbl.menu.header.edit";
+	private static final String LBL_MENU_ITEM_CUT = "lbl.menu.item.cut";
+	private static final String LBL_MENU_ITEM_COPY = "lbl.menu.item.copy";
+	private static final String LBL_MENU_ITEM_PASTE = "lbl.menu.item.paste";
+	private static final String LBL_MENU_ITEM_TORQUE_CURVE = "lbl.menu.item.torque.curve";
+	private static final String LBL_MENU_ITEM_TORQUE_CURVE_BIKE = "lbl.menu.item.torque.curve.bike";
+	private static final String LBL_MENU_ITEM_RESET = "lbl.menu.item.reset";
+	private static final String LBL_MENU_ITEM_RESET_SINGLE = "lbl.menu.item.reset.single";
+	private static final String LBL_MENU_ITEM_RESET_ALL = "lbl.menu.item.reset.all";
+	private static final String LBL_MENU_HEADER_VIEW = "lbl.menu.header.view";
+	private static final String LBL_MENU_ITEM_RADIX = "lbl.menu.item.radix";
+	private static final String LBL_MENU_ITEM_LANGUAGE = "lbl.menu.item.language";
+	private static final String LBL_MENU_HEADER_HELP = "lbl.menu.header.help";
+	private static final String LBL_MENU_HEADER_HELP_WINDOWS = "lbl.menu.header.help.windows";
+	private static final String LBL_MENU_ITEM_SYSTEM_INFO = "lbl.menu.item.system.info";
+	private static final String LBL_MENU_ITEM_ABOUT = "lbl.menu.item.about";
 
 	private static final Logger logger = LoggerFactory.getLogger(MenuBar.class);
 
@@ -67,8 +91,9 @@ public class MenuBar {
 	private final MenuItem viewLanguageSubMenuItem;
 	private final Map<Language, MenuItem> viewLanguageMenuItems = new EnumMap<Language, MenuItem>(Language.class);
 
-	private MenuItem helpMenuHeader;
-	private MenuItem helpAboutMenuItem;
+	private final MenuItem helpMenuHeader;
+	private final MenuItem helpSystemInfoItem;
+	private MenuItem helpAboutItem;
 
 	MenuBar(final CyclesModGui gui) {
 		final CloseListener closeListener = new CloseListener(gui);
@@ -90,16 +115,16 @@ public class MenuBar {
 		// File
 		final Menu fileMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		fileMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		fileMenuHeader.setText(Messages.get("lbl.menu.header.file"));
+		fileMenuHeader.setText(Messages.get(LBL_MENU_HEADER_FILE));
 		fileMenuHeader.setMenu(fileMenu);
 
 		fileOpenMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileOpenMenuItem.setText(Messages.get("lbl.menu.item.open") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
+		fileOpenMenuItem.setText(Messages.get(LBL_MENU_ITEM_OPEN) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
 		fileOpenMenuItem.addSelectionListener(new OpenSelectionListener(gui));
 		fileOpenMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_OPEN);
 
 		fileSaveMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileSaveMenuItem.setText(Messages.get("lbl.menu.item.save") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+		fileSaveMenuItem.setText(Messages.get(LBL_MENU_ITEM_SAVE) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
 		fileSaveMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -109,7 +134,7 @@ public class MenuBar {
 		fileSaveMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_SAVE);
 
 		fileSaveAsMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-		fileSaveAsMenuItem.setText(Messages.get("lbl.menu.item.saveas"));
+		fileSaveAsMenuItem.setText(Messages.get(LBL_MENU_ITEM_SAVEAS));
 		fileSaveAsMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -121,45 +146,45 @@ public class MenuBar {
 			new MenuItem(fileMenu, SWT.SEPARATOR);
 
 			fileExitMenuItem = new MenuItem(fileMenu, SWT.PUSH);
-			fileExitMenuItem.setText(Messages.get("lbl.menu.item.exit"));
+			fileExitMenuItem.setText(Messages.get(LBL_MENU_ITEM_EXIT));
 			fileExitMenuItem.addSelectionListener(closeListener);
 		}
 
 		// Edit
 		final Menu editMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		editMenuHeader.setText(Messages.get("lbl.menu.header.edit"));
+		editMenuHeader.setText(Messages.get(LBL_MENU_HEADER_EDIT));
 		editMenuHeader.setMenu(editMenu);
 		final EditMenuListener editMenuListener = new EditMenuListener(gui);
 		editMenu.addMenuListener(editMenuListener);
 		editMenuHeader.addArmListener(editMenuListener);
 
 		editCutMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editCutMenuItem.setText(Messages.get("lbl.menu.item.cut") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_CUT));
+		editCutMenuItem.setText(Messages.get(LBL_MENU_ITEM_CUT) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_CUT));
 		editCutMenuItem.addSelectionListener(new CutSelectionListener(gui));
 		editCutMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_CUT);
 
 		editCopyMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editCopyMenuItem.setText(Messages.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
+		editCopyMenuItem.setText(Messages.get(LBL_MENU_ITEM_COPY) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
 		editCopyMenuItem.addSelectionListener(new CopySelectionListener(gui));
 		editCopyMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_COPY);
 
 		editPasteMenuItem = new MenuItem(editMenu, SWT.PUSH);
-		editPasteMenuItem.setText(Messages.get("lbl.menu.item.paste") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_PASTE));
+		editPasteMenuItem.setText(Messages.get(LBL_MENU_ITEM_PASTE) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_PASTE));
 		editPasteMenuItem.addSelectionListener(new PasteSelectionListener(gui));
 		editPasteMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_PASTE);
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
 		editTorqueSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
-		editTorqueSubMenuItem.setText(Messages.get("lbl.menu.item.torque.curve"));
+		editTorqueSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE));
 
 		final Menu editTorqueSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editTorqueSubMenuItem.setMenu(editTorqueSubMenu);
 
 		for (final BikeType bikeType : BikeType.values()) {
 			final MenuItem editTorqueMenuItem = new MenuItem(editTorqueSubMenu, SWT.PUSH);
-			editTorqueMenuItem.setText(Messages.get("lbl.menu.item.torque.curve.bike", bikeType.getDisplacement()));
+			editTorqueMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE_BIKE, bikeType.getDisplacement()));
 			editTorqueMenuItem.addSelectionListener(new OpenTorqueGraphDialogListener(gui, bikeType));
 			editTorqueMenuItems.put(bikeType, editTorqueMenuItem);
 		}
@@ -167,27 +192,27 @@ public class MenuBar {
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
 		editResetSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
-		editResetSubMenuItem.setText(Messages.get("lbl.menu.item.reset"));
+		editResetSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_RESET));
 
 		final Menu editResetSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editResetSubMenuItem.setMenu(editResetSubMenu);
 
 		editResetSingleMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
-		editResetSingleMenuItem.setText(Messages.get("lbl.menu.item.reset.single"));
+		editResetSingleMenuItem.setText(Messages.get(LBL_MENU_ITEM_RESET_SINGLE));
 		editResetSingleMenuItem.addSelectionListener(new ResetSingleSelectionListener(gui));
 
 		editResetAllMenuItem = new MenuItem(editResetSubMenu, SWT.PUSH);
-		editResetAllMenuItem.setText(Messages.get("lbl.menu.item.reset.all"));
+		editResetAllMenuItem.setText(Messages.get(LBL_MENU_ITEM_RESET_ALL));
 		editResetAllMenuItem.addSelectionListener(new ResetAllSelectionListener(gui));
 
 		// View
 		final Menu viewMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewMenuHeader = new MenuItem(bar, SWT.CASCADE);
-		viewMenuHeader.setText(Messages.get("lbl.menu.header.view"));
+		viewMenuHeader.setText(Messages.get(LBL_MENU_HEADER_VIEW));
 		viewMenuHeader.setMenu(viewMenu);
 
 		viewRadixSubMenuItem = new MenuItem(viewMenu, SWT.CASCADE);
-		viewRadixSubMenuItem.setText(Messages.get("lbl.menu.item.radix"));
+		viewRadixSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_RADIX));
 
 		final Menu viewRadixSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewRadixSubMenuItem.setMenu(viewRadixSubMenu);
@@ -196,7 +221,7 @@ public class MenuBar {
 
 		for (final NumeralSystem numeralSystem : NumeralSystem.values()) {
 			final MenuItem radixMenuItem = new MenuItem(viewRadixSubMenu, SWT.RADIO);
-			radixMenuItem.setText(Messages.get("lbl.menu.item.radix." + numeralSystem.getRadix()));
+			radixMenuItem.setText(Messages.get(LBL_MENU_ITEM_RADIX + '.' + numeralSystem.getRadix()));
 			radixMenuItem.setData(numeralSystem);
 			radixMenuItem.addSelectionListener(radixSelectionListener);
 			viewRadixMenuItems.put(numeralSystem, radixMenuItem);
@@ -207,7 +232,7 @@ public class MenuBar {
 		new MenuItem(viewMenu, SWT.SEPARATOR);
 
 		viewLanguageSubMenuItem = new MenuItem(viewMenu, SWT.CASCADE);
-		viewLanguageSubMenuItem.setText(Messages.get("lbl.menu.item.language"));
+		viewLanguageSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_LANGUAGE));
 
 		final Menu viewLanguageSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewLanguageSubMenuItem.setMenu(viewLanguageSubMenu);
@@ -225,53 +250,67 @@ public class MenuBar {
 		viewLanguageMenuItems.get(Messages.getLanguage()).setSelection(true); // Default
 
 		// Help
-		if (!cocoaMenuCreated) {
-			final Menu helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-			helpMenuHeader = new MenuItem(bar, SWT.CASCADE);
-			helpMenuHeader.setText(Messages.get("lbl.menu.header.help"));
-			helpMenuHeader.setMenu(helpMenu);
+		final Menu helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		helpMenuHeader = new MenuItem(bar, SWT.CASCADE);
+		helpMenuHeader.setText(Messages.get(Util.isWindows() ? LBL_MENU_HEADER_HELP_WINDOWS : LBL_MENU_HEADER_HELP));
+		helpMenuHeader.setMenu(helpMenu);
 
-			helpAboutMenuItem = new MenuItem(helpMenu, SWT.PUSH);
-			helpAboutMenuItem.setText(Messages.get("lbl.menu.item.about"));
-			helpAboutMenuItem.addSelectionListener(aboutListener);
+		helpSystemInfoItem = new MenuItem(helpMenu, SWT.PUSH);
+		helpSystemInfoItem.setText(Messages.get(LBL_MENU_ITEM_SYSTEM_INFO));
+		helpSystemInfoItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				SystemInformationDialog.open(gui.getShell());
+			}
+		});
+
+		if (!cocoaMenuCreated) {
+			new MenuItem(helpMenu, SWT.SEPARATOR);
+
+			helpAboutItem = new MenuItem(helpMenu, SWT.PUSH);
+			helpAboutItem.setText(Messages.get(LBL_MENU_ITEM_ABOUT));
+			helpAboutItem.addSelectionListener(new AboutListener(gui));
 		}
+
+		final HelpMenuListener helpMenuListener = new HelpMenuListener(helpSystemInfoItem);
+		helpMenu.addMenuListener(helpMenuListener);
+		helpMenuHeader.addArmListener(helpMenuListener);
 
 		gui.getShell().setMenuBar(bar);
 	}
 
 	public void updateTexts() {
-		fileMenuHeader.setText(Messages.get("lbl.menu.header.file"));
-		fileOpenMenuItem.setText(Messages.get("lbl.menu.item.open") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
-		fileSaveMenuItem.setText(Messages.get("lbl.menu.item.save") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
-		fileSaveAsMenuItem.setText(Messages.get("lbl.menu.item.saveas"));
+		fileMenuHeader.setText(Messages.get(LBL_MENU_HEADER_FILE));
+		fileOpenMenuItem.setText(Messages.get(LBL_MENU_ITEM_OPEN) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
+		fileSaveMenuItem.setText(Messages.get(LBL_MENU_ITEM_SAVE) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+		fileSaveAsMenuItem.setText(Messages.get(LBL_MENU_ITEM_SAVEAS));
 		if (fileExitMenuItem != null && !fileExitMenuItem.isDisposed()) {
-			fileExitMenuItem.setText(Messages.get("lbl.menu.item.exit"));
+			fileExitMenuItem.setText(Messages.get(LBL_MENU_ITEM_EXIT));
 		}
-		editMenuHeader.setText(Messages.get("lbl.menu.header.edit"));
-		editCutMenuItem.setText(Messages.get("lbl.menu.item.cut") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_CUT));
-		editCopyMenuItem.setText(Messages.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
-		editPasteMenuItem.setText(Messages.get("lbl.menu.item.paste") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_PASTE));
-		editResetSubMenuItem.setText(Messages.get("lbl.menu.item.reset"));
-		editResetSingleMenuItem.setText(Messages.get("lbl.menu.item.reset.single"));
-		editResetAllMenuItem.setText(Messages.get("lbl.menu.item.reset.all"));
-		viewMenuHeader.setText(Messages.get("lbl.menu.header.view"));
-		viewRadixSubMenuItem.setText(Messages.get("lbl.menu.item.radix"));
+		editMenuHeader.setText(Messages.get(LBL_MENU_HEADER_EDIT));
+		editCutMenuItem.setText(Messages.get(LBL_MENU_ITEM_CUT) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_CUT));
+		editCopyMenuItem.setText(Messages.get(LBL_MENU_ITEM_COPY) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
+		editPasteMenuItem.setText(Messages.get(LBL_MENU_ITEM_PASTE) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_PASTE));
+		editResetSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_RESET));
+		editResetSingleMenuItem.setText(Messages.get(LBL_MENU_ITEM_RESET_SINGLE));
+		editResetAllMenuItem.setText(Messages.get(LBL_MENU_ITEM_RESET_ALL));
+		viewMenuHeader.setText(Messages.get(LBL_MENU_HEADER_VIEW));
+		viewRadixSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_RADIX));
 		for (final Entry<NumeralSystem, MenuItem> entry : viewRadixMenuItems.entrySet()) {
-			entry.getValue().setText(Messages.get("lbl.menu.item.radix." + entry.getKey().getRadix()));
+			entry.getValue().setText(Messages.get(LBL_MENU_ITEM_RADIX + '.' + +entry.getKey().getRadix()));
 		}
-		editTorqueSubMenuItem.setText(Messages.get("lbl.menu.item.torque.curve"));
+		editTorqueSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE));
 		for (final Entry<BikeType, MenuItem> entry : editTorqueMenuItems.entrySet()) {
-			entry.getValue().setText(Messages.get("lbl.menu.item.torque.curve.bike", entry.getKey().getDisplacement()));
+			entry.getValue().setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE_BIKE, entry.getKey().getDisplacement()));
 		}
-		viewLanguageSubMenuItem.setText(Messages.get("lbl.menu.item.language"));
+		viewLanguageSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_LANGUAGE));
 		for (final Entry<Language, MenuItem> entry : viewLanguageMenuItems.entrySet()) {
 			entry.getValue().setText(entry.getKey().getLocale().getDisplayLanguage(entry.getKey().getLocale()));
 		}
-		if (helpMenuHeader != null && !helpMenuHeader.isDisposed()) {
-			helpMenuHeader.setText(Messages.get("lbl.menu.header.help"));
-		}
-		if (helpAboutMenuItem != null && !helpAboutMenuItem.isDisposed()) {
-			helpAboutMenuItem.setText(Messages.get("lbl.menu.item.about"));
+		helpMenuHeader.setText(Messages.get(Util.isWindows() ? LBL_MENU_HEADER_HELP_WINDOWS : LBL_MENU_HEADER_HELP));
+		helpSystemInfoItem.setText(Messages.get(LBL_MENU_ITEM_SYSTEM_INFO));
+		if (helpAboutItem != null && !helpAboutItem.isDisposed()) {
+			helpAboutItem.setText(Messages.get(LBL_MENU_ITEM_ABOUT));
 		}
 	}
 
