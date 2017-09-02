@@ -371,6 +371,7 @@
 			AppPublisherURL=${innosetup.AppPublisherURL}
 			AppSupportURL=${innosetup.AppSupportURL}
 			AppUpdatesURL=${innosetup.AppUpdatesURL}
+			AppMutex=${build.jar.archive.manifest.mainClass}
 			DefaultDirName={pf}\${name}
 			DefaultGroupName=${name}
 			UninstallDisplayIcon={app}\${ant.project.name}.exe
@@ -395,8 +396,8 @@
 			Name: "{userdesktop}\${name}"; Filename: "{app}\${ant.project.name}.exe"; Tasks: desktopicon
 
 			[Files]
-			Source: "${artifactId}\*"; Excludes: "*.cfg,lib\${dependencies.log.fileName}"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-			Source: "${artifactId}\${dependencies.directory}\${dependencies.log.fileName}"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
+			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+			Source: "${artifactId}\${dependencies.directory}\*.log"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
 
 			[Code]
 			procedure CurStepChanged(CurStep: TSetupStep);
@@ -404,7 +405,7 @@
 				jarFileNames: TArrayOfString;
 				i: Integer;
 			begin
-				if (CurStep = ssInstall) and (LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${dependencies.log.fileName}'), jarFileNames)) then
+				if (CurStep = ssInstall) and (LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innosetup.AppId.x86}.log'), jarFileNames)) then
 				begin
 					for i := 0 to GetArrayLength(jarFileNames) - 1 do
 						DeleteFile(ExpandConstant('{app}\${dependencies.directory}\' + jarFileNames[i]));
@@ -421,7 +422,7 @@
 			</mapper>
 		</pathconvert>
 
-		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}/${dependencies.log.fileName}">${depedenciesToInstall}</echo>
+		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}/${appId.x86}.log">${depedenciesToInstall}</echo>
 
 		<exec osfamily="windows" executable="${innosetup.dir}/ISCC.exe">
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86/setup.iss" />
@@ -451,6 +452,7 @@
 			AppPublisherURL=${innosetup.AppPublisherURL}
 			AppSupportURL=${innosetup.AppSupportURL}
 			AppUpdatesURL=${innosetup.AppUpdatesURL}
+			AppMutex=${build.jar.archive.manifest.mainClass}
 			DefaultDirName={pf}\${name}
 			DefaultGroupName=${name}
 			UninstallDisplayIcon={app}\${ant.project.name}.exe
@@ -476,8 +478,8 @@
 			Name: "{userdesktop}\${name}"; Filename: "{app}\${ant.project.name}.exe"; Tasks: desktopicon
 
 			[Files]
-			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\${dependencies.log.fileName}"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-			Source: "${artifactId}\${dependencies.directory}\${dependencies.log.fileName}"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
+			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
+			Source: "${artifactId}\${dependencies.directory}\*.log"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
 
 			[Code]
 			procedure CurStepChanged(CurStep: TSetupStep);
@@ -485,7 +487,7 @@
 				jarFileNames: TArrayOfString;
 				i: Integer;
 			begin
-				if (CurStep = ssInstall) and (LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${dependencies.log.fileName}'), jarFileNames)) then
+				if (CurStep = ssInstall) and (LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innosetup.AppId.x64}.log'), jarFileNames)) then
 				begin
 					for i := 0 to GetArrayLength(jarFileNames) - 1 do
 						DeleteFile(ExpandConstant('{app}\${dependencies.directory}\' + jarFileNames[i]));
@@ -502,7 +504,7 @@
 			</mapper>
 		</pathconvert>
 
-		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}/${dependencies.log.fileName}">${depedenciesToInstall}</echo>
+		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}/${appId.x64}.log">${depedenciesToInstall}</echo>
 
 		<exec osfamily="windows" executable="${innosetup.dir}/ISCC.exe">
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86_64/setup.iss" />
