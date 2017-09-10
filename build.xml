@@ -405,10 +405,17 @@
 				jarFileNames: TArrayOfString;
 				i: Integer;
 			begin
-				if (CurStep = ssInstall) and (LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innosetup.AppId.x86}.log'), jarFileNames)) then
+				if CurStep = ssInstall then
 				begin
-					for i := 0 to GetArrayLength(jarFileNames) - 1 do
-						DeleteFile(ExpandConstant('{app}\${dependencies.directory}\' + jarFileNames[i]));
+					if LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innosetup.AppId.x86}.log'), jarFileNames) then
+					begin
+						for i := 0 to GetArrayLength(jarFileNames) - 1 do
+							DeleteFile(ExpandConstant('{app}\${dependencies.directory}\' + jarFileNames[i]));
+					end
+					else
+					begin
+						DelTree(ExpandConstant('{app}\${dependencies.directory}\*.jar'), False, True, False);
+					end;
 				end;
 			end;
 		</echo>
@@ -487,10 +494,17 @@
 				jarFileNames: TArrayOfString;
 				i: Integer;
 			begin
-				if (CurStep = ssInstall) and (LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innosetup.AppId.x64}.log'), jarFileNames)) then
+				if CurStep = ssInstall then
 				begin
-					for i := 0 to GetArrayLength(jarFileNames) - 1 do
-						DeleteFile(ExpandConstant('{app}\${dependencies.directory}\' + jarFileNames[i]));
+					if LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innosetup.AppId.x64}.log'), jarFileNames) then
+					begin
+						for i := 0 to GetArrayLength(jarFileNames) - 1 do
+							DeleteFile(ExpandConstant('{app}\${dependencies.directory}\' + jarFileNames[i]));
+					end
+					else
+					begin
+						DelTree(ExpandConstant('{app}\${dependencies.directory}\*.jar'), False, True, False);
+					end;
 				end;
 			end;
 		</echo>
