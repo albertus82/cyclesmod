@@ -49,7 +49,7 @@ public class DefaultBikes {
 		return new ByteArrayInputStream(DEFAULT);
 	}
 
-	public byte[] getByteArray() {
+	byte[] getByteArray() {
 		return Arrays.copyOf(DEFAULT, DEFAULT.length);
 	}
 
