@@ -285,7 +285,7 @@
 		<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpath="${jarbundler.dir}/jarbundler-core-3.3.0.jar" />
 
 		<mkdir dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" />
-		<jarbundler vmoptions="${macosx.vmoptions}" dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub" highresolutioncapable="true">
+		<jarbundler vmoptions="${macos.vmoptions}" dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub" highresolutioncapable="true">
 			<jarfileset dir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}" includes="**/*.jar" />
 		</jarbundler>
 		<copy todir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/Resources/Java" failonerror="false">
@@ -345,13 +345,46 @@
 	</target>
 
 	<target name="dist-windows" depends="jar">
+		<echo message="os.name: ${os.name}" />
+		<echo message="os.arch: ${os.arch}" />
+		<echo message="os.version: ${os.version}" />
+
 		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
-		<condition property="launch4j.bindir" value="${launch4j.dir}/mac" else="${launch4j.dir}/bin">
+		<condition property="launch4j.bindir" value="${launch4j.dir}/bin/win32">
 			<and>
-				<os family="mac" />
-				<available file="${launch4j.dir}/mac" type="dir" />
+				<os family="windows" />
+				<available file="${launch4j.dir}/bin/win32" type="dir" />
 			</and>
 		</condition>
+		<condition property="launch4j.bindir" value="${launch4j.dir}/bin/macosx-x86">
+			<and>
+				<os family="mac" />
+				<available file="${launch4j.dir}/bin/macosx-x86" type="dir" />
+			</and>
+		</condition>
+		<condition property="launch4j.bindir" value="${launch4j.dir}/bin/linux">
+			<and>
+				<os family="unix" />
+				<os arch="x86" />
+				<not>
+					<os name="mac os x" />
+				</not>
+				<available file="${launch4j.dir}/bin/linux" type="dir" />
+			</and>
+		</condition>
+		<condition property="launch4j.bindir" value="${launch4j.dir}/bin/linux-x64">
+			<and>
+				<os family="unix" />
+				<os arch="amd64" />
+				<not>
+					<os name="mac os x" />
+				</not>
+				<available file="${launch4j.dir}/bin/linux-x64" type="dir" />
+			</and>
+		</condition>
+
+		<echo message="launch4j.bindir: ${launch4j.bindir}" />
+
 		<chmod perm="+x" file="${launch4j.bindir}/ld" failonerror="false" failifexecutionfails="false" ignoremissing="true" />
 		<chmod perm="+x" file="${launch4j.bindir}/windres" failonerror="false" failifexecutionfails="false" ignoremissing="true" />
 
