@@ -36,7 +36,9 @@ env:
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; brew install wine ant; fi;
 
-script:
+before_script:
   - ant -diagnostics
+
+script:
   - ant all
   - if [ "$TRAVIS_JDK_VERSION" == "oraclejdk9" ]; then sonar-scanner -Dsonar.login=$SONAR_TOKEN; fi;
