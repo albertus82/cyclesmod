@@ -27,12 +27,15 @@ environment:
       ANT_VERSION: 1.9.9
     - platform: x64
       JAVA_HOME: $(ProgramFiles)\Java\jdk1.8.0
+    - platform: x64
+      JAVA_HOME: $(ChocolateyInstall)\lib\jvm\jdk9
 
 cache:
   - $(ChocolateyInstall)\lib\ant -> .appveyor.yml
 
 install:
-  - ps: if (!(Test-Path -Path ($env:ChocolateyInstall + '\lib\ant\apache-ant-' + $env:ANT_VERSION))) { cinst ant -i --version $env:ANT_VERSION }
+  - ps: If ($env:JAVA_HOME -eq ($env:ChocolateyInstall + '\lib\jvm\jdk9')) { cinst jdk9 -i -params 'installdir=C:\\ProgramData\\chocolatey\\lib\\jvm\\jdk9' }
+  - ps: If (!(Test-Path -Path ($env:ChocolateyInstall + '\lib\ant\apache-ant-' + $env:ANT_VERSION))) { cinst ant -i --version $env:ANT_VERSION }
   - cmd: PATH %ChocolateyInstall%\lib\ant\apache-ant-%ANT_VERSION%\bin;%JAVA_HOME%\bin;%PATH%
 
 before_build:
