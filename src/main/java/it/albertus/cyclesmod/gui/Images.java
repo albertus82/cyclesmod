@@ -1,6 +1,8 @@
 package it.albertus.cyclesmod.gui;
 
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
@@ -11,27 +13,28 @@ import it.albertus.util.IOUtils;
 
 public class Images {
 
-	/* Icona principale dell'applicazione (in vari formati) */
-	private static final Image[] MAIN_ICONS = loadIcons("main.ico");
+	// Main application icon (in various formats)
+	private static final Collection<Image> mainIcons = new LinkedHashSet<Image>();
 
 	private Images() {
 		throw new IllegalAccessError();
 	}
 
-	private static Image[] loadIcons(final String fileName) {
-		final InputStream is = Images.class.getResourceAsStream(fileName);
-		final ImageData[] images = new ImageLoader().load(is);
-		IOUtils.closeQuietly(is);
-		final Image[] icons = new Image[images.length];
-		int i = 0;
-		for (final ImageData id : images) {
-			icons[i++] = new Image(Display.getCurrent(), id);
+	static {
+		InputStream stream = null;
+		try {
+			stream = Images.class.getResourceAsStream("main.ico");
+			for (final ImageData data : new ImageLoader().load(stream)) {
+				mainIcons.add(new Image(Display.getCurrent(), data));
+			}
 		}
-		return icons;
+		finally {
+			IOUtils.closeQuietly(stream);
+		}
 	}
 
 	public static Image[] getMainIcons() {
-		return MAIN_ICONS;
+		return mainIcons.toArray(new Image[mainIcons.size()]);
 	}
 
 }
