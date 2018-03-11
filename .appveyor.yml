@@ -29,14 +29,13 @@ environment:
       VT_API_KEY:
         secure: 3sqJDjLAS708tR/LiAqKLZTnLLrhGJuWVzzI4nCjLbUUsZB+PPRG3y0BWWnMo14CDhBT4v6yjHTA23RdopoHDWJlBcGhKELKZOLhHsnJLU8=
     - platform: x64
-      JAVA_HOME: $(ChocolateyInstall)\lib\jvm\jdk9
+      JAVA_HOME: $(ProgramFiles)\Java\jdk9
       ANT_VERSION: 1.10.1
 
 cache:
   - $(ChocolateyInstall)\lib\ant -> .appveyor.yml
 
 install:
-  - ps: If ($env:JAVA_HOME -eq ($env:ChocolateyInstall + '\lib\jvm\jdk9')) { cinst jdk9 -i -params 'installdir=C:\\ProgramData\\chocolatey\\lib\\jvm\\jdk9' }
   - ps: If (!(Test-Path -Path ($env:ChocolateyInstall + '\lib\ant\apache-ant-' + $env:ANT_VERSION))) { cinst ant -i --version $env:ANT_VERSION }
   - cmd: PATH %ChocolateyInstall%\lib\ant\apache-ant-%ANT_VERSION%\bin;%JAVA_HOME%\bin;%PATH%
 
