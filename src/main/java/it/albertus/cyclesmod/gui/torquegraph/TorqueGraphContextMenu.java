@@ -27,7 +27,7 @@ public abstract class TorqueGraphContextMenu {
 
 	private static final byte[] POINT_SIZE_OPTIONS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-	private static final short[] AREA_ALPHA_OPTIONS = { 25, 50, 75, 100, 125, 150, 175, 200, 225, 0xFF };
+	private static final short[] AREA_ALPHA_OPTIONS = { 26, 51, 77, 102, 128, 153, 179, 204, 230, 255 };
 
 	private final ITorqueGraph torqueGraph;
 	private final Control parent;
@@ -81,8 +81,8 @@ public abstract class TorqueGraphContextMenu {
 		final Map<Integer, MenuItem> areaAlphaSubMenuItems = new HashMap<Integer, MenuItem>();
 		for (final int areaAlpha : AREA_ALPHA_OPTIONS) {
 			final MenuItem menuItem = new MenuItem(areaAlphaSubMenu, SWT.RADIO);
-			menuItem.setText("&" + (int) Math.min(areaAlpha / 2.5, 100) + "%");
-			if (areaAlpha == torqueGraph.getTrace().getAreaAlpha()) {
+			menuItem.setText("&" + (int) (areaAlpha / 2.55) + "%");
+			if (Math.round((float) areaAlpha / AREA_ALPHA_OPTIONS.length) == Math.round((float) torqueGraph.getTrace().getAreaAlpha() / AREA_ALPHA_OPTIONS.length)) {
 				areaAlphaSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
@@ -101,7 +101,7 @@ public abstract class TorqueGraphContextMenu {
 					entry.getValue().setSelection(entry.getKey().equals(torqueGraph.getTrace().getTraceType()));
 				}
 				for (final Entry<Integer, MenuItem> entry : areaAlphaSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(entry.getKey().equals(torqueGraph.getTrace().getAreaAlpha()));
+					entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / AREA_ALPHA_OPTIONS.length) == Math.round((float) torqueGraph.getTrace().getAreaAlpha() / AREA_ALPHA_OPTIONS.length));
 				}
 			}
 		});
