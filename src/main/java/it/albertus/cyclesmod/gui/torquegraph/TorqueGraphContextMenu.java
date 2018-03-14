@@ -81,8 +81,8 @@ public abstract class TorqueGraphContextMenu {
 		final Map<Integer, MenuItem> areaAlphaSubMenuItems = new HashMap<Integer, MenuItem>();
 		for (final int areaAlpha : AREA_ALPHA_OPTIONS) {
 			final MenuItem menuItem = new MenuItem(areaAlphaSubMenu, SWT.RADIO);
-			menuItem.setText("&" + (int) (areaAlpha / 2.55) + "%");
-			if (Math.round((float) areaAlpha / AREA_ALPHA_OPTIONS.length) == Math.round((float) torqueGraph.getTrace().getAreaAlpha() / AREA_ALPHA_OPTIONS.length)) {
+			menuItem.setText("&" + Math.round(areaAlpha / 2.55f) + "%");
+			if (Math.round(areaAlpha / 255f * AREA_ALPHA_OPTIONS.length) == Math.round(torqueGraph.getTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length)) {
 				areaAlphaSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
@@ -101,7 +101,7 @@ public abstract class TorqueGraphContextMenu {
 					entry.getValue().setSelection(entry.getKey().equals(torqueGraph.getTrace().getTraceType()));
 				}
 				for (final Entry<Integer, MenuItem> entry : areaAlphaSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / AREA_ALPHA_OPTIONS.length) == Math.round((float) torqueGraph.getTrace().getAreaAlpha() / AREA_ALPHA_OPTIONS.length));
+					entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / 255 * AREA_ALPHA_OPTIONS.length) == Math.round(torqueGraph.getTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length));
 				}
 			}
 		});
