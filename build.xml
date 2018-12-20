@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="CyclesMod" default="all" xmlns:jacoco="antlib:org.jacoco.ant">
+<project name="cycles-mod" default="all" xmlns:as="antlib:org.codehaus.mojo.animal_sniffer" xmlns:jacoco="antlib:org.jacoco.ant">
+
+	<property name="version.number" value="2.8.0" />
 
 	<property environment="env" />
 	<property name="env.JRE6_HOME" value="${env.JAVA_HOME}/../jdk1.6.0_45/jre" />
 
 	<property file="build.properties" />
-	<property file="${build.resourcesDirectory}/version.properties" />
 
 	<target name="clean">
 		<delete dir="${build.directory}" />
@@ -17,78 +18,107 @@
 		<delete dir="${build.distDirectory}" includes="*.*" />
 	</target>
 
+	<fileset id="classpath" dir="${dependencies.directory}">
+		<!-- Platform-independent libraries -->
+		<include name="compile/common/*.jar" />
+		<!-- Oldest SWT version in the package -->
+		<include name="compile/platform-dependent/gtk-linux-armhf/*.jar" />
+	</fileset>
+
 	<target name="compile">
 		<mkdir dir="${build.outputDirectory}" />
 		<javac srcdir="${build.sourceDirectory}" destdir="${build.outputDirectory}" source="${build.compiler.source}" target="${build.compiler.target}" debug="true" includeantruntime="false">
 			<classpath>
-				<fileset dir="${dependencies.directory}">
-					<include name="**/*.jar" />
-				</fileset>
+				<fileset refid="classpath" />
 			</classpath>
 			<bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" />
 			<compilerarg value="-version" />
 		</javac>
 	</target>
 
+	<target name="check-signature" depends="compile">
+		<typedef uri="antlib:org.codehaus.mojo.animal_sniffer">
+			<classpath path="${animalSniffer.directory}/animal-sniffer-ant-tasks-1.16.jar" />
+		</typedef>
+		<as:check-signature signature="${animalSniffer.directory}/java16-1.1.signature">
+			<path path="${build.outputDirectory}" />
+			<classpath>
+				<fileset refid="classpath" />
+			</classpath>
+		</as:check-signature>
+	</target>
+
 	<target name="resources">
+		<tstamp>
+			<format property="version.date" pattern="yyyy-MM-dd" />
+		</tstamp>
 		<copy todir="${build.outputDirectory}">
-			<fileset dir="${build.resourcesDirectory}" />
+			<fileset dir="${build.resourcesDirectory}">
+				<excludesfile name="${build.resourcesDirectory}/META-INF/version.properties" />
+			</fileset>
 		</copy>
+		<filter token="version.number" value="${version.number}" />
+		<filter token="version.date" value="${version.date}" />
+		<copy file="${build.resourcesDirectory}/META-INF/version.properties" todir="${build.outputDirectory}/META-INF" filtering="true" overwrite="true" />
 	</target>
 
 	<target name="lib">
-		<fileset id="lib" dir="${dependencies.directory}">
-			<include name="*.jar" />
-			<include name="license/*.txt" />
-		</fileset>
+		<union id="lib">
+			<fileset dir="${dependencies.directory}/compile/common">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${dependencies.directory}">
+				<include name="license/*.txt" />
+			</fileset>
+		</union>
 
 		<!-- Copy dependencies -->
 		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}">
-			<fileset refid="lib" />
-			<fileset dir="${dependencies.directory}/platform/win32-win32-x86">
+			<resources refid="lib" />
+			<fileset dir="${dependencies.directory}/compile/platform-dependent/win32-win32-x86">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}">
-			<fileset refid="lib" />
-			<fileset dir="${dependencies.directory}/platform/win32-win32-x86_64">
+			<resources refid="lib" />
+			<fileset dir="${dependencies.directory}/compile/platform-dependent/win32-win32-x86_64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}/${dependencies.directory}">
-			<fileset refid="lib" />
-			<fileset dir="${dependencies.directory}/platform/gtk-linux-x86">
+			<resources refid="lib" />
+			<fileset dir="${dependencies.directory}/compile/platform-dependent/gtk-linux-x86">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}/${dependencies.directory}">
-			<fileset refid="lib" />
-			<fileset dir="${dependencies.directory}/platform/gtk-linux-x86_64">
+			<resources refid="lib" />
+			<fileset dir="${dependencies.directory}/compile/platform-dependent/gtk-linux-x86_64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}/${dependencies.directory}">
-			<fileset refid="lib" />
-			<fileset dir="${dependencies.directory}/platform/gtk-linux-armhf">
+			<resources refid="lib" />
+			<fileset dir="${dependencies.directory}/compile/platform-dependent/gtk-linux-armhf">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
 		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${dependencies.directory}">
-			<fileset refid="lib" />
-			<fileset dir="${dependencies.directory}/platform/cocoa-macosx-x86_64">
+			<resources refid="lib" />
+			<fileset dir="${dependencies.directory}/compile/platform-dependent/cocoa-macosx-x86_64">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
 
 		<!-- Prepare MANIFEST.MF files -->
-		<manifestclasspath property="classpath.win32-win32-x86" jarfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${ant.project.name}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.win32-win32-x86" jarfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${launch4j.jarName}" maxParentLevels="0">
 			<classpath>
 				<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</manifestclasspath>
-		<manifestclasspath property="classpath.win32-win32-x86_64" jarfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${ant.project.name}.jar" maxParentLevels="0">
+		<manifestclasspath property="classpath.win32-win32-x86_64" jarfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${launch4j.jarName}" maxParentLevels="0">
 			<classpath>
 				<fileset dir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}">
 					<include name="*.jar" />
@@ -159,22 +189,26 @@
 			<include name="*.command" />
 		</fileset>
 
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}" failonerror="false">
+		<filter token="artifactId" value="${artifactId}" />
+		<filter token="vm.initialHeapSize" value="${vm.initialHeapSize}" />
+		<filter token="vm.maxHeapSize" value="${vm.maxHeapSize}" />
+
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}" failonerror="false" filtering="true">
 			<fileset refid="bat" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}" failonerror="false" filtering="true">
 			<fileset refid="bat" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}" failonerror="false" filtering="true">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}" failonerror="false" filtering="true">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}" failonerror="false" filtering="true">
 			<fileset refid="sh" />
 		</copy>
-		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}" failonerror="false">
+		<copy todir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}" failonerror="false" filtering="true">
 			<fileset refid="command" />
 		</copy>
 	</target>
@@ -213,8 +247,8 @@
 		<copy file="${icons.directory}/main.icns" tofile="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" failonerror="false" />
 	</target>
 
-	<target name="jar" depends="compile, resources, config, scripts, docs, icons, lib">
-		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${ant.project.name}.jar" basedir="${build.outputDirectory}" level="9">
+	<target name="jar" depends="check-signature, resources, config, scripts, docs, icons, lib">
+		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${launch4j.jarName}" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86}" />
@@ -225,7 +259,7 @@
 			</manifest>
 			<metainf refid="docs" />
 		</jar>
-		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${ant.project.name}.jar" basedir="${build.outputDirectory}" level="9">
+		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${launch4j.jarName}" basedir="${build.outputDirectory}" level="9">
 			<manifest>
 				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86_64}" />
@@ -283,19 +317,28 @@
 	</target>
 
 	<target name="dist-macos" depends="jar">
-		<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpath="${jarbundler.dir}/jarbundler-core-3.3.0.jar" />
+		<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpath="${jarBundler.directory}/jarbundler-core-3.3.0.jar" />
 
 		<mkdir dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" />
-		<jarbundler vmoptions="${macos.vmoptions}" dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarbundler.dir}/JavaApplicationStub" highresolutioncapable="true">
+		<jarbundler vmoptions="${macos.vmoptions}" dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarBundler.directory}/JavaApplicationStub" highresolutioncapable="true">
 			<jarfileset dir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}" includes="**/*.jar" />
 		</jarbundler>
+
 		<copy todir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/Resources/Java" failonerror="false">
 			<fileset refid="config" />
+		</copy>
+
+		<filter token="artifactId" value="${artifactId}" />
+		<filter token="vm.initialHeapSize" value="${vm.initialHeapSize}" />
+		<filter token="vm.maxHeapSize" value="${vm.maxHeapSize}" />
+		<copy todir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/Resources/Java" failonerror="false" filtering="true">
 			<fileset refid="command" />
 		</copy>
+
 		<copy todir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/SharedSupport">
 			<fileset refid="docs" />
 		</copy>
+
 		<tar destfile="${build.distDirectory}/${artifactId}-${version.number}-cocoa-macosx-x86_64-app.tar.gz" compression="gzip">
 			<tarfileset dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" filemode="755">
 				<include name="${name}.app/Contents/MacOS/*" />
@@ -350,37 +393,37 @@
 		<echo message="os.arch: ${os.arch}" />
 		<echo message="os.version: ${os.version}" />
 
-		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.dir}/launch4j.jar:${launch4j.dir}/lib/xstream.jar" />
-		<condition property="launch4j.bindir" value="${launch4j.dir}/bin/win32">
+		<taskdef name="launch4j" classname="net.sf.launch4j.ant.Launch4jTask" classpath="${launch4j.directory}/launch4j.jar:${launch4j.directory}/lib/xstream.jar" />
+		<condition property="launch4j.bindir" value="${launch4j.directory}/bin/win32">
 			<and>
 				<os family="windows" />
-				<available file="${launch4j.dir}/bin/win32" type="dir" />
+				<available file="${launch4j.directory}/bin/win32" type="dir" />
 			</and>
 		</condition>
-		<condition property="launch4j.bindir" value="${launch4j.dir}/bin/macosx-x86">
+		<condition property="launch4j.bindir" value="${launch4j.directory}/bin/macosx-x86">
 			<and>
 				<os family="mac" />
-				<available file="${launch4j.dir}/bin/macosx-x86" type="dir" />
+				<available file="${launch4j.directory}/bin/macosx-x86" type="dir" />
 			</and>
 		</condition>
-		<condition property="launch4j.bindir" value="${launch4j.dir}/bin/linux">
+		<condition property="launch4j.bindir" value="${launch4j.directory}/bin/linux">
 			<and>
 				<os family="unix" />
 				<os arch="x86" />
 				<not>
 					<os name="mac os x" />
 				</not>
-				<available file="${launch4j.dir}/bin/linux" type="dir" />
+				<available file="${launch4j.directory}/bin/linux" type="dir" />
 			</and>
 		</condition>
-		<condition property="launch4j.bindir" value="${launch4j.dir}/bin/linux-x64">
+		<condition property="launch4j.bindir" value="${launch4j.directory}/bin/linux-x64">
 			<and>
 				<os family="unix" />
 				<os arch="amd64" />
 				<not>
 					<os name="mac os x" />
 				</not>
-				<available file="${launch4j.dir}/bin/linux-x64" type="dir" />
+				<available file="${launch4j.directory}/bin/linux-x64" type="dir" />
 			</and>
 		</condition>
 
@@ -390,10 +433,10 @@
 		<chmod perm="+x" file="${launch4j.bindir}/windres" failonerror="false" failifexecutionfails="false" ignoremissing="true" />
 
 		<launch4j bindir="${launch4j.bindir}">
-			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${ant.project.name}.exe" jarpath="${ant.project.name}.jar" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
+			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${launch4j.outFileName}" jarpath="${launch4j.jarName}" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
 				<singleInstance mutexname="${build.jar.archive.manifest.mainClass}" windowtitle="${name}" />
 				<jre runtimebits="32" minversion="${build.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${vm.initialHeapSize}" maxheapsize="${vm.maxHeapSize}" />
-				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${ant.project.name}" originalfilename="${ant.project.name}.exe" />
+				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${launch4j.copyright}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${artifactId}" originalfilename="${launch4j.outFileName}" companyname="${launch4j.copyright}" />
 			</config>
 		</launch4j>
 		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86/setup.iss">
@@ -401,14 +444,15 @@
 			AppName=${name}
 			AppVersion=${version.number}
 			VersionInfoVersion=${version.number}
-			AppId=${innosetup.AppId.x86}
-			AppPublisherURL=${innosetup.AppPublisherURL}
-			AppSupportURL=${innosetup.AppSupportURL}
-			AppUpdatesURL=${innosetup.AppUpdatesURL}
+			AppId=${innoSetup.AppId.x86}
+			AppPublisherURL=${innoSetup.AppPublisherURL}
+			AppSupportURL=${innoSetup.AppSupportURL}
+			AppUpdatesURL=${innoSetup.AppUpdatesURL}
 			AppMutex=${build.jar.archive.manifest.mainClass}
-			DefaultDirName={pf}\${name}
+			PrivilegesRequired=lowest
+			DefaultDirName={userappdata}\${name}
 			DefaultGroupName=${name}
-			UninstallDisplayIcon={app}\${ant.project.name}.exe
+			UninstallDisplayIcon={app}\${launch4j.outFileName}
 			Compression=lzma2
 			SolidCompression=yes
 			CloseApplications=no
@@ -419,15 +463,15 @@
 			Name: "Italiano"; MessagesFile: "compiler:Languages\Italian.isl"; LicenseFile: "${artifactId}\LICENSE.txt"
 
 			[Run]
-			Filename: "{app}\${ant.project.name}.exe"; Description: "{cm:LaunchProgram,${name}}"; Flags: nowait postinstall skipifsilent
+			Filename: "{app}\${launch4j.outFileName}"; Description: "{cm:LaunchProgram,${name}}"; Flags: nowait postinstall skipifsilent
 
 			[Tasks]
 			Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 			[Icons]
-			Name: "{group}\${name}"; Filename: "{app}\${ant.project.name}.exe"
+			Name: "{group}\${name}"; Filename: "{app}\${launch4j.outFileName}"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
-			Name: "{userdesktop}\${name}"; Filename: "{app}\${ant.project.name}.exe"; Tasks: desktopicon
+			Name: "{userdesktop}\${name}"; Filename: "{app}\${launch4j.outFileName}"; Tasks: desktopicon
 
 			[Files]
 			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
@@ -441,7 +485,7 @@
 			begin
 				if CurStep = ssInstall then
 				begin
-					if LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innosetup.AppId.x86}.log'), jarFileNames) then
+					if LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innoSetup.AppId.x86}.log'), jarFileNames) then
 					begin
 						for i := 0 to GetArrayLength(jarFileNames) - 1 do
 							DeleteFile(ExpandConstant('{app}\${dependencies.directory}\' + jarFileNames[i]));
@@ -465,23 +509,23 @@
 
 		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}/${appId.x86}.log">${dependencies.log.x86}</echo>
 
-		<exec osfamily="windows" executable="${innosetup.dir}/ISCC.exe">
+		<exec osfamily="windows" executable="${innoSetup.directory}/ISCC.exe">
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86/setup.iss" />
 			<arg value="/O${build.distDirectory}" />
 			<arg value="/F${artifactId}-${version.number}-win32-win32-x86-setup" />
 		</exec>
 		<exec osfamily="unix" executable="wine">
-			<arg value="${innosetup.dir}/ISCC.exe" />
+			<arg value="${innoSetup.directory}/ISCC.exe" />
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86/setup.iss" />
 			<arg value="/O${build.distDirectory}" />
 			<arg value="/F${artifactId}-${version.number}-win32-win32-x86-setup" />
 		</exec>
 
 		<launch4j bindir="${launch4j.bindir}">
-			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${ant.project.name}.exe" jarpath="${ant.project.name}.jar" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
+			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${launch4j.outFileName}" jarpath="${launch4j.jarName}" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
 				<singleInstance mutexname="${build.jar.archive.manifest.mainClass}" windowtitle="${name}" />
 				<jre runtimebits="64" minversion="${build.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${vm.initialHeapSize}" maxheapsize="${vm.maxHeapSize}" />
-				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${name}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${ant.project.name}" originalfilename="${ant.project.name}.exe" />
+				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${launch4j.copyright}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${artifactId}" originalfilename="${launch4j.outFileName}" companyname="${launch4j.copyright}" />
 			</config>
 		</launch4j>
 		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86_64/setup.iss">
@@ -489,14 +533,15 @@
 			AppName=${name}
 			AppVersion=${version.number}
 			VersionInfoVersion=${version.number}
-			AppId=${innosetup.AppId.x64}
-			AppPublisherURL=${innosetup.AppPublisherURL}
-			AppSupportURL=${innosetup.AppSupportURL}
-			AppUpdatesURL=${innosetup.AppUpdatesURL}
+			AppId=${innoSetup.AppId.x64}
+			AppPublisherURL=${innoSetup.AppPublisherURL}
+			AppSupportURL=${innoSetup.AppSupportURL}
+			AppUpdatesURL=${innoSetup.AppUpdatesURL}
 			AppMutex=${build.jar.archive.manifest.mainClass}
-			DefaultDirName={pf}\${name}
+			PrivilegesRequired=lowest
+			DefaultDirName={userappdata}\${name}
 			DefaultGroupName=${name}
-			UninstallDisplayIcon={app}\${ant.project.name}.exe
+			UninstallDisplayIcon={app}\${launch4j.outFileName}
 			Compression=lzma2
 			SolidCompression=yes
 			CloseApplications=no
@@ -508,15 +553,15 @@
 			Name: "Italiano"; MessagesFile: "compiler:Languages\Italian.isl"; LicenseFile: "${artifactId}\LICENSE.txt"
 
 			[Run]
-			Filename: "{app}\${ant.project.name}.exe"; Description: "{cm:LaunchProgram,${name}}"; Flags: nowait postinstall skipifsilent
+			Filename: "{app}\${launch4j.outFileName}"; Description: "{cm:LaunchProgram,${name}}"; Flags: nowait postinstall skipifsilent
 
 			[Tasks]
 			Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 			[Icons]
-			Name: "{group}\${name}"; Filename: "{app}\${ant.project.name}.exe"
+			Name: "{group}\${name}"; Filename: "{app}\${launch4j.outFileName}"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
-			Name: "{userdesktop}\${name}"; Filename: "{app}\${ant.project.name}.exe"; Tasks: desktopicon
+			Name: "{userdesktop}\${name}"; Filename: "{app}\${launch4j.outFileName}"; Tasks: desktopicon
 
 			[Files]
 			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
@@ -530,7 +575,7 @@
 			begin
 				if CurStep = ssInstall then
 				begin
-					if LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innosetup.AppId.x64}.log'), jarFileNames) then
+					if LoadStringsFromFile(ExpandConstant('{app}\${dependencies.directory}\${innoSetup.AppId.x64}.log'), jarFileNames) then
 					begin
 						for i := 0 to GetArrayLength(jarFileNames) - 1 do
 							DeleteFile(ExpandConstant('{app}\${dependencies.directory}\' + jarFileNames[i]));
@@ -554,13 +599,13 @@
 
 		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}/${appId.x64}.log">${dependencies.log.x86_64}</echo>
 
-		<exec osfamily="windows" executable="${innosetup.dir}/ISCC.exe">
+		<exec osfamily="windows" executable="${innoSetup.directory}/ISCC.exe">
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86_64/setup.iss" />
 			<arg value="/O${build.distDirectory}" />
 			<arg value="/F${artifactId}-${version.number}-win32-win32-x86_64-setup" />
 		</exec>
 		<exec osfamily="unix" executable="wine">
-			<arg value="${innosetup.dir}/ISCC.exe" />
+			<arg value="${innoSetup.directory}/ISCC.exe" />
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86_64/setup.iss" />
 			<arg value="/O${build.distDirectory}" />
 			<arg value="/F${artifactId}-${version.number}-win32-win32-x86_64-setup" />
@@ -575,8 +620,9 @@
 		<mkdir dir="${build.outputTestDirectory}" />
 		<javac srcdir="${build.testSourceDirectory}" destdir="${build.outputTestDirectory}" source="${build.compiler.source}" target="${build.compiler.target}" debug="true" includeantruntime="false">
 			<classpath path="${build.outputDirectory}">
-				<fileset dir="${dependencies.directory}">
-					<include name="**/*.jar" />
+				<fileset refid="classpath" />
+				<fileset dir="${dependencies.directory}/test">
+					<include name="*.jar" />
 				</fileset>
 			</classpath>
 			<bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" />
@@ -587,22 +633,22 @@
 		</copy>
 
 		<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
-			<classpath path="${dependencies.directory}/ant/jacoco/jacocoant.jar" />
+			<classpath path="${jacoco.directory}/jacocoant.jar" />
 		</taskdef>
 		<jacoco:coverage destfile="${build.distDirectory}/jacoco.exec">
 			<junit printsummary="yes" haltonfailure="yes" fork="true" forkmode="once" maxmemory="64m">
 				<classpath path="${build.outputTestDirectory}">
-					<fileset dir="${dependencies.directory}">
-						<include name="test/*.jar" />
+					<fileset dir="${dependencies.directory}/test">
+						<include name="*.jar" />
 					</fileset>
-					<fileset dir="${build.assemblyDirectory}/dist">
-						<include name="**/*.jar" />
+					<fileset dir="${build.assemblyDirectory}">
+						<include name="**/${artifactId}.jar" />
 					</fileset>
 				</classpath>
 				<batchtest>
 					<fileset dir="${build.outputTestDirectory}">
-						<include name="**/*Test*" />
-						<exclude name="**/*$*" />
+						<include name="**/*Test*.class" />
+						<exclude name="**/*$*.class" />
 					</fileset>
 				</batchtest>
 				<formatter type="plain" usefile="false" />
@@ -612,14 +658,14 @@
 
 	<target name="sonar-main">
 		<propertyfile file="sonar-project.properties">
-			<entry key="sonar.projectKey" value="it.albertus:${artifactId}" />
+			<entry key="sonar.projectKey" value="${groupId}:${artifactId}" />
 			<entry key="sonar.projectName" value="${name}" />
 			<entry key="sonar.projectVersion" value="${version.number}" />
 			<entry key="sonar.sources" value="${build.sourceDirectory}" />
 			<entry key="sonar.language" value="java" />
 			<entry key="sonar.java.source" value="${build.compiler.source}" />
 			<entry key="sonar.java.target" value="${build.compiler.target}" />
-			<entry key="sonar.java.libraries" value="${dependencies.directory}/*.jar,${dependencies.directory}/platform/**/*.jar" />
+			<entry key="sonar.java.libraries" value="${dependencies.directory}/compile/common/*.jar,${dependencies.directory}/compile/platform-dependent/**/*.jar" />
 			<entry key="sonar.java.binaries" value="${build.outputDirectory}" />
 			<entry key="sonar.sourceEncoding" value="UTF-8" />
 		</propertyfile>
@@ -628,7 +674,7 @@
 	<target name="sonar-test" depends="sonar-main" if="build.test">
 		<propertyfile file="sonar-project.properties">
 			<entry key="sonar.tests" value="${build.testSourceDirectory}" />
-			<entry key="sonar.java.test.libraries" value="${dependencies.directory}/*.jar,${dependencies.directory}/platform/**/*.jar,${dependencies.directory}/test/*.jar" />
+			<entry key="sonar.java.test.libraries" value="${dependencies.directory}/compile/common/*.jar,${dependencies.directory}/compile/platform-dependent/**/*.jar,${dependencies.directory}/test/*.jar" />
 			<entry key="sonar.java.test.binaries" value="${build.outputTestDirectory}" />
 		</propertyfile>
 	</target>
