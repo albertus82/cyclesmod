@@ -37,10 +37,9 @@ cache:
 
 install:
   - ps: If (!(Test-Path -Path ($env:ChocolateyInstall + '\lib\ant\apache-ant-' + $env:ANT_VERSION))) { cinst ant -i --version $env:ANT_VERSION }
-  - cmd: PATH %ChocolateyInstall%\lib\ant\apache-ant-%ANT_VERSION%\bin;%PATH%
+  - cmd: PATH %ANT_HOME%\bin;%PATH%
 
 before_build:
-  - cmd: ECHO %ANT_HOME%
   - ant -diagnostics
 
 build_script:
