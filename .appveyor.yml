@@ -34,7 +34,7 @@ environment:
 
 install:
   - cinst ant -i --version %ANT_VERSION%
-  - cmd: PATH %ANT_HOME%\bin;%PATH%
+  - refreshenv
 
 before_build:
   - ant -diagnostics
@@ -43,9 +43,9 @@ build_script:
   - ant all
 
 after_build:
-  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY SET ARTIFACTS_PATH=target\*.*
-  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R target %%i IN (*.exe) DO IF "%%~xi" == ".exe" ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
-  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R target %%i IN (*.tar.gz) DO ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
+  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY SET ARTIFACTS_PATH=target\*.*
+  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R target %%i IN (*.exe) DO IF "%%~xi" == ".exe" ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
+  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R target %%i IN (*.tar.gz) DO ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
 
 artifacts:
   - path: $(ARTIFACTS_PATH)
