@@ -1,9 +1,9 @@
 CyclesMod
 =========
 
-[![Latest release](https://img.shields.io/github/release/Albertus82/CyclesMod.svg)](https://github.com/Albertus82/CyclesMod/releases/latest)
-[![Build status](https://travis-ci.org/Albertus82/CyclesMod.svg?branch=master)](https://travis-ci.org/Albertus82/CyclesMod)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/Albertus82/CyclesMod?branch=master&svg=true)](https://ci.appveyor.com/project/Albertus82/CyclesMod)
+[![Latest release](https://img.shields.io/github/release/albertus82/cycles-mod.svg)](https://github.com/albertus82/cycles-mod/releases/latest)
+[![Build status](https://travis-ci.org/albertus82/cycles-mod.svg?branch=master)](https://travis-ci.org/albertus82/cycles-mod)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/albertus82/cycles-mod?branch=master&svg=true)](https://ci.appveyor.com/project/albertus82/cycles-mod)
 
 **The Cycles - International Grand Prix Racing** &egrave; un videogioco di simulazione motociclistica. Risalente al 1989, fu distribuito per tutte le pi&ugrave; diffuse piattaforme dell'epoca, dal Commodore 64 al PC IBM (DOS), ed &egrave; oggi facilmente reperibile come *Abandonware*.
 
