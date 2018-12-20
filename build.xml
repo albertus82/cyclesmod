@@ -26,6 +26,7 @@
 				</fileset>
 			</classpath>
 			<bootclasspath path="${build.compiler.compilerArguments.bootclasspath}" />
+			<compilerarg value="-version" />
 		</javac>
 	</target>
 

@@ -9,9 +9,11 @@ env:
 matrix:
   include:
     - os: linux
-      jdk: oraclejdk9
+      jdk: oraclejdk11
       env:
         - secure: "CfCsUAsJP0ffKmGchWunlNTYfp+3bAGBrvabCI+smeqKwzNFabKMoQlkTErv7k9uBVbv21ZMEySeWpFFQaNU697vFV2dDhygl1whNnLZY9LgZ/vGSBfi8dJt/tNdsy5ep8O24kWpNbs93Kg29qvBlTpCTgvNzinBGUhyTkzZj//By/tgo9dS9RIDjRTG3u/JGQkhGvLMwj4Wr8IKoZD/D91aNfrxhc0EkM85kRHYX799zoKjDaP08HYaC/d6uNi7wMviZwyLe9IuKdHVY6JIQgqLscZwoM9C5fn5ke+d5FodDxXNYCcadMrxJLGT0/JbB7WERFE36onJhPClfH646C625eTSgWyfeogjkEobeeOd/jSYjqkqzkDUuy8BW73Sdhe1PWPwloEOgqx0DEHvLaaYGk6yLAvO7vdPm0mkHwnsHEZDVzbcQBcJW8BFzTv//EP/IgA1m8PPUei7UrYriCJ2ww/bBnk7SVSBw9ZenU4GhT2huYvVdAVDMZNWJcD5Ub8rGiky3N+irN2RoEJwYGEZByo8TJHO3aGciZMn/Huag7vlq1NN41VBYjCLUN+k1/mB9q7041TM8fPPCldC0TV0Gexw67en+YDYG+xB6i4WKqS+ZbOXb79yJGLUvD0h4FXiCzyNpEgPfhq6+pEvrRs5oy78zi1tfj7W37Y+miQ="
+      before_script:
+        - git fetch --unshallow
       after_success:
         - sonar-scanner -Dsonar.login=$SONAR_TOKEN
     - os: linux

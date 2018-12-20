@@ -32,11 +32,8 @@ environment:
       VT_API_KEY:
         secure: 3sqJDjLAS708tR/LiAqKLZTnLLrhGJuWVzzI4nCjLbUUsZB+PPRG3y0BWWnMo14CDhBT4v6yjHTA23RdopoHDWJlBcGhKELKZOLhHsnJLU8=
 
-cache:
-  - $(ChocolateyInstall)\lib\ant -> .appveyor.yml
-
 install:
-  - ps: If (!(Test-Path -Path ($env:ChocolateyInstall + '\lib\ant\apache-ant-' + $env:ANT_VERSION))) { cinst ant -i --version $env:ANT_VERSION }
+  - cinst ant -i --version %ANT_VERSION%
   - cmd: PATH %ANT_HOME%\bin;%PATH%
 
 before_build:
