@@ -12,8 +12,8 @@ done
 PRGDIR=`dirname "$PRG"`
 if [ "$1" = "-c" ] || [ "$1" = "-C" ] || [ "$1" = "--help" ] || [ "$1" = "--HELP" ]
   then if [ "$JAVA_HOME" != "" ]
-  then "$JAVA_HOME/bin/java" -Xms4m -Xmx16m -classpath "$PRGDIR/@artifactId@.jar:$PRGDIR/lib/*" @mainClass@ $1 $2 $3
-  else java -Xms4m -Xmx16m -classpath "$PRGDIR/@artifactId@.jar:$PRGDIR/lib/*" @mainClass@ $1 $2 $3
+  then "$JAVA_HOME/bin/java" -Xms@console.vm.initialHeapSize@m -Xmx@console.vm.maxHeapSize@m -classpath "$PRGDIR/@artifactId@.jar:$PRGDIR/lib/*" @mainClass@ $1 $2 $3
+  else java -Xms@console.vm.initialHeapSize@m -Xmx@console.vm.maxHeapSize@m -classpath "$PRGDIR/@artifactId@.jar:$PRGDIR/lib/*" @mainClass@ $1 $2 $3
   fi
 else
   if [ "$JAVA_HOME" != "" ]
