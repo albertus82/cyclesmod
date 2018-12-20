@@ -190,6 +190,7 @@
 		</fileset>
 
 		<filter token="artifactId" value="${artifactId}" />
+		<filter token="mainClass" value="${mainClass}" />
 		<filter token="vm.initialHeapSize" value="${vm.initialHeapSize}" />
 		<filter token="vm.maxHeapSize" value="${vm.maxHeapSize}" />
 
@@ -250,7 +251,7 @@
 	<target name="jar" depends="check-signature, resources, config, scripts, docs, icons, lib">
 		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${launch4j.jarName}" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
+				<attribute name="Main-Class" value="${mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86}" />
 				<attribute name="Implementation-Title" value="${name}" />
 				<attribute name="Implementation-Version" value="${version.number}" />
@@ -261,7 +262,7 @@
 		</jar>
 		<jar destfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${launch4j.jarName}" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
+				<attribute name="Main-Class" value="${mainClass}" />
 				<attribute name="Class-Path" value="${classpath.win32-win32-x86_64}" />
 				<attribute name="Implementation-Title" value="${name}" />
 				<attribute name="Implementation-Version" value="${version.number}" />
@@ -272,7 +273,7 @@
 		</jar>
 		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-x86/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
+				<attribute name="Main-Class" value="${mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86}" />
 				<attribute name="Implementation-Title" value="${name}" />
 				<attribute name="Implementation-Version" value="${version.number}" />
@@ -283,7 +284,7 @@
 		</jar>
 		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
+				<attribute name="Main-Class" value="${mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-x86_64}" />
 				<attribute name="Implementation-Title" value="${name}" />
 				<attribute name="Implementation-Version" value="${version.number}" />
@@ -294,7 +295,7 @@
 		</jar>
 		<jar destfile="${build.assemblyDirectory}/dist/gtk-linux-armhf/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
+				<attribute name="Main-Class" value="${mainClass}" />
 				<attribute name="Class-Path" value="${classpath.gtk-linux-armhf}" />
 				<attribute name="Implementation-Title" value="${name}" />
 				<attribute name="Implementation-Version" value="${version.number}" />
@@ -305,7 +306,7 @@
 		</jar>
 		<jar destfile="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.jar" basedir="${build.outputDirectory}" level="9">
 			<manifest>
-				<attribute name="Main-Class" value="${build.jar.archive.manifest.mainClass}" />
+				<attribute name="Main-Class" value="${mainClass}" />
 				<attribute name="Class-Path" value="${classpath.cocoa-macosx-x86_64}" />
 				<attribute name="Implementation-Title" value="${name}" />
 				<attribute name="Implementation-Version" value="${version.number}" />
@@ -320,7 +321,7 @@
 		<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpath="${jarBundler.directory}/jarbundler-core-3.3.0.jar" />
 
 		<mkdir dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" />
-		<jarbundler vmoptions="${macos.vmoptions}" dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${build.jar.archive.manifest.mainClass}" startonmainthread="true" version="${version.number}" icon="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarBundler.directory}/JavaApplicationStub" highresolutioncapable="true">
+		<jarbundler vmoptions="${macos.vmoptions}" dir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64" name="${name}" mainclass="${mainClass}" startonmainthread="true" version="${version.number}" icon="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}/${artifactId}.icns" usejavaxkey="true" jvmversion="${build.compiler.target}+" stubfile="${jarBundler.directory}/JavaApplicationStub" highresolutioncapable="true">
 			<jarfileset dir="${build.assemblyDirectory}/dist/cocoa-macosx-x86_64/${artifactId}" includes="**/*.jar" />
 		</jarbundler>
 
@@ -329,6 +330,7 @@
 		</copy>
 
 		<filter token="artifactId" value="${artifactId}" />
+		<filter token="mainClass" value="${mainClass}" />
 		<filter token="vm.initialHeapSize" value="${vm.initialHeapSize}" />
 		<filter token="vm.maxHeapSize" value="${vm.maxHeapSize}" />
 		<copy todir="${build.assemblyDirectory}/bundle/cocoa-macosx-x86_64/${name}.app/Contents/Resources/Java" failonerror="false" filtering="true">
@@ -434,7 +436,7 @@
 
 		<launch4j bindir="${launch4j.bindir}">
 			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${launch4j.outFileName}" jarpath="${launch4j.jarName}" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
-				<singleInstance mutexname="${build.jar.archive.manifest.mainClass}" windowtitle="${name}" />
+				<singleInstance mutexname="${mainClass}" windowtitle="${name}" />
 				<jre runtimebits="32" minversion="${build.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${vm.initialHeapSize}" maxheapsize="${vm.maxHeapSize}" />
 				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${launch4j.copyright}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${artifactId}" originalfilename="${launch4j.outFileName}" companyname="${launch4j.copyright}" />
 			</config>
@@ -448,7 +450,7 @@
 			AppPublisherURL=${innoSetup.AppPublisherURL}
 			AppSupportURL=${innoSetup.AppSupportURL}
 			AppUpdatesURL=${innoSetup.AppUpdatesURL}
-			AppMutex=${build.jar.archive.manifest.mainClass}
+			AppMutex=${mainClass}
 			PrivilegesRequired=lowest
 			DefaultDirName={userappdata}\${name}
 			DefaultGroupName=${name}
@@ -523,7 +525,7 @@
 
 		<launch4j bindir="${launch4j.bindir}">
 			<config outfile="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${launch4j.outFileName}" jarpath="${launch4j.jarName}" headertype="${launch4j.headerType}" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${icons.directory}/main.ico">
-				<singleInstance mutexname="${build.jar.archive.manifest.mainClass}" windowtitle="${name}" />
+				<singleInstance mutexname="${mainClass}" windowtitle="${name}" />
 				<jre runtimebits="64" minversion="${build.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${vm.initialHeapSize}" maxheapsize="${vm.maxHeapSize}" />
 				<versionInfo fileversion="${version.number}.0" txtfileversion="${version.number}" filedescription="${name}" copyright="${launch4j.copyright}" productversion="${version.number}.0" txtproductversion="${version.number}" productname="${name}" internalname="${artifactId}" originalfilename="${launch4j.outFileName}" companyname="${launch4j.copyright}" />
 			</config>
@@ -537,7 +539,7 @@
 			AppPublisherURL=${innoSetup.AppPublisherURL}
 			AppSupportURL=${innoSetup.AppSupportURL}
 			AppUpdatesURL=${innoSetup.AppUpdatesURL}
-			AppMutex=${build.jar.archive.manifest.mainClass}
+			AppMutex=${mainClass}
 			PrivilegesRequired=lowest
 			DefaultDirName={userappdata}\${name}
 			DefaultGroupName=${name}
