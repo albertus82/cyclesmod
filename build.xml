@@ -468,15 +468,18 @@
 
 			[Tasks]
 			Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+			;Name: "startupicon"; Description: "{cm:AutoStartProgram,${name}}"; GroupDescription: "{cm:AutoStartProgramGroupDescription}"; Flags: unchecked
 
 			[Icons]
 			Name: "{group}\${name}"; Filename: "{app}\${launch4j.outFileName}"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
 			Name: "{userdesktop}\${name}"; Filename: "{app}\${launch4j.outFileName}"; Tasks: desktopicon
+			;Name: "{userstartup}\${name}"; Filename: "{app}\${launch4j.outFileName}"; Tasks: startupicon
 
 			[Files]
 			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 			Source: "${artifactId}\${dependencies.directory}\*.log"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
+			;Source: "${artifactId}\*.cfg"; DestDir: "{userappdata}\${name}"; Flags: onlyifdoesntexist
 
 			[Code]
 			procedure CurStepChanged(CurStep: TSetupStep);
@@ -558,15 +561,18 @@
 
 			[Tasks]
 			Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+			;Name: "startupicon"; Description: "{cm:AutoStartProgram,${name}}"; GroupDescription: "{cm:AutoStartProgramGroupDescription}"; Flags: unchecked
 
 			[Icons]
 			Name: "{group}\${name}"; Filename: "{app}\${launch4j.outFileName}"
 			Name: "{group}\{cm:UninstallProgram,${name}}"; Filename: "{uninstallexe}"
 			Name: "{userdesktop}\${name}"; Filename: "{app}\${launch4j.outFileName}"; Tasks: desktopicon
+			;Name: "{userstartup}\${name}"; Filename: "{app}\${launch4j.outFileName}"; Tasks: startupicon
 
 			[Files]
 			Source: "${artifactId}\*"; Excludes: "*.cfg,${dependencies.directory}\*.log"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 			Source: "${artifactId}\${dependencies.directory}\*.log"; DestDir: "{app}\${dependencies.directory}"; Flags: ignoreversion overwritereadonly uninsremovereadonly; Attribs: hidden readonly
+			;Source: "${artifactId}\*.cfg"; DestDir: "{userappdata}\${name}"; Flags: onlyifdoesntexist
 
 			[Code]
 			procedure CurStepChanged(CurStep: TSetupStep);
