@@ -33,12 +33,8 @@ environment:
         secure: 3sqJDjLAS708tR/LiAqKLZTnLLrhGJuWVzzI4nCjLbUUsZB+PPRG3y0BWWnMo14CDhBT4v6yjHTA23RdopoHDWJlBcGhKELKZOLhHsnJLU8=
 
 install:
-  - echo on
-  - echo "%JAVA_HOME%"
   - cinst ant -i --version %ANT_VERSION%
-  - refreshenv
-  - echo on
-  - echo "%JAVA_HOME%"
+  - PATH %ChocolateyInstall%\lib\ant\apache-ant-%ANT_VERSION%\bin;%PATH%
 
 before_build:
   - ant -diagnostics
