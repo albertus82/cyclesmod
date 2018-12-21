@@ -6,7 +6,6 @@ environment:
   JRE6_HOME: $(ProgramFiles)\Java\jdk1.6.0\jre
 
   matrix:
-    - fast_finish: true
     - platform: x86
       JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.6.0
       ANT_VERSION: 1.9.9
