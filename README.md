@@ -87,7 +87,7 @@ Utilizzando la funzione di men&ugrave; *Modifica - Curva di coppia* (o facendo d
 ## Versione da riga di comando
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
-Gli script di avvio ([**`cyclesmod.bat`**](src/main/scripts/cycles-mod.bat), [**`cycles-mod.sh`**](src/main/scripts/cycles-mod.sh) e [**`cycles-mod.command`**](src/main/scripts/cycles-mod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
+Gli script di avvio ([**`cycles-mod.bat`**](src/main/scripts/cycles-mod.bat), [**`cycles-mod.sh`**](src/main/scripts/cycles-mod.sh) e [**`cycles-mod.command`**](src/main/scripts/cycles-mod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
 * Windows: **`cycles-mod.bat -c`**
 * Linux: **`cycles-mod.sh -c`**
 * OS X: **`cycles-mod.command -c`**
@@ -103,6 +103,6 @@ Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `
 
 ## Riconoscimenti
 
-Quest'applicazione include componenti realizzati da [Eclipse Foundation](lib/license/eclipse-1.0.txt).
+Quest'applicazione include componenti realizzati da [Eclipse Foundation](lib/license/org.eclipse.LICENSE.txt).
 
 L'icona dell'applicazione &egrave; stata realizzata da [Everaldo Coelho](http://www.everaldo.com) (licenza [LGPL](http://www.gnu.org/licenses/lgpl.html)), e prelevata da [Iconfinder](http://www.iconfinder.com).
