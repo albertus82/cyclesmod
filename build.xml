@@ -513,12 +513,12 @@
 
 		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86/${artifactId}/${dependencies.directory}/${appId.x86}.log">${dependencies.log.x86}</echo>
 
-		<exec osfamily="windows" executable="${innoSetup.directory}/ISCC.exe">
+		<exec osfamily="windows" executable="${innoSetup.directory}/ISCC.exe" failonerror="true">
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86/setup.iss" />
 			<arg value="/O${build.distDirectory}" />
 			<arg value="/F${artifactId}-${version.number}-win32-win32-x86-setup" />
 		</exec>
-		<exec osfamily="unix" executable="wine">
+		<exec osfamily="unix" executable="wine" failonerror="true">
 			<arg value="${innoSetup.directory}/ISCC.exe" />
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86/setup.iss" />
 			<arg value="/O${build.distDirectory}" />
@@ -606,12 +606,12 @@
 
 		<echo file="${build.assemblyDirectory}/dist/win32-win32-x86_64/${artifactId}/${dependencies.directory}/${appId.x64}.log">${dependencies.log.x86_64}</echo>
 
-		<exec osfamily="windows" executable="${innoSetup.directory}/ISCC.exe">
+		<exec osfamily="windows" executable="${innoSetup.directory}/ISCC.exe" failonerror="true">
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86_64/setup.iss" />
 			<arg value="/O${build.distDirectory}" />
 			<arg value="/F${artifactId}-${version.number}-win32-win32-x86_64-setup" />
 		</exec>
-		<exec osfamily="unix" executable="wine">
+		<exec osfamily="unix" executable="wine" failonerror="true">
 			<arg value="${innoSetup.directory}/ISCC.exe" />
 			<arg value="${build.assemblyDirectory}/dist/win32-win32-x86_64/setup.iss" />
 			<arg value="/O${build.distDirectory}" />
