@@ -6,10 +6,10 @@ environment:
   JRE6_HOME: $(ProgramFiles)\Java\jdk1.6.0\jre
 
   matrix:
+    - fast_finish: true
     - platform: x86
-      environment:
-        - JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.6.0
-        - ANT_VERSION: 1.9.9
+      JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.6.0
+      ANT_VERSION: 1.9.9
     - platform: x86
       JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.7.0
       ANT_VERSION: 1.9.9
@@ -36,6 +36,7 @@ environment:
 install:
   - cinst ant -i --version %ANT_VERSION%
   - refreshenv
+  - SET PATH=%JAVA_HOME%\bin;%PATH%
 
 before_build:
   - ant -diagnostics
