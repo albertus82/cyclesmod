@@ -34,7 +34,7 @@ environment:
 
 install:
   - cinst ant -i --version %ANT_VERSION%
-  - PATH %ChocolateyInstall%\lib\ant\apache-ant-%ANT_VERSION%\bin;%PATH%
+  - PATH %ANT_HOME%\bin;%PATH%
 
 before_build:
   - ant -diagnostics
