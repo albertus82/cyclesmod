@@ -17,6 +17,8 @@
 	<filter token="console.vm.initialHeapSize" value="${console.vm.initialHeapSize}" />
 	<filter token="console.vm.maxHeapSize" value="${console.vm.maxHeapSize}" />
 
+	<filter token="launch4j.jarName" value="${launch4j.jarName}" />
+
 	<target name="clean">
 		<delete dir="${build.directory}" />
 		<delete file="sonar-project.properties" />
