@@ -35,9 +35,12 @@ environment:
 install:
   - cinst ant -i --version %ANT_VERSION%
   - refreshenv
-  - SET PATH=%JAVA_HOME%\bin;%PATH%
 
 before_build:
+  - java -version
+  - javac -version
+  - echo on
+  - echo "%JAVA_HOME%"
   - ant -diagnostics
 
 build_script:
