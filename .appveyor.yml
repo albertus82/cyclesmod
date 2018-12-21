@@ -7,8 +7,9 @@ environment:
 
   matrix:
     - platform: x86
-      JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.6.0
-      ANT_VERSION: 1.9.9
+      environment:
+        - JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.6.0
+        - ANT_VERSION: 1.9.9
     - platform: x86
       JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.7.0
       ANT_VERSION: 1.9.9
