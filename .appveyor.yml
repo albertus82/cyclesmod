@@ -43,9 +43,9 @@ build_script:
   - ant all
 
 after_build:
-  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY SET ARTIFACTS_PATH=target\*.*
-  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R target %%i IN (*.exe) DO IF "%%~xi" == ".exe" ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
-  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R target %%i IN (*.tar.gz) DO ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
+  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY SET ARTIFACTS_PATH=build\*.*
+  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R build %%i IN (*.exe) DO IF "%%~xi" == ".exe" ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
+  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R build %%i IN (*.tar.gz) DO ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
 
 artifacts:
   - path: $(ARTIFACTS_PATH)
