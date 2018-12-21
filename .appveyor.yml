@@ -33,14 +33,14 @@ environment:
         secure: 3sqJDjLAS708tR/LiAqKLZTnLLrhGJuWVzzI4nCjLbUUsZB+PPRG3y0BWWnMo14CDhBT4v6yjHTA23RdopoHDWJlBcGhKELKZOLhHsnJLU8=
 
 install:
-  - cinst ant -i --version %ANT_VERSION%
-  - refreshenv
-
-before_build:
-  - java -version
-  - javac -version
   - echo on
   - echo "%JAVA_HOME%"
+  - cinst ant -i --version %ANT_VERSION%
+  - refreshenv
+  - echo on
+  - echo "%JAVA_HOME%"
+
+before_build:
   - ant -diagnostics
 
 build_script:
