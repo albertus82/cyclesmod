@@ -87,8 +87,8 @@ Utilizzando la funzione di men&ugrave; *Modifica - Curva di coppia* (o facendo d
 ## Versione da riga di comando
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
-Gli script di avvio ([**`cycles-mod.bat`**](src/main/scripts/cycles-mod.bat), [**`cycles-mod.sh`**](src/main/scripts/cycles-mod.sh) e [**`cycles-mod.command`**](src/main/scripts/cycles-mod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
-* Windows: **`cycles-mod.bat -c`**
+Gli script di avvio ([**`CyclesMod.bat`**](src/main/scripts/CyclesMod.bat), [**`cycles-mod.sh`**](src/main/scripts/cycles-mod.sh) e [**`cycles-mod.command`**](src/main/scripts/cycles-mod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
+* Windows: **`CyclesMod.bat -c`**
 * Linux: **`cycles-mod.sh -c`**
 * OS X: **`cycles-mod.command -c`**
 
