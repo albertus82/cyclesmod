@@ -253,7 +253,7 @@ public class Tabs {
 		for (final Bike bike : gui.getBikesInf().getBikes()) {
 			final ITorqueGraph torqueGraph = torqueCanvases.get(bike.getType()).getTorqueGraph();
 			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
-				torqueGraph.getValues()[i] = bike.getTorque().getCurve()[i];
+				torqueGraph.setValue(i, bike.getTorque().getCurve()[i]);
 			}
 			torqueGraph.refresh();
 		}

@@ -44,10 +44,10 @@ public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
 	private void execute(final Point location) {
 		final int index = torqueGraph.getTorqueIndex(location);
-		final short oldValue = (short) torqueGraph.getValues()[index];
+		final short oldValue = (short) torqueGraph.getValue(index);
 		final short newValue = torqueGraph.getTorqueValue(location);
 		if (oldValue != newValue) {
-			torqueGraph.getValues()[index] = newValue;
+			torqueGraph.setValue(index, newValue);
 			torqueGraph.refresh();
 			torqueGraph.getXyGraph().getOperationsManager().addCommand(new ChangeValueCommand(torqueGraph, index, oldValue, newValue));
 		}

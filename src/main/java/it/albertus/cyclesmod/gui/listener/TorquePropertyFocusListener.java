@@ -35,9 +35,9 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 					final ITorqueGraph graph = (ITorqueGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
 
 					final short newValue = Torque.parse(key, field.getText().trim(), gui.getNumeralSystem().getRadix());
-					final short oldValue = (short) graph.getValues()[index];
+					final short oldValue = (short) graph.getValue(index);
 					if (oldValue != newValue) {
-						graph.getValues()[index] = newValue;
+						graph.setValue(index, newValue);
 						graph.refresh();
 					}
 				}
