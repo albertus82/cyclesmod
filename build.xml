@@ -2,7 +2,7 @@
 <!DOCTYPE project>
 <project name="cycles-mod" default="all" xmlns:as="antlib:org.codehaus.mojo.animal_sniffer" xmlns:jacoco="antlib:org.jacoco.ant">
 
-	<property name="version.number" value="2.8.0" />
+	<property name="version.number" value="3.0.0" />
 
 	<property environment="env" />
 	<property name="env.JRE6_HOME" value="${env.JAVA_HOME}/../jdk1.6.0_45/jre" />
