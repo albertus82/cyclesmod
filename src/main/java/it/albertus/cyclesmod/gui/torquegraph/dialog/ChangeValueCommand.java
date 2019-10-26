@@ -21,13 +21,13 @@ public class ChangeValueCommand implements IUndoableCommand {
 
 	@Override
 	public void undo() {
-		torqueGraph.getValues()[index] = oldValue;
+		torqueGraph.setValue(index, oldValue);
 		torqueGraph.refresh();
 	}
 
 	@Override
 	public void redo() {
-		torqueGraph.getValues()[index] = newValue;
+		torqueGraph.setValue(index, newValue);
 		torqueGraph.refresh();
 	}
 

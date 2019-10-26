@@ -18,7 +18,9 @@ public interface ITorqueGraph {
 
 	Trace getTrace();
 
-	double[] getValues();
+	double getValue(int index);
+
+	void setValue(int index, double value);
 
 	void refresh();
 

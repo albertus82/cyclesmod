@@ -15,8 +15,8 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
 import it.albertus.cyclesmod.model.Bike;
-import it.albertus.cyclesmod.model.Torque;
 import it.albertus.cyclesmod.model.Bike.BikeType;
+import it.albertus.cyclesmod.model.Torque;
 import it.albertus.cyclesmod.resources.Messages;
 
 public class TorqueGraph implements ITorqueGraph {
@@ -27,14 +27,18 @@ public class TorqueGraph implements ITorqueGraph {
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
 	private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
+	private final CircularBufferDataProvider dataProvider2 = new CircularBufferDataProvider(false);
 	private final Trace trace = new Trace(Messages.get("lbl.graph.trace"), abscissae, ordinates, dataProvider);
+	private final Trace trace2 = new Trace(Messages.get("lbl.graph.trace2"), abscissae, ordinates, dataProvider2);
 	private final double[] values = new double[Torque.LENGTH];
+	private final double[] values2 = new double[Torque.LENGTH];
 	private final double[] xDataArray = new double[Torque.LENGTH];
 
 	public TorqueGraph(final Bike bike) {
 		for (int i = 0; i < Torque.LENGTH; i++) {
 			xDataArray[i] = (double) Torque.getRpm(i) / RPM_DIVISOR;
 			values[i] = bike.getTorque().getCurve()[i];
+			values2[i] = powerToTorque(values[i], xDataArray[i]);
 		}
 		init(bike.getType());
 	}
@@ -48,6 +52,7 @@ public class TorqueGraph implements ITorqueGraph {
 		for (final Entry<Integer, Short> entry : map.entrySet()) {
 			xDataArray[i] = entry.getKey().doubleValue() / RPM_DIVISOR;
 			values[i] = entry.getValue();
+			values2[i] = powerToTorque(values[i], xDataArray[i]);
 			i++;
 		}
 		init(bikeType);
@@ -57,6 +62,9 @@ public class TorqueGraph implements ITorqueGraph {
 		dataProvider.setBufferSize(xDataArray.length);
 		dataProvider.setCurrentXDataArray(xDataArray);
 		dataProvider.setCurrentYDataArray(values);
+		dataProvider2.setBufferSize(xDataArray.length);
+		dataProvider2.setCurrentXDataArray(xDataArray);
+		dataProvider2.setCurrentYDataArray(values2);
 
 		final Font axisTitleFont = Display.getCurrent().getSystemFont();
 
@@ -69,9 +77,20 @@ public class TorqueGraph implements ITorqueGraph {
 		ordinates.setShowMajorGrid(true);
 
 		xyGraph.addTrace(trace);
+		xyGraph.addTrace(trace2);
 		xyGraph.setShowLegend(false);
 
 		trace.setTraceColor(getColor(bikeType));
+	}
+
+	private static double powerToTorque(final double hp, final double rpm) {
+//		if (rpm > 3) {
+//			return (hp * 0.7457 * 9.5488) / rpm;
+//		}
+//		else {
+//			return 0;
+//		}
+		return Math.min((hp * 0.7457 * 9.5488) / rpm, 255);
 	}
 
 	private static Color getColor(final BikeType bikeType) {
@@ -91,6 +110,7 @@ public class TorqueGraph implements ITorqueGraph {
 	@Override
 	public void refresh() {
 		dataProvider.triggerUpdate();
+		dataProvider2.triggerUpdate();
 	}
 
 	@Override
@@ -119,8 +139,14 @@ public class TorqueGraph implements ITorqueGraph {
 	}
 
 	@Override
-	public double[] getValues() {
-		return values;
+	public double getValue(final int index) {
+		return values[index];
+	}
+
+	@Override
+	public void setValue(final int index, final double value) {
+		values[index] = value;
+		values2[index] =  powerToTorque(value, xDataArray[index]);
 	}
 
 	@Override
