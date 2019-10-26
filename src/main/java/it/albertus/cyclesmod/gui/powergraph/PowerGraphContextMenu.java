@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.gui.torquegraph;
+package it.albertus.cyclesmod.gui.powergraph;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cyclesmod.resources.Messages;
 
-public abstract class TorqueGraphContextMenu {
+public abstract class PowerGraphContextMenu {
 
 	protected static final String TEXT_MESSAGE_KEY = "TEXT_MESSAGE_KEY";
 
@@ -29,13 +29,13 @@ public abstract class TorqueGraphContextMenu {
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 	private static final short[] AREA_ALPHA_OPTIONS = { 26, 51, 77, 102, 128, 153, 179, 204, 230, 255 };
 
-	private final ITorqueGraph torqueGraph;
+	private final IPowerGraph powerGraph;
 	private final Control parent;
 	private final Menu menu;
 
-	public TorqueGraphContextMenu(final Control parent, final ITorqueGraph torqueGraph) {
+	public PowerGraphContextMenu(final Control parent, final IPowerGraph powerGraph) {
 		this.parent = parent;
-		this.torqueGraph = torqueGraph;
+		this.powerGraph = powerGraph;
 
 		menu = new Menu(parent);
 		parent.setMenu(menu);
@@ -58,13 +58,13 @@ public abstract class TorqueGraphContextMenu {
 		for (final TraceType traceType : TraceType.values()) {
 			final MenuItem menuItem = new MenuItem(traceTypeSubMenu, SWT.RADIO);
 			menuItem.setText("&" + traceType.toString());
-			if (traceType.equals(torqueGraph.getTrace().getTraceType())) {
+			if (traceType.equals(powerGraph.getPowerTrace().getTraceType())) {
 				traceTypeSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					torqueGraph.getTrace().setTraceType(traceType);
+					powerGraph.getPowerTrace().setTraceType(traceType);
 				}
 			});
 			traceTypeSubMenuItems.put(traceType, menuItem);
@@ -82,13 +82,13 @@ public abstract class TorqueGraphContextMenu {
 		for (final int areaAlpha : AREA_ALPHA_OPTIONS) {
 			final MenuItem menuItem = new MenuItem(areaAlphaSubMenu, SWT.RADIO);
 			menuItem.setText("&" + Math.round(areaAlpha / 2.55f) + "%");
-			if (Math.round(areaAlpha / 255f * AREA_ALPHA_OPTIONS.length) == Math.round(torqueGraph.getTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length)) {
+			if (Math.round(areaAlpha / 255f * AREA_ALPHA_OPTIONS.length) == Math.round(powerGraph.getPowerTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length)) {
 				areaAlphaSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					torqueGraph.getTrace().setAreaAlpha(areaAlpha);
+					powerGraph.getPowerTrace().setAreaAlpha(areaAlpha);
 				}
 			});
 			areaAlphaSubMenuItems.put(areaAlpha, menuItem);
@@ -98,10 +98,10 @@ public abstract class TorqueGraphContextMenu {
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
 				for (final Entry<TraceType, MenuItem> entry : traceTypeSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(entry.getKey().equals(torqueGraph.getTrace().getTraceType()));
+					entry.getValue().setSelection(entry.getKey().equals(powerGraph.getPowerTrace().getTraceType()));
 				}
 				for (final Entry<Integer, MenuItem> entry : areaAlphaSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / 255 * AREA_ALPHA_OPTIONS.length) == Math.round(torqueGraph.getTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length));
+					entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / 255 * AREA_ALPHA_OPTIONS.length) == Math.round(powerGraph.getPowerTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length));
 				}
 			}
 		});
@@ -124,13 +124,13 @@ public abstract class TorqueGraphContextMenu {
 		for (final int lineWidth : LINE_WIDTH_OPTIONS) {
 			final MenuItem menuItem = new MenuItem(lineWidthSubMenu, SWT.RADIO);
 			menuItem.setText("&" + lineWidth);
-			if (lineWidth == torqueGraph.getTrace().getLineWidth()) {
+			if (lineWidth == powerGraph.getPowerTrace().getLineWidth()) {
 				lineWidthSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					torqueGraph.getTrace().setLineWidth(lineWidth);
+					powerGraph.getPowerTrace().setLineWidth(lineWidth);
 				}
 			});
 			lineWidthSubMenuItems.put(lineWidth, menuItem);
@@ -140,7 +140,7 @@ public abstract class TorqueGraphContextMenu {
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
 				for (final Entry<Integer, MenuItem> entry : lineWidthSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(entry.getKey().intValue() == torqueGraph.getTrace().getLineWidth());
+					entry.getValue().setSelection(entry.getKey().intValue() == powerGraph.getPowerTrace().getLineWidth());
 				}
 			}
 		});
@@ -161,13 +161,13 @@ public abstract class TorqueGraphContextMenu {
 		for (final PointStyle pointStyle : PointStyle.values()) {
 			final MenuItem menuItem = new MenuItem(traceTypeSubMenu, SWT.RADIO);
 			menuItem.setText("&" + pointStyle.toString());
-			if (pointStyle.equals(torqueGraph.getTrace().getPointStyle())) {
+			if (pointStyle.equals(powerGraph.getPowerTrace().getPointStyle())) {
 				traceTypeSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					torqueGraph.getTrace().setPointStyle(pointStyle);
+					powerGraph.getPowerTrace().setPointStyle(pointStyle);
 				}
 			});
 			pointStyleSubMenuItems.put(pointStyle, menuItem);
@@ -177,7 +177,7 @@ public abstract class TorqueGraphContextMenu {
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
 				for (final Entry<PointStyle, MenuItem> entry : pointStyleSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(entry.getKey().equals(torqueGraph.getTrace().getPointStyle()));
+					entry.getValue().setSelection(entry.getKey().equals(powerGraph.getPowerTrace().getPointStyle()));
 				}
 			}
 		});
@@ -186,7 +186,7 @@ public abstract class TorqueGraphContextMenu {
 	}
 
 	protected SubMenu<Integer> addPointSizeSubMenu() {
-		final Trace trace = torqueGraph.getTrace();
+		final Trace trace = powerGraph.getPowerTrace();
 
 		final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<Integer, MenuItem>();
 		final MenuItem pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);

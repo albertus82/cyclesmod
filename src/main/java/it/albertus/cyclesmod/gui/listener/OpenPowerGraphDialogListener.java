@@ -12,17 +12,17 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.FormProperty;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.TorqueGraphDialog;
+import it.albertus.cyclesmod.gui.powergraph.dialog.PowerGraphDialog;
 import it.albertus.cyclesmod.model.BikesCfg;
-import it.albertus.cyclesmod.model.Torque;
+import it.albertus.cyclesmod.model.Power;
 import it.albertus.cyclesmod.model.Bike.BikeType;
 
-public class OpenTorqueGraphDialogListener implements MouseListener, SelectionListener {
+public class OpenPowerGraphDialogListener implements MouseListener, SelectionListener {
 
 	private final CyclesModGui gui;
 	private final BikeType bikeType;
 
-	public OpenTorqueGraphDialogListener(final CyclesModGui gui, final BikeType bikeType) {
+	public OpenPowerGraphDialogListener(final CyclesModGui gui, final BikeType bikeType) {
 		this.gui = gui;
 		this.bikeType = bikeType;
 	}
@@ -47,20 +47,20 @@ public class OpenTorqueGraphDialogListener implements MouseListener, SelectionLi
 	public void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
 
 	private void execute() {
-		final TorqueGraphDialog torqueGraphDialog = new TorqueGraphDialog(gui.getShell());
+		final PowerGraphDialog powerGraphDialog = new PowerGraphDialog(gui.getShell());
 		final Map<Integer, Short> map = new TreeMap<Integer, Short>();
 		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties();
-		for (int i = 0; i < Torque.LENGTH; i++) {
-			final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Torque.class, i));
-			map.put(Torque.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
+		for (int i = 0; i < Power.LENGTH; i++) {
+			final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Power.class, i));
+			map.put(Power.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
 		}
 
-		if (torqueGraphDialog.open(map, bikeType) == SWT.OK) {
-			for (int i = 0; i < Torque.LENGTH; i++) {
-				final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Torque.class, i));
+		if (powerGraphDialog.open(map, bikeType) == SWT.OK) {
+			for (int i = 0; i < Power.LENGTH; i++) {
+				final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Power.class, i));
 				final Text text = formProperty.getText();
 				final String oldValue = text.getText();
-				final String newValue = Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(torqueGraphDialog.getTorqueGraph().getValue(i)))), gui.getNumeralSystem().getRadix());
+				final String newValue = Long.toString(Math.max(Power.MIN_VALUE, Math.min(Power.MAX_VALUE, Math.round(powerGraphDialog.getPowerGraph().getValue(i)))), gui.getNumeralSystem().getRadix());
 				if (!oldValue.equals(newValue)) {
 					text.setText(newValue);
 					text.notifyListeners(SWT.FocusOut, null);

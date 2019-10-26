@@ -9,15 +9,15 @@ import org.eclipse.swt.widgets.Text;
 import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.FormProperty;
-import it.albertus.cyclesmod.gui.torquegraph.ITorqueGraph;
-import it.albertus.cyclesmod.model.Torque;
+import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
+import it.albertus.cyclesmod.model.Power;
 import it.albertus.util.logging.LoggerFactory;
 
-public class TorquePropertyFocusListener extends PropertyFocusListener {
+public class PowerPropertyFocusListener extends PropertyFocusListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(TorquePropertyFocusListener.class);
+	private static final Logger logger = LoggerFactory.getLogger(PowerPropertyFocusListener.class);
 
-	public TorquePropertyFocusListener(final CyclesModGui gui) {
+	public PowerPropertyFocusListener(final CyclesModGui gui) {
 		super(gui);
 	}
 
@@ -26,15 +26,15 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 		if (isEnabled()) {
 			super.focusLost(fe);
 
-			// Update torque graph...
+			// Update power graph...
 			final Text field = (Text) fe.widget;
 			if (gui.isNumeric(field.getText().trim())) {
 				try {
 					final String key = (String) field.getData(FormProperty.TextDataKey.KEY.toString());
 					final int index = (Integer) field.getData(FormProperty.TextDataKey.INDEX.toString());
-					final ITorqueGraph graph = (ITorqueGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
+					final IPowerGraph graph = (IPowerGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
 
-					final short newValue = Torque.parse(key, field.getText().trim(), gui.getNumeralSystem().getRadix());
+					final short newValue = Power.parse(key, field.getText().trim(), gui.getNumeralSystem().getRadix());
 					final short oldValue = (short) graph.getValue(index);
 					if (oldValue != newValue) {
 						graph.setValue(index, newValue);

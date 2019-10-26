@@ -31,9 +31,9 @@ Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://
 La finestra principale dell'applicazione presenta tre schede, una per categoria di moto: 125, 250 e 500 cc. Ogni scheda &egrave; suddivisa in tre sezioni:
 * **Impostazioni** generali
 * **Cambio** di velocit&agrave;
-* **Coppia** motrice
+* **Potenza** motrice
 
-&Egrave; inoltre presente un grafico della curva di coppia, generato in tempo reale in base ai valori di coppia motrice presenti nella relativa sezione.
+&Egrave; inoltre presente un grafico della curva di potenza, generato in tempo reale in base ai valori di potenza motrice presenti nella relativa sezione.
 
 Ogni sezione presenta diverse propriet&agrave;, tutte rigorosamente numeriche e corredate da etichette descrittive sulla sinistra. Quando si modifica il valore di una propriet&agrave;, esso viene mostrato in grassetto per evidenziare che &egrave; diverso dal valore predefinito. Volendo conoscere il valore predefinito di una singola propriet&agrave;, &egrave; sufficiente portare il mouse sul relativo campo e attendere la comparsa del suggerimento.
 
@@ -43,7 +43,7 @@ Tramite la barra dei men&ugrave; &egrave; possibile:
 * aprire un file `BIKES.INF` esistente;
 * salvare le impostazioni correnti in un file `BIKES.INF`;
 * ripristinare le impostazioni predefinite per una o per tutte le moto (qualsiasi personalizzazione non salvata viene persa);
-* modificare o disegnare la curva di coppia in un'apposita finestra di dialogo;
+* modificare o disegnare la curva di potenza in un'apposita finestra di dialogo;
 * modificare il sistema numerico (decimale/esadecimale);
 * cambiare la lingua dell'interfaccia;
 * visualizzare informazioni sulla versione di *CyclesMod*.
@@ -61,7 +61,7 @@ Nel caso in cui si volessero ripristinare le configurazioni originali di tutte l
 Ogni moto dispone di otto impostazioni generali che determinano le seguenti caratteristiche:
 * **Numero marce**: il numero di rapporti del cambio di velocit&agrave;. Intervallo di valori validi: da `0` a `9`.
 * **Regime inizio zona rossa**: regime oltre il quale, dopo un tempo variabile determinato dall'impostazione *Tolleranza fuorigiri* e dal livello di difficolt&agrave; impostato, si verifica la rottura del motore. Ai livelli di difficolt&agrave; 1 e 2 (i pi&ugrave; bassi), questo valore determina anche il regime di cambiata. Intervallo di valori validi: `8500`-`32767` giri/min.
-* **Regime massimo**: regime massimo raggiungibile dal motore (limitatore). Intervallo di valori validi: `768`-`14335` giri/min. Notare che, una volta raggiunto il limite, la moto continua ad accelerare con una coppia motrice pari a quella impostata per il regime limite, pertanto, per limitare efficacemente il regime ad un certo valore, occorre azzerare i valori della [coppia](#coppia-motrice) nell'intorno del regime limite.
+* **Regime massimo**: regime massimo raggiungibile dal motore (limitatore). Intervallo di valori validi: `768`-`14335` giri/min. Notare che, una volta raggiunto il limite, la moto continua ad accelerare con una potenza motrice pari a quella impostata per il regime limite, pertanto, per limitare efficacemente il regime ad un certo valore, occorre azzerare i valori della [potenza](#potenza-motrice) nell'intorno del regime limite.
 * **Tolleranza fuorigiri**: periodo di grazia durante il quale il motore non si guasta nonostante giri ad un regime maggiore del *Regime inizio zona rossa*; il valore &egrave; espresso in un'unit&agrave; di misura del tempo *lineare* variabile a seconda del livello di difficolt&agrave;. Intervallo di valori validi: `0`-`32767`.
 Segue un elenco per la determinazione del valore in base ai secondi di tolleranza desiderati a seconda del livello di difficolt&agrave;:
 	* Livello 1/5 (Beg.): il motore non si guasta mai, a meno di non impostare `0`.
@@ -79,9 +79,9 @@ Segue un elenco per la determinazione del valore in base ai secondi di tolleranz
 ### Cambio di velocit&agrave;
 &Egrave; possibile configurare i rapporti del cambio di velocit&agrave; per ogni singola marcia. A valori pi&ugrave; elevati corrispondono rapporti pi&ugrave; corti. I valori ammessi sono compresi tra `0` e `65535` per le marce da 1 a 9, mentre per marcia *N* (folle) il valore &egrave; irrilevante.
 
-### Coppia motrice
-La curva di coppia del motore viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la coppia del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m. La curva risultante viene rappresentata graficamente nel relativo riquadro.
-Utilizzando la funzione di men&ugrave; *Modifica - Curva di coppia* (o facendo doppio clic sul grafico) si accede ad una finestra che consente di disegnare e modificare la curva in modalit&agrave; grafica.
+### Potenza motrice
+La curva di potenza del motore viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la potenza del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m. La curva risultante viene rappresentata graficamente nel relativo riquadro.
+Utilizzando la funzione di men&ugrave; *Modifica - Curva di potenza* (o facendo doppio clic sul grafico) si accede ad una finestra che consente di disegnare e modificare la curva in modalit&agrave; grafica.
 
 
 ## Versione da riga di comando
@@ -92,7 +92,7 @@ Gli script di avvio ([**`CyclesMod.bat`**](src/main/scripts/CyclesMod.bat), [**`
 * Linux: **`cycles-mod.sh -c`**
 * OS X: **`cycles-mod.command -c`**
 
-Una volta eseguito, il programma verifica per prima cosa l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *coppia motrice* (torque). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
+Una volta eseguito, il programma verifica per prima cosa l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *potenza motrice* (power). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
 
 A seguire, il programma rileva l'esistenza del file `BIKES.CFG`, ne legge il contenuto e infine produce un nuovo file `BIKES.INF`, sovrascrivendo quello eventualmente preesistente. A questo punto &egrave; sufficiente copiare nella directory del gioco il file `BIKES.INF` generato, sovrascrivendo il file preesistente, **avendone fatto prima una copia di backup**. Avviando il gioco sar&agrave; quindi possibile sperimentare le modifiche apportate alla configurazione.
 

@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.gui.torquegraph;
+package it.albertus.cyclesmod.gui.powergraph;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
@@ -6,7 +6,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 
-public interface ITorqueGraph {
+public interface IPowerGraph {
 
 	IXYGraph getXyGraph();
 
@@ -16,7 +16,9 @@ public interface ITorqueGraph {
 
 	IDataProvider getDataProvider();
 
-	Trace getTrace();
+	Trace getPowerTrace();
+
+	Trace getTorqueTrace();
 
 	double getValue(int index);
 
@@ -24,8 +26,8 @@ public interface ITorqueGraph {
 
 	void refresh();
 
-	short getTorqueValue(Point location);
+	short getPowerValue(Point location);
 
-	int getTorqueIndex(Point location);
+	int getPowerIndex(Point location);
 
 }

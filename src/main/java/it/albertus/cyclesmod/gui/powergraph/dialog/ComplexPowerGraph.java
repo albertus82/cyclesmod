@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.gui.torquegraph.dialog;
+package it.albertus.cyclesmod.gui.powergraph.dialog;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -19,16 +19,16 @@ import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
 
-import it.albertus.cyclesmod.gui.torquegraph.TorqueGraph;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.listener.ChangeValueListener;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.listener.UpdateTitleListener;
+import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
+import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
+import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UpdateTitleListener;
 import it.albertus.cyclesmod.model.Bike.BikeType;
 import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
 
-public class ComplexTorqueGraph extends TorqueGraph {
+public class ComplexPowerGraph extends PowerGraph {
 
-	private static final Logger logger = LoggerFactory.getLogger(ComplexTorqueGraph.class);
+	private static final Logger logger = LoggerFactory.getLogger(ComplexPowerGraph.class);
 
 	private static final String LBL_GRAPH_TOOLBAR_UNDO = "lbl.graph.toolbar.undo";
 	private static final String LBL_GRAPH_TOOLBAR_REDO = "lbl.graph.toolbar.redo";
@@ -42,7 +42,7 @@ public class ComplexTorqueGraph extends TorqueGraph {
 
 	private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-	public ComplexTorqueGraph(final Map<Integer, Short> map, final BikeType bikeType) {
+	public ComplexPowerGraph(final Map<Integer, Short> map, final BikeType bikeType) {
 		super(map, bikeType);
 
 		final Axis abscissae = getAbscissae();
@@ -51,10 +51,13 @@ public class ComplexTorqueGraph extends TorqueGraph {
 		final Axis ordinates = getOrdinates();
 		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
 
-		final Trace trace = getTrace();
-		trace.setPointStyle(PointStyle.FILLED_DIAMOND);
-		trace.setLineWidth(DEFAULT_LINE_WIDTH);
-		trace.setPointSize(DEFAULT_POINT_SIZE);
+		final Trace powerTrace = getPowerTrace();
+		powerTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
+		powerTrace.setLineWidth(DEFAULT_LINE_WIDTH);
+		powerTrace.setPointSize(DEFAULT_POINT_SIZE);
+
+		final Trace torqueTrace = getTorqueTrace();
+		torqueTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
 		fixToolbarButtons(toolbarArmedXYGraph);
 
