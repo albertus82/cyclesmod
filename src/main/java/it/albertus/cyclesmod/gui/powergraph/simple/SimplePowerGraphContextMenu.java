@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.gui.torquegraph.simple;
+package it.albertus.cyclesmod.gui.powergraph.simple;
 
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.TraceType;
@@ -11,11 +11,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import it.albertus.cyclesmod.gui.torquegraph.ITorqueGraph;
-import it.albertus.cyclesmod.gui.torquegraph.TorqueGraphContextMenu;
+import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
+import it.albertus.cyclesmod.gui.powergraph.PowerGraphContextMenu;
 import it.albertus.cyclesmod.resources.Messages;
 
-public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
+public class SimplePowerGraphContextMenu extends PowerGraphContextMenu {
 
 	private final MenuItem editMenuItem;
 	private final SubMenu<TraceType> traceTypeSubMenu;
@@ -23,8 +23,8 @@ public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 	private final SubMenu<PointStyle> pointStyleSubMenu;
 	private final SubMenu<Integer> pointSizeSubMenu;
 
-	public SimpleTorqueGraphContextMenu(final Control parent, final ITorqueGraph torqueGraph) {
-		super(parent, torqueGraph);
+	public SimplePowerGraphContextMenu(final Control parent, final IPowerGraph powerGraph) {
+		super(parent, powerGraph);
 
 		final Menu menu = getMenu();
 

@@ -22,19 +22,19 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.gui.FormProperty.LabelDataKey;
 import it.albertus.cyclesmod.gui.FormProperty.TextDataKey;
-import it.albertus.cyclesmod.gui.listener.OpenTorqueGraphDialogListener;
+import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.PropertyFocusListener;
 import it.albertus.cyclesmod.gui.listener.PropertyKeyListener;
 import it.albertus.cyclesmod.gui.listener.PropertyVerifyListener;
-import it.albertus.cyclesmod.gui.listener.TorquePropertyFocusListener;
-import it.albertus.cyclesmod.gui.torquegraph.ITorqueGraph;
-import it.albertus.cyclesmod.gui.torquegraph.simple.TorqueGraphCanvas;
+import it.albertus.cyclesmod.gui.listener.PowerPropertyFocusListener;
+import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
+import it.albertus.cyclesmod.gui.powergraph.simple.PowerGraphCanvas;
 import it.albertus.cyclesmod.model.Bike;
 import it.albertus.cyclesmod.model.BikesCfg;
 import it.albertus.cyclesmod.model.Gearbox;
 import it.albertus.cyclesmod.model.Setting;
 import it.albertus.cyclesmod.model.Settings;
-import it.albertus.cyclesmod.model.Torque;
+import it.albertus.cyclesmod.model.Power;
 import it.albertus.cyclesmod.model.Bike.BikeType;
 import it.albertus.cyclesmod.resources.Messages;
 
@@ -50,12 +50,12 @@ public class Tabs {
 
 	private final Map<BikeType, Group> settingsGroups = new EnumMap<BikeType, Group>(BikeType.class);
 	private final Map<BikeType, Group> gearboxGroups = new EnumMap<BikeType, Group>(BikeType.class);
-	private final Map<BikeType, Group> torqueGroups = new EnumMap<BikeType, Group>(BikeType.class);
-	private final Map<BikeType, TorqueGraphCanvas> torqueCanvases = new EnumMap<BikeType, TorqueGraphCanvas>(BikeType.class);
+	private final Map<BikeType, Group> powerGroups = new EnumMap<BikeType, Group>(BikeType.class);
+	private final Map<BikeType, PowerGraphCanvas> powerCanvases = new EnumMap<BikeType, PowerGraphCanvas>(BikeType.class);
 
 	private final PropertyVerifyListener propertyVerifyListener;
 	private final PropertyFocusListener propertyFocusListener;
-	private final TorquePropertyFocusListener torquePropertyFocusListener;
+	private final PowerPropertyFocusListener powerPropertyFocusListener;
 	private final PropertyKeyListener propertyKeyListener;
 
 	Tabs(final CyclesModGui gui) {
@@ -63,7 +63,7 @@ public class Tabs {
 		textFormatter = new TextFormatter(gui);
 		propertyVerifyListener = new PropertyVerifyListener(gui);
 		propertyFocusListener = new PropertyFocusListener(gui);
-		torquePropertyFocusListener = new TorquePropertyFocusListener(gui);
+		powerPropertyFocusListener = new PowerPropertyFocusListener(gui);
 		propertyKeyListener = new PropertyKeyListener(gui);
 
 		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
@@ -111,15 +111,15 @@ public class Tabs {
 				formProperties.put(key, new FormProperty(label, text));
 			}
 
-			// Torque graph
-			final TorqueGraphCanvas canvas = new TorqueGraphCanvas(tabComposite, bike);
-			canvas.addMouseListener(new OpenTorqueGraphDialogListener(gui, bike.getType()));
-			final ITorqueGraph torqueGraph = canvas.getTorqueGraph();
-			torqueGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
+			// Power graph
+			final PowerGraphCanvas canvas = new PowerGraphCanvas(tabComposite, bike);
+			canvas.addMouseListener(new OpenPowerGraphDialogListener(gui, bike.getType()));
+			final IPowerGraph powerGraph = canvas.getPowerGraph();
+			powerGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Torque.class, torqueGraph.getTorqueIndex(me.getLocation())));
+						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Power.class, powerGraph.getPowerIndex(me.getLocation())));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
 						}
@@ -127,7 +127,7 @@ public class Tabs {
 				}
 			});
 			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(canvas);
-			torqueCanvases.put(bike.getType(), canvas);
+			powerCanvases.put(bike.getType(), canvas);
 
 			// Gearbox
 			final Group gearboxGroup = new Group(tabComposite, SWT.NULL);
@@ -161,36 +161,36 @@ public class Tabs {
 				formProperties.put(key, new FormProperty(label, text));
 			}
 
-			// Torque
-			final Group torqueGroup = new Group(tabComposite, SWT.NULL);
-			torqueGroup.setText(Messages.get("lbl.torque"));
-			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(torqueGroup);
-			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(torqueGroup);
-			torqueGroups.put(bike.getType(), torqueGroup);
+			// Power
+			final Group powerGroup = new Group(tabComposite, SWT.NULL);
+			powerGroup.setText(Messages.get("lbl.power"));
+			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(powerGroup);
+			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
+			powerGroups.put(bike.getType(), powerGroup);
 
-			for (int index = 0; index < bike.getTorque().getCurve().length; index++) {
-				final String key = BikesCfg.buildPropertyKey(bike.getType(), Torque.class, index);
+			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
+				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.class, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
-				final Label label = new Label(torqueGroup, SWT.NULL);
+				final Label label = new Label(powerGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				final String labelTextKey = "lbl.rpm";
-				final String labelTextArgument = String.valueOf(Torque.getRpm(index));
+				final String labelTextArgument = String.valueOf(Power.getRpm(index));
 				label.setText(Messages.get(labelTextKey, labelTextArgument));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setData(LabelDataKey.ARGUMENT.toString(), labelTextArgument);
 				label.setToolTipText(key);
-				final Text text = new Text(torqueGroup, SWT.BORDER);
+				final Text text = new Text(powerGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				final int textSize = Integer.toString(Torque.MAX_VALUE).length();
+				final int textSize = Integer.toString(Power.MAX_VALUE).length();
 				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
 				text.setData(TextDataKey.KEY.toString(), key);
-				text.setData(TextDataKey.GRAPH.toString(), torqueGraph);
+				text.setData(TextDataKey.GRAPH.toString(), powerGraph);
 				text.setData(TextDataKey.INDEX.toString(), index);
 				text.setData(TextDataKey.SIZE.toString(), textSize);
-				text.setData(TextDataKey.MAX.toString(), Integer.valueOf(Torque.MAX_VALUE));
+				text.setData(TextDataKey.MAX.toString(), Integer.valueOf(Power.MAX_VALUE));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
-				text.addFocusListener(torquePropertyFocusListener);
+				text.addFocusListener(powerPropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(label, text));
 			}
@@ -209,10 +209,10 @@ public class Tabs {
 		for (final Group gearboxGroup : gearboxGroups.values()) {
 			gearboxGroup.setText(Messages.get("lbl.gearbox"));
 		}
-		for (final Group torqueGroup : torqueGroups.values()) {
-			torqueGroup.setText(Messages.get("lbl.torque"));
+		for (final Group powerGroup : powerGroups.values()) {
+			powerGroup.setText(Messages.get("lbl.power"));
 		}
-		for (final TorqueGraphCanvas canvas : torqueCanvases.values()) {
+		for (final PowerGraphCanvas canvas : powerCanvases.values()) {
 			canvas.updateTexts();
 		}
 
@@ -249,13 +249,13 @@ public class Tabs {
 		updateFields(properties);
 		enableTextListeners();
 
-		// Update torque graphs...
+		// Update power graphs...
 		for (final Bike bike : gui.getBikesInf().getBikes()) {
-			final ITorqueGraph torqueGraph = torqueCanvases.get(bike.getType()).getTorqueGraph();
-			for (short i = 0; i < bike.getTorque().getCurve().length; i++) {
-				torqueGraph.setValue(i, bike.getTorque().getCurve()[i]);
+			final IPowerGraph powerGraph = powerCanvases.get(bike.getType()).getPowerGraph();
+			for (short i = 0; i < bike.getPower().getCurve().length; i++) {
+				powerGraph.setValue(i, bike.getPower().getCurve()[i]);
 			}
-			torqueGraph.refresh();
+			powerGraph.refresh();
 		}
 	}
 
@@ -274,8 +274,8 @@ public class Tabs {
 			else if (gui.isGearboxProperty(entry.getKey())) {
 				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
-			else if (gui.isTorqueProperty(entry.getKey())) {
-				textLimit = Integer.toString(Torque.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+			else if (gui.isPowerProperty(entry.getKey())) {
+				textLimit = Integer.toString(Power.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else {
 				throw new IllegalStateException(Messages.get("err.unsupported.property", entry.getKey(), entry.getValue().getValue()));
@@ -305,14 +305,14 @@ public class Tabs {
 		propertyKeyListener.setEnabled(true);
 		propertyVerifyListener.setEnabled(true);
 		propertyFocusListener.setEnabled(true);
-		torquePropertyFocusListener.setEnabled(true);
+		powerPropertyFocusListener.setEnabled(true);
 	}
 
 	private void disableTextListeners() {
 		propertyKeyListener.setEnabled(false);
 		propertyVerifyListener.setEnabled(false);
 		propertyFocusListener.setEnabled(false);
-		torquePropertyFocusListener.setEnabled(false);
+		powerPropertyFocusListener.setEnabled(false);
 	}
 
 	public TabFolder getTabFolder() {
@@ -327,8 +327,8 @@ public class Tabs {
 		return Collections.unmodifiableMap(formProperties);
 	}
 
-	public Map<BikeType, TorqueGraphCanvas> getTorqueCanvases() {
-		return Collections.unmodifiableMap(torqueCanvases);
+	public Map<BikeType, PowerGraphCanvas> getPowerCanvases() {
+		return Collections.unmodifiableMap(powerCanvases);
 	}
 
 	public Map<BikeType, Group> getSettingsGroups() {
@@ -339,8 +339,8 @@ public class Tabs {
 		return Collections.unmodifiableMap(gearboxGroups);
 	}
 
-	public Map<BikeType, Group> getTorqueGroups() {
-		return Collections.unmodifiableMap(torqueGroups);
+	public Map<BikeType, Group> getPowerGroups() {
+		return Collections.unmodifiableMap(powerGroups);
 	}
 
 }

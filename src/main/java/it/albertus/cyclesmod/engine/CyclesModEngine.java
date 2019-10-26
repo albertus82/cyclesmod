@@ -7,7 +7,7 @@ import it.albertus.cyclesmod.model.BikesInf;
 import it.albertus.cyclesmod.model.Gearbox;
 import it.albertus.cyclesmod.model.Setting;
 import it.albertus.cyclesmod.model.Settings;
-import it.albertus.cyclesmod.model.Torque;
+import it.albertus.cyclesmod.model.Power;
 import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.StringUtils;
 
@@ -66,9 +66,9 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 				applied = applyGearboxProperty(key, value);
 			}
 
-			// Torque
-			else if (isTorqueProperty(key)) {
-				applied = applyTorqueProperty(key, value);
+			// Power
+			else if (isPowerProperty(key)) {
+				applied = applyPowerProperty(key, value);
 			}
 
 			else {
@@ -83,8 +83,8 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		return applied;
 	}
 
-	public boolean isTorqueProperty(final String key) {
-		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Torque.class.getSimpleName()));
+	public boolean isPowerProperty(final String key) {
+		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Power.class.getSimpleName()));
 	}
 
 	public boolean isGearboxProperty(final String key) {
@@ -95,17 +95,17 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Settings.class.getSimpleName()));
 	}
 
-	private boolean applyTorqueProperty(final String key, final String value) {
+	private boolean applyPowerProperty(final String key, final String value) {
 		boolean applied = false;
-		final short newValue = Torque.parse(key, value, numeralSystem.getRadix());
+		final short newValue = Power.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key, value);
-		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Torque.class.getSimpleName()) + '.');
-		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getTorque().getCurve().length) {
+		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Power.class.getSimpleName()) + '.');
+		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getPower().getCurve().length) {
 			final int index = Integer.parseInt(suffix);
-			final short defaultValue = bike.getTorque().getCurve()[index];
+			final short defaultValue = bike.getPower().getCurve()[index];
 			if (defaultValue != newValue) {
-				bike.getTorque().getCurve()[index] = newValue;
+				bike.getPower().getCurve()[index] = newValue;
 				applied = true;
 				logChange(key, defaultValue, newValue);
 			}

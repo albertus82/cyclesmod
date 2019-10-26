@@ -1,19 +1,19 @@
-package it.albertus.cyclesmod.gui.torquegraph.dialog;
+package it.albertus.cyclesmod.gui.powergraph.dialog;
 
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
 
-import it.albertus.cyclesmod.gui.torquegraph.ITorqueGraph;
+import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.resources.Messages;
 
 public class ChangeValueCommand implements IUndoableCommand {
 
-	private final ITorqueGraph torqueGraph;
+	private final IPowerGraph powerGraph;
 	private final int index;
 	private final short oldValue;
 	private final short newValue;
 
-	public ChangeValueCommand(final ITorqueGraph torqueGraph, final int index, final short oldValue, final short newValue) {
-		this.torqueGraph = torqueGraph;
+	public ChangeValueCommand(final IPowerGraph powerGraph, final int index, final short oldValue, final short newValue) {
+		this.powerGraph = powerGraph;
 		this.index = index;
 		this.oldValue = oldValue;
 		this.newValue = newValue;
@@ -21,14 +21,14 @@ public class ChangeValueCommand implements IUndoableCommand {
 
 	@Override
 	public void undo() {
-		torqueGraph.setValue(index, oldValue);
-		torqueGraph.refresh();
+		powerGraph.setValue(index, oldValue);
+		powerGraph.refresh();
 	}
 
 	@Override
 	public void redo() {
-		torqueGraph.setValue(index, newValue);
-		torqueGraph.refresh();
+		powerGraph.setValue(index, newValue);
+		powerGraph.refresh();
 	}
 
 	@Override

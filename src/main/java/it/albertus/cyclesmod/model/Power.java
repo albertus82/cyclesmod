@@ -6,7 +6,7 @@ import java.util.List;
 import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.resources.Messages;
 
-public class Torque extends BikesInfElement {
+public class Power extends BikesInfElement {
 
 	public static final int LENGTH = 106;
 	public static final short MIN_VALUE = 0;
@@ -21,13 +21,13 @@ public class Torque extends BikesInfElement {
 	public static final short POINT_WIDTH_RPM = 128;
 
 	/**
-	 * 42-147: curva di coppia (intervallo regime considerato: 768-14335 RPM).
+	 * 42-147: curva di potenza (intervallo regime considerato: 768-14335 RPM).
 	 */
 	private final short[] curve = new short[LENGTH];
 
-	public Torque(final short[] curve) {
+	public Power(final short[] curve) {
 		if (curve.length > LENGTH) {
-			throw new IllegalArgumentException(Messages.get("err.torque", LENGTH, curve.length));
+			throw new IllegalArgumentException(Messages.get("err.power", LENGTH, curve.length));
 		}
 		for (int i = 0; i < curve.length; i++) {
 			this.curve[i] = curve[i];

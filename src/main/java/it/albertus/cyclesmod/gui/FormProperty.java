@@ -4,7 +4,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import it.albertus.cyclesmod.gui.torquegraph.ITorqueGraph;
+import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.util.StringUtils;
 
 public class FormProperty {
@@ -26,7 +26,7 @@ public class FormProperty {
 
 	public enum TextDataKey {
 		DEFAULT(Integer.class),
-		GRAPH(ITorqueGraph.class),
+		GRAPH(IPowerGraph.class),
 		INDEX(Integer.class),
 		KEY(String.class),
 		MAX(Integer.class),

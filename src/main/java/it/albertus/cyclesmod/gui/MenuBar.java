@@ -22,7 +22,7 @@ import it.albertus.cyclesmod.gui.listener.EditMenuListener;
 import it.albertus.cyclesmod.gui.listener.HelpMenuListener;
 import it.albertus.cyclesmod.gui.listener.LanguageSelectionListener;
 import it.albertus.cyclesmod.gui.listener.OpenSelectionListener;
-import it.albertus.cyclesmod.gui.listener.OpenTorqueGraphDialogListener;
+import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.PasteSelectionListener;
 import it.albertus.cyclesmod.gui.listener.RadixSelectionListener;
 import it.albertus.cyclesmod.gui.listener.ResetAllSelectionListener;
@@ -54,8 +54,8 @@ public class MenuBar {
 	private static final String LBL_MENU_ITEM_CUT = "lbl.menu.item.cut";
 	private static final String LBL_MENU_ITEM_COPY = "lbl.menu.item.copy";
 	private static final String LBL_MENU_ITEM_PASTE = "lbl.menu.item.paste";
-	private static final String LBL_MENU_ITEM_TORQUE_CURVE = "lbl.menu.item.torque.curve";
-	private static final String LBL_MENU_ITEM_TORQUE_CURVE_BIKE = "lbl.menu.item.torque.curve.bike";
+	private static final String LBL_MENU_ITEM_TORQUE_CURVE = "lbl.menu.item.power.curve";
+	private static final String LBL_MENU_ITEM_TORQUE_CURVE_BIKE = "lbl.menu.item.power.curve.bike";
 	private static final String LBL_MENU_ITEM_RESET = "lbl.menu.item.reset";
 	private static final String LBL_MENU_ITEM_RESET_SINGLE = "lbl.menu.item.reset.single";
 	private static final String LBL_MENU_ITEM_RESET_ALL = "lbl.menu.item.reset.all";
@@ -79,8 +79,8 @@ public class MenuBar {
 	private final MenuItem editCutMenuItem;
 	private final MenuItem editCopyMenuItem;
 	private final MenuItem editPasteMenuItem;
-	private final MenuItem editTorqueSubMenuItem;
-	private final Map<BikeType, MenuItem> editTorqueMenuItems = new EnumMap<BikeType, MenuItem>(BikeType.class);
+	private final MenuItem editPowerSubMenuItem;
+	private final Map<BikeType, MenuItem> editPowerMenuItems = new EnumMap<BikeType, MenuItem>(BikeType.class);
 	private final MenuItem editResetSubMenuItem;
 	private final MenuItem editResetSingleMenuItem;
 	private final MenuItem editResetAllMenuItem;
@@ -176,17 +176,17 @@ public class MenuBar {
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
-		editTorqueSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
-		editTorqueSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE));
+		editPowerSubMenuItem = new MenuItem(editMenu, SWT.CASCADE);
+		editPowerSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE));
 
-		final Menu editTorqueSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		editTorqueSubMenuItem.setMenu(editTorqueSubMenu);
+		final Menu editPowerSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		editPowerSubMenuItem.setMenu(editPowerSubMenu);
 
 		for (final BikeType bikeType : BikeType.values()) {
-			final MenuItem editTorqueMenuItem = new MenuItem(editTorqueSubMenu, SWT.PUSH);
-			editTorqueMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE_BIKE, bikeType.getDisplacement()));
-			editTorqueMenuItem.addSelectionListener(new OpenTorqueGraphDialogListener(gui, bikeType));
-			editTorqueMenuItems.put(bikeType, editTorqueMenuItem);
+			final MenuItem editPowerMenuItem = new MenuItem(editPowerSubMenu, SWT.PUSH);
+			editPowerMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE_BIKE, bikeType.getDisplacement()));
+			editPowerMenuItem.addSelectionListener(new OpenPowerGraphDialogListener(gui, bikeType));
+			editPowerMenuItems.put(bikeType, editPowerMenuItem);
 		}
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
@@ -299,8 +299,8 @@ public class MenuBar {
 		for (final Entry<NumeralSystem, MenuItem> entry : viewRadixMenuItems.entrySet()) {
 			entry.getValue().setText(Messages.get(LBL_MENU_ITEM_RADIX + '.' + +entry.getKey().getRadix()));
 		}
-		editTorqueSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE));
-		for (final Entry<BikeType, MenuItem> entry : editTorqueMenuItems.entrySet()) {
+		editPowerSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE));
+		for (final Entry<BikeType, MenuItem> entry : editPowerMenuItems.entrySet()) {
 			entry.getValue().setText(Messages.get(LBL_MENU_ITEM_TORQUE_CURVE_BIKE, entry.getKey().getDisplacement()));
 		}
 		viewLanguageSubMenuItem.setText(Messages.get(LBL_MENU_ITEM_LANGUAGE));

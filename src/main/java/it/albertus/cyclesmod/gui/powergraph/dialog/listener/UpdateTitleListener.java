@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.gui.torquegraph.dialog.listener;
+package it.albertus.cyclesmod.gui.powergraph.dialog.listener;
 
 import java.text.NumberFormat;
 
@@ -6,21 +6,21 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 
-import it.albertus.cyclesmod.gui.torquegraph.ITorqueGraph;
-import it.albertus.cyclesmod.model.Torque;
+import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
+import it.albertus.cyclesmod.model.Power;
 import it.albertus.cyclesmod.resources.Messages;
 
 public class UpdateTitleListener implements MouseMotionListener {
 
 	private static final double NM_TO_LBFT = 1.35581794884;
 
-	private final ITorqueGraph torqueGraph;
+	private final IPowerGraph powerGraph;
 	private final NumberFormat numberFormat;
 
 	private String lastPosition;
 
-	public UpdateTitleListener(final ITorqueGraph torqueGraph) {
-		this.torqueGraph = torqueGraph;
+	public UpdateTitleListener(final IPowerGraph powerGraph) {
+		this.powerGraph = powerGraph;
 		numberFormat = NumberFormat.getNumberInstance(Messages.getLanguage().getLocale());
 		numberFormat.setMaximumFractionDigits(1);
 	}
@@ -33,7 +33,7 @@ public class UpdateTitleListener implements MouseMotionListener {
 	@Override
 	public void mouseExited(final MouseEvent me) {
 		lastPosition = " ";
-		torqueGraph.getXyGraph().setTitle(lastPosition);
+		powerGraph.getXyGraph().setTitle(lastPosition);
 	}
 
 	@Override
@@ -42,11 +42,11 @@ public class UpdateTitleListener implements MouseMotionListener {
 	}
 
 	private void execute(final Point location) {
-		final short torqueValue = torqueGraph.getTorqueValue(location);
-		final String currentPosition = Messages.get("lbl.graph.torqueAtRpm", torqueValue, numberFormat.format(torqueValue / NM_TO_LBFT), Torque.getRpm(torqueGraph.getTorqueIndex(location)));
+		final short powerValue = powerGraph.getPowerValue(location);
+		final String currentPosition = Messages.get("lbl.graph.powerAtRpm", powerValue, numberFormat.format(powerValue / NM_TO_LBFT), Power.getRpm(powerGraph.getPowerIndex(location)));
 		if (!currentPosition.equals(lastPosition)) {
 			lastPosition = currentPosition;
-			torqueGraph.getXyGraph().setTitle(lastPosition);
+			powerGraph.getXyGraph().setTitle(lastPosition);
 		}
 	}
 

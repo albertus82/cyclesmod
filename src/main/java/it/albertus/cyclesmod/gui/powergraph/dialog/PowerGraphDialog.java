@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.gui.torquegraph.dialog;
+package it.albertus.cyclesmod.gui.powergraph.dialog;
 
 import java.util.Map;
 
@@ -19,30 +19,30 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cyclesmod.gui.Images;
-import it.albertus.cyclesmod.gui.torquegraph.TorqueGraphProvider;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.listener.RedoListener;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.listener.SaveSnapshotListener;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.listener.UndoListener;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.listener.ZoomInListener;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.listener.ZoomMouseWheelListener;
-import it.albertus.cyclesmod.gui.torquegraph.dialog.listener.ZoomOutListener;
+import it.albertus.cyclesmod.gui.powergraph.PowerGraphProvider;
+import it.albertus.cyclesmod.gui.powergraph.dialog.listener.RedoListener;
+import it.albertus.cyclesmod.gui.powergraph.dialog.listener.SaveSnapshotListener;
+import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UndoListener;
+import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
+import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomMouseWheelListener;
+import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import it.albertus.cyclesmod.model.Bike.BikeType;
 import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.jface.JFaceMessages;
 import it.albertus.jface.SwtUtils;
 
-public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
+public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
 	private static final int SHELL_SIZE_FACTOR = 3;
 
 	private int returnCode = SWT.CANCEL;
-	private ComplexTorqueGraph torqueGraph;
+	private ComplexPowerGraph powerGraph;
 
-	public TorqueGraphDialog(final Shell parent) {
+	public PowerGraphDialog(final Shell parent) {
 		this(parent, SWT.SHEET | SWT.RESIZE | SWT.MAX);
 	}
 
-	private TorqueGraphDialog(final Shell parent, final int style) {
+	private PowerGraphDialog(final Shell parent, final int style) {
 		super(parent, style);
 		setText(Messages.get("lbl.graph.title"));
 	}
@@ -85,12 +85,12 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		torqueGraph = new ComplexTorqueGraph(map, bikeType);
-		lws.setContents(torqueGraph.getToolbarArmedXYGraph());
+		powerGraph = new ComplexPowerGraph(map, bikeType);
+		lws.setContents(powerGraph.getToolbarArmedXYGraph());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
-		final IXYGraph xyGraph = torqueGraph.getXyGraph();
+		final IXYGraph xyGraph = powerGraph.getXyGraph();
 		canvas.addKeyListener(new ZoomInListener(xyGraph));
 		canvas.addKeyListener(new ZoomOutListener(xyGraph));
 		canvas.addKeyListener(new UndoListener(xyGraph.getOperationsManager()));
@@ -99,7 +99,7 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 
 		canvas.addMouseWheelListener(new ZoomMouseWheelListener(xyGraph));
 
-		new ComplexTorqueGraphContextMenu(canvas, torqueGraph);
+		new ComplexPowerGraphContextMenu(canvas, powerGraph);
 	}
 
 	private Composite createButtonBox(final Shell shell) {
@@ -138,8 +138,8 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 	}
 
 	@Override
-	public ComplexTorqueGraph getTorqueGraph() {
-		return torqueGraph;
+	public ComplexPowerGraph getPowerGraph() {
+		return powerGraph;
 	}
 
 }

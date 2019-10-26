@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.gui.torquegraph.dialog.listener;
+package it.albertus.cyclesmod.gui.powergraph.dialog.listener;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.internal.xygraph.undo.SaveStateCommand;

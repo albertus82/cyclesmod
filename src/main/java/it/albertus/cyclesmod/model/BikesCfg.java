@@ -118,18 +118,18 @@ public class BikesCfg {
 				props.append(lineSeparator);
 			}
 
-			// Torque
+			// Power
 			props.append(lineSeparator);
-			props.append("# ").append(Torque.class.getSimpleName()).append(" (").append(Torque.getRpm(0)).append('-').append(Torque.getRpm(Torque.LENGTH) - 1).append(" RPM) #");
+			props.append("# ").append(Power.class.getSimpleName()).append(" (").append(Power.getRpm(0)).append('-').append(Power.getRpm(Power.LENGTH) - 1).append(" RPM) #");
 			props.append(lineSeparator);
-			for (int index = 0; index < bike.getTorque().getCurve().length; index++) {
+			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
 				if (index > 0 && index % 8 == 0) {
-					props.append("# " + Torque.getRpm(index) + " RPM");
+					props.append("# " + Power.getRpm(index) + " RPM");
 					props.append(lineSeparator);
 				}
-				props.append(buildPropertyKey(bike.getType(), Torque.class, index));
+				props.append(buildPropertyKey(bike.getType(), Power.class, index));
 				props.append('=');
-				props.append(bike.getTorque().getCurve()[index]);
+				props.append(bike.getPower().getCurve()[index]);
 				props.append(lineSeparator);
 			}
 
