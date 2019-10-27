@@ -38,12 +38,13 @@ public class PowerGraph implements IPowerGraph {
 	private final double[] values = new double[Power.LENGTH];
 	private final double[] torqueValues = new double[Power.LENGTH];
 	private final double[] xDataArray = new double[Power.LENGTH];
+	private boolean torqueVisible;
 
 	public PowerGraph(final Bike bike) {
 		for (int i = 0; i < Power.LENGTH; i++) {
 			xDataArray[i] = (double) Power.getRpm(i) / RPM_DIVISOR;
 			values[i] = bike.getPower().getCurve()[i];
-			torqueValues[i] = powerToTorque(values[i], Power.getRpm(i));
+			torqueValues[i] = hpToNm(values[i], Power.getRpm(i));
 		}
 		init(bike.getType());
 	}
@@ -57,7 +58,7 @@ public class PowerGraph implements IPowerGraph {
 		for (final Entry<Integer, Short> entry : map.entrySet()) {
 			xDataArray[i] = entry.getKey().doubleValue() / RPM_DIVISOR;
 			values[i] = entry.getValue();
-			torqueValues[i] = powerToTorque(values[i], Power.getRpm(i));
+			torqueValues[i] = hpToNm(values[i], Power.getRpm(i));
 			i++;
 		}
 		init(bikeType);
@@ -77,21 +78,16 @@ public class PowerGraph implements IPowerGraph {
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
-		ordinates.setTitle(Messages.get("lbl.graph.axis.y"));
+		ordinates.setTitle(Messages.get("lbl.graph.axis.y.power"));
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 
 		xyGraph.addTrace(powerTrace);
-		setTorqueVisibility(false);
+		toggleTorqueVisibility(false);
 		xyGraph.setShowLegend(false);
 
 		powerTrace.setTraceColor(getColor(bikeType));
 		torqueTrace.setTraceColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
-	}
-
-	private static double powerToTorque(final double hp, final int rpm) {
-		final double kw = hp * 0.7457;
-		return 9.5488 * kw / rpm * 1000;
 	}
 
 	private static Color getColor(final BikeType bikeType) {
@@ -106,6 +102,11 @@ public class PowerGraph implements IPowerGraph {
 		default:
 			throw new IllegalStateException("Unknown bike type: " + bikeType);
 		}
+	}
+
+	public static double hpToNm(final double hp, final int rpm) {
+		final double kw = hp * 0.7457;
+		return 9.5488 * kw / rpm * 1000;
 	}
 
 	@Override
@@ -152,7 +153,7 @@ public class PowerGraph implements IPowerGraph {
 	@Override
 	public void setValue(final int index, final double value) {
 		values[index] = value;
-		torqueValues[index] = powerToTorque(value, Power.getRpm(index));
+		torqueValues[index] = hpToNm(value, Power.getRpm(index));
 	}
 
 	@Override
@@ -166,15 +167,22 @@ public class PowerGraph implements IPowerGraph {
 	}
 
 	@Override
-	public void setTorqueVisibility(final boolean visibility) {
+	public void toggleTorqueVisibility(final boolean visibility) {
+		this.torqueVisible = visibility;
 		if (visibility) {
 			torqueTrace.setDataProvider(torqueDataProvider);
 			xyGraph.addTrace(torqueTrace);
+			ordinates.setTitle(Messages.get("lbl.graph.axis.y.power") + " / " + Messages.get("lbl.graph.axis.y.torque"));
 		}
 		else {
 			xyGraph.removeTrace(torqueTrace);
 			torqueTrace.setDataProvider(new NullDataProvider());
+			ordinates.setTitle(Messages.get("lbl.graph.axis.y.power"));
 		}
+	}
+
+	public boolean isTorqueVisible() {
+		return torqueVisible;
 	}
 
 	private static class NullDataProvider extends AbstractDataProvider {

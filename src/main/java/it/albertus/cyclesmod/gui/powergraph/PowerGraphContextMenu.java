@@ -233,7 +233,7 @@ public abstract class PowerGraphContextMenu {
 		showTorqueMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				powerGraph.setTorqueVisibility(showTorqueMenuItem.getSelection());
+				powerGraph.toggleTorqueVisibility(showTorqueMenuItem.getSelection());
 			}
 		});
 		return showTorqueMenuItem;

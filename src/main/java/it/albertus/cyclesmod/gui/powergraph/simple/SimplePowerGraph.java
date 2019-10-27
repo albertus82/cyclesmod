@@ -42,7 +42,12 @@ public class SimplePowerGraph extends PowerGraph {
 	public void updateTexts() {
 		getXyGraph().setTitle(Messages.get("lbl.graph.title"));
 		getAbscissae().setTitle(Messages.get("lbl.graph.axis.x", RPM_DIVISOR));
-		getOrdinates().setTitle(Messages.get("lbl.graph.axis.y"));
+		if (isTorqueVisible()) {
+			getOrdinates().setTitle(Messages.get("lbl.graph.axis.y.power") + " / " + Messages.get("lbl.graph.axis.y.torque"));
+		}
+		else {
+			getOrdinates().setTitle(Messages.get("lbl.graph.axis.y.power"));
+		}
 	}
 
 }
