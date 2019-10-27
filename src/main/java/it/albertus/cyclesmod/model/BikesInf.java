@@ -2,6 +2,7 @@ package it.albertus.cyclesmod.model;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -90,18 +91,67 @@ public class BikesInf {
 		crc.update(newBikesInf, 0, newBikesInf.length);
 		System.out.println(Messages.get("msg.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + Messages.get("msg.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
 
+		final File file = new File(fileName);
+		if (file.exists() && !file.isDirectory()) {
+			InputStream is = null;
+			ByteArrayOutputStream os = null;
+			try {
+				is = new FileInputStream(file);
+				os = new ByteArrayOutputStream();
+				IOUtils.copy(is, os, FILE_SIZE);
+			}
+			finally {
+				IOUtils.closeQuietly(os, is);
+			}
+			final Checksum crcExistingFile = new CRC32();
+			crcExistingFile.update(os.toByteArray(), 0, os.size());
+			if (os.size() == FILE_SIZE && crcExistingFile.getValue() == crc.getValue()) {
+				System.out.println(Messages.get("msg.already.uptodate", FILE_NAME));
+			}
+			else {
+				backup(fileName);
+				doWrite(fileName, newBikesInf, crc);
+			}
+		}
+		else {
+			doWrite(fileName, newBikesInf, crc);
+		}
+	}
+
+	private void doWrite(final String fileName, final byte[] newBikesInf, final Checksum crc) throws IOException {
 		FileOutputStream fos = null;
 		BufferedOutputStream bos = null;
 		try {
 			fos = new FileOutputStream(fileName);
 			bos = new BufferedOutputStream(fos, FILE_SIZE);
 			bos.write(newBikesInf);
+			System.out.println(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
 		}
 		finally {
 			IOUtils.closeQuietly(bos, fos);
 		}
+	}
 
-		System.out.println(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
+	private void backup(final String existingFile) throws IOException {
+		File backupFile;
+		int i = 1;
+		final String parent = new File(existingFile).getParent();
+		do {
+			backupFile = new File(parent != null ? parent : "" + "BIKESINF." + String.format("%03d", i++));
+		}
+		while (backupFile.exists());
+
+		FileInputStream fis = null;
+		FileOutputStream fos = null;
+		try {
+			fis = new FileInputStream(existingFile);
+			fos = new FileOutputStream(backupFile);
+			IOUtils.copy(fis, fos, FILE_SIZE);
+			System.out.println(Messages.get("msg.old.file.backed.up", FILE_NAME, backupFile));
+		}
+		finally {
+			IOUtils.closeQuietly(fos, fis);
+		}
 	}
 
 	/**

@@ -3,10 +3,10 @@ package it.albertus.cyclesmod.console;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import it.albertus.cyclesmod.CyclesMod;
 import it.albertus.cyclesmod.data.DefaultBikes;
 import it.albertus.cyclesmod.engine.CyclesModEngine;
 import it.albertus.cyclesmod.model.BikesCfg;
@@ -53,7 +53,7 @@ public class CyclesModConsole extends CyclesModEngine {
 
 	private static String getWelcomeMessage() {
 		final Version version = Version.getInstance();
-		return Messages.get("msg.welcome", version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(version.getDate()), Messages.get("msg.info.site")) + NewLine.SYSTEM_LINE_SEPARATOR;
+		return Messages.get("msg.welcome", version.getNumber(), CyclesMod.getFormattedVersionDate(), Messages.get("msg.info.site")) + NewLine.SYSTEM_LINE_SEPARATOR;
 	}
 
 	private void execute() throws IOException {
