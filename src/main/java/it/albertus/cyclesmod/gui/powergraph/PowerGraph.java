@@ -33,8 +33,8 @@ public class PowerGraph implements IPowerGraph {
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
 	private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
-	private final Trace powerTrace = new Trace(Messages.get("lbl.graph.trace"), abscissae, ordinates, dataProvider);
-	private final Trace torqueTrace = new Trace(Messages.get("lbl.graph.torquetrace"), abscissae, ordinates, nullDataProvider);
+	private final Trace powerTrace = new Trace(Messages.get("lbl.graph.trace.power"), abscissae, ordinates, dataProvider);
+	private final Trace torqueTrace = new Trace(Messages.get("lbl.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
 	private final double[] values = new double[Power.LENGTH];
 	private final double[] torqueValues = new double[Power.LENGTH];
 	private final double[] xDataArray = new double[Power.LENGTH];
