@@ -181,6 +181,7 @@ public class PowerGraph implements IPowerGraph {
 		}
 	}
 
+	@Override
 	public boolean isTorqueVisible() {
 		return torqueVisible;
 	}

@@ -32,4 +32,6 @@ public interface IPowerGraph {
 
 	void toggleTorqueVisibility(boolean visibility);
 
+	boolean isTorqueVisible();
+
 }
