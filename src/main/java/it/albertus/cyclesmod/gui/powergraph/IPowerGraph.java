@@ -30,4 +30,6 @@ public interface IPowerGraph {
 
 	int getPowerIndex(Point location);
 
+	void setTorqueVisibility(boolean visibility);
+
 }

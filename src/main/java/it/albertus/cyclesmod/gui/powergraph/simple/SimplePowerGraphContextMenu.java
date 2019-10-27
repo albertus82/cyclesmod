@@ -22,6 +22,7 @@ public class SimplePowerGraphContextMenu extends PowerGraphContextMenu {
 	private final SubMenu<Integer> lineWidthSubMenu;
 	private final SubMenu<PointStyle> pointStyleSubMenu;
 	private final SubMenu<Integer> pointSizeSubMenu;
+	private final MenuItem showTorqueMenuItem;
 
 	public SimplePowerGraphContextMenu(final Control parent, final IPowerGraph powerGraph) {
 		super(parent, powerGraph);
@@ -47,6 +48,10 @@ public class SimplePowerGraphContextMenu extends PowerGraphContextMenu {
 		pointStyleSubMenu = addPointStyleSubMenu();
 		pointSizeSubMenu = addPointSizeSubMenu();
 
+		new MenuItem(menu, SWT.SEPARATOR);
+
+		showTorqueMenuItem = addShowTorqueMenuItem();
+
 		parent.addMenuDetectListener(new MenuDetectListener() {
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
@@ -67,6 +72,7 @@ public class SimplePowerGraphContextMenu extends PowerGraphContextMenu {
 		pointStyleMenuItem.setText(Messages.get(pointStyleMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
 		final MenuItem pointSizeMenuItem = pointSizeSubMenu.getMenuItem();
 		pointSizeMenuItem.setText(Messages.get(pointSizeMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
+		showTorqueMenuItem.setText(Messages.get(showTorqueMenuItem.getData(TEXT_MESSAGE_KEY).toString()));
 	}
 
 }

@@ -4,7 +4,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.nebula.visualization.xygraph.dataprovider.AbstractDataProvider;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
+import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
+import org.eclipse.nebula.visualization.xygraph.dataprovider.ISample;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
@@ -23,13 +26,15 @@ public class PowerGraph implements IPowerGraph {
 
 	public static final int RPM_DIVISOR = 1000;
 
+	private static final IDataProvider nullDataProvider = new NullDataProvider();
+
 	private final IXYGraph xyGraph = new XYGraph();
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
 	private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
 	private final Trace powerTrace = new Trace(Messages.get("lbl.graph.trace"), abscissae, ordinates, dataProvider);
-	private final Trace torqueTrace = new Trace(Messages.get("lbl.graph.torquetrace"), abscissae, ordinates, torqueDataProvider);
+	private final Trace torqueTrace = new Trace(Messages.get("lbl.graph.torquetrace"), abscissae, ordinates, nullDataProvider);
 	private final double[] values = new double[Power.LENGTH];
 	private final double[] torqueValues = new double[Power.LENGTH];
 	private final double[] xDataArray = new double[Power.LENGTH];
@@ -77,7 +82,7 @@ public class PowerGraph implements IPowerGraph {
 		ordinates.setShowMajorGrid(true);
 
 		xyGraph.addTrace(powerTrace);
-		xyGraph.addTrace(torqueTrace);
+		setTorqueVisibility(false);
 		xyGraph.setShowLegend(false);
 
 		powerTrace.setTraceColor(getColor(bikeType));
@@ -158,6 +163,41 @@ public class PowerGraph implements IPowerGraph {
 	@Override
 	public int getPowerIndex(final Point location) {
 		return Math.max(Math.min(Power.indexOf(getAbscissae().getPositionValue(location.x, false) * RPM_DIVISOR), Power.LENGTH - 1), 0);
+	}
+
+	@Override
+	public void setTorqueVisibility(final boolean visibility) {
+		if (visibility) {
+			torqueTrace.setDataProvider(torqueDataProvider);
+			xyGraph.addTrace(torqueTrace);
+		}
+		else {
+			xyGraph.removeTrace(torqueTrace);
+			torqueTrace.setDataProvider(new NullDataProvider());
+		}
+	}
+
+	private static class NullDataProvider extends AbstractDataProvider {
+
+		public NullDataProvider() {
+			super(false);
+		}
+
+		@Override
+		protected void updateDataRange() {/* NOOP */}
+
+		@Override
+		protected void innerUpdate() {/* NOOP */}
+
+		@Override
+		public int getSize() {
+			return 0;
+		}
+
+		@Override
+		public ISample getSample(int index) {
+			return null;
+		}
 	}
 
 }
