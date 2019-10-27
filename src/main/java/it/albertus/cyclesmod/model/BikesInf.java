@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import it.albertus.cyclesmod.data.DefaultBikes;
 import it.albertus.cyclesmod.model.Bike.BikeType;
@@ -132,26 +135,32 @@ public class BikesInf {
 		}
 	}
 
-	private void backup(final String existingFile) throws IOException {
+	private void backup(final String existingFileName) throws IOException {
 		File backupFile;
 		int i = 0;
-		final String parent = new File(existingFile).getParent();
+		final File existingFile = new File(existingFileName);
+		final String parent = existingFile.getParent();
 		final String prefix = parent != null ? parent + File.separator : "";
 		do {
-			backupFile = new File(prefix + "BIKESINF." + String.format("%03d", i++));
+			backupFile = new File(prefix + "BIKES" + String.format("%03d", i++) + ".ZIP");
 		}
 		while (backupFile.exists());
 
 		FileInputStream fis = null;
 		FileOutputStream fos = null;
+		ZipOutputStream zos = null;
 		try {
-			fis = new FileInputStream(existingFile);
+			fis = new FileInputStream(existingFileName);
 			fos = new FileOutputStream(backupFile);
-			IOUtils.copy(fis, fos, FILE_SIZE);
+			zos = new ZipOutputStream(fos);
+			zos.setLevel(Deflater.BEST_COMPRESSION);
+			zos.putNextEntry(new ZipEntry(existingFile.getName()));
+			IOUtils.copy(fis, zos, FILE_SIZE);
+			zos.closeEntry();
 			System.out.println(Messages.get("msg.old.file.backed.up", FILE_NAME, backupFile));
 		}
 		finally {
-			IOUtils.closeQuietly(fos, fis);
+			IOUtils.closeQuietly(zos, fos, fis);
 		}
 	}
 
