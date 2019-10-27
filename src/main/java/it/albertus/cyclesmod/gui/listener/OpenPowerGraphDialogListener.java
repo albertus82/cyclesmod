@@ -60,7 +60,7 @@ public class OpenPowerGraphDialogListener implements MouseListener, SelectionLis
 				final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Power.class, i));
 				final Text text = formProperty.getText();
 				final String oldValue = text.getText();
-				final String newValue = Long.toString(Math.max(Power.MIN_VALUE, Math.min(Power.MAX_VALUE, Math.round(powerGraphDialog.getPowerGraph().getValue(i)))), gui.getNumeralSystem().getRadix());
+				final String newValue = Long.toString(Math.max(Power.MIN_VALUE, Math.min(Power.MAX_VALUE, Math.round(powerGraphDialog.getPowerGraph().getPowerValue(i)))), gui.getNumeralSystem().getRadix());
 				if (!oldValue.equals(newValue)) {
 					text.setText(newValue);
 					text.notifyListeners(SWT.FocusOut, null);

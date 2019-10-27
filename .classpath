@@ -12,7 +12,7 @@
 	<classpathentry kind="lib" path="lib/compile/common/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar" sourcepath="lib/compile/common/src/org.eclipse.equinox.common.source_3.6.200.v20130402-1505.jar"/>
 	<classpathentry kind="lib" path="lib/compile/common/org.eclipse.jface_3.10.2.v20141021-1035.jar" sourcepath="lib/compile/common/src/org.eclipse.jface.source_3.10.2.v20141021-1035.jar"/>
 	<classpathentry kind="lib" path="lib/compile/common/jaxb-api-2.2.12.jar" sourcepath="lib/compile/common/src/jaxb-api-2.2.12-sources.jar"/>
-	<classpathentry kind="lib" path="lib/compile/common/jface-utils-14.1.0.jar" sourcepath="lib/compile/common/src/jface-utils-14.1.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/compile/common/jface-utils-16.0.1.jar" sourcepath="lib/compile/common/src/jface-utils-16.0.1-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

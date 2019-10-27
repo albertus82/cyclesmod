@@ -35,9 +35,9 @@ public class PowerPropertyFocusListener extends PropertyFocusListener {
 					final IPowerGraph graph = (IPowerGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
 
 					final short newValue = Power.parse(key, field.getText().trim(), gui.getNumeralSystem().getRadix());
-					final short oldValue = (short) graph.getValue(index);
+					final short oldValue = (short) graph.getPowerValue(index);
 					if (oldValue != newValue) {
-						graph.setValue(index, newValue);
+						graph.setPowerValue(index, newValue);
 						graph.refresh();
 					}
 				}
