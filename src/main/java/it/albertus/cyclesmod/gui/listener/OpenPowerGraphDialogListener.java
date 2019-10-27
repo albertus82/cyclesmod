@@ -55,7 +55,7 @@ public class OpenPowerGraphDialogListener implements MouseListener, SelectionLis
 			map.put(Power.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
 		}
 
-		if (powerGraphDialog.open(map, bikeType, gui.getTabs().getPowerCanvases().get(bikeType).getPowerGraph().isTorqueVisible()) == SWT.OK) {
+		if (powerGraphDialog.open(map, bikeType, false) == SWT.OK) {
 			for (int i = 0; i < Power.LENGTH; i++) {
 				final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Power.class, i));
 				final Text text = formProperty.getText();
