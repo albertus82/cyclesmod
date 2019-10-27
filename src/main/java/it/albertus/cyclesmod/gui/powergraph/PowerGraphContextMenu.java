@@ -131,6 +131,7 @@ public abstract class PowerGraphContextMenu {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					powerGraph.getPowerTrace().setLineWidth(lineWidth);
+					powerGraph.getTorqueTrace().setLineWidth(lineWidth);
 				}
 			});
 			lineWidthSubMenuItems.put(lineWidth, menuItem);
@@ -222,6 +223,20 @@ public abstract class PowerGraphContextMenu {
 		});
 
 		return new SubMenu<Integer>(pointSizeMenuItem, pointSizeSubMenuItems);
+	}
+
+	protected MenuItem addShowTorqueMenuItem() {
+		final MenuItem showTorqueMenuItem = new MenuItem(menu, SWT.CHECK);
+		final String showTorqueMenuItemTextMessageKey = "lbl.menu.item.graph.showTorque";
+		showTorqueMenuItem.setData(TEXT_MESSAGE_KEY, showTorqueMenuItemTextMessageKey);
+		showTorqueMenuItem.setText(Messages.get(showTorqueMenuItemTextMessageKey));
+		showTorqueMenuItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				powerGraph.setTorqueVisibility(showTorqueMenuItem.getSelection());
+			}
+		});
+		return showTorqueMenuItem;
 	}
 
 	@SuppressWarnings("rawtypes")

@@ -97,6 +97,10 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 		addPointStyleSubMenu();
 		addPointSizeSubMenu();
 
+		new MenuItem(menu, SWT.SEPARATOR);
+
+		addShowTorqueMenuItem();
+
 		final Image imageUndo = mediaFactory.getImage("images/Undo.png");
 		final Image imageUndoGray = mediaFactory.getImage("images/Undo_Gray.png");
 		final Image imageRedo = mediaFactory.getImage("images/Redo.png");

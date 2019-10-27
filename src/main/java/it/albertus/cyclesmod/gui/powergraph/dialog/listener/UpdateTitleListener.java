@@ -13,6 +13,7 @@ import it.albertus.cyclesmod.resources.Messages;
 public class UpdateTitleListener implements MouseMotionListener {
 
 	private static final double NM_TO_LBFT = 1.35581794884;
+	private static final double HP_TO_KW = 0.7457;
 
 	private final IPowerGraph powerGraph;
 	private final NumberFormat numberFormat;
@@ -43,7 +44,7 @@ public class UpdateTitleListener implements MouseMotionListener {
 
 	private void execute(final Point location) {
 		final short powerValue = powerGraph.getPowerValue(location);
-		final String currentPosition = Messages.get("lbl.graph.powerAtRpm", powerValue, numberFormat.format(powerValue / NM_TO_LBFT), Power.getRpm(powerGraph.getPowerIndex(location)));
+		final String currentPosition = Messages.get("lbl.graph.powerAtRpm", powerValue, numberFormat.format(powerValue * HP_TO_KW), Power.getRpm(powerGraph.getPowerIndex(location)));
 		if (!currentPosition.equals(lastPosition)) {
 			lastPosition = currentPosition;
 			powerGraph.getXyGraph().setTitle(lastPosition);
