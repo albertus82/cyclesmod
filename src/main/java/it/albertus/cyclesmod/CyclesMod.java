@@ -1,12 +1,8 @@
 package it.albertus.cyclesmod;
 
-import java.text.DateFormat;
-import java.util.Date;
-
 import it.albertus.cyclesmod.console.CyclesModConsole;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.resources.Messages;
-import it.albertus.util.Version;
 
 public class CyclesMod {
 
@@ -63,8 +59,7 @@ public class CyclesMod {
 	}
 
 	private static void printHelp(final String mode) {
-		System.out.println(Messages.get("msg.welcome", Version.getInstance().getNumber(), getFormattedVersionDate(), Messages.get("msg.info.site")));
-		System.out.println();
+		System.out.println(CyclesModConsole.getWelcomeMessage());
 		if ("console".equalsIgnoreCase(mode)) {
 			System.out.println(Messages.get("msg.help.usage.console", ARG_HELP));
 		}
@@ -78,17 +73,6 @@ public class CyclesMod {
 		}
 		System.out.println("  " + Messages.get("msg.help.option.destination"));
 		System.out.println("  " + Messages.get("msg.help.option.help", ARG_HELP));
-	}
-
-	public static String getFormattedVersionDate() {
-		Date date;
-		try {
-			date = Version.getInstance().getDate();
-		}
-		catch (final Exception e) {
-			date = new Date();
-		}
-		return DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(date);
 	}
 
 }
