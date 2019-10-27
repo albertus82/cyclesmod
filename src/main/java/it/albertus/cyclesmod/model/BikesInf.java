@@ -134,10 +134,11 @@ public class BikesInf {
 
 	private void backup(final String existingFile) throws IOException {
 		File backupFile;
-		int i = 1;
+		int i = 0;
 		final String parent = new File(existingFile).getParent();
+		final String prefix = parent != null ? parent + File.separator : "";
 		do {
-			backupFile = new File(parent != null ? parent : "" + "BIKESINF." + String.format("%03d", i++));
+			backupFile = new File(prefix + "BIKESINF." + String.format("%03d", i++));
 		}
 		while (backupFile.exists());
 
