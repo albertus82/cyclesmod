@@ -47,12 +47,12 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		setText(Messages.get("lbl.graph.title"));
 	}
 
-	public int open(final Map<Integer, Short> map, final BikeType bikeType) {
+	public int open(final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(getText() + " - " + bikeType.getDisplacement() + " cc");
 		shell.setImages(Images.getMainIcons());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
-		createContents(shell, map, bikeType);
+		createContents(shell, map, bikeType, torqueVisible);
 		final Point minimumSize = getMinimumSize(shell);
 		shell.setSize(getSize(shell));
 		shell.setMinimumSize(minimumSize);
@@ -76,16 +76,21 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		return shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 	}
 
-	private void createContents(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType) {
-		createGraph(shell, map, bikeType);
+	private void createContents(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
+		createGraph(shell, map, bikeType, torqueVisible);
 		createButtonBox(shell);
 	}
 
-	private void createGraph(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType) {
+	private void createGraph(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
 		powerGraph = new ComplexPowerGraph(map, bikeType);
+		final ComplexPowerGraphContextMenu menu = new ComplexPowerGraphContextMenu(canvas, powerGraph);
+		if (torqueVisible) {
+			powerGraph.toggleTorqueVisibility(true);
+			menu.getShowTorqueMenuItem().setSelection(true);
+		}
 		lws.setContents(powerGraph.getToolbarArmedXYGraph());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
@@ -98,8 +103,6 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		canvas.addKeyListener(new SaveSnapshotListener(shell, xyGraph));
 
 		canvas.addMouseWheelListener(new ZoomMouseWheelListener(xyGraph));
-
-		new ComplexPowerGraphContextMenu(canvas, powerGraph);
 	}
 
 	private Composite createButtonBox(final Shell shell) {

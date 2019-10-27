@@ -23,19 +23,19 @@ import org.eclipse.swt.widgets.Text;
 import it.albertus.cyclesmod.gui.FormProperty.LabelDataKey;
 import it.albertus.cyclesmod.gui.FormProperty.TextDataKey;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
+import it.albertus.cyclesmod.gui.listener.PowerPropertyFocusListener;
 import it.albertus.cyclesmod.gui.listener.PropertyFocusListener;
 import it.albertus.cyclesmod.gui.listener.PropertyKeyListener;
 import it.albertus.cyclesmod.gui.listener.PropertyVerifyListener;
-import it.albertus.cyclesmod.gui.listener.PowerPropertyFocusListener;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.simple.PowerGraphCanvas;
 import it.albertus.cyclesmod.model.Bike;
+import it.albertus.cyclesmod.model.Bike.BikeType;
 import it.albertus.cyclesmod.model.BikesCfg;
 import it.albertus.cyclesmod.model.Gearbox;
+import it.albertus.cyclesmod.model.Power;
 import it.albertus.cyclesmod.model.Setting;
 import it.albertus.cyclesmod.model.Settings;
-import it.albertus.cyclesmod.model.Power;
-import it.albertus.cyclesmod.model.Bike.BikeType;
 import it.albertus.cyclesmod.resources.Messages;
 
 public class Tabs {

@@ -25,6 +25,8 @@ import it.albertus.jface.SwtUtils;
 
 public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 
+	private final MenuItem showTorqueMenuItem;
+
 	public ComplexPowerGraphContextMenu(final Control control, final IPowerGraph powerGraph) {
 		super(control, powerGraph);
 
@@ -99,7 +101,7 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 
 		new MenuItem(menu, SWT.SEPARATOR);
 
-		addShowTorqueMenuItem();
+		showTorqueMenuItem = addShowTorqueMenuItem();
 
 		final Image imageUndo = mediaFactory.getImage("images/Undo.png");
 		final Image imageUndoGray = mediaFactory.getImage("images/Undo_Gray.png");
@@ -138,6 +140,10 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 				menu.setVisible(true);
 			}
 		});
+	}
+
+	public MenuItem getShowTorqueMenuItem() {
+		return showTorqueMenuItem;
 	}
 
 }

@@ -13,9 +13,9 @@ import org.eclipse.swt.widgets.Text;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.FormProperty;
 import it.albertus.cyclesmod.gui.powergraph.dialog.PowerGraphDialog;
+import it.albertus.cyclesmod.model.Bike.BikeType;
 import it.albertus.cyclesmod.model.BikesCfg;
 import it.albertus.cyclesmod.model.Power;
-import it.albertus.cyclesmod.model.Bike.BikeType;
 
 public class OpenPowerGraphDialogListener implements MouseListener, SelectionListener {
 
@@ -55,7 +55,7 @@ public class OpenPowerGraphDialogListener implements MouseListener, SelectionLis
 			map.put(Power.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
 		}
 
-		if (powerGraphDialog.open(map, bikeType) == SWT.OK) {
+		if (powerGraphDialog.open(map, bikeType, gui.getTabs().getPowerCanvases().get(bikeType).getPowerGraph().isTorqueVisible()) == SWT.OK) {
 			for (int i = 0; i < Power.LENGTH; i++) {
 				final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Power.class, i));
 				final Text text = formProperty.getText();
