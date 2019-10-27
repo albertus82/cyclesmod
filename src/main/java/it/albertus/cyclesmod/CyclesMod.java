@@ -63,8 +63,7 @@ public class CyclesMod {
 	}
 
 	private static void printHelp(final String mode) {
-		final Version version = Version.getInstance();
-		System.out.println(Messages.get("msg.welcome", version.getNumber(), getFormattedVersionDate(), Messages.get("msg.info.site")));
+		System.out.println(Messages.get("msg.welcome", Version.getInstance().getNumber(), getFormattedVersionDate(), Messages.get("msg.info.site")));
 		System.out.println();
 		if ("console".equalsIgnoreCase(mode)) {
 			System.out.println(Messages.get("msg.help.usage.console", ARG_HELP));
