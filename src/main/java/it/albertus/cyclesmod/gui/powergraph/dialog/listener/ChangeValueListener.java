@@ -44,10 +44,10 @@ public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
 	private void execute(final Point location) {
 		final int index = powerGraph.getPowerIndex(location);
-		final short oldValue = (short) powerGraph.getValue(index);
+		final short oldValue = (short) powerGraph.getPowerValue(index);
 		final short newValue = powerGraph.getPowerValue(location);
 		if (oldValue != newValue) {
-			powerGraph.setValue(index, newValue);
+			powerGraph.setPowerValue(index, newValue);
 			powerGraph.refresh();
 			powerGraph.getXyGraph().getOperationsManager().addCommand(new ChangeValueCommand(powerGraph, index, oldValue, newValue));
 		}

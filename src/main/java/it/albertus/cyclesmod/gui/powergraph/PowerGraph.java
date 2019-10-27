@@ -35,7 +35,7 @@ public class PowerGraph implements IPowerGraph {
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
 	private final Trace powerTrace = new Trace(Messages.get("lbl.graph.trace.power"), abscissae, ordinates, dataProvider);
 	private final Trace torqueTrace = new Trace(Messages.get("lbl.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
-	private final double[] values = new double[Power.LENGTH];
+	private final double[] powerValues = new double[Power.LENGTH];
 	private final double[] torqueValues = new double[Power.LENGTH];
 	private final double[] xDataArray = new double[Power.LENGTH];
 	private boolean torqueVisible;
@@ -43,8 +43,8 @@ public class PowerGraph implements IPowerGraph {
 	public PowerGraph(final Bike bike) {
 		for (int i = 0; i < Power.LENGTH; i++) {
 			xDataArray[i] = (double) Power.getRpm(i) / RPM_DIVISOR;
-			values[i] = bike.getPower().getCurve()[i];
-			torqueValues[i] = hpToNm(values[i], Power.getRpm(i));
+			powerValues[i] = bike.getPower().getCurve()[i];
+			torqueValues[i] = hpToNm(powerValues[i], Power.getRpm(i));
 		}
 		init(bike.getType());
 	}
@@ -57,8 +57,8 @@ public class PowerGraph implements IPowerGraph {
 		int i = 0;
 		for (final Entry<Integer, Short> entry : map.entrySet()) {
 			xDataArray[i] = entry.getKey().doubleValue() / RPM_DIVISOR;
-			values[i] = entry.getValue();
-			torqueValues[i] = hpToNm(values[i], Power.getRpm(i));
+			powerValues[i] = entry.getValue();
+			torqueValues[i] = hpToNm(powerValues[i], Power.getRpm(i));
 			i++;
 		}
 		init(bikeType);
@@ -67,7 +67,7 @@ public class PowerGraph implements IPowerGraph {
 	protected void init(final BikeType bikeType) {
 		dataProvider.setBufferSize(xDataArray.length);
 		dataProvider.setCurrentXDataArray(xDataArray);
-		dataProvider.setCurrentYDataArray(values);
+		dataProvider.setCurrentYDataArray(powerValues);
 		torqueDataProvider.setBufferSize(xDataArray.length);
 		torqueDataProvider.setCurrentXDataArray(xDataArray);
 		torqueDataProvider.setCurrentYDataArray(torqueValues);
@@ -146,13 +146,13 @@ public class PowerGraph implements IPowerGraph {
 	}
 
 	@Override
-	public double getValue(final int index) {
-		return values[index];
+	public double getPowerValue(final int index) {
+		return powerValues[index];
 	}
 
 	@Override
-	public void setValue(final int index, final double value) {
-		values[index] = value;
+	public void setPowerValue(final int index, final double value) {
+		powerValues[index] = value;
 		torqueValues[index] = hpToNm(value, Power.getRpm(index));
 	}
 

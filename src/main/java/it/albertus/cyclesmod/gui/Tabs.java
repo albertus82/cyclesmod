@@ -253,7 +253,7 @@ public class Tabs {
 		for (final Bike bike : gui.getBikesInf().getBikes()) {
 			final IPowerGraph powerGraph = powerCanvases.get(bike.getType()).getPowerGraph();
 			for (short i = 0; i < bike.getPower().getCurve().length; i++) {
-				powerGraph.setValue(i, bike.getPower().getCurve()[i]);
+				powerGraph.setPowerValue(i, bike.getPower().getCurve()[i]);
 			}
 			powerGraph.refresh();
 		}

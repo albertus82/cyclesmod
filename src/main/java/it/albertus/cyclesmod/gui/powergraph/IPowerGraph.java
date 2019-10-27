@@ -20,9 +20,9 @@ public interface IPowerGraph {
 
 	Trace getTorqueTrace();
 
-	double getValue(int index);
+	double getPowerValue(int index);
 
-	void setValue(int index, double value);
+	void setPowerValue(int index, double value);
 
 	void refresh();
 

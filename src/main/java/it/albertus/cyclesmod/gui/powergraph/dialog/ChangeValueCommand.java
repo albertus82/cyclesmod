@@ -21,13 +21,13 @@ public class ChangeValueCommand implements IUndoableCommand {
 
 	@Override
 	public void undo() {
-		powerGraph.setValue(index, oldValue);
+		powerGraph.setPowerValue(index, oldValue);
 		powerGraph.refresh();
 	}
 
 	@Override
 	public void redo() {
-		powerGraph.setValue(index, newValue);
+		powerGraph.setPowerValue(index, newValue);
 		powerGraph.refresh();
 	}
 
