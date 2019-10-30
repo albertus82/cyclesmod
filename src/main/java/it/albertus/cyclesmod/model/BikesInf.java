@@ -150,7 +150,7 @@ public class BikesInf {
 		FileOutputStream fos = null;
 		ZipOutputStream zos = null;
 		try {
-			fis = new FileInputStream(existingFileName);
+			fis = new FileInputStream(existingFile);
 			fos = new FileOutputStream(backupFile);
 			zos = new ZipOutputStream(fos);
 			zos.setLevel(Deflater.BEST_COMPRESSION);
