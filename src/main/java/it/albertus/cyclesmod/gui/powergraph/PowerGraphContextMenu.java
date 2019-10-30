@@ -230,6 +230,7 @@ public abstract class PowerGraphContextMenu {
 		final String showTorqueMenuItemTextMessageKey = "lbl.menu.item.graph.showTorque";
 		showTorqueMenuItem.setData(TEXT_MESSAGE_KEY, showTorqueMenuItemTextMessageKey);
 		showTorqueMenuItem.setText(Messages.get(showTorqueMenuItemTextMessageKey));
+		showTorqueMenuItem.setSelection(powerGraph.isTorqueVisible());
 		showTorqueMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {

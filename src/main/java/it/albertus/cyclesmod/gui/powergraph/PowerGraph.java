@@ -31,9 +31,9 @@ public class PowerGraph implements IPowerGraph {
 	private final IXYGraph xyGraph = new XYGraph();
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
-	private final CircularBufferDataProvider dataProvider = new CircularBufferDataProvider(false);
+	private final CircularBufferDataProvider powerDataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
-	private final Trace powerTrace = new Trace(Messages.get("lbl.graph.trace.power"), abscissae, ordinates, dataProvider);
+	private final Trace powerTrace = new Trace(Messages.get("lbl.graph.trace.power"), abscissae, ordinates, powerDataProvider);
 	private final Trace torqueTrace = new Trace(Messages.get("lbl.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
 	private final double[] powerValues = new double[Power.LENGTH];
 	private final double[] torqueValues = new double[Power.LENGTH];
@@ -65,9 +65,9 @@ public class PowerGraph implements IPowerGraph {
 	}
 
 	protected void init(final BikeType bikeType) {
-		dataProvider.setBufferSize(xDataArray.length);
-		dataProvider.setCurrentXDataArray(xDataArray);
-		dataProvider.setCurrentYDataArray(powerValues);
+		powerDataProvider.setBufferSize(xDataArray.length);
+		powerDataProvider.setCurrentXDataArray(xDataArray);
+		powerDataProvider.setCurrentYDataArray(powerValues);
 		torqueDataProvider.setBufferSize(xDataArray.length);
 		torqueDataProvider.setCurrentXDataArray(xDataArray);
 		torqueDataProvider.setCurrentYDataArray(torqueValues);
@@ -84,6 +84,7 @@ public class PowerGraph implements IPowerGraph {
 
 		xyGraph.addTrace(powerTrace);
 		toggleTorqueVisibility(false);
+		toggleTorqueVisibility(true);
 		xyGraph.setShowLegend(false);
 
 		powerTrace.setTraceColor(getColor(bikeType));
@@ -111,7 +112,7 @@ public class PowerGraph implements IPowerGraph {
 
 	@Override
 	public void refresh() {
-		dataProvider.triggerUpdate();
+		powerDataProvider.triggerUpdate();
 		torqueDataProvider.triggerUpdate();
 	}
 
@@ -132,7 +133,7 @@ public class PowerGraph implements IPowerGraph {
 
 	@Override
 	public CircularBufferDataProvider getDataProvider() {
-		return dataProvider;
+		return powerDataProvider;
 	}
 
 	@Override
