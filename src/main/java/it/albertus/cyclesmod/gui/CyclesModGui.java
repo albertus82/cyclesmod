@@ -184,7 +184,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				return false;
 			}
 			try {
-				getBikesInf().write(bikesInfFileName);
+				getBikesInf().write(bikesInfFileName, false);
 			}
 			catch (final Exception e) {
 				logger.log(Level.WARNING, e.toString(), e);
@@ -213,7 +213,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
-				getBikesInf().write(fileName);
+				getBikesInf().write(fileName, false);
 			}
 			catch (final Exception e) {
 				logger.log(Level.WARNING, e.toString(), e);

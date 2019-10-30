@@ -89,7 +89,7 @@ public class BikesInf {
 		System.out.println(Messages.get("msg.file.parsed", FILE_NAME));
 	}
 
-	public void write(final String fileName) throws IOException {
+	public void write(final String fileName, final boolean backupExisting) throws IOException {
 		final byte[] newBikesInf = this.toByteArray();
 		final Checksum crc = new CRC32();
 		crc.update(newBikesInf, 0, newBikesInf.length);
@@ -111,7 +111,9 @@ public class BikesInf {
 				System.out.println(Messages.get("msg.already.uptodate", FILE_NAME));
 			}
 			else {
-				backup(fileName);
+				if (backupExisting) {
+					backup(fileName);
+				}
 				doWrite(fileName, newBikesInf, crc);
 			}
 		}
