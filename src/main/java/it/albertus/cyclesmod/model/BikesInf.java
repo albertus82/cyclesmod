@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
@@ -106,9 +107,7 @@ public class BikesInf {
 			finally {
 				IOUtils.closeQuietly(os, is);
 			}
-			final Checksum crcExistingFile = new CRC32();
-			crcExistingFile.update(os.toByteArray(), 0, os.size());
-			if (os.size() == FILE_SIZE && crcExistingFile.getValue() == crc.getValue()) {
+			if (Arrays.equals(os.toByteArray(), newBikesInf)) {
 				System.out.println(Messages.get("msg.already.uptodate", FILE_NAME));
 			}
 			else {
