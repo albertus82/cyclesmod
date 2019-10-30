@@ -82,7 +82,7 @@ public class CyclesModConsole extends CyclesModEngine {
 		customize();
 
 		System.out.println(Messages.get("msg.preparing.new.file", BikesInf.FILE_NAME));
-		getBikesInf().write(path + BikesInf.FILE_NAME);
+		getBikesInf().write(path + BikesInf.FILE_NAME, true);
 	}
 
 	private void customize() throws IOException {
