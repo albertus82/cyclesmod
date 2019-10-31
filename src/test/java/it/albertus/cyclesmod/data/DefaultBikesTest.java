@@ -7,6 +7,7 @@ import java.io.StreamCorruptedException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.CRC32;
@@ -14,7 +15,6 @@ import java.util.zip.CRC32;
 import org.junit.Assert;
 import org.junit.Test;
 
-import it.albertus.cyclesmod.data.DefaultBikes;
 import it.albertus.cyclesmod.model.BikesInf;
 import it.albertus.util.IOUtils;
 import it.albertus.util.logging.LoggerFactory;
@@ -53,8 +53,8 @@ public class DefaultBikesTest {
 		modifiersField.setInt(declaredField, declaredField.getModifiers() & ~Modifier.FINAL);
 
 		final byte[] array = (byte[]) declaredField.get(null);
-		final int newLength = BikesInf.FILE_SIZE - 1 - (int) (Math.random() * BikesInf.FILE_SIZE / 2);
-		logger.info(Integer.toString(newLength));
+		final int newLength = BikesInf.FILE_SIZE - 1 - new Random().nextInt(BikesInf.FILE_SIZE / 2);
+		logger.log(Level.INFO, "{0,number,#}", newLength);
 		declaredField.set(null, Arrays.copyOf(array, newLength));
 		try {
 			new DefaultBikes();
