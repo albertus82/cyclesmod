@@ -44,12 +44,11 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
 	private PowerGraphDialog(final Shell parent, final int style) {
 		super(parent, style);
-		setText(Messages.get("lbl.graph.title"));
 	}
 
 	public int open(final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
-		shell.setText(getText() + " - " + bikeType.getDisplacement() + " cc");
+		shell.setText(Messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
 		shell.setImages(Images.getMainIcons());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
 		createContents(shell, map, bikeType, torqueVisible);
@@ -85,7 +84,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		powerGraph = new ComplexPowerGraph(map, bikeType);
+		powerGraph = new ComplexPowerGraph(map, bikeType, shell);
 		final ComplexPowerGraphContextMenu menu = new ComplexPowerGraphContextMenu(canvas, powerGraph);
 		if (torqueVisible) {
 			powerGraph.toggleTorqueVisibility(true);

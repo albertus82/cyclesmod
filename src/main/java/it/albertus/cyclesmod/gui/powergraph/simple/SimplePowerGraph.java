@@ -35,17 +35,29 @@ public class SimplePowerGraph extends PowerGraph {
 		torqueTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
 		final IXYGraph xyGraph = getXyGraph();
-		xyGraph.setTitle(Messages.get("lbl.graph.title"));
+		xyGraph.setTitle(Messages.get("lbl.graph.title.power.torque"));
 		xyGraph.setTitleFont(Display.getCurrent().getSystemFont());
 	}
 
+	@Override
+	public void toggleTorqueVisibility(final boolean visibility) {
+		super.toggleTorqueVisibility(visibility);
+		if (visibility) {
+			getXyGraph().setTitle(Messages.get("lbl.graph.title.power.torque"));
+		}
+		else {
+			getXyGraph().setTitle(Messages.get("lbl.graph.title.power"));
+		}
+	}
+
 	public void updateTexts() {
-		getXyGraph().setTitle(Messages.get("lbl.graph.title"));
 		getAbscissae().setTitle(Messages.get("lbl.graph.axis.x", RPM_DIVISOR));
 		if (isTorqueVisible()) {
+			getXyGraph().setTitle(Messages.get("lbl.graph.title.power.torque"));
 			getOrdinates().setTitle(Messages.get("lbl.graph.axis.y.power") + " / " + Messages.get("lbl.graph.axis.y.torque"));
 		}
 		else {
+			getXyGraph().setTitle(Messages.get("lbl.graph.title.power"));
 			getOrdinates().setTitle(Messages.get("lbl.graph.axis.y.power"));
 		}
 	}
