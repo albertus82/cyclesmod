@@ -18,6 +18,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
@@ -40,10 +41,15 @@ public class ComplexPowerGraph extends PowerGraph {
 
 	private static final float TITLE_HEIGHT_FACTOR = 0.80f;
 
+	private final Shell shell;
+	private final BikeType bikeType;
+
 	private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-	public ComplexPowerGraph(final Map<Integer, Short> map, final BikeType bikeType) {
+	public ComplexPowerGraph(final Map<Integer, Short> map, final BikeType bikeType, final Shell shell) {
 		super(map, bikeType);
+		this.shell = shell;
+		this.bikeType = bikeType;
 
 		final Axis abscissae = getAbscissae();
 		abscissae.setAutoScale(DEFAULT_AUTOSCALE);
@@ -147,6 +153,19 @@ public class ComplexPowerGraph extends PowerGraph {
 
 	public ToolbarArmedXYGraph getToolbarArmedXYGraph() {
 		return toolbarArmedXYGraph;
+	}
+
+	@Override
+	public void toggleTorqueVisibility(final boolean visibility) {
+		super.toggleTorqueVisibility(visibility);
+		if (shell != null && !shell.isDisposed()) {
+			if (visibility) {
+				shell.setText(Messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+			}
+			else {
+				shell.setText(Messages.get("lbl.graph.dialog.title.power", bikeType.getDisplacement()));
+			}
+		}
 	}
 
 }
