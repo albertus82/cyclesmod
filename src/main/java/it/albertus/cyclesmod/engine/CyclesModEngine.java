@@ -75,7 +75,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 				throw new InvalidPropertyException(Messages.get(MSG_KEY_ERR_UNSUPPORTED_PROPERTY, key, value));
 			}
 		}
-		catch (InvalidPropertyException ipe) {
+		catch (final InvalidPropertyException ipe) {
 			if (!lenient) {
 				throw ipe;
 			}
