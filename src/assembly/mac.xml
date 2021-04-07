@@ -1,0 +1,51 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+
+	<id>app</id>
+
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+
+	<includeBaseDirectory>false</includeBaseDirectory>
+
+	<baseDirectory>${project.build.directory}/jarbundler</baseDirectory>
+
+	<fileSets>
+		<fileSet>
+			<directory>${project.build.directory}/jarbundler</directory>
+			<outputDirectory>./</outputDirectory>
+			<excludes>
+				<exclude>**/*JavaApplicationStub</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}</directory>
+			<includes>
+				<include>LICENSE*</include>
+				<include>NOTICE*</include>
+				<include>README*</include>
+			</includes>
+			<outputDirectory>${project.name}.app/Contents/SharedSupport</outputDirectory>
+			<lineEnding>lf</lineEnding>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/${thirdparty.license.directory}</directory>
+			<outputDirectory>${project.name}.app/Contents/SharedSupport/${thirdparty.license.directory}</outputDirectory>
+			<lineEnding>lf</lineEnding>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.binSourceDirectory}/mac</directory>
+			<includes>
+				<include>*JavaApplicationStub</include>
+				<include>*.command</include>
+			</includes>
+			<outputDirectory>${project.name}.app/Contents/MacOS</outputDirectory>
+			<filtered>true</filtered>
+			<lineEnding>lf</lineEnding>
+			<fileMode>0755</fileMode>
+		</fileSet>
+	</fileSets>
+
+</assembly>

@@ -88,7 +88,7 @@ public class ComplexPowerGraph extends PowerGraph {
 		try {
 			final Field listenersField = OperationsManager.class.getDeclaredField("listeners");
 			listenersField.setAccessible(true);
-			final OperationsManager manager = toolbarArmedXYGraph.getIXYGraph().getOperationsManager();
+			final OperationsManager manager = toolbarArmedXYGraph.getXYGraph().getOperationsManager();
 			for (final IOperationsManagerListener listener : (Iterable<IOperationsManagerListener>) listenersField.get(manager)) {
 				manager.removeListener(listener);
 			}

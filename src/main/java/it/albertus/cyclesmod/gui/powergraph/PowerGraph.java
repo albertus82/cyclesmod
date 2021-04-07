@@ -194,12 +194,6 @@ public class PowerGraph implements IPowerGraph {
 		}
 
 		@Override
-		protected void updateDataRange() {/* NOOP */}
-
-		@Override
-		protected void innerUpdate() {/* NOOP */}
-
-		@Override
 		public int getSize() {
 			return 0;
 		}

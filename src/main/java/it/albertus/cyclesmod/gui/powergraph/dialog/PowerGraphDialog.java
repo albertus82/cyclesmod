@@ -49,7 +49,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 	public int open(final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(Messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
-		shell.setImages(Images.getMainIcons());
+		shell.setImages(Images.getAppIconArray());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
 		createContents(shell, map, bikeType, torqueVisible);
 		final Point minimumSize = getMinimumSize(shell);
