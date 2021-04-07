@@ -1,9 +1,9 @@
 CyclesMod
 =========
 
-[![Latest release](https://img.shields.io/github/release/albertus82/cycles-mod.svg)](https://github.com/albertus82/cycles-mod/releases/latest)
-[![Build status](https://travis-ci.org/albertus82/cycles-mod.svg?branch=master)](https://travis-ci.org/albertus82/cycles-mod)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/albertus82/cycles-mod?branch=master&svg=true)](https://ci.appveyor.com/project/albertus82/cycles-mod)
+[![Latest release](https://img.shields.io/github/release/albertus82/cyclesmod.svg)](https://github.com/albertus82/cyclesmod/releases/latest)
+[![Build status](https://travis-ci.org/albertus82/cyclesmod.svg?branch=master)](https://travis-ci.org/albertus82/cyclesmod)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/albertus82/cyclesmod?branch=master&svg=true)](https://ci.appveyor.com/project/albertus82/cyclesmod)
 
 **The Cycles - International Grand Prix Racing** &egrave; un videogioco di simulazione motociclistica. Risalente al 1989, fu distribuito per tutte le pi&ugrave; diffuse piattaforme dell'epoca, dal Commodore 64 al PC IBM (DOS), ed &egrave; oggi facilmente reperibile come *Abandonware*.
 
@@ -20,7 +20,7 @@ Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere esegui
 
 **Effettuare una copia di backup della directory di *The Cycles* prima di utilizzare questo programma!**
 
-1. [scaricare](https://github.com/albertus82/cycles-mod/releases) la release adatta alla propria piattaforma, possibilmente la pi&ugrave; recente;
+1. [scaricare](https://github.com/albertus82/cyclesmod/releases) la release adatta alla propria piattaforma, possibilmente la pi&ugrave; recente;
 2. installare (o scompattare, a seconda dei casi) il programma in una cartella a piacimento.
 
 Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva.
@@ -87,10 +87,10 @@ Utilizzando la funzione di men&ugrave; *Modifica - Curva di potenza* (o facendo 
 ## Versione da riga di comando
 
 Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
-Gli script di avvio ([**`CyclesMod.bat`**](src/main/scripts/CyclesMod.bat), [**`cycles-mod.sh`**](src/main/scripts/cycles-mod.sh) e [**`cycles-mod.command`**](src/main/scripts/cycles-mod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
+Gli script di avvio ([**`CyclesMod.bat`**](src/main/scripts/CyclesMod.bat), [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) e [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
 * Windows: **`CyclesMod.bat -c`**
-* Linux: **`cycles-mod.sh -c`**
-* OS X: **`cycles-mod.command -c`**
+* Linux: **`cyclesmod.sh -c`**
+* OS X: **`cyclesmod.command -c`**
 
 Una volta eseguito, il programma verifica per prima cosa l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *potenza motrice* (power). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
 
