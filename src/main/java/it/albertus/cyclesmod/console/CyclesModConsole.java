@@ -53,13 +53,13 @@ public class CyclesModConsole extends CyclesModEngine {
 	}
 
 	public static String getWelcomeMessage() {
-		return Messages.get("msg.welcome", Version.getInstance().getNumber(), getFormattedVersionDate(), Messages.get("msg.info.site")) + NewLine.SYSTEM_LINE_SEPARATOR;
+		return Messages.get("msg.welcome", Version.getNumber(), getFormattedVersionDate(), Messages.get("msg.info.site")) + NewLine.SYSTEM_LINE_SEPARATOR;
 	}
 
 	private static String getFormattedVersionDate() {
 		Date date;
 		try {
-			date = Version.getInstance().getDate();
+			date = Version.getDate();
 		}
 		catch (final Exception e) {
 			date = new Date();
