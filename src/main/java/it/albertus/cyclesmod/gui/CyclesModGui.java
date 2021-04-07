@@ -63,7 +63,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		// Shell creation...
 		shell = new Shell(display);
-		shell.setImages(Images.getMainIcons());
+		shell.setImages(Images.getAppIconArray());
 		shell.setText(Messages.get(MSG_KEY_WIN_TITLE));
 		shell.setLayout(new FillLayout());
 		shell.addShellListener(new CloseListener(this));
@@ -88,7 +88,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	/* GUI entry point. */
 	public static void start(final String fileName) {
 		Display.setAppName(Messages.get(MSG_KEY_WIN_TITLE));
-		Display.setAppVersion(Version.getInstance().getNumber());
+		Display.setAppVersion(Version.getNumber());
 		final Display display = Display.getDefault();
 		Shell shell = null;
 		try {
@@ -104,7 +104,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		catch (final Exception e) {
 			final String message = e.toString();
 			logger.log(Level.SEVERE, message, e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, Messages.get(MSG_KEY_WARNING), message, IStatus.ERROR, e, Images.getMainIcons());
+			EnhancedErrorDialog.openError(shell != null ? shell : null, Messages.get(MSG_KEY_WARNING), message, IStatus.ERROR, e, Images.getAppIconArray());
 		}
 		finally {
 			display.dispose();
@@ -112,7 +112,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	public void setLanguage(final Language language) {
-		Messages.setLanguage(language);
+		Messages.setLanguage(language.getLocale().getLanguage());
 		shell.setRedraw(false);
 		menuBar.updateTexts();
 		tabs.updateTexts();
@@ -162,7 +162,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (final Exception e) {
 			logger.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.load"), IStatus.WARNING, e, Images.getMainIcons());
+			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
 		}
 	}
 
@@ -180,15 +180,15 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final InvalidPropertyException e) {
 				logger.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getMainIcons());
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			try {
-				getBikesInf().write(bikesInfFileName);
+				getBikesInf().write(bikesInfFileName, false);
 			}
 			catch (final Exception e) {
 				logger.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.getMainIcons());
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
@@ -202,7 +202,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (final InvalidPropertyException e) {
 			logger.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getMainIcons());
+			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
@@ -213,11 +213,11 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
-				getBikesInf().write(fileName);
+				getBikesInf().write(fileName, false);
 			}
 			catch (final Exception e) {
 				logger.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.getMainIcons());
+				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			bikesInfFileName = fileName;

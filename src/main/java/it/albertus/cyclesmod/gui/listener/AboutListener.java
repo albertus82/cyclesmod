@@ -30,16 +30,15 @@ public class AboutListener extends SelectionAdapter implements Listener {
 	public void widgetSelected(final SelectionEvent se) {
 		final AboutDialog aboutDialog = new AboutDialog(gui.getShell());
 		aboutDialog.setText(Messages.get("msg.info.title"));
-		final Version version = Version.getInstance();
 		Date versionDate;
 		try {
-			versionDate = version.getDate();
+			versionDate = Version.getDate();
 		}
 		catch (final Exception e) {
 			logger.log(Level.WARNING, e.toString(), e);
 			versionDate = new Date();
 		}
-		aboutDialog.setMessage(Messages.get("msg.info.body", version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(versionDate)));
+		aboutDialog.setMessage(Messages.get("msg.info.body", Version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(versionDate)));
 		aboutDialog.setApplicationUrl(Messages.get("msg.info.site"));
 		aboutDialog.setIconUrl(Messages.get("msg.info.icon.site"));
 		aboutDialog.open();
