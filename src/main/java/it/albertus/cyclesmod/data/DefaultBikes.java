@@ -9,10 +9,9 @@ import java.util.zip.Checksum;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
-import javax.xml.bind.DatatypeConverter;
-
 import it.albertus.cyclesmod.model.BikesInf;
 import it.albertus.cyclesmod.resources.Messages;
+import jakarta.xml.bind.DatatypeConverter;
 
 public class DefaultBikes {
 

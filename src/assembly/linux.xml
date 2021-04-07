@@ -1,0 +1,63 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+
+	<id>bin</id>
+
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+
+	<includeBaseDirectory>true</includeBaseDirectory>
+
+	<baseDirectory>${project.build.finalName}</baseDirectory>
+
+	<dependencySets>
+		<dependencySet>
+			<scope>runtime</scope>
+			<outputDirectory>${dependencies.directory}</outputDirectory>
+			<useProjectArtifact>false</useProjectArtifact>
+		</dependencySet>
+	</dependencySets>
+
+	<files>
+		<file>
+			<source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+			<outputDirectory>./</outputDirectory>
+			<fileMode>0755</fileMode>
+		</file>
+	</files>
+
+	<fileSets>
+		<fileSet>
+			<directory>${project.basedir}</directory>
+			<includes>
+				<include>LICENSE*</include>
+				<include>NOTICE*</include>
+				<include>README*</include>
+			</includes>
+			<outputDirectory>./</outputDirectory>
+			<lineEnding>lf</lineEnding>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/${thirdparty.license.directory}</directory>
+			<outputDirectory>${thirdparty.license.directory}</outputDirectory>
+			<lineEnding>lf</lineEnding>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.binSourceDirectory}/linux</directory>
+			<includes>
+				<include>*.sh</include>
+			</includes>
+			<outputDirectory>./</outputDirectory>
+			<filtered>true</filtered>
+			<lineEnding>lf</lineEnding>
+			<fileMode>0755</fileMode>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.iconsSourceDirectory}/linux</directory>
+			<outputDirectory>icon</outputDirectory>
+		</fileSet>
+	</fileSets>
+
+</assembly>

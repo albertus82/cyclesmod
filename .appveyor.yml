@@ -1,51 +1,23 @@
+image: Visual Studio 2019
+
 version: '{build}'
 
 clone_depth: 50
 
 environment:
-  JRE6_HOME: $(ProgramFiles)\Java\jdk1.6.0\jre
-
   matrix:
     - platform: x86
-      JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.6.0
-      ANT_VERSION: 1.9.9
-    - platform: x86
-      JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.7.0
-      ANT_VERSION: 1.9.9
-    - platform: x86
       JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.8.0
-      ANT_VERSION: 1.10.5
-    - platform: x64
-      JAVA_HOME: $(ProgramFiles)\Java\jdk1.6.0
-      ANT_VERSION: 1.9.9
-    - platform: x64
-      JAVA_HOME: $(ProgramFiles)\Java\jdk1.7.0
-      ANT_VERSION: 1.9.9
     - platform: x64
       JAVA_HOME: $(ProgramFiles)\Java\jdk1.8.0
-      ANT_VERSION: 1.10.5
-    - platform: x64
-      JAVA_HOME: $(ProgramFiles)\Java\jdk11
-      ANT_VERSION: 1.10.5
-      VT_API_URL: https://www.virustotal.com/vtapi/v2/file/scan
-      VT_API_DELAY: 15
       VT_API_KEY:
         secure: 3sqJDjLAS708tR/LiAqKLZTnLLrhGJuWVzzI4nCjLbUUsZB+PPRG3y0BWWnMo14CDhBT4v6yjHTA23RdopoHDWJlBcGhKELKZOLhHsnJLU8=
 
-install:
-  - cinst ant -i --version %ANT_VERSION%
-  - PATH %ANT_HOME%\bin;%PATH%
-
-before_build:
-  - ant -diagnostics
-
 build_script:
-  - ant all
+  - mvn clean verify -e -B -V
 
 after_build:
-  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY SET ARTIFACTS_PATH=build\*.*
-  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R build %%i IN (*.exe) DO IF "%%~xi" == ".exe" ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
-  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY FOR /R build %%i IN (*.tar.gz) DO ECHO %%i & curl -v -F "file=@%%i" -F apikey=%VT_API_KEY% %VT_API_URL% & TIMEOUT %VT_API_DELAY% /NOBREAK
+  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY SET ARTIFACTS_PATH=target\*.* & FOR /R target %%f IN (*.exe *.tar.gz *.zip) DO IF NOT %%~xf == .exec ECHO Submitting file "%%f" to VirusTotal... & curl -v -F "file=@%%f" -F apikey=%VT_API_KEY% https://www.virustotal.com/vtapi/v2/file/scan & ECHO File "%%f" submitted to VirusTotal. & TIMEOUT 15 /NOBREAK
 
 artifacts:
   - path: $(ARTIFACTS_PATH)

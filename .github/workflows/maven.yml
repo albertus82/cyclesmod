@@ -1,0 +1,24 @@
+name: build
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        java: [ '8', '9', '10', '11', '12', '13', '14', '15' ]
+        os: [ 'windows-latest', 'ubuntu-latest', 'macOS-latest' ]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - if: startsWith(matrix.os, 'ubuntu')
+      run: sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y wine32
+    - uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java }}
+    - run: mvn clean verify -e -B -V
+    - if: matrix.os == 'ubuntu-latest' && matrix.java == '11'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: git fetch --unshallow && mvn package sonar:sonar -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=albertus82-github -e -B -V

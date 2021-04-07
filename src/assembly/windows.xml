@@ -1,0 +1,55 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+
+	<id>bin</id>
+
+	<formats>
+		<format>zip</format>
+	</formats>
+
+	<includeBaseDirectory>true</includeBaseDirectory>
+
+	<baseDirectory>${project.name}</baseDirectory>
+
+	<dependencySets>
+		<dependencySet>
+			<scope>runtime</scope>
+			<outputDirectory>${dependencies.directory}</outputDirectory>
+			<useProjectArtifact>false</useProjectArtifact>
+		</dependencySet>
+	</dependencySets>
+
+	<files>
+		<file>
+			<source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
+			<outputDirectory>./</outputDirectory>
+		</file>
+	</files>
+
+	<fileSets>
+		<fileSet>
+			<directory>${project.basedir}</directory>
+			<includes>
+				<include>LICENSE*</include>
+				<include>NOTICE*</include>
+				<include>README*</include>
+			</includes>
+			<outputDirectory>./</outputDirectory>
+			<lineEnding>crlf</lineEnding>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/${thirdparty.license.directory}</directory>
+			<outputDirectory>${thirdparty.license.directory}</outputDirectory>
+			<lineEnding>crlf</lineEnding>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}/launch4j</directory>
+			<includes>
+				<include>*.exe</include>
+			</includes>
+			<outputDirectory>./</outputDirectory>
+		</fileSet>
+	</fileSets>
+
+</assembly>
