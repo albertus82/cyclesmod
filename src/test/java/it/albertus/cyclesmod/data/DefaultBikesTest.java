@@ -45,10 +45,17 @@ public class DefaultBikesTest {
 	}
 
 	@Test
-	public void testReflection() throws NoSuchFieldException, IllegalAccessException, StreamCorruptedException {
+	public void testReflection() throws IllegalAccessException, StreamCorruptedException, NoSuchFieldException {
 		final Field declaredField = DefaultBikes.class.getDeclaredField("DEFAULT");
 		declaredField.setAccessible(true);
-		final Field modifiersField = Field.class.getDeclaredField("modifiers");
+		final Field modifiersField;
+		try {
+			modifiersField = Field.class.getDeclaredField("modifiers");
+		}
+		catch (final NoSuchFieldException e) {
+			Assert.assertTrue(true);
+			return;
+		}
 		modifiersField.setAccessible(true);
 		modifiersField.setInt(declaredField, declaredField.getModifiers() & ~Modifier.FINAL);
 
