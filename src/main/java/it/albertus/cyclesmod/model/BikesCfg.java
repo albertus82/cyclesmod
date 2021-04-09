@@ -56,16 +56,16 @@ public class BikesCfg {
 
 	private void populateProperties(final Reader reader) throws IOException {
 		properties.load(reader);
-		final Map<Object, String> deprecatedEntries = new HashMap<>();
+		final Map<String, String> deprecatedEntries = new HashMap<>();
 		final String deprecatedPrefix = "torque";
-		for (final Object key : properties.keySet()) {
-			if (key.toString().contains(deprecatedPrefix)) {
-				deprecatedEntries.put(key, properties.getProperty(key.toString()));
+		for (final String key : properties.stringPropertyNames()) {
+			if (key.contains(deprecatedPrefix)) {
+				deprecatedEntries.put(key, properties.getProperty(key));
 			}
 		}
-		for (final Entry<Object, String> entry : deprecatedEntries.entrySet()) {
+		for (final Entry<String, String> entry : deprecatedEntries.entrySet()) {
 			properties.remove(entry.getKey());
-			properties.setProperty(entry.getKey().toString().replace(deprecatedPrefix, Power.PREFIX), entry.getValue());
+			properties.setProperty(entry.getKey().replace(deprecatedPrefix, Power.PREFIX), entry.getValue());
 		}
 	}
 
