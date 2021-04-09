@@ -7,7 +7,7 @@ import it.albertus.util.ByteUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gearbox extends BikesInfElement {
+public class Gearbox implements BikesInfElement {
 
 	public static final int LENGTH = 20;
 	public static final int MIN_VALUE = 0;
@@ -32,7 +32,7 @@ public class Gearbox extends BikesInfElement {
 
 	@Override
 	public List<Byte> toByteList() {
-		final List<Byte> byteList = new ArrayList<Byte>(LENGTH);
+		final List<Byte> byteList = new ArrayList<>(LENGTH);
 		for (final int ratio : ratios) {
 			byteList.addAll(ByteUtils.toByteList(ratio));
 		}

@@ -2,8 +2,8 @@ package it.albertus.cyclesmod.model;
 
 import java.util.List;
 
-public abstract class BikesInfElement {
+public interface BikesInfElement {
 
-	public abstract List<Byte> toByteList();
+	List<Byte> toByteList();
 
 }

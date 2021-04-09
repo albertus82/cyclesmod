@@ -172,7 +172,7 @@ public class BikesInf {
 	 * @return L'array di byte corrispondente al file BIKES.INF.
 	 */
 	private byte[] toByteArray() {
-		final List<Byte> byteList = new ArrayList<Byte>(FILE_SIZE);
+		final List<Byte> byteList = new ArrayList<>(FILE_SIZE);
 		for (final Bike bike : bikes) {
 			byteList.addAll(bike.toByteList());
 		}

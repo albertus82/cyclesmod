@@ -154,7 +154,7 @@ public class BikesCfg {
 	}
 
 	public Map<String, Integer> getMap() {
-		final Map<String, Integer> map = new HashMap<String, Integer>();
+		final Map<String, Integer> map = new HashMap<>();
 		for (final String key : properties.stringPropertyNames()) {
 			map.put(key, Integer.valueOf(properties.getProperty(key), RADIX));
 		}

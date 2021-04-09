@@ -40,8 +40,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	private static final String MSG_KEY_WARNING = "msg.warning";
 	private static final String MSG_KEY_WIN_TITLE = "win.title";
 
-	private final Map<String, Integer> defaultProperties = new HashMap<String, Integer>();
-	private final Map<String, Integer> lastPersistedProperties = new HashMap<String, Integer>();
+	private final Map<String, Integer> defaultProperties = new HashMap<>();
+	private final Map<String, Integer> lastPersistedProperties = new HashMap<>();
 
 	private final Shell shell;
 	private final MenuBar menuBar;

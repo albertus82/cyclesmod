@@ -46,12 +46,12 @@ public class Tabs {
 
 	private final TabFolder tabFolder;
 
-	private final Map<String, FormProperty> formProperties = new HashMap<String, FormProperty>();
+	private final Map<String, FormProperty> formProperties = new HashMap<>();
 
-	private final Map<BikeType, Group> settingsGroups = new EnumMap<BikeType, Group>(BikeType.class);
-	private final Map<BikeType, Group> gearboxGroups = new EnumMap<BikeType, Group>(BikeType.class);
-	private final Map<BikeType, Group> powerGroups = new EnumMap<BikeType, Group>(BikeType.class);
-	private final Map<BikeType, PowerGraphCanvas> powerCanvases = new EnumMap<BikeType, PowerGraphCanvas>(BikeType.class);
+	private final Map<BikeType, Group> settingsGroups = new EnumMap<>(BikeType.class);
+	private final Map<BikeType, Group> gearboxGroups = new EnumMap<>(BikeType.class);
+	private final Map<BikeType, Group> powerGroups = new EnumMap<>(BikeType.class);
+	private final Map<BikeType, PowerGraphCanvas> powerCanvases = new EnumMap<>(BikeType.class);
 
 	private final PropertyVerifyListener propertyVerifyListener;
 	private final PropertyFocusListener propertyFocusListener;

@@ -46,7 +46,7 @@ public abstract class PowerGraphContextMenu {
 	}
 
 	protected SubMenu<TraceType> addTraceTypeSubMenu() {
-		final Map<TraceType, MenuItem> traceTypeSubMenuItems = new EnumMap<TraceType, MenuItem>(TraceType.class);
+		final Map<TraceType, MenuItem> traceTypeSubMenuItems = new EnumMap<>(TraceType.class);
 		final MenuItem traceTypeMenuItem = new MenuItem(menu, SWT.CASCADE);
 		final String traceTypeMenuItemTextMessageKey = "lbl.menu.item.graph.traceType";
 		traceTypeMenuItem.setData(TEXT_MESSAGE_KEY, traceTypeMenuItemTextMessageKey);
@@ -78,7 +78,7 @@ public abstract class PowerGraphContextMenu {
 		final Menu areaAlphaSubMenu = new Menu(areaAlphaMenuItem);
 		areaAlphaMenuItem.setMenu(areaAlphaSubMenu);
 
-		final Map<Integer, MenuItem> areaAlphaSubMenuItems = new HashMap<Integer, MenuItem>();
+		final Map<Integer, MenuItem> areaAlphaSubMenuItems = new HashMap<>();
 		for (final int areaAlpha : AREA_ALPHA_OPTIONS) {
 			final MenuItem menuItem = new MenuItem(areaAlphaSubMenu, SWT.RADIO);
 			menuItem.setText("&" + Math.round(areaAlpha / 2.55f) + "%");
@@ -106,13 +106,13 @@ public abstract class PowerGraphContextMenu {
 			}
 		});
 
-		final SubMenu<TraceType> subMenu = new SubMenu<TraceType>(traceTypeMenuItem, traceTypeSubMenuItems);
+		final SubMenu<TraceType> subMenu = new SubMenu<>(traceTypeMenuItem, traceTypeSubMenuItems);
 		subMenu.getChildren().add(new SubMenu<Integer>(areaAlphaMenuItem, areaAlphaSubMenuItems));
 		return subMenu;
 	}
 
 	protected SubMenu<Integer> addLineWidthSubMenu() {
-		final Map<Integer, MenuItem> lineWidthSubMenuItems = new HashMap<Integer, MenuItem>();
+		final Map<Integer, MenuItem> lineWidthSubMenuItems = new HashMap<>();
 		final MenuItem lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
 		final String lineWidthMenuItemTextMessageKey = "lbl.menu.item.graph.lineWidth";
 		lineWidthMenuItem.setData(TEXT_MESSAGE_KEY, lineWidthMenuItemTextMessageKey);
@@ -146,11 +146,11 @@ public abstract class PowerGraphContextMenu {
 			}
 		});
 
-		return new SubMenu<Integer>(lineWidthMenuItem, lineWidthSubMenuItems);
+		return new SubMenu<>(lineWidthMenuItem, lineWidthSubMenuItems);
 	}
 
 	protected SubMenu<PointStyle> addPointStyleSubMenu() {
-		final Map<PointStyle, MenuItem> pointStyleSubMenuItems = new EnumMap<PointStyle, MenuItem>(PointStyle.class);
+		final Map<PointStyle, MenuItem> pointStyleSubMenuItems = new EnumMap<>(PointStyle.class);
 		final MenuItem pointStyleMenuItem = new MenuItem(menu, SWT.CASCADE);
 		final String pointStyleMenuItemTextMessageKey = "lbl.menu.item.graph.pointStyle";
 		pointStyleMenuItem.setData(TEXT_MESSAGE_KEY, pointStyleMenuItemTextMessageKey);
@@ -183,13 +183,13 @@ public abstract class PowerGraphContextMenu {
 			}
 		});
 
-		return new SubMenu<PointStyle>(pointStyleMenuItem, pointStyleSubMenuItems);
+		return new SubMenu<>(pointStyleMenuItem, pointStyleSubMenuItems);
 	}
 
 	protected SubMenu<Integer> addPointSizeSubMenu() {
 		final Trace trace = powerGraph.getPowerTrace();
 
-		final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<Integer, MenuItem>();
+		final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<>();
 		final MenuItem pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
 		final String pointSizeMenuItemTextMessageKey = "lbl.menu.item.graph.pointSize";
 		pointSizeMenuItem.setData(TEXT_MESSAGE_KEY, pointSizeMenuItemTextMessageKey);
@@ -222,7 +222,7 @@ public abstract class PowerGraphContextMenu {
 			}
 		});
 
-		return new SubMenu<Integer>(pointSizeMenuItem, pointSizeSubMenuItems);
+		return new SubMenu<>(pointSizeMenuItem, pointSizeSubMenuItems);
 	}
 
 	protected MenuItem addShowTorqueMenuItem() {
@@ -244,7 +244,7 @@ public abstract class PowerGraphContextMenu {
 	public class SubMenu<K> {
 		private final MenuItem menuItem;
 		private final Map<K, MenuItem> menuItems;
-		private final List<SubMenu> children = new ArrayList<SubMenu>();
+		private final List<SubMenu> children = new ArrayList<>();
 
 		public SubMenu(final MenuItem menuItem, final Map<K, MenuItem> menuItems) {
 			this.menuItem = menuItem;
