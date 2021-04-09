@@ -6,7 +6,7 @@ import java.util.List;
 import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.resources.Messages;
 
-public class Power extends BikesInfElement {
+public class Power implements BikesInfElement {
 
 	public static final int LENGTH = 106;
 	public static final short MIN_VALUE = 0;
@@ -36,7 +36,7 @@ public class Power extends BikesInfElement {
 
 	@Override
 	public List<Byte> toByteList() {
-		final List<Byte> byteList = new ArrayList<Byte>(LENGTH);
+		final List<Byte> byteList = new ArrayList<>(LENGTH);
 		for (final short point : curve) {
 			byteList.add((byte) point);
 		}

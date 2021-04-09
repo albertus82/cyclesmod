@@ -48,7 +48,7 @@ public class OpenPowerGraphDialogListener implements MouseListener, SelectionLis
 
 	private void execute() {
 		final PowerGraphDialog powerGraphDialog = new PowerGraphDialog(gui.getShell());
-		final Map<Integer, Short> map = new TreeMap<Integer, Short>();
+		final Map<Integer, Short> map = new TreeMap<>();
 		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties();
 		for (int i = 0; i < Power.LENGTH; i++) {
 			final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Power.class, i));

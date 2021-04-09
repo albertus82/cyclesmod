@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Bike extends BikesInfElement {
+public class Bike implements BikesInfElement {
 
 	public enum BikeType {
 		CLASS_125(125),
@@ -52,7 +52,7 @@ public class Bike extends BikesInfElement {
 
 	@Override
 	public List<Byte> toByteList() {
-		final List<Byte> byteList = new ArrayList<Byte>(LENGTH);
+		final List<Byte> byteList = new ArrayList<>(LENGTH);
 		byteList.addAll(settings.toByteList());
 		byteList.addAll(gearbox.toByteList());
 		byteList.addAll(power.toByteList());

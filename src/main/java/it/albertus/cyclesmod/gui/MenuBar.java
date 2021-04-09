@@ -80,16 +80,16 @@ public class MenuBar {
 	private final MenuItem editCopyMenuItem;
 	private final MenuItem editPasteMenuItem;
 	private final MenuItem editPowerSubMenuItem;
-	private final Map<BikeType, MenuItem> editPowerMenuItems = new EnumMap<BikeType, MenuItem>(BikeType.class);
+	private final Map<BikeType, MenuItem> editPowerMenuItems = new EnumMap<>(BikeType.class);
 	private final MenuItem editResetSubMenuItem;
 	private final MenuItem editResetSingleMenuItem;
 	private final MenuItem editResetAllMenuItem;
 
 	private final MenuItem viewMenuHeader;
 	private final MenuItem viewRadixSubMenuItem;
-	private final Map<NumeralSystem, MenuItem> viewRadixMenuItems = new EnumMap<NumeralSystem, MenuItem>(NumeralSystem.class);
+	private final Map<NumeralSystem, MenuItem> viewRadixMenuItems = new EnumMap<>(NumeralSystem.class);
 	private final MenuItem viewLanguageSubMenuItem;
-	private final Map<Language, MenuItem> viewLanguageMenuItems = new EnumMap<Language, MenuItem>(Language.class);
+	private final Map<Language, MenuItem> viewLanguageMenuItems = new EnumMap<>(Language.class);
 
 	private final MenuItem helpMenuHeader;
 	private final MenuItem helpSystemInfoItem;

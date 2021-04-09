@@ -9,13 +9,13 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class Settings extends BikesInfElement {
+public class Settings implements BikesInfElement {
 
 	public static final int LENGTH = 22;
 	public static final int MIN_VALUE = 0;
 	public static final int MAX_VALUE = 65535;
 
-	private final Map<Setting, Integer> values = new EnumMap<Setting, Integer>(Setting.class);
+	private final Map<Setting, Integer> values = new EnumMap<>(Setting.class);
 
 	public Settings(int gearsCount, int rpmRedline, int rpmLimit, int overspeedGracePeriod, int grip, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int rpmDownshift) {
 		values.put(Setting.gearsCount, gearsCount);
@@ -33,7 +33,7 @@ public class Settings extends BikesInfElement {
 
 	@Override
 	public List<Byte> toByteList() {
-		final List<Byte> byteList = new ArrayList<Byte>(LENGTH);
+		final List<Byte> byteList = new ArrayList<>(LENGTH);
 		for (final int value : values.values()) {
 			byteList.addAll(ByteUtils.toByteList(value));
 		}
