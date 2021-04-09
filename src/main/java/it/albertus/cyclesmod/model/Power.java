@@ -6,6 +6,7 @@ import java.util.List;
 
 import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.resources.Messages;
+import lombok.NonNull;
 
 public class Power implements ByteList {
 
@@ -28,7 +29,7 @@ public class Power implements ByteList {
 	 */
 	private final short[] curve;
 
-	public Power(final short[] curve) {
+	public Power(@NonNull final short[] curve) {
 		if (curve.length > LENGTH) {
 			throw new IllegalArgumentException(Messages.get("err.power", LENGTH, curve.length));
 		}
@@ -52,7 +53,7 @@ public class Power implements ByteList {
 		return (int) (rpm + (double) POINT_WIDTH_RPM / 2 - BASE_RPM) / POINT_WIDTH_RPM;
 	}
 
-	public static short parse(final String key, final String value, final int radix) {
+	public static short parse(final String key, @NonNull final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
 			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
