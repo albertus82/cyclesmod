@@ -116,37 +116,31 @@ public class ComplexPowerGraph extends PowerGraph {
 	}
 
 	private static void addUndoListener(final GrayableButton button, final OperationsManager manager) {
-		manager.addListener(new IOperationsManagerListener() {
-			@Override
-			public void operationsHistoryChanged(final OperationsManager manager) {
-				final int undoCommandsSize = manager.getUndoCommandsSize();
-				if (undoCommandsSize > 0) {
-					button.setEnabled(true);
-					final String cmdName = manager.getUndoCommands()[undoCommandsSize - 1].toString();
-					button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
-				}
-				else {
-					button.setEnabled(false);
-					button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
-				}
+		manager.addListener(m -> {
+			final int undoCommandsSize = m.getUndoCommandsSize();
+			if (undoCommandsSize > 0) {
+				button.setEnabled(true);
+				final String cmdName = m.getUndoCommands()[undoCommandsSize - 1].toString();
+				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
+			}
+			else {
+				button.setEnabled(false);
+				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
 			}
 		});
 	}
 
 	private static void addRedoListener(final GrayableButton button, final OperationsManager manager) {
-		manager.addListener(new IOperationsManagerListener() {
-			@Override
-			public void operationsHistoryChanged(final OperationsManager manager) {
-				final int redoCommandsSize = manager.getRedoCommandsSize();
-				if (redoCommandsSize > 0) {
-					button.setEnabled(true);
-					final String cmdName = manager.getRedoCommands()[redoCommandsSize - 1].toString();
-					button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, cmdName)));
-				}
-				else {
-					button.setEnabled(false);
-					button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
-				}
+		manager.addListener(m -> {
+			final int redoCommandsSize = m.getRedoCommandsSize();
+			if (redoCommandsSize > 0) {
+				button.setEnabled(true);
+				final String cmdName = m.getRedoCommands()[redoCommandsSize - 1].toString();
+				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, cmdName)));
+			}
+			else {
+				button.setEnabled(false);
+				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
 			}
 		});
 	}

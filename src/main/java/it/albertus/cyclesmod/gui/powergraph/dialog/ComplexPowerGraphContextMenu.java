@@ -4,8 +4,6 @@ import org.eclipse.nebula.visualization.internal.xygraph.undo.OperationsManager;
 import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 import org.eclipse.nebula.visualization.xygraph.util.XYGraphMediaFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -108,37 +106,34 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 		final Image imageRedo = mediaFactory.getImage("images/Redo.png");
 		final Image imageRedoGray = mediaFactory.getImage("images/Redo_Gray.png");
 
-		control.addMenuDetectListener(new MenuDetectListener() {
-			@Override
-			public void menuDetected(final MenuDetectEvent e) {
-				autoScaleMenuItem.setSelection(powerGraph.getAbscissae().isAutoScale() && powerGraph.getOrdinates().isAutoScale());
+		control.addMenuDetectListener(e -> {
+			autoScaleMenuItem.setSelection(powerGraph.getAbscissae().isAutoScale() && powerGraph.getOrdinates().isAutoScale());
 
-				// Undo/Redo
-				if (manager.getUndoCommandsSize() > 0) {
-					undoMenuItem.setEnabled(true);
-					undoMenuItem.setImage(imageUndo);
-					final String cmdName = manager.getUndoCommands()[manager.getUndoCommandsSize() - 1].toString();
-					undoMenuItem.setText(Messages.get("lbl.menu.item.graph.undo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
-				}
-				else {
-					undoMenuItem.setEnabled(false);
-					undoMenuItem.setImage(imageUndoGray);
-					undoMenuItem.setText(Messages.get("lbl.menu.item.graph.undo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
-				}
-				if (manager.getRedoCommandsSize() > 0) {
-					redoMenuItem.setEnabled(true);
-					redoMenuItem.setImage(imageRedo);
-					final String cmdName = manager.getRedoCommands()[manager.getRedoCommandsSize() - 1].toString();
-					redoMenuItem.setText(Messages.get("lbl.menu.item.graph.redo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
-				}
-				else {
-					redoMenuItem.setEnabled(false);
-					redoMenuItem.setImage(imageRedoGray);
-					redoMenuItem.setText(Messages.get("lbl.menu.item.graph.redo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
-				}
-
-				menu.setVisible(true);
+			// Undo/Redo
+			if (manager.getUndoCommandsSize() > 0) {
+				undoMenuItem.setEnabled(true);
+				undoMenuItem.setImage(imageUndo);
+				final String cmdName = manager.getUndoCommands()[manager.getUndoCommandsSize() - 1].toString();
+				undoMenuItem.setText(Messages.get("lbl.menu.item.graph.undo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
 			}
+			else {
+				undoMenuItem.setEnabled(false);
+				undoMenuItem.setImage(imageUndoGray);
+				undoMenuItem.setText(Messages.get("lbl.menu.item.graph.undo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
+			}
+			if (manager.getRedoCommandsSize() > 0) {
+				redoMenuItem.setEnabled(true);
+				redoMenuItem.setImage(imageRedo);
+				final String cmdName = manager.getRedoCommands()[manager.getRedoCommandsSize() - 1].toString();
+				redoMenuItem.setText(Messages.get("lbl.menu.item.graph.redo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
+			}
+			else {
+				redoMenuItem.setEnabled(false);
+				redoMenuItem.setImage(imageRedoGray);
+				redoMenuItem.setText(Messages.get("lbl.menu.item.graph.redo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
+			}
+
+			menu.setVisible(true);
 		});
 	}
 

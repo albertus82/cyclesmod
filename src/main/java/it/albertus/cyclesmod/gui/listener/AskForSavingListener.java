@@ -10,7 +10,7 @@ public abstract class AskForSavingListener {
 
 	protected final CyclesModGui gui;
 
-	public AskForSavingListener(final CyclesModGui gui) {
+	protected AskForSavingListener(final CyclesModGui gui) {
 		this.gui = gui;
 	}
 

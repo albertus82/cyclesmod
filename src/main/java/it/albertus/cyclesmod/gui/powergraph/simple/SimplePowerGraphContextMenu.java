@@ -3,8 +3,6 @@ package it.albertus.cyclesmod.gui.powergraph.simple;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.TraceType;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
@@ -52,12 +50,7 @@ public class SimplePowerGraphContextMenu extends PowerGraphContextMenu {
 
 		showTorqueMenuItem = addShowTorqueMenuItem();
 
-		parent.addMenuDetectListener(new MenuDetectListener() {
-			@Override
-			public void menuDetected(final MenuDetectEvent e) {
-				menu.setVisible(true);
-			}
-		});
+		parent.addMenuDetectListener(e -> menu.setVisible(true));
 	}
 
 	public void updateTexts() {
