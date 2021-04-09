@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,26 +36,14 @@ public class BikesInf {
 	}
 
 	public BikesInf(final File file) throws IOException {
-		FileInputStream fis = null;
-		BufferedInputStream bis = null;
-		try {
-			fis = new FileInputStream(file);
-			bis = new BufferedInputStream(fis);
+		try (final InputStream fis = new FileInputStream(file); final InputStream bis = new BufferedInputStream(fis)) {
 			read(bis);
-		}
-		finally {
-			IOUtils.closeQuietly(bis, fis);
 		}
 	}
 
 	public void reset(final BikeType type) throws IOException {
-		InputStream is = null;
-		try {
-			is = new DefaultBikes().getInputStream();
+		try (final InputStream is = new DefaultBikes().getInputStream()) {
 			read(is, type);
-		}
-		finally {
-			IOUtils.closeQuietly(is);
 		}
 	}
 
@@ -97,24 +86,19 @@ public class BikesInf {
 
 		final File file = new File(fileName);
 		if (file.exists() && !file.isDirectory()) {
-			InputStream is = null;
-			ByteArrayOutputStream os = null;
-			try {
-				is = new FileInputStream(file);
-				os = new ByteArrayOutputStream();
-				IOUtils.copy(is, os, FILE_SIZE);
-			}
-			finally {
-				IOUtils.closeQuietly(os, is);
-			}
-			if (Arrays.equals(os.toByteArray(), newBikesInf)) {
-				System.out.println(Messages.get("msg.already.uptodate", FILE_NAME));
-			}
-			else {
-				if (backupExisting) {
-					backup(fileName);
+			try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+				try (final InputStream is = new FileInputStream(file)) {
+					IOUtils.copy(is, os, FILE_SIZE);
 				}
-				doWrite(fileName, newBikesInf, crc);
+				if (Arrays.equals(os.toByteArray(), newBikesInf)) {
+					System.out.println(Messages.get("msg.already.uptodate", FILE_NAME));
+				}
+				else {
+					if (backupExisting) {
+						backup(fileName);
+					}
+					doWrite(fileName, newBikesInf, crc);
+				}
 			}
 		}
 		else {
@@ -123,16 +107,9 @@ public class BikesInf {
 	}
 
 	private void doWrite(final String fileName, final byte[] newBikesInf, final Checksum crc) throws IOException {
-		FileOutputStream fos = null;
-		BufferedOutputStream bos = null;
-		try {
-			fos = new FileOutputStream(fileName);
-			bos = new BufferedOutputStream(fos, FILE_SIZE);
+		try (final OutputStream fos = new FileOutputStream(fileName); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
 			bos.write(newBikesInf);
 			System.out.println(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
-		}
-		finally {
-			IOUtils.closeQuietly(bos, fos);
 		}
 	}
 
@@ -147,21 +124,12 @@ public class BikesInf {
 		}
 		while (backupFile.exists());
 
-		FileInputStream fis = null;
-		FileOutputStream fos = null;
-		ZipOutputStream zos = null;
-		try {
-			fis = new FileInputStream(existingFile);
-			fos = new FileOutputStream(backupFile);
-			zos = new ZipOutputStream(fos);
+		try (final InputStream fis = new FileInputStream(existingFile); final OutputStream fos = new FileOutputStream(backupFile); final ZipOutputStream zos = new ZipOutputStream(fos)) {
 			zos.setLevel(Deflater.BEST_COMPRESSION);
 			zos.putNextEntry(new ZipEntry(existingFile.getName()));
 			IOUtils.copy(fis, zos, FILE_SIZE);
 			zos.closeEntry();
 			System.out.println(Messages.get("msg.old.file.backed.up", FILE_NAME, backupFile));
-		}
-		finally {
-			IOUtils.closeQuietly(zos, fos, fis);
 		}
 	}
 

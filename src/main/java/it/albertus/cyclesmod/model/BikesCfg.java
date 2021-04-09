@@ -8,13 +8,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import it.albertus.cyclesmod.model.Bike.BikeType;
 import it.albertus.cyclesmod.resources.Messages;
-import it.albertus.util.IOUtils;
 import it.albertus.util.NewLine;
 
 public class BikesCfg {
@@ -25,26 +25,17 @@ public class BikesCfg {
 	private final Properties properties = new Properties();
 
 	public BikesCfg(final BikesInf bikesInf) {
-		final StringReader reader = new StringReader(createProperties(bikesInf));
-		try {
+		try (final StringReader reader = new StringReader(createProperties(bikesInf))) {
 			populateProperties(reader);
 		}
-		catch (final IOException ioe) {
-			throw new IllegalStateException(ioe); // No exception possible with StringReader!
-		}
-		finally {
-			IOUtils.closeQuietly(reader);
+		catch (final IOException e) {
+			throw new UncheckedIOException(e); // No exception possible with StringReader!
 		}
 	}
 
 	public BikesCfg(final String fileName) throws IOException {
-		FileReader fr = null;
-		try {
-			fr = new FileReader(fileName);
+		try (final FileReader fr = new FileReader(fileName)) {
 			populateProperties(fr); // buffered internally
-		}
-		finally {
-			IOUtils.closeQuietly(fr);
 		}
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
@@ -57,13 +48,8 @@ public class BikesCfg {
 			writeDefaultBikesCfg(originalBikesInf, file);
 			System.out.println(Messages.get("msg.default.file.created", FILE_NAME));
 		}
-		FileReader fr = null;
-		try {
-			fr = new FileReader(file);
+		try (final FileReader fr = new FileReader(file)) {
 			populateProperties(fr); // buffered internally
-		}
-		finally {
-			IOUtils.closeQuietly(fr);
 		}
 		System.out.println(Messages.get("msg.file.read", FILE_NAME));
 	}
@@ -76,15 +62,8 @@ public class BikesCfg {
 		final String props = createProperties(originalBikesInf);
 
 		// Salvataggio...
-		FileWriter fw = null;
-		BufferedWriter bw = null;
-		try {
-			fw = new FileWriter(destination);
-			bw = new BufferedWriter(fw);
+		try (FileWriter fw = new FileWriter(destination); BufferedWriter bw = new BufferedWriter(fw)) {
 			bw.write(props);
-		}
-		finally {
-			IOUtils.closeQuietly(bw, fw);
 		}
 	}
 
