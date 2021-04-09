@@ -89,11 +89,11 @@ public class Tabs {
 			settingsGroups.put(bike.getType(), settingsGroup);
 
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
-				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.toString());
+				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.getKey());
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
-				final String labelTextKey = "lbl." + setting.toString();
+				final String labelTextKey = "lbl." + setting.getKey();
 				label.setText(Messages.get(labelTextKey));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setToolTipText(key);

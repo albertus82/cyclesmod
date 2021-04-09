@@ -5,9 +5,9 @@ import java.beans.Introspector;
 import it.albertus.cyclesmod.model.Bike;
 import it.albertus.cyclesmod.model.BikesInf;
 import it.albertus.cyclesmod.model.Gearbox;
+import it.albertus.cyclesmod.model.Power;
 import it.albertus.cyclesmod.model.Setting;
 import it.albertus.cyclesmod.model.Settings;
-import it.albertus.cyclesmod.model.Power;
 import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.StringUtils;
 
@@ -143,7 +143,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 
 		final Bike bike = getBike(key, value);
 		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Settings.class.getSimpleName()) + '.');
-		final Setting setting = Setting.getSetting(suffix);
+		final Setting setting = Setting.forKey(suffix);
 		if (setting != null) {
 			final int defaultValue = bike.getSettings().getValues().get(setting);
 			if (newValue != defaultValue) {

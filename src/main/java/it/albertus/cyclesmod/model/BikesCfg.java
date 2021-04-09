@@ -80,7 +80,7 @@ public class BikesCfg {
 			props.append("# ").append(Settings.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
-				props.append(buildPropertyKey(bike.getType(), Settings.class, setting.toString()));
+				props.append(buildPropertyKey(bike.getType(), Settings.class, setting.getKey()));
 				props.append('=');
 				props.append(bike.getSettings().getValues().get(setting).intValue());
 				props.append(lineSeparator);
