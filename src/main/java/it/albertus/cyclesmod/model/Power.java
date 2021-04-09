@@ -1,6 +1,7 @@
 package it.albertus.cyclesmod.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import it.albertus.cyclesmod.engine.InvalidPropertyException;
@@ -23,15 +24,13 @@ public class Power implements BikesInfElement {
 	/**
 	 * 42-147: curva di potenza (intervallo regime considerato: 768-14335 RPM).
 	 */
-	private final short[] curve = new short[LENGTH];
+	private final short[] curve;
 
 	public Power(final short[] curve) {
 		if (curve.length > LENGTH) {
 			throw new IllegalArgumentException(Messages.get("err.power", LENGTH, curve.length));
 		}
-		for (int i = 0; i < curve.length; i++) {
-			this.curve[i] = curve[i];
-		}
+		this.curve = Arrays.copyOf(curve, LENGTH);
 	}
 
 	@Override
