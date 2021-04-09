@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import it.albertus.cyclesmod.model.Bike.BikeType;
@@ -54,7 +55,18 @@ public class BikesCfg {
 	}
 
 	private void populateProperties(final Reader reader) throws IOException {
-		this.properties.load(reader);
+		properties.load(reader);
+		final Map<Object, String> deprecatedEntries = new HashMap<>();
+		final String deprecatedPrefix = "torque";
+		for (final Object key : properties.keySet()) {
+			if (key.toString().contains(deprecatedPrefix)) {
+				deprecatedEntries.put(key, properties.getProperty(key.toString()));
+			}
+		}
+		for (final Entry<Object, String> entry : deprecatedEntries.entrySet()) {
+			properties.remove(entry.getKey());
+			properties.setProperty(entry.getKey().toString().replace(deprecatedPrefix, Power.PREFIX), entry.getValue());
+		}
 	}
 
 	private void writeDefaultBikesCfg(final BikesInf originalBikesInf, final File destination) throws IOException {
