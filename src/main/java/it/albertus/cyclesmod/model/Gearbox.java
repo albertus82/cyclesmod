@@ -7,6 +7,7 @@ import java.util.List;
 import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.ByteUtils;
+import lombok.NonNull;
 
 public class Gearbox implements ByteList {
 
@@ -24,7 +25,7 @@ public class Gearbox implements ByteList {
 	/** 22-41 (N, 1, 2, 3, 4, 5, 6, 7, 8, 9) */
 	private final int[] ratios;
 
-	public Gearbox(final int[] ratios) {
+	public Gearbox(@NonNull final int[] ratios) {
 		if (ratios.length > LENGTH / 2) {
 			throw new IllegalArgumentException(Messages.get("err.gearbox", LENGTH / 2, ratios.length));
 		}
@@ -40,7 +41,7 @@ public class Gearbox implements ByteList {
 		return byteList;
 	}
 
-	public static int parse(final String key, final String value, final int radix) {
+	public static int parse(final String key, @NonNull final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
 			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));

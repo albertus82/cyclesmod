@@ -8,6 +8,7 @@ import java.util.Map;
 import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.ByteUtils;
+import lombok.NonNull;
 
 public class Settings implements ByteList {
 
@@ -42,7 +43,7 @@ public class Settings implements ByteList {
 		return byteList;
 	}
 
-	public static int parse(final String key, final String value, final int radix) {
+	public static int parse(final String key, @NonNull final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
 			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
