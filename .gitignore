@@ -7,3 +7,6 @@ interpolated-pom.xml
 lombok.config
 hs_err_pid*.log
 junit*.properties
+/*.[cC][fF][gG]
+/*.[iI][nN][fF]
+/*.[zZ][iI][pP]

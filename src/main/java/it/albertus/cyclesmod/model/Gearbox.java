@@ -8,10 +8,12 @@ import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.ByteUtils;
 
-public class Gearbox implements BikesInfElement {
+public class Gearbox implements ByteList {
 
 	public static final int LENGTH = 20;
 	public static final int MIN_VALUE = 0;
+
+	public static final String PREFIX = "gearbox";
 
 	/**
 	 * I valori sono a 16 bit, ma di fatto vengono considerati solo 8 bit (si

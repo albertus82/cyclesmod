@@ -7,11 +7,13 @@ import java.util.List;
 import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.resources.Messages;
 
-public class Power implements BikesInfElement {
+public class Power implements ByteList {
 
 	public static final int LENGTH = 106;
 	public static final short MIN_VALUE = 0;
 	public static final short MAX_VALUE = 255;
+
+	public static final String PREFIX = "power";
 
 	/**
 	 * 0-767: overlap con Gearbox '7' (0-255), '8' (256-511) e '9' (512-767). Il

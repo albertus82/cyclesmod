@@ -9,11 +9,13 @@ import it.albertus.cyclesmod.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.ByteUtils;
 
-public class Settings implements BikesInfElement {
+public class Settings implements ByteList {
 
 	public static final int LENGTH = 22;
 	public static final int MIN_VALUE = 0;
 	public static final int MAX_VALUE = 65535;
+
+	public static final String PREFIX = "settings";
 
 	private final Map<Setting, Integer> values = new EnumMap<>(Setting.class);
 

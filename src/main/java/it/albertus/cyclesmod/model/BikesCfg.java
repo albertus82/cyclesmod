@@ -1,6 +1,5 @@
 package it.albertus.cyclesmod.model;
 
-import java.beans.Introspector;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
@@ -80,7 +79,7 @@ public class BikesCfg {
 			props.append("# ").append(Settings.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
-				props.append(buildPropertyKey(bike.getType(), Settings.class, setting.getKey()));
+				props.append(buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey()));
 				props.append('=');
 				props.append(bike.getSettings().getValues().get(setting).intValue());
 				props.append(lineSeparator);
@@ -91,7 +90,7 @@ public class BikesCfg {
 			props.append("# ").append(Gearbox.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
-				props.append(buildPropertyKey(bike.getType(), Gearbox.class, index));
+				props.append(buildPropertyKey(bike.getType(), Gearbox.PREFIX, index));
 				props.append('=');
 				props.append(bike.getGearbox().getRatios()[index]);
 				props.append(lineSeparator);
@@ -106,7 +105,7 @@ public class BikesCfg {
 					props.append("# " + Power.getRpm(index) + " RPM");
 					props.append(lineSeparator);
 				}
-				props.append(buildPropertyKey(bike.getType(), Power.class, index));
+				props.append(buildPropertyKey(bike.getType(), Power.PREFIX, index));
 				props.append('=');
 				props.append(bike.getPower().getCurve()[index]);
 				props.append(lineSeparator);
@@ -120,12 +119,12 @@ public class BikesCfg {
 		return props.toString();
 	}
 
-	public static String buildPropertyKey(final BikeType bikeType, final Class<? extends BikesInfElement> propertyType, final String suffix) {
-		return Integer.toString(bikeType.getDisplacement()) + '.' + Introspector.decapitalize(propertyType.getSimpleName()) + '.' + suffix;
+	public static String buildPropertyKey(final BikeType bikeType, final String prefix, final String suffix) {
+		return Integer.toString(bikeType.getDisplacement()) + '.' + prefix + '.' + suffix;
 	}
 
-	public static String buildPropertyKey(final BikeType bikeType, final Class<? extends BikesInfElement> propertyType, final int suffix) {
-		return buildPropertyKey(bikeType, propertyType, Integer.toString(suffix));
+	public static String buildPropertyKey(final BikeType bikeType, final String prefix, final int suffix) {
+		return buildPropertyKey(bikeType, prefix, Integer.toString(suffix));
 	}
 
 	public Properties getProperties() {
