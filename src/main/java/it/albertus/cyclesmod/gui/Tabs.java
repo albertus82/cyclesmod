@@ -89,7 +89,7 @@ public class Tabs {
 			settingsGroups.put(bike.getType(), settingsGroup);
 
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
-				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.class, setting.getKey());
+				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey());
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
@@ -119,7 +119,7 @@ public class Tabs {
 				@Override
 				public void mousePressed(final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Power.class, powerGraph.getPowerIndex(me.getLocation())));
+						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
 						}
@@ -137,7 +137,7 @@ public class Tabs {
 			gearboxGroups.put(bike.getType(), gearboxGroup);
 
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
-				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.class, index);
+				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(gearboxGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
@@ -169,7 +169,7 @@ public class Tabs {
 			powerGroups.put(bike.getType(), powerGroup);
 
 			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
-				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.class, index);
+				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(powerGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);

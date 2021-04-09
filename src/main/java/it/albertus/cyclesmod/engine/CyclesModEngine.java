@@ -1,7 +1,5 @@
 package it.albertus.cyclesmod.engine;
 
-import java.beans.Introspector;
-
 import it.albertus.cyclesmod.model.Bike;
 import it.albertus.cyclesmod.model.BikesInf;
 import it.albertus.cyclesmod.model.Gearbox;
@@ -84,15 +82,15 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 	}
 
 	public boolean isPowerProperty(final String key) {
-		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Power.class.getSimpleName()));
+		return StringUtils.substringAfter(key, ".").startsWith(Power.PREFIX);
 	}
 
 	public boolean isGearboxProperty(final String key) {
-		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Gearbox.class.getSimpleName()));
+		return StringUtils.substringAfter(key, ".").startsWith(Gearbox.PREFIX);
 	}
 
 	public boolean isSettingsProperty(final String key) {
-		return StringUtils.substringAfter(key, ".").startsWith(Introspector.decapitalize(Settings.class.getSimpleName()));
+		return StringUtils.substringAfter(key, ".").startsWith(Settings.PREFIX);
 	}
 
 	private boolean applyPowerProperty(final String key, final String value) {
@@ -100,7 +98,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		final short newValue = Power.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key, value);
-		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Power.class.getSimpleName()) + '.');
+		final String suffix = StringUtils.substringAfter(key, Power.PREFIX + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getPower().getCurve().length) {
 			final int index = Integer.parseInt(suffix);
 			final short defaultValue = bike.getPower().getCurve()[index];
@@ -121,7 +119,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		final int newValue = Gearbox.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key, value);
-		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Gearbox.class.getSimpleName()) + '.');
+		final String suffix = StringUtils.substringAfter(key, Gearbox.PREFIX + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getGearbox().getRatios().length) {
 			final int index = Integer.parseInt(suffix);
 			final int defaultValue = bike.getGearbox().getRatios()[index];
@@ -142,7 +140,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		final int newValue = Settings.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key, value);
-		final String suffix = StringUtils.substringAfter(key, Introspector.decapitalize(Settings.class.getSimpleName()) + '.');
+		final String suffix = StringUtils.substringAfter(key, Settings.PREFIX + '.');
 		final Setting setting = Setting.forKey(suffix);
 		if (setting != null) {
 			final int defaultValue = bike.getSettings().getValues().get(setting);

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Bike implements BikesInfElement {
+public class Bike implements ByteList {
 
 	public enum BikeType {
 		CLASS_125(125),
@@ -29,14 +29,14 @@ public class Bike implements BikesInfElement {
 	public static final int LENGTH = Settings.LENGTH + Gearbox.LENGTH + Power.LENGTH;
 
 	/** 0-21 */
-	private final Settings settings; 
-	
+	private final Settings settings;
+
 	/** 22-41 */
 	private final Gearbox gearbox;
 
 	/** 42-147 */
 	private final Power power;
-	
+
 	private final BikeType type;
 
 	public Bike(final BikeType type, final byte[] inf) {
