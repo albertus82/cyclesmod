@@ -11,8 +11,6 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.TraceType;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Control;
@@ -33,7 +31,7 @@ public abstract class PowerGraphContextMenu {
 	private final Control parent;
 	private final Menu menu;
 
-	public PowerGraphContextMenu(final Control parent, final IPowerGraph powerGraph) {
+	protected PowerGraphContextMenu(final Control parent, final IPowerGraph powerGraph) {
 		this.parent = parent;
 		this.powerGraph = powerGraph;
 
@@ -94,15 +92,12 @@ public abstract class PowerGraphContextMenu {
 			areaAlphaSubMenuItems.put(areaAlpha, menuItem);
 		}
 
-		parent.addMenuDetectListener(new MenuDetectListener() {
-			@Override
-			public void menuDetected(final MenuDetectEvent e) {
-				for (final Entry<TraceType, MenuItem> entry : traceTypeSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(entry.getKey().equals(powerGraph.getPowerTrace().getTraceType()));
-				}
-				for (final Entry<Integer, MenuItem> entry : areaAlphaSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / 255 * AREA_ALPHA_OPTIONS.length) == Math.round(powerGraph.getPowerTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length));
-				}
+		parent.addMenuDetectListener(e -> {
+			for (final Entry<TraceType, MenuItem> entry : traceTypeSubMenuItems.entrySet()) {
+				entry.getValue().setSelection(entry.getKey().equals(powerGraph.getPowerTrace().getTraceType()));
+			}
+			for (final Entry<Integer, MenuItem> entry : areaAlphaSubMenuItems.entrySet()) {
+				entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / 255 * AREA_ALPHA_OPTIONS.length) == Math.round(powerGraph.getPowerTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length));
 			}
 		});
 
@@ -137,12 +132,9 @@ public abstract class PowerGraphContextMenu {
 			lineWidthSubMenuItems.put(lineWidth, menuItem);
 		}
 
-		parent.addMenuDetectListener(new MenuDetectListener() {
-			@Override
-			public void menuDetected(final MenuDetectEvent e) {
-				for (final Entry<Integer, MenuItem> entry : lineWidthSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(entry.getKey().intValue() == powerGraph.getPowerTrace().getLineWidth());
-				}
+		parent.addMenuDetectListener(e -> {
+			for (final Entry<Integer, MenuItem> entry : lineWidthSubMenuItems.entrySet()) {
+				entry.getValue().setSelection(entry.getKey().intValue() == powerGraph.getPowerTrace().getLineWidth());
 			}
 		});
 
@@ -174,12 +166,9 @@ public abstract class PowerGraphContextMenu {
 			pointStyleSubMenuItems.put(pointStyle, menuItem);
 		}
 
-		parent.addMenuDetectListener(new MenuDetectListener() {
-			@Override
-			public void menuDetected(final MenuDetectEvent e) {
-				for (final Entry<PointStyle, MenuItem> entry : pointStyleSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(entry.getKey().equals(powerGraph.getPowerTrace().getPointStyle()));
-				}
+		parent.addMenuDetectListener(e -> {
+			for (final Entry<PointStyle, MenuItem> entry : pointStyleSubMenuItems.entrySet()) {
+				entry.getValue().setSelection(entry.getKey().equals(powerGraph.getPowerTrace().getPointStyle()));
 			}
 		});
 
@@ -213,12 +202,9 @@ public abstract class PowerGraphContextMenu {
 			pointSizeSubMenuItems.put(pointSize, menuItem);
 		}
 
-		parent.addMenuDetectListener(new MenuDetectListener() {
-			@Override
-			public void menuDetected(final MenuDetectEvent e) {
-				for (final Entry<Integer, MenuItem> entry : pointSizeSubMenuItems.entrySet()) {
-					entry.getValue().setSelection(entry.getKey().intValue() == trace.getPointSize());
-				}
+		parent.addMenuDetectListener(e -> {
+			for (final Entry<Integer, MenuItem> entry : pointSizeSubMenuItems.entrySet()) {
+				entry.getValue().setSelection(entry.getKey().intValue() == trace.getPointSize());
 			}
 		});
 

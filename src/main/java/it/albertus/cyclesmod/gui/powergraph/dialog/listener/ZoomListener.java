@@ -15,7 +15,7 @@ public abstract class ZoomListener implements KeyListener, SelectionListener {
 
 	protected final IXYGraph xyGraph;
 
-	public ZoomListener(final IXYGraph graph) {
+	protected ZoomListener(final IXYGraph graph) {
 		this.xyGraph = graph;
 	}
 
