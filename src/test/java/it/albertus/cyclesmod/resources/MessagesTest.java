@@ -41,11 +41,11 @@ public class MessagesTest {
 				try {
 					// @formatter:off
 					keys.addAll(Files.readAllLines(path).stream()
-							.map(l -> l.trim().replace(" ", ""))
-							.filter(l -> l.toLowerCase(Locale.ROOT).contains("messages.get(\""))
-							.flatMap(l -> Arrays.stream(l.split("(?i)(?>=messages\\.get\\(\")|(?=messages\\.get\\(\")")))
+							.map(line -> line.trim().replace(" ", ""))
+							.filter(e -> e.toLowerCase(Locale.ROOT).contains("messages.get(\""))
+							.flatMap(e -> Arrays.stream(e.split("(?i)(?>=messages\\.get\\(\")|(?=messages\\.get\\(\")")))
 							.filter(e -> e.toLowerCase(Locale.ROOT).startsWith("messages"))
-							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, "\""), "\""))
+							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, '"'), '"'))
 							.collect(Collectors.toSet()));
 					// @formatter:on
 				}
@@ -54,12 +54,13 @@ public class MessagesTest {
 				}
 			});
 		}
-		Assert.assertNotEquals("No message keys found", 0, keys.size());
+		Assert.assertNotEquals("No message keys found.", 0, keys.size());
+		log.log(Level.INFO, "Found {0} message keys referenced in sources.", keys.size());
 		final Set<String> allKeys = new HashSet<>();
 		allKeys.addAll(Messages.getKeys());
 		allKeys.addAll(JFaceMessages.getKeys());
 		for (final String key : new TreeSet<>(keys)) {
-			Assert.assertTrue("Missing message key '" + key + "'", allKeys.contains(key));
+			Assert.assertTrue("Missing message key '" + key + "'!", allKeys.contains(key));
 		}
 	}
 
