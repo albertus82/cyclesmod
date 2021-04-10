@@ -4,20 +4,16 @@ import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
 
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.resources.Messages;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ChangeValueCommand implements IUndoableCommand {
 
-	private final IPowerGraph powerGraph;
+	@NonNull private final IPowerGraph powerGraph;
 	private final int index;
 	private final short oldValue;
 	private final short newValue;
-
-	public ChangeValueCommand(final IPowerGraph powerGraph, final int index, final short oldValue, final short newValue) {
-		this.powerGraph = powerGraph;
-		this.index = index;
-		this.oldValue = oldValue;
-		this.newValue = newValue;
-	}
 
 	@Override
 	public void undo() {
