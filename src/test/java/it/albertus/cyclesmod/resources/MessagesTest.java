@@ -17,12 +17,12 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 import it.albertus.cyclesmod.CyclesMod;
 import it.albertus.jface.JFaceMessages;
+import it.albertus.util.StringUtils;
 import lombok.extern.java.Log;
 
 @Log
@@ -47,7 +47,7 @@ public class MessagesTest {
 							.filter(e -> e.toLowerCase(Locale.ROOT).contains("messages.get(\""))
 							.flatMap(e -> Arrays.stream(e.split("(?i)(?>=messages\\.get\\(\")|(?=messages\\.get\\(\")")))
 							.filter(e -> e.toLowerCase(Locale.ROOT).startsWith("messages"))
-							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, '"'), '"'))
+							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, "\""), "\""))
 							.filter(key -> !key.endsWith("."))
 							.collect(Collectors.toSet()));
 					// @formatter:on
