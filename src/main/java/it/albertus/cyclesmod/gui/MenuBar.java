@@ -15,11 +15,11 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cyclesmod.engine.NumeralSystem;
 import it.albertus.cyclesmod.gui.listener.AboutListener;
+import it.albertus.cyclesmod.gui.listener.ArmMenuListener;
 import it.albertus.cyclesmod.gui.listener.CloseListener;
 import it.albertus.cyclesmod.gui.listener.CopySelectionListener;
 import it.albertus.cyclesmod.gui.listener.CutSelectionListener;
 import it.albertus.cyclesmod.gui.listener.EditMenuListener;
-import it.albertus.cyclesmod.gui.listener.HelpMenuListener;
 import it.albertus.cyclesmod.gui.listener.LanguageSelectionListener;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.OpenSelectionListener;
@@ -272,7 +272,7 @@ public class MenuBar {
 			helpAboutItem.addSelectionListener(new AboutListener(gui));
 		}
 
-		final HelpMenuListener helpMenuListener = new HelpMenuListener(helpSystemInfoItem);
+		final ArmMenuListener helpMenuListener = e -> helpSystemInfoItem.setEnabled(SystemInformationDialog.isAvailable());
 		helpMenu.addMenuListener(helpMenuListener);
 		helpMenuHeader.addArmListener(helpMenuListener);
 
