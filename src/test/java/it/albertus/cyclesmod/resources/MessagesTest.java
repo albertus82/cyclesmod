@@ -34,8 +34,10 @@ public class MessagesTest {
 		try (final InputStream is = MessagesTest.class.getResourceAsStream("/test.properties")) {
 			testProperties.load(is);
 		}
+		final Path sourcesPath = Paths.get(testProperties.getProperty("project.build.sourceDirectory"), CyclesMod.class.getPackage().getName().replace('.', File.separatorChar));
+		log.log(Level.INFO, "Sources path: {0}", sourcesPath);
 		final Set<String> keys = new TreeSet<>();
-		try (final Stream<Path> paths = Files.walk(Paths.get(testProperties.getProperty("project.build.sourceDirectory"), CyclesMod.class.getPackage().getName().replace('.', File.separatorChar))).filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".java"))) {
+		try (final Stream<Path> paths = Files.walk(sourcesPath).filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".java"))) {
 			paths.forEach(path -> {
 				log.log(Level.FINE, "{0}", path);
 				try {
@@ -46,6 +48,7 @@ public class MessagesTest {
 							.flatMap(e -> Arrays.stream(e.split("(?i)(?>=messages\\.get\\(\")|(?=messages\\.get\\(\")")))
 							.filter(e -> e.toLowerCase(Locale.ROOT).startsWith("messages"))
 							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, '"'), '"'))
+							.filter(key -> !key.endsWith("."))
 							.collect(Collectors.toSet()));
 					// @formatter:on
 				}
