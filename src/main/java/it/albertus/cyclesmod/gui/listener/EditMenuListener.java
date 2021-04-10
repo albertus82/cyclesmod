@@ -1,42 +1,26 @@
 package it.albertus.cyclesmod.gui.listener;
 
 import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.events.ArmEvent;
-import org.eclipse.swt.events.ArmListener;
-import org.eclipse.swt.events.MenuEvent;
-import org.eclipse.swt.events.MenuListener;
+import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.FormProperty;
 import it.albertus.jface.SwtUtils;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Attenzione: disabilitando gli elementi dei menu, vengono automaticamente
  * disabilitati anche i relativi acceleratori.
  */
-public class EditMenuListener implements ArmListener, MenuListener {
+@RequiredArgsConstructor
+public class EditMenuListener implements ArmMenuListener {
 
-	private final CyclesModGui gui;
-
-	public EditMenuListener(final CyclesModGui gui) {
-		this.gui = gui;
-	}
+	@NonNull private final CyclesModGui gui;
 
 	@Override
-	public void widgetArmed(final ArmEvent e) {
-		execute();
-	}
-
-	@Override
-	public void menuShown(final MenuEvent e) {
-		execute();
-	}
-
-	@Override
-	public void menuHidden(final MenuEvent e) {/* Ignore */}
-
-	private void execute() {
+	public void menuArmed(final TypedEvent e) {
 		final MenuItem cutMenuItem = gui.getMenuBar().getEditCutMenuItem();
 		cutMenuItem.setEnabled(canCut());
 
