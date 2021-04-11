@@ -6,24 +6,25 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.util.StringUtils;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class FormProperty {
 
+	@Getter
+	@RequiredArgsConstructor
 	public enum LabelDataKey {
 		KEY(String.class),
 		ARGUMENT(String.class);
 
 		private final Class<?> type;
-
-		private LabelDataKey(final Class<?> type) {
-			this.type = type;
-		}
-
-		public Class<?> getType() {
-			return type;
-		}
 	}
 
+	@Getter
+	@RequiredArgsConstructor
 	public enum TextDataKey {
 		DEFAULT(Integer.class),
 		GRAPH(IPowerGraph.class),
@@ -33,21 +34,14 @@ public class FormProperty {
 		SIZE(Integer.class);
 
 		private final Class<?> type;
-
-		private TextDataKey(final Class<?> type) {
-			this.type = type;
-		}
-
-		public Class<?> getType() {
-			return type;
-		}
 	}
 
+	@Value
 	private class TextBackup {
-		private final String text;
-		private final int textLimit;
-		private final Font font;
-		private final boolean visible;
+		String text;
+		int textLimit;
+		Font font;
+		boolean visible;
 
 		public TextBackup(final Text source) {
 			this.text = source.getText();
@@ -57,22 +51,10 @@ public class FormProperty {
 		}
 	}
 
-	private final Label label;
-	private final Text text;
+	@Getter private final Label label;
+	@Getter private final Text text;
+
 	private TextBackup textBackup = null;
-
-	FormProperty(final Label label, final Text text) {
-		this.label = label;
-		this.text = text;
-	}
-
-	public Label getLabel() {
-		return label;
-	}
-
-	public Text getText() {
-		return text;
-	}
 
 	public String getValue() {
 		if (text != null) {
