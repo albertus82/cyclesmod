@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.resources.Messages;
 
 public abstract class PowerGraphContextMenu {
 

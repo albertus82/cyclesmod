@@ -11,7 +11,7 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.jface.SwtUtils;
 
 public class SaveSnapshotListener implements KeyListener, SelectionListener {

@@ -4,7 +4,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MenuItem;
 
-import it.albertus.cyclesmod.engine.NumeralSystem;
+import it.albertus.cyclesmod.common.engine.NumeralSystem;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 
 public class RadixSelectionListener extends SelectionAdapter {

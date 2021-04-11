@@ -1,12 +1,12 @@
-package it.albertus.cyclesmod.model;
+package it.albertus.cyclesmod.common.model;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import it.albertus.cyclesmod.engine.InvalidPropertyException;
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.ByteUtils;
 import lombok.NonNull;
 

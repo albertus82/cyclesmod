@@ -5,8 +5,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
+import it.albertus.cyclesmod.common.model.Bike;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphProvider;
-import it.albertus.cyclesmod.model.Bike;
 
 public class PowerGraphCanvas extends Canvas implements PowerGraphProvider {
 

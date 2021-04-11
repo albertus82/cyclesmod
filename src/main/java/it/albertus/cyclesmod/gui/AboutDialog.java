@@ -55,8 +55,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.listener.LinkSelectionListener;
-import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.jface.SwtUtils;
 import it.albertus.jface.closeable.CloseableResource;
 import it.albertus.util.Version;

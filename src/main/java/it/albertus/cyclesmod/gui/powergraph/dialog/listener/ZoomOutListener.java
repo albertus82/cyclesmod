@@ -7,7 +7,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.resources.Messages;
 
 public class ZoomOutListener extends ZoomListener {
 

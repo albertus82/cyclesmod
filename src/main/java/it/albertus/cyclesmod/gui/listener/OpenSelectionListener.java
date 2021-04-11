@@ -5,8 +5,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.FileDialog;
 
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.StringUtils;
 
 public class OpenSelectionListener extends AskForSavingListener implements SelectionListener {

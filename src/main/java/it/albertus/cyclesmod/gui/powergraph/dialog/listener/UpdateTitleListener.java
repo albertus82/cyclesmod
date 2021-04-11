@@ -6,10 +6,10 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 
+import it.albertus.cyclesmod.common.model.Power;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
-import it.albertus.cyclesmod.model.Power;
-import it.albertus.cyclesmod.resources.Messages;
 
 public class UpdateTitleListener implements MouseMotionListener {
 

@@ -6,9 +6,9 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.swt.widgets.Display;
 
+import it.albertus.cyclesmod.common.model.Bike;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
-import it.albertus.cyclesmod.model.Bike;
-import it.albertus.cyclesmod.resources.Messages;
 
 public class SimplePowerGraph extends PowerGraph {
 

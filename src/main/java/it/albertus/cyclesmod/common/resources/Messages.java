@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.resources;
+package it.albertus.cyclesmod.common.resources;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;

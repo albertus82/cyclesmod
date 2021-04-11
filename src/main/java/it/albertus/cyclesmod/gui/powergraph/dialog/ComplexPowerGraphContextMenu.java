@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphContextMenu;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.RedoListener;
@@ -18,7 +19,6 @@ import it.albertus.cyclesmod.gui.powergraph.dialog.listener.SaveSnapshotListener
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UndoListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
-import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.jface.SwtUtils;
 
 public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {

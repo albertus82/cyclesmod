@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.data;
+package it.albertus.cyclesmod.common.data;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -9,8 +9,8 @@ import java.util.zip.Checksum;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
-import it.albertus.cyclesmod.model.BikesInf;
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.model.BikesInf;
+import it.albertus.cyclesmod.common.resources.Messages;
 import jakarta.xml.bind.DatatypeConverter;
 
 public class DefaultBikes {

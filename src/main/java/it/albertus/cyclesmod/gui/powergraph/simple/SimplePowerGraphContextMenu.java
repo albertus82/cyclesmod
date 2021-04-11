@@ -9,9 +9,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphContextMenu;
-import it.albertus.cyclesmod.resources.Messages;
 
 public class SimplePowerGraphContextMenu extends PowerGraphContextMenu {
 

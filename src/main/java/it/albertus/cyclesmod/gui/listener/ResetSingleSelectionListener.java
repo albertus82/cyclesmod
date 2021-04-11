@@ -9,9 +9,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
 
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.model.Bike.BikeType;
-import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.ExceptionUtils;
 import it.albertus.util.logging.LoggerFactory;
 

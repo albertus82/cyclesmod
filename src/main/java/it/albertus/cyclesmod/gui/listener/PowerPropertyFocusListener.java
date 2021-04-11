@@ -6,11 +6,11 @@ import java.util.logging.Logger;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Text;
 
-import it.albertus.cyclesmod.engine.InvalidPropertyException;
+import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
+import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.FormProperty;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
-import it.albertus.cyclesmod.model.Power;
 import it.albertus.util.logging.LoggerFactory;
 
 public class PowerPropertyFocusListener extends PropertyFocusListener {
