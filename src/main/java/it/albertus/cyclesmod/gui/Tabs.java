@@ -21,12 +21,12 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.common.model.Bike;
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
-import it.albertus.cyclesmod.common.model.Bike.BikeType;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.FormProperty.LabelDataKey;
 import it.albertus.cyclesmod.gui.FormProperty.TextDataKey;
@@ -37,28 +37,31 @@ import it.albertus.cyclesmod.gui.listener.PropertyKeyListener;
 import it.albertus.cyclesmod.gui.listener.PropertyVerifyListener;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.simple.PowerGraphCanvas;
+import it.albertus.jface.i18n.LocalizedWidgets;
+import it.albertus.util.ISupplier;
+import lombok.Getter;
+import lombok.NonNull;
 
 public class Tabs {
 
 	private final CyclesModGui gui;
 
-	private final TextFormatter textFormatter;
+	@Getter private final TextFormatter textFormatter;
 
-	private final TabFolder tabFolder;
+	@Getter private final TabFolder tabFolder;
 
 	private final Map<String, FormProperty> formProperties = new HashMap<>();
 
-	private final Map<BikeType, Group> settingsGroups = new EnumMap<>(BikeType.class);
-	private final Map<BikeType, Group> gearboxGroups = new EnumMap<>(BikeType.class);
-	private final Map<BikeType, Group> powerGroups = new EnumMap<>(BikeType.class);
 	private final Map<BikeType, PowerGraphCanvas> powerCanvases = new EnumMap<>(BikeType.class);
+
+	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
 
 	private final PropertyVerifyListener propertyVerifyListener;
 	private final PropertyFocusListener propertyFocusListener;
 	private final PowerPropertyFocusListener powerPropertyFocusListener;
 	private final PropertyKeyListener propertyKeyListener;
 
-	Tabs(final CyclesModGui gui) {
+	Tabs(@NonNull final CyclesModGui gui) {
 		this.gui = gui;
 		textFormatter = new TextFormatter(gui);
 		propertyVerifyListener = new PropertyVerifyListener(gui);
@@ -80,13 +83,11 @@ public class Tabs {
 			GridLayoutFactory.swtDefaults().numColumns(2).applyTo(tabComposite);
 
 			// Settings
-			final Group settingsGroup = new Group(tabComposite, SWT.NULL);
-			settingsGroup.setText(Messages.get("lbl.settings"));
+			final Group settingsGroup = newLocalizedGroup(tabComposite, SWT.NULL, "lbl.settings");
 			// Posizionamento dell'elemento all'interno del contenitore...
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(settingsGroup);
 			// Definizione di come saranno disposti gli elementi contenuti...
 			GridLayoutFactory.swtDefaults().numColumns(6).applyTo(settingsGroup);
-			settingsGroups.put(bike.getType(), settingsGroup);
 
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey());
@@ -130,11 +131,9 @@ public class Tabs {
 			powerCanvases.put(bike.getType(), canvas);
 
 			// Gearbox
-			final Group gearboxGroup = new Group(tabComposite, SWT.NULL);
-			gearboxGroup.setText(Messages.get("lbl.gearbox"));
+			final Group gearboxGroup = newLocalizedGroup(tabComposite, SWT.NULL, "lbl.gearbox");
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(gearboxGroup);
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
-			gearboxGroups.put(bike.getType(), gearboxGroup);
 
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
@@ -162,11 +161,9 @@ public class Tabs {
 			}
 
 			// Power
-			final Group powerGroup = new Group(tabComposite, SWT.NULL);
-			powerGroup.setText(Messages.get("lbl.power"));
+			final Group powerGroup = newLocalizedGroup(tabComposite, SWT.NULL, "lbl.power");
 			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(powerGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
-			powerGroups.put(bike.getType(), powerGroup);
 
 			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
@@ -203,15 +200,7 @@ public class Tabs {
 	}
 
 	public void updateTexts() {
-		for (final Group settingsGroup : settingsGroups.values()) {
-			settingsGroup.setText(Messages.get("lbl.settings"));
-		}
-		for (final Group gearboxGroup : gearboxGroups.values()) {
-			gearboxGroup.setText(Messages.get("lbl.gearbox"));
-		}
-		for (final Group powerGroup : powerGroups.values()) {
-			powerGroup.setText(Messages.get("lbl.power"));
-		}
+		localizedWidgets.resetAllTexts();
 		for (final PowerGraphCanvas canvas : powerCanvases.values()) {
 			canvas.updateTexts();
 		}
@@ -315,32 +304,16 @@ public class Tabs {
 		powerPropertyFocusListener.setEnabled(false);
 	}
 
-	public TabFolder getTabFolder() {
-		return tabFolder;
-	}
-
-	public TextFormatter getTextFormatter() {
-		return textFormatter;
-	}
-
 	public Map<String, FormProperty> getFormProperties() {
 		return Collections.unmodifiableMap(formProperties);
 	}
 
-	public Map<BikeType, PowerGraphCanvas> getPowerCanvases() {
-		return Collections.unmodifiableMap(powerCanvases);
+	private Group newLocalizedGroup(@NonNull final Composite parent, final int style, @NonNull final String messageKey) {
+		return newLocalizedGroup(parent, style, () -> Messages.get(messageKey));
 	}
 
-	public Map<BikeType, Group> getSettingsGroups() {
-		return Collections.unmodifiableMap(settingsGroups);
-	}
-
-	public Map<BikeType, Group> getGearboxGroups() {
-		return Collections.unmodifiableMap(gearboxGroups);
-	}
-
-	public Map<BikeType, Group> getPowerGroups() {
-		return Collections.unmodifiableMap(powerGroups);
+	private Group newLocalizedGroup(@NonNull final Composite parent, final int style, @NonNull final ISupplier<String> textSupplier) {
+		return localizedWidgets.putAndReturn(new Group(parent, style), textSupplier).getKey();
 	}
 
 }
