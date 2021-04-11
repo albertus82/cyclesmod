@@ -37,12 +37,13 @@ import it.albertus.cyclesmod.gui.listener.PropertyKeyListener;
 import it.albertus.cyclesmod.gui.listener.PropertyVerifyListener;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.simple.PowerGraphCanvas;
+import it.albertus.jface.Multilanguage;
 import it.albertus.jface.i18n.LocalizedWidgets;
 import it.albertus.util.ISupplier;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class Tabs {
+public class Tabs implements Multilanguage {
 
 	private final CyclesModGui gui;
 
@@ -199,7 +200,8 @@ public class Tabs {
 		}
 	}
 
-	public void updateTexts() {
+	@Override
+	public void updateLanguage() {
 		localizedWidgets.resetAllTexts();
 		for (final PowerGraphCanvas canvas : powerCanvases.values()) {
 			canvas.updateTexts();

@@ -115,7 +115,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		Messages.setLanguage(language.getLocale().getLanguage());
 		shell.setRedraw(false);
 		menuBar.updateLanguage();
-		tabs.updateTexts();
+		tabs.updateLanguage();
 		shell.setRedraw(true);
 	}
 
