@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.Images;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphProvider;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.RedoListener;
@@ -26,8 +28,6 @@ import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UndoListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomMouseWheelListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
-import it.albertus.cyclesmod.model.Bike.BikeType;
-import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.jface.JFaceMessages;
 import it.albertus.jface.SwtUtils;
 

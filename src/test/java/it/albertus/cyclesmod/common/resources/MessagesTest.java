@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.resources;
+package it.albertus.cyclesmod.common.resources;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +25,7 @@ import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 
 import it.albertus.cyclesmod.CyclesMod;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.StringUtils;
 import lombok.NonNull;
 import lombok.extern.java.Log;

@@ -8,11 +8,11 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import it.albertus.cyclesmod.data.DefaultBikes;
-import it.albertus.cyclesmod.engine.CyclesModEngine;
-import it.albertus.cyclesmod.model.BikesCfg;
-import it.albertus.cyclesmod.model.BikesInf;
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.data.DefaultBikes;
+import it.albertus.cyclesmod.common.engine.CyclesModEngine;
+import it.albertus.cyclesmod.common.model.BikesCfg;
+import it.albertus.cyclesmod.common.model.BikesInf;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.IOUtils;
 import it.albertus.util.NewLine;
 import it.albertus.util.Version;

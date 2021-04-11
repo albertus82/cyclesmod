@@ -1,8 +1,8 @@
 package it.albertus.cyclesmod;
 
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.console.CyclesModConsole;
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.resources.Messages;
 
 public class CyclesMod {
 

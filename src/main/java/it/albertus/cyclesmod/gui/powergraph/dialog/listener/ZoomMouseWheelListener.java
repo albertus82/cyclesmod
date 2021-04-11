@@ -10,7 +10,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.resources.Messages;
 
 public class ZoomMouseWheelListener implements MouseWheelListener {
 

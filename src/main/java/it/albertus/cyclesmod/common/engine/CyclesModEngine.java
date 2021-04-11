@@ -1,12 +1,12 @@
-package it.albertus.cyclesmod.engine;
+package it.albertus.cyclesmod.common.engine;
 
-import it.albertus.cyclesmod.model.Bike;
-import it.albertus.cyclesmod.model.BikesInf;
-import it.albertus.cyclesmod.model.Gearbox;
-import it.albertus.cyclesmod.model.Power;
-import it.albertus.cyclesmod.model.Setting;
-import it.albertus.cyclesmod.model.Settings;
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.model.Bike;
+import it.albertus.cyclesmod.common.model.BikesInf;
+import it.albertus.cyclesmod.common.model.Gearbox;
+import it.albertus.cyclesmod.common.model.Power;
+import it.albertus.cyclesmod.common.model.Setting;
+import it.albertus.cyclesmod.common.model.Settings;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.StringUtils;
 
 public abstract class CyclesModEngine implements NumeralSystemProvider {

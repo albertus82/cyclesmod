@@ -20,11 +20,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UpdateTitleListener;
-import it.albertus.cyclesmod.model.Bike.BikeType;
-import it.albertus.cyclesmod.resources.Messages;
 import it.albertus.util.logging.LoggerFactory;
 
 public class ComplexPowerGraph extends PowerGraph {

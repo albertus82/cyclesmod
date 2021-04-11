@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.model;
+package it.albertus.cyclesmod.common.model;
 
 import static it.albertus.util.ByteUtils.toInt;
 import static it.albertus.util.ByteUtils.toIntArray;

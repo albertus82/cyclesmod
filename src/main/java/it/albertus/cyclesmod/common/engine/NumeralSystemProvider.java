@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.engine;
+package it.albertus.cyclesmod.common.engine;
 
 public interface NumeralSystemProvider {
 

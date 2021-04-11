@@ -8,8 +8,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.resources.Messages;
 
 public class CloseListener extends AskForSavingListener implements ShellListener, SelectionListener, Listener {
 

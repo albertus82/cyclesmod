@@ -17,10 +17,10 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
-import it.albertus.cyclesmod.model.Bike;
-import it.albertus.cyclesmod.model.Bike.BikeType;
-import it.albertus.cyclesmod.model.Power;
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.model.Bike;
+import it.albertus.cyclesmod.common.model.Power;
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
+import it.albertus.cyclesmod.common.resources.Messages;
 
 public class PowerGraph implements IPowerGraph {
 

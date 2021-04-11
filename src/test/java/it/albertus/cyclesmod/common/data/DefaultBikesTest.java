@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.data;
+package it.albertus.cyclesmod.common.data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,7 +15,8 @@ import java.util.zip.CRC32;
 import org.junit.Assert;
 import org.junit.Test;
 
-import it.albertus.cyclesmod.model.BikesInf;
+import it.albertus.cyclesmod.common.data.DefaultBikes;
+import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.util.IOUtils;
 import it.albertus.util.logging.LoggerFactory;
 

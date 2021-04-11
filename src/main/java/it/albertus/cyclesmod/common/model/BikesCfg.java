@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.model;
+package it.albertus.cyclesmod.common.model;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import it.albertus.cyclesmod.model.Bike.BikeType;
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.NewLine;
 
 public class BikesCfg {

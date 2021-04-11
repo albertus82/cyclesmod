@@ -4,9 +4,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MenuItem;
 
+import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.common.resources.Messages.Language;
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.resources.Messages;
-import it.albertus.cyclesmod.resources.Messages.Language;
 import it.albertus.jface.JFaceMessages;
 
 public class LanguageSelectionListener extends SelectionAdapter {

@@ -3,8 +3,8 @@ package it.albertus.cyclesmod.gui.listener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 
+import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.model.BikesCfg;
 
 public abstract class AskForSavingListener {
 

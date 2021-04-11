@@ -2,8 +2,8 @@ package it.albertus.cyclesmod.gui.powergraph.dialog;
 
 import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
 
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
-import it.albertus.cyclesmod.resources.Messages;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

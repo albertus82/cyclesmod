@@ -10,12 +10,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Text;
 
+import it.albertus.cyclesmod.common.model.BikesCfg;
+import it.albertus.cyclesmod.common.model.Power;
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.FormProperty;
 import it.albertus.cyclesmod.gui.powergraph.dialog.PowerGraphDialog;
-import it.albertus.cyclesmod.model.Bike.BikeType;
-import it.albertus.cyclesmod.model.BikesCfg;
-import it.albertus.cyclesmod.model.Power;
 
 public class OpenPowerGraphDialogListener implements MouseListener, SelectionListener {
 

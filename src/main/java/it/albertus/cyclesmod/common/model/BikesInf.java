@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.model;
+package it.albertus.cyclesmod.common.model;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -18,9 +18,9 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import it.albertus.cyclesmod.data.DefaultBikes;
-import it.albertus.cyclesmod.model.Bike.BikeType;
-import it.albertus.cyclesmod.resources.Messages;
+import it.albertus.cyclesmod.common.data.DefaultBikes;
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
+import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.ByteUtils;
 import it.albertus.util.IOUtils;
 
