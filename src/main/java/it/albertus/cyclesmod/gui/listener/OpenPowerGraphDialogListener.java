@@ -10,22 +10,20 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Text;
 
+import it.albertus.cyclesmod.common.model.Bike.BikeType;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.Power;
-import it.albertus.cyclesmod.common.model.Bike.BikeType;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.FormProperty;
 import it.albertus.cyclesmod.gui.powergraph.dialog.PowerGraphDialog;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class OpenPowerGraphDialogListener implements MouseListener, SelectionListener {
 
-	private final CyclesModGui gui;
-	private final BikeType bikeType;
-
-	public OpenPowerGraphDialogListener(final CyclesModGui gui, final BikeType bikeType) {
-		this.gui = gui;
-		this.bikeType = bikeType;
-	}
+	@NonNull private final CyclesModGui gui;
+	@NonNull private final BikeType bikeType;
 
 	@Override
 	public void mouseDoubleClick(final MouseEvent e) {

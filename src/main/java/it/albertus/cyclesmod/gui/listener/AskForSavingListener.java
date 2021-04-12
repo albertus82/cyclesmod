@@ -5,14 +5,13 @@ import org.eclipse.swt.widgets.MessageBox;
 
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.gui.CyclesModGui;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public abstract class AskForSavingListener {
 
-	protected final CyclesModGui gui;
-
-	protected AskForSavingListener(final CyclesModGui gui) {
-		this.gui = gui;
-	}
+	@NonNull protected final CyclesModGui gui;
 
 	protected boolean askForSaving(final String dialogTitle, final String dialogMessage) {
 		gui.updateModelValues(true);

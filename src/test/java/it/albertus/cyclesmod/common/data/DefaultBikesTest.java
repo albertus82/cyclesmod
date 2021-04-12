@@ -9,20 +9,17 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.CRC32;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import it.albertus.cyclesmod.common.data.DefaultBikes;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.util.IOUtils;
-import it.albertus.util.logging.LoggerFactory;
+import lombok.extern.java.Log;
 
+@Log
 public class DefaultBikesTest {
-
-	private static final Logger logger = LoggerFactory.getLogger(DefaultBikesTest.class);
 
 	@Test
 	public void test() throws IOException {
@@ -62,14 +59,14 @@ public class DefaultBikesTest {
 
 		final byte[] array = (byte[]) declaredField.get(null);
 		final int newLength = BikesInf.FILE_SIZE - 1 - new Random().nextInt(BikesInf.FILE_SIZE / 2);
-		logger.log(Level.INFO, "{0,number,#}", newLength);
+		log.log(Level.INFO, "{0,number,#}", newLength);
 		declaredField.set(null, Arrays.copyOf(array, newLength));
 		try {
 			new DefaultBikes();
 			Assert.assertFalse(true);
 		}
 		catch (final StreamCorruptedException e) {
-			logger.log(Level.INFO, e.toString(), e);
+			log.log(Level.INFO, e.toString(), e);
 			Assert.assertTrue(true);
 		}
 		finally {

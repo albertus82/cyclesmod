@@ -2,7 +2,6 @@ package it.albertus.cyclesmod.gui.listener;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -13,17 +12,15 @@ import it.albertus.cyclesmod.common.model.Bike.BikeType;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.util.ExceptionUtils;
-import it.albertus.util.logging.LoggerFactory;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 
+@Log
+@RequiredArgsConstructor
 public class ResetSingleSelectionListener extends SelectionAdapter {
 
-	private static final Logger logger = LoggerFactory.getLogger(ResetSingleSelectionListener.class);
-
-	private final CyclesModGui gui;
-
-	public ResetSingleSelectionListener(CyclesModGui gui) {
-		this.gui = gui;
-	}
+	@NonNull private final CyclesModGui gui;
 
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
@@ -37,7 +34,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 				reset(type);
 			}
 			catch (final Exception e) {
-				logger.log(Level.WARNING, e.toString(), e);
+				log.log(Level.WARNING, e.toString(), e);
 				messageBox = new MessageBox(gui.getShell(), SWT.ICON_ERROR);
 				messageBox.setText(Messages.get("msg.warning"));
 				messageBox.setMessage(Messages.get("err.reset", ExceptionUtils.getUIMessage(e)));

@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.window.IShellProvider;
@@ -31,11 +31,10 @@ import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.util.ExceptionUtils;
 import it.albertus.util.IOUtils;
 import it.albertus.util.Version;
-import it.albertus.util.logging.LoggerFactory;
+import lombok.extern.java.Log;
 
+@Log
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
-
-	private static final Logger logger = LoggerFactory.getLogger(CyclesModGui.class);
 
 	private static final String MSG_KEY_WARNING = "msg.warning";
 	private static final String MSG_KEY_WIN_TITLE = "win.title";
@@ -103,7 +102,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (final Exception e) {
 			final String message = e.toString();
-			logger.log(Level.SEVERE, message, e);
+			log.log(Level.SEVERE, message, e);
 			EnhancedErrorDialog.openError(shell != null ? shell : null, Messages.get(MSG_KEY_WARNING), message, IStatus.ERROR, e, Images.getAppIconArray());
 		}
 		finally {
@@ -127,7 +126,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	public void open(final String fileName) {
 		try {
-			if (fileName.toLowerCase().endsWith(".inf")) {
+			if (fileName.toLowerCase(Locale.ROOT).endsWith(".inf")) {
 				final File bikesInfFile = new File(fileName);
 				setBikesInf(new BikesInf(bikesInfFile));
 				tabs.updateFormValues();
@@ -135,7 +134,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				bikesInfFileName = bikesInfFile.getCanonicalPath();
 				shell.setText(Messages.get(MSG_KEY_WIN_TITLE) + " - " + bikesInfFileName);
 			}
-			else if (fileName.toLowerCase().endsWith(".cfg")) {
+			else if (fileName.toLowerCase(Locale.ROOT).endsWith(".cfg")) {
 				bikesInfFileName = null;
 				InputStream is = null;
 				try {
@@ -161,7 +160,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 		}
 		catch (final Exception e) {
-			logger.log(Level.WARNING, e.toString(), e);
+			log.log(Level.WARNING, e.toString(), e);
 			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
 		}
 	}
@@ -179,7 +178,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				updateModelValues(false);
 			}
 			catch (final InvalidPropertyException e) {
-				logger.log(Level.WARNING, e.toString(), e);
+				log.log(Level.WARNING, e.toString(), e);
 				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
@@ -187,7 +186,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				getBikesInf().write(bikesInfFileName, false);
 			}
 			catch (final Exception e) {
-				logger.log(Level.WARNING, e.toString(), e);
+				log.log(Level.WARNING, e.toString(), e);
 				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
@@ -201,7 +200,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			updateModelValues(false);
 		}
 		catch (final InvalidPropertyException e) {
-			logger.log(Level.WARNING, e.toString(), e);
+			log.log(Level.WARNING, e.toString(), e);
 			EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
@@ -216,7 +215,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				getBikesInf().write(fileName, false);
 			}
 			catch (final Exception e) {
-				logger.log(Level.WARNING, e.toString(), e);
+				log.log(Level.WARNING, e.toString(), e);
 				EnhancedErrorDialog.openError(shell, Messages.get(MSG_KEY_WARNING), Messages.get("err.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}

@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import it.albertus.cyclesmod.common.data.DefaultBikes;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
@@ -16,11 +15,10 @@ import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.IOUtils;
 import it.albertus.util.NewLine;
 import it.albertus.util.Version;
-import it.albertus.util.logging.LoggerFactory;
+import lombok.extern.java.Log;
 
+@Log
 public class CyclesModConsole extends CyclesModEngine {
-
-	private static final Logger logger = LoggerFactory.getLogger(CyclesModConsole.class);
 
 	private static final String DEFAULT_DESTINATION_PATH = "";
 
@@ -48,7 +46,7 @@ public class CyclesModConsole extends CyclesModEngine {
 			new CyclesModConsole(path).execute();
 		}
 		catch (final Exception e) {
-			logger.log(Level.SEVERE, e.toString(), e);
+			log.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 

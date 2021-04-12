@@ -7,18 +7,17 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 import it.albertus.cyclesmod.gui.AboutDialog;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class AboutListener extends SelectionAdapter implements Listener {
 
-	private final IShellProvider gui;
-
-	public AboutListener(final IShellProvider gui) {
-		this.gui = gui;
-	}
+	@NonNull private final IShellProvider shellProvider;
 
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
-		new AboutDialog(gui.getShell()).open();
+		new AboutDialog(shellProvider.getShell()).open();
 	}
 
 	@Override

@@ -29,7 +29,7 @@ public final class Messages {
 		}
 	}
 
-	private static final String BASE_NAME = Messages.class.getName().toLowerCase();
+	private static final String BASE_NAME = Messages.class.getName().toLowerCase(Locale.ROOT);
 
 	private static ResourceBundle resources = ResourceBundle.getBundle(BASE_NAME, ResourceBundle.Control.getNoFallbackControl(ResourceBundle.Control.FORMAT_PROPERTIES));
 

@@ -3,6 +3,7 @@ package it.albertus.cyclesmod.common.model;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
@@ -46,7 +47,7 @@ public class Settings implements ByteList {
 	public static int parse(final String key, @NonNull final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(), Integer.toString(MAX_VALUE, radix).toUpperCase(), key, Long.toString(newValue, radix).toUpperCase()));
+			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
 		}
 		return (int) newValue;
 	}

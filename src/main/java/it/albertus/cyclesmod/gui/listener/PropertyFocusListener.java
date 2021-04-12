@@ -6,20 +6,21 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.TextFormatter;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
+@RequiredArgsConstructor
 public class PropertyFocusListener implements FocusListener {
 
-	protected final CyclesModGui gui;
+	@NonNull protected final CyclesModGui gui;
 
-	private boolean enabled = true;
-
-	public PropertyFocusListener(final CyclesModGui gui) {
-		this.gui = gui;
-	}
+	@Getter @Setter private boolean enabled = true;
 
 	@Override
-	public void focusLost(final FocusEvent fe) {
-		if (enabled) {
+	public void focusLost(@NonNull final FocusEvent fe) {
+		if (enabled && fe.widget instanceof Text) {
 			final Text text = (Text) fe.widget;
 			final TextFormatter textFormatter = gui.getTabs().getTextFormatter();
 			textFormatter.clean(text);
@@ -28,19 +29,11 @@ public class PropertyFocusListener implements FocusListener {
 	}
 
 	@Override
-	public void focusGained(final FocusEvent fe) {
-		if (enabled) {
+	public void focusGained(@NonNull final FocusEvent fe) {
+		if (enabled && fe.widget instanceof Text) {
 			final Text text = (Text) fe.widget;
 			text.selectAll();
 		}
-	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
 	}
 
 }
