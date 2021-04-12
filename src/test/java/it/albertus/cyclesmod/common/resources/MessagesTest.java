@@ -39,42 +39,32 @@ public class MessagesTest {
 		checkMessageFiles(getResourceNames(Messages.class), null);
 	}
 
-	@Test
-	public void checkUnreferencedMessages() throws IOException {
-		checkUnreferencedMessages(getResourceNames(Messages.class).iterator().next());
+	private void checkMessageFiles(@NonNull final Iterable<String> resourceNames, final String prefix) throws IOException {
+		final Collection<Properties> pp = new ArrayList<>();
+		for (final String resourceName : resourceNames) {
+			final Properties p = new Properties();
+			pp.add(p);
+			try (final InputStream is = getClass().getResourceAsStream('/' + resourceName)) {
+				Assert.assertNotNull("Missing resource file: " + resourceName, is);
+				p.load(is);
+			}
+			log.log(Level.INFO, "{0} messages found in: {1}", new Serializable[] { p.size(), resourceName });
+			Assert.assertFalse("Empty resource file: " + resourceName, p.isEmpty());
+		}
+		pp.stream().reduce((p1, p2) -> {
+			if (prefix != null) {
+				p1.keySet().forEach(e -> Assert.assertTrue("Invalid property key '" + e + "': expected prefix '" + prefix + "'!", e.toString().startsWith(prefix)));
+				p2.keySet().forEach(e -> Assert.assertTrue("Invalid property key '" + e + "': expected prefix '" + prefix + "'!", e.toString().startsWith(prefix)));
+			}
+			Assert.assertTrue("Uneven resource files: " + resourceNames, p1.keySet().containsAll(p2.keySet()));
+			Assert.assertTrue("Uneven resource files: " + resourceNames, p2.keySet().containsAll(p1.keySet()));
+			return p1;
+		});
 	}
 
 	@Test
-	public void checkMissingMessages() throws IOException {
-		final Set<String> keys = new TreeSet<>();
-		try (final Stream<Path> paths = newSourceStream()) {
-			paths.forEach(path -> {
-				log.log(Level.FINE, "{0}", path);
-				try {
-					// @formatter:off
-					keys.addAll(Files.readAllLines(path).stream()
-							.map(line -> line.trim().replace(" ", ""))
-							.filter(e -> e.toLowerCase(Locale.ROOT).contains("messages.get(\""))
-							.flatMap(e -> Arrays.stream(e.split("(?i)(?>=messages\\.get\\(\")|(?=messages\\.get\\(\")")))
-							.filter(e -> e.toLowerCase(Locale.ROOT).startsWith("messages"))
-							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, "\""), "\""))
-							.filter(key -> !key.endsWith("."))
-							.collect(Collectors.toSet()));
-					// @formatter:on
-				}
-				catch (final IOException e) {
-					throw new UncheckedIOException(e);
-				}
-			});
-		}
-		log.log(Level.INFO, "Found {0} message keys referenced in sources", keys.size());
-		Assert.assertFalse("No message keys found in sources", keys.isEmpty());
-		final Collection<String> allKeys = Messages.getKeys();
-		log.log(Level.INFO, "{0} message keys available in resource bundle: {1}", new Serializable[] { allKeys.size(), Messages.class.getSimpleName() });
-		Assert.assertFalse("No message keys found in resource bundle: " + Messages.class.getSimpleName(), allKeys.isEmpty());
-		for (final String key : new TreeSet<>(keys)) {
-			Assert.assertTrue("Missing message key '" + key + "'", allKeys.contains(key));
-		}
+	public void checkUnreferencedMessages() throws IOException {
+		checkUnreferencedMessages(getResourceNames(Messages.class).iterator().next());
 	}
 
 	private void checkUnreferencedMessages(@NonNull final String resourceName) throws IOException {
@@ -111,6 +101,39 @@ public class MessagesTest {
 		}
 	}
 
+	@Test
+	public void checkMissingMessages() throws IOException {
+		final Set<String> keys = new TreeSet<>();
+		try (final Stream<Path> paths = newSourceStream()) {
+			paths.forEach(path -> {
+				log.log(Level.FINE, "{0}", path);
+				try {
+					// @formatter:off
+					keys.addAll(Files.readAllLines(path).stream()
+							.map(line -> line.trim().replace(" ", ""))
+							.filter(e -> e.toLowerCase(Locale.ROOT).contains("messages.get(\""))
+							.flatMap(e -> Arrays.stream(e.split("(?i)(?>=messages\\.get\\(\")|(?=messages\\.get\\(\")")))
+							.filter(e -> e.toLowerCase(Locale.ROOT).startsWith("messages"))
+							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, "\""), "\""))
+							.filter(key -> !key.endsWith("."))
+							.collect(Collectors.toSet()));
+					// @formatter:on
+				}
+				catch (final IOException e) {
+					throw new UncheckedIOException(e);
+				}
+			});
+		}
+		log.log(Level.INFO, "Found {0} message keys referenced in sources", keys.size());
+		Assert.assertFalse("No message keys found in sources", keys.isEmpty());
+		final Collection<String> allKeys = Messages.getKeys();
+		log.log(Level.INFO, "{0} message keys available in resource bundle: {1}", new Serializable[] { allKeys.size(), Messages.class.getSimpleName() });
+		Assert.assertFalse("No message keys found in resource bundle: " + Messages.class.getSimpleName(), allKeys.isEmpty());
+		for (final String key : new TreeSet<>(keys)) {
+			Assert.assertTrue("Missing message key '" + key + "'", allKeys.contains(key));
+		}
+	}
+
 	private Stream<Path> newSourceStream() throws IOException {
 		final Properties testProperties = new Properties();
 		try (final InputStream is = getClass().getResourceAsStream("/test.properties")) {
@@ -119,29 +142,6 @@ public class MessagesTest {
 		final Path sourcesPath = Paths.get(testProperties.getProperty("project.build.sourceDirectory"), CyclesMod.class.getPackage().getName().replace('.', File.separatorChar));
 		log.log(Level.INFO, "Sources path: {0}", sourcesPath);
 		return Files.walk(sourcesPath).filter(Files::isRegularFile).filter(p -> p.toString().toLowerCase(Locale.ROOT).endsWith(".java"));
-	}
-
-	private void checkMessageFiles(@NonNull final Iterable<String> resourceNames, final String prefix) throws IOException {
-		final Collection<Properties> pp = new ArrayList<>();
-		for (final String resourceName : resourceNames) {
-			final Properties p = new Properties();
-			pp.add(p);
-			try (final InputStream is = getClass().getResourceAsStream('/' + resourceName)) {
-				Assert.assertNotNull("Missing resource file: " + resourceName, is);
-				p.load(is);
-			}
-			log.log(Level.INFO, "{0} messages found in: {1}", new Serializable[] { p.size(), resourceName });
-			Assert.assertFalse("Empty resource file: " + resourceName, p.isEmpty());
-		}
-		pp.stream().reduce((p1, p2) -> {
-			if (prefix != null) {
-				p1.keySet().forEach(e -> Assert.assertTrue("Invalid property key '" + e + "': expected prefix '" + prefix + "'!", e.toString().startsWith(prefix)));
-				p2.keySet().forEach(e -> Assert.assertTrue("Invalid property key '" + e + "': expected prefix '" + prefix + "'!", e.toString().startsWith(prefix)));
-			}
-			Assert.assertTrue("Uneven resource files: " + resourceNames, p1.keySet().containsAll(p2.keySet()));
-			Assert.assertTrue("Uneven resource files: " + resourceNames, p2.keySet().containsAll(p1.keySet()));
-			return p1;
-		});
 	}
 
 	private static Set<String> getResourceNames(final Class<?> messagesClass) {
