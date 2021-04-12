@@ -8,7 +8,11 @@ import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.StringUtils;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public abstract class CyclesModEngine implements NumeralSystemProvider {
 
 	private static final String MSG_KEY_ERR_UNSUPPORTED_PROPERTY = "err.unsupported.property";
@@ -16,31 +20,14 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
 	private BikesInf bikesInf;
 
-	@Override
-	public NumeralSystem getNumeralSystem() {
-		return numeralSystem;
-	}
-
-	public void setNumeralSystem(final NumeralSystem numeralSystem) {
-		this.numeralSystem = numeralSystem;
-	}
-
-	public BikesInf getBikesInf() {
-		return bikesInf;
-	}
-
-	public void setBikesInf(final BikesInf bikesInf) {
-		this.bikesInf = bikesInf;
-	}
-
 	public static boolean isNumeric(final String value, final int radix) {
 		try {
 			Long.parseLong(value, radix);
+			return true;
 		}
-		catch (final NumberFormatException nfe) {
+		catch (final NumberFormatException e) {
 			return false;
 		}
-		return true;
 	}
 
 	public boolean isNumeric(final String value) {
@@ -73,9 +60,9 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 				throw new InvalidPropertyException(Messages.get(MSG_KEY_ERR_UNSUPPORTED_PROPERTY, key, value));
 			}
 		}
-		catch (final InvalidPropertyException ipe) {
+		catch (final InvalidPropertyException e) {
 			if (!lenient) {
-				throw ipe;
+				throw e;
 			}
 		}
 		return applied;
