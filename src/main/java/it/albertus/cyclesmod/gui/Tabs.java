@@ -3,6 +3,7 @@ package it.albertus.cyclesmod.gui;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -276,13 +277,13 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Update field value...
-			final String text = Integer.toString(properties.get(entry.getKey()), gui.getNumeralSystem().getRadix()).toUpperCase();
+			final String text = Integer.toString(properties.get(entry.getKey()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT);
 			if (!field.getText().equals(text)) {
 				field.setText(text);
 			}
 
 			// Update tooltip text...
-			final String toolTipText = Messages.get("msg.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase());
+			final String toolTipText = Messages.get("msg.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}

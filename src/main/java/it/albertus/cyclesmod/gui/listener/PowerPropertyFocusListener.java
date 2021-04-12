@@ -1,7 +1,6 @@
 package it.albertus.cyclesmod.gui.listener;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Text;
@@ -11,18 +10,18 @@ import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.FormProperty;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
-import it.albertus.util.logging.LoggerFactory;
+import lombok.NonNull;
+import lombok.extern.java.Log;
 
+@Log
 public class PowerPropertyFocusListener extends PropertyFocusListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(PowerPropertyFocusListener.class);
-
-	public PowerPropertyFocusListener(final CyclesModGui gui) {
+	public PowerPropertyFocusListener(@NonNull final CyclesModGui gui) {
 		super(gui);
 	}
 
 	@Override
-	public void focusLost(final FocusEvent fe) {
+	public void focusLost(@NonNull final FocusEvent fe) {
 		if (isEnabled()) {
 			super.focusLost(fe);
 
@@ -42,7 +41,7 @@ public class PowerPropertyFocusListener extends PropertyFocusListener {
 					}
 				}
 				catch (final InvalidPropertyException ipe) {
-					logger.log(Level.INFO, ipe.getMessage(), ipe);
+					log.log(Level.INFO, ipe.getMessage(), ipe);
 				}
 			}
 		}

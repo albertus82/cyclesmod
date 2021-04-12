@@ -3,7 +3,6 @@ package it.albertus.cyclesmod.gui.powergraph.dialog;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.eclipse.draw2d.Label;
 import org.eclipse.nebula.visualization.internal.xygraph.toolbar.GrayableButton;
@@ -25,11 +24,11 @@ import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UpdateTitleListener;
-import it.albertus.util.logging.LoggerFactory;
+import lombok.Getter;
+import lombok.extern.java.Log;
 
+@Log
 public class ComplexPowerGraph extends PowerGraph {
-
-	private static final Logger logger = LoggerFactory.getLogger(ComplexPowerGraph.class);
 
 	private static final String LBL_GRAPH_TOOLBAR_UNDO = "lbl.graph.toolbar.undo";
 	private static final String LBL_GRAPH_TOOLBAR_REDO = "lbl.graph.toolbar.redo";
@@ -44,7 +43,7 @@ public class ComplexPowerGraph extends PowerGraph {
 	private final Shell shell;
 	private final BikeType bikeType;
 
-	private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
+	@Getter private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
 	public ComplexPowerGraph(final Map<Integer, Short> map, final BikeType bikeType, final Shell shell) {
 		super(map, bikeType);
@@ -111,7 +110,7 @@ public class ComplexPowerGraph extends PowerGraph {
 			}
 		}
 		catch (final Exception e) {
-			logger.log(Level.WARNING, e.toString(), e);
+			log.log(Level.WARNING, e.toString(), e);
 		}
 	}
 
@@ -143,10 +142,6 @@ public class ComplexPowerGraph extends PowerGraph {
 				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
 			}
 		});
-	}
-
-	public ToolbarArmedXYGraph getToolbarArmedXYGraph() {
-		return toolbarArmedXYGraph;
 	}
 
 	@Override
