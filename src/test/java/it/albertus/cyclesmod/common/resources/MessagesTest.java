@@ -36,7 +36,7 @@ public class MessagesTest {
 
 	@Test
 	public void checkMessageFiles() throws IOException {
-		checkMessageFiles(getResourceNames(Messages.class));
+		checkMessageFiles(getResourceNames(Messages.class), null);
 	}
 
 	@Test
@@ -121,7 +121,7 @@ public class MessagesTest {
 		return Files.walk(sourcesPath).filter(Files::isRegularFile).filter(p -> p.toString().toLowerCase(Locale.ROOT).endsWith(".java"));
 	}
 
-	private void checkMessageFiles(@NonNull final Iterable<String> resourceNames) throws IOException {
+	private void checkMessageFiles(@NonNull final Iterable<String> resourceNames, final String prefix) throws IOException {
 		final Collection<Properties> pp = new ArrayList<>();
 		for (final String resourceName : resourceNames) {
 			final Properties p = new Properties();
@@ -134,8 +134,12 @@ public class MessagesTest {
 			Assert.assertFalse("Empty resource file: " + resourceName, p.isEmpty());
 		}
 		pp.stream().reduce((p1, p2) -> {
-			Assert.assertTrue("Uneven resource files", p1.keySet().containsAll(p2.keySet()));
-			Assert.assertTrue("Uneven resource files", p2.keySet().containsAll(p1.keySet()));
+			if (prefix != null) {
+				p1.keySet().forEach(e -> Assert.assertTrue("Invalid property key '" + e + "': expected prefix '" + prefix + "'!", e.toString().startsWith(prefix)));
+				p2.keySet().forEach(e -> Assert.assertTrue("Invalid property key '" + e + "': expected prefix '" + prefix + "'!", e.toString().startsWith(prefix)));
+			}
+			Assert.assertTrue("Uneven resource files: " + resourceNames, p1.keySet().containsAll(p2.keySet()));
+			Assert.assertTrue("Uneven resource files: " + resourceNames, p2.keySet().containsAll(p1.keySet()));
 			return p1;
 		});
 	}
