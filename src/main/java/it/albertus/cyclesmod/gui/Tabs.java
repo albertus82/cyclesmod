@@ -203,8 +203,8 @@ public class Tabs implements Multilanguage {
 	@Override
 	public void updateLanguage() {
 		localizedWidgets.resetAllTexts();
-		for (final PowerGraphCanvas canvas : powerCanvases.values()) {
-			canvas.updateTexts();
+		for (final Multilanguage canvas : powerCanvases.values()) {
+			canvas.updateLanguage();
 		}
 
 		// Update form fields...

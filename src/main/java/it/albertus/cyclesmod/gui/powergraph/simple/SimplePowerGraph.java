@@ -9,8 +9,9 @@ import org.eclipse.swt.widgets.Display;
 import it.albertus.cyclesmod.common.model.Bike;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
+import it.albertus.jface.Multilanguage;
 
-public class SimplePowerGraph extends PowerGraph {
+public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 
 	private static final byte DEFAULT_POINT_SIZE = 4;
 	private static final byte DEFAULT_LINE_WIDTH = 2;
@@ -50,7 +51,8 @@ public class SimplePowerGraph extends PowerGraph {
 		}
 	}
 
-	public void updateTexts() {
+	@Override
+	public void updateLanguage() {
 		getAbscissae().setTitle(Messages.get("lbl.graph.axis.x", RPM_DIVISOR));
 		if (isTorqueVisible()) {
 			getXyGraph().setTitle(Messages.get("lbl.graph.title.power.torque"));

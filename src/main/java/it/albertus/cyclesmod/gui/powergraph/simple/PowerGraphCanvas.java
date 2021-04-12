@@ -1,5 +1,8 @@
 package it.albertus.cyclesmod.gui.powergraph.simple;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
@@ -7,32 +10,33 @@ import org.eclipse.swt.widgets.Composite;
 
 import it.albertus.cyclesmod.common.model.Bike;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphProvider;
+import it.albertus.jface.Multilanguage;
+import lombok.Getter;
 
-public class PowerGraphCanvas extends Canvas implements PowerGraphProvider {
+public class PowerGraphCanvas extends Canvas implements PowerGraphProvider, Multilanguage { // NOSONAR This class has 6 parents which is greater than 5 authorized. Inheritance tree of classes should not be too deep (java:S110)
 
-	private final SimplePowerGraphContextMenu contextMenu;
-	private final SimplePowerGraph powerGraph;
+	@Getter private final SimplePowerGraph powerGraph;
+
+	private final Collection<Multilanguage> multilanguages = new ArrayList<>();
 
 	public PowerGraphCanvas(final Composite parent, final Bike bike) {
 		super(parent, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(this);
 		powerGraph = new SimplePowerGraph(bike);
+		multilanguages.add(powerGraph);
 		lws.setContents(powerGraph.getXyGraph());
 
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 
-		contextMenu = new SimplePowerGraphContextMenu(this, powerGraph);
-	}
-
-	public void updateTexts() {
-		powerGraph.updateTexts();
-		contextMenu.updateTexts();
+		multilanguages.add(new SimplePowerGraphContextMenu(this, powerGraph));
 	}
 
 	@Override
-	public SimplePowerGraph getPowerGraph() {
-		return powerGraph;
+	public void updateLanguage() {
+		for (final Multilanguage multilanguage : multilanguages) {
+			multilanguage.updateLanguage();
+		}
 	}
 
 }
