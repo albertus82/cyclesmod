@@ -18,18 +18,26 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.jface.Multilanguage;
+import it.albertus.jface.i18n.LocalizedWidgets;
+import it.albertus.util.ISupplier;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Value;
 
-public abstract class PowerGraphContextMenu {
-
-	protected static final String TEXT_MESSAGE_KEY = "TEXT_MESSAGE_KEY";
+public abstract class PowerGraphContextMenu implements Multilanguage {
 
 	private static final byte[] POINT_SIZE_OPTIONS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 	private static final short[] AREA_ALPHA_OPTIONS = { 26, 51, 77, 102, 128, 153, 179, 204, 230, 255 };
 
+	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
+
 	private final IPowerGraph powerGraph;
 	private final Control parent;
-	private final Menu menu;
+
+	@Getter(AccessLevel.PROTECTED) private final Menu menu;
 
 	protected PowerGraphContextMenu(final Control parent, final IPowerGraph powerGraph) {
 		this.parent = parent;
@@ -39,16 +47,9 @@ public abstract class PowerGraphContextMenu {
 		parent.setMenu(menu);
 	}
 
-	public Menu getMenu() {
-		return menu;
-	}
-
 	protected SubMenu<TraceType> addTraceTypeSubMenu() {
 		final Map<TraceType, MenuItem> traceTypeSubMenuItems = new EnumMap<>(TraceType.class);
-		final MenuItem traceTypeMenuItem = new MenuItem(menu, SWT.CASCADE);
-		final String traceTypeMenuItemTextMessageKey = "lbl.menu.item.graph.traceType";
-		traceTypeMenuItem.setData(TEXT_MESSAGE_KEY, traceTypeMenuItemTextMessageKey);
-		traceTypeMenuItem.setText(Messages.get(traceTypeMenuItemTextMessageKey));
+		final MenuItem traceTypeMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "lbl.menu.item.graph.traceType");
 
 		final Menu traceTypeSubMenu = new Menu(traceTypeMenuItem);
 		traceTypeMenuItem.setMenu(traceTypeSubMenu);
@@ -68,10 +69,7 @@ public abstract class PowerGraphContextMenu {
 			traceTypeSubMenuItems.put(traceType, menuItem);
 		}
 
-		final MenuItem areaAlphaMenuItem = new MenuItem(traceTypeSubMenu, SWT.CASCADE);
-		final String areaAlphaMenuItemTextMessageKey = "lbl.menu.item.graph.areaAlpha";
-		areaAlphaMenuItem.setData(TEXT_MESSAGE_KEY, areaAlphaMenuItemTextMessageKey);
-		areaAlphaMenuItem.setText(Messages.get(areaAlphaMenuItemTextMessageKey));
+		final MenuItem areaAlphaMenuItem = newLocalizedMenuItem(traceTypeSubMenu, SWT.CASCADE, "lbl.menu.item.graph.areaAlpha");
 
 		final Menu areaAlphaSubMenu = new Menu(areaAlphaMenuItem);
 		areaAlphaMenuItem.setMenu(areaAlphaSubMenu);
@@ -108,10 +106,7 @@ public abstract class PowerGraphContextMenu {
 
 	protected SubMenu<Integer> addLineWidthSubMenu() {
 		final Map<Integer, MenuItem> lineWidthSubMenuItems = new HashMap<>();
-		final MenuItem lineWidthMenuItem = new MenuItem(menu, SWT.CASCADE);
-		final String lineWidthMenuItemTextMessageKey = "lbl.menu.item.graph.lineWidth";
-		lineWidthMenuItem.setData(TEXT_MESSAGE_KEY, lineWidthMenuItemTextMessageKey);
-		lineWidthMenuItem.setText(Messages.get(lineWidthMenuItemTextMessageKey));
+		final MenuItem lineWidthMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "lbl.menu.item.graph.lineWidth");
 
 		final Menu lineWidthSubMenu = new Menu(lineWidthMenuItem);
 		lineWidthMenuItem.setMenu(lineWidthSubMenu);
@@ -143,10 +138,7 @@ public abstract class PowerGraphContextMenu {
 
 	protected SubMenu<PointStyle> addPointStyleSubMenu() {
 		final Map<PointStyle, MenuItem> pointStyleSubMenuItems = new EnumMap<>(PointStyle.class);
-		final MenuItem pointStyleMenuItem = new MenuItem(menu, SWT.CASCADE);
-		final String pointStyleMenuItemTextMessageKey = "lbl.menu.item.graph.pointStyle";
-		pointStyleMenuItem.setData(TEXT_MESSAGE_KEY, pointStyleMenuItemTextMessageKey);
-		pointStyleMenuItem.setText(Messages.get(pointStyleMenuItemTextMessageKey));
+		final MenuItem pointStyleMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "lbl.menu.item.graph.pointStyle");
 
 		final Menu traceTypeSubMenu = new Menu(pointStyleMenuItem);
 		pointStyleMenuItem.setMenu(traceTypeSubMenu);
@@ -179,10 +171,7 @@ public abstract class PowerGraphContextMenu {
 		final Trace trace = powerGraph.getPowerTrace();
 
 		final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<>();
-		final MenuItem pointSizeMenuItem = new MenuItem(menu, SWT.CASCADE);
-		final String pointSizeMenuItemTextMessageKey = "lbl.menu.item.graph.pointSize";
-		pointSizeMenuItem.setData(TEXT_MESSAGE_KEY, pointSizeMenuItemTextMessageKey);
-		pointSizeMenuItem.setText(Messages.get(pointSizeMenuItemTextMessageKey));
+		final MenuItem pointSizeMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "lbl.menu.item.graph.pointSize");
 
 		final Menu pointSizeSubMenu = new Menu(pointSizeMenuItem);
 		pointSizeMenuItem.setMenu(pointSizeSubMenu);
@@ -212,10 +201,7 @@ public abstract class PowerGraphContextMenu {
 	}
 
 	protected MenuItem addShowTorqueMenuItem() {
-		final MenuItem showTorqueMenuItem = new MenuItem(menu, SWT.CHECK);
-		final String showTorqueMenuItemTextMessageKey = "lbl.menu.item.graph.showTorque";
-		showTorqueMenuItem.setData(TEXT_MESSAGE_KEY, showTorqueMenuItemTextMessageKey);
-		showTorqueMenuItem.setText(Messages.get(showTorqueMenuItemTextMessageKey));
+		final MenuItem showTorqueMenuItem = newLocalizedMenuItem(menu, SWT.CHECK, "lbl.menu.item.graph.showTorque");
 		showTorqueMenuItem.setSelection(powerGraph.isTorqueVisible());
 		showTorqueMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -226,28 +212,24 @@ public abstract class PowerGraphContextMenu {
 		return showTorqueMenuItem;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@Value
 	public class SubMenu<K> {
-		private final MenuItem menuItem;
-		private final Map<K, MenuItem> menuItems;
-		private final List<SubMenu> children = new ArrayList<>();
+		MenuItem menuItem;
+		Map<K, MenuItem> menuItems;
+		List<SubMenu<?>> children = new ArrayList<>();
+	}
 
-		public SubMenu(final MenuItem menuItem, final Map<K, MenuItem> menuItems) {
-			this.menuItem = menuItem;
-			this.menuItems = menuItems;
-		}
+	@Override
+	public void updateLanguage() {
+		localizedWidgets.resetAllTexts();
+	}
 
-		public MenuItem getMenuItem() {
-			return menuItem;
-		}
+	protected MenuItem newLocalizedMenuItem(@NonNull final Menu parent, final int style, @NonNull final String messageKey) {
+		return newLocalizedMenuItem(parent, style, () -> Messages.get(messageKey));
+	}
 
-		public Map<K, MenuItem> getMenuItems() {
-			return menuItems;
-		}
-
-		public List<SubMenu> getChildren() {
-			return children;
-		}
+	protected MenuItem newLocalizedMenuItem(@NonNull final Menu parent, final int style, @NonNull final ISupplier<String> textSupplier) {
+		return localizedWidgets.putAndReturn(new MenuItem(parent, style), textSupplier).getKey();
 	}
 
 }
