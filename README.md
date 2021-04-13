@@ -6,104 +6,131 @@ CyclesMod
 [![Build status](https://ci.appveyor.com/api/projects/status/github/albertus82/cyclesmod?branch=master&svg=true)](https://ci.appveyor.com/project/albertus82/cyclesmod)
 [![Known Vulnerabilities](https://snyk.io/test/github/albertus82/cyclesmod/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/albertus82/cyclesmod?targetFile=pom.xml)
 
-**The Cycles - International Grand Prix Racing** &egrave; un videogioco di simulazione motociclistica. Risalente al 1989, fu distribuito per tutte le pi&ugrave; diffuse piattaforme dell'epoca, dal Commodore 64 al PC IBM (DOS), ed &egrave; oggi facilmente reperibile come *Abandonware*.
+**The Cycles - International Grand Prix Racing** is a motorcycle simulation video game. Dating back to 1989, it was distributed for all the most popular platforms of the time, from the Commodore 64 to the IBM PC (DOS), and is now easily available as *Abandonware*.
 
-**CyclesMod** &egrave; un *mod* per la versione DOS di questo gioco, che consente di **modificare le configurazioni delle moto**, di norma non accessibili all'utente.
+**CyclesMod** is a *mod* for the DOS version of this game, which allows you to **change the configurations of the bikes**, which are usually not accessible to the user.
 
 ![Screenshot](https://user-images.githubusercontent.com/8672431/28228643-9f0171e4-68df-11e7-8bdb-681569c05030.png)
 
-Il gioco permette di scegliere tre diverse moto: 125, 250 o 500 cc. I parametri di funzionamento delle moto sono contenuti nel file binario **`BIKES.INF`** presente nella directory del gioco. **CyclesMod** carica e interpreta questo file, e mette a disposizione del giocatore un'interfaccia grafica con quale pu&ograve; esaminare e modificare la configurazione delle tre moto. Al salvataggio del file, il programma genera un nuovo `BIKES.INF` utilizzabile da *The Cycles*, contenente la configurazione modificata.
+The game allows to choose three different bikes: 125, 250 or 500cc. The motorcycle operating parameters are stored in the **`BIKES.INF`** binary file in the game directory. **CyclesMod** loads and interprets this file, and provides a graphical interface for inspecting and modifying the configuration of the bikes. On save, the program generates a new `BIKES.INF` containing the modified configuration.
 
-Trattandosi di un gioco molto vecchio, naturalmente non pu&ograve; essere eseguito nativamente con i sistemi operativi correnti, ma con l'aiuto di macchine virtuali o, meglio ancora, di specifici emulatori come [**DOSBox**](http://www.dosbox.com), &egrave; possibile comunque eseguirlo con ottimi risultati.
+**The Cycles** cannot be executed natively on modern operating systems, but runs greatly in [**DOSBox**](https://www.dosbox.com).
 
+## Download
 
-## Installazione e avvio
+Download the [latest release](https://github.com/albertus82/cyclesmod/releases/latest) from the [releases page](https://github.com/albertus82/cyclesmod/releases).
 
-**Effettuare una copia di backup della directory di *The Cycles* prima di utilizzare questo programma!**
+## Installation
 
-1. [scaricare](https://github.com/albertus82/cyclesmod/releases) la release adatta alla propria piattaforma, possibilmente la pi&ugrave; recente;
-2. installare (o scompattare, a seconda dei casi) il programma in una cartella a piacimento.
+* **Windows**: if you downloaded a ZIP package, simply unpack the archive; otherwise run the installer (EXE) to install the application.
 
-Per avviare l'applicazione &egrave; richiesto [Java Runtime Environment](http://www.java.com) (JRE) versione 6 (1.6) o successiva.
+  If the OS complains with a ***Windows protected your PC*** popup, you may need to click ***Run anyway*** to proceed with the installation.
 
+  ![Windows protected your PC](https://user-images.githubusercontent.com/8672431/31048995-7145b034-a62a-11e7-860b-c477237145ce.png)
 
-## Utilizzo
+  In order to enable the *Run anyway* button, you may need to open the *Properties* of the installer, tab *General*, section *Security* (if available), and tick the ***Unblock*** option.
+* **Linux** & **macOS**: unpack the archive.
 
-La finestra principale dell'applicazione presenta tre schede, una per categoria di moto: 125, 250 e 500 cc. Ogni scheda &egrave; suddivisa in tre sezioni:
-* **Impostazioni** generali
-* **Cambio** di velocit&agrave;
-* **Potenza** motrice
+**This application requires [Java SE Runtime Environment (JRE)](https://www.java.com) v1.8 (or newer) to run.**
 
-&Egrave; inoltre presente un grafico della curva di potenza, generato in tempo reale in base ai valori di potenza motrice presenti nella relativa sezione.
+## Usage
 
-Ogni sezione presenta diverse propriet&agrave;, tutte rigorosamente numeriche e corredate da etichette descrittive sulla sinistra. Quando si modifica il valore di una propriet&agrave;, esso viene mostrato in grassetto per evidenziare che &egrave; diverso dal valore predefinito. Volendo conoscere il valore predefinito di una singola propriet&agrave;, &egrave; sufficiente portare il mouse sul relativo campo e attendere la comparsa del suggerimento.
+The main application window has three tabs, one for each motorcycle category: 125, 250 and 500 cc. Each tab is divided into three groups:
 
-All'apertura del programma, tutte le maschere vengono precaricate con i valori predefiniti per tutte le moto.
+* General **Settings**
+* **Greabox**;
+* Engine **Power**
 
-Tramite la barra dei men&ugrave; &egrave; possibile:
-* aprire un file `BIKES.INF` esistente;
-* salvare le impostazioni correnti in un file `BIKES.INF`;
-* ripristinare le impostazioni predefinite per una o per tutte le moto (qualsiasi personalizzazione non salvata viene persa);
-* modificare o disegnare la curva di potenza in un'apposita finestra di dialogo;
-* modificare il sistema numerico (decimale/esadecimale);
-* cambiare la lingua dell'interfaccia;
-* visualizzare informazioni sulla versione di *CyclesMod*.
+There is also a graph of the power/torque curve that is generated in real time from the engine power values ​​present in the relevant group.
 
-Dopo aver modificato le propriet&agrave; desiderate, &egrave; sufficiente utilizzare la funzione *Salva* o *Salva con nome...* (men&ugrave; *File*) e salvare il file `BIKES.INF` nella directory di *The Cycles*. Quasi sicuramente il file sar&agrave; gi&agrave; presente, pertanto verr&agrave; richiesto di sovrascriverlo, quindi **&egrave; bene accertarsi di avere una copia di riserva del file che si sovrascriver&agrave;**. A questo punto &egrave; possibile eseguire il gioco in un emulatore DOS come DOSBox. La configurazione viene ricaricata ogni volta che si inizia una nuova gara, pertanto non occorre riavviare completamente il gioco.
+Each group has several fields with descriptive labels. Customized values are shown in bold typeface to highlight the fact that the value is different from the default one. Anyhowm the default value of a field is always available as tooltip, just move the mouse over the field and wait for the suggestion to appear.
 
-#### Ripristino del `BIKES.INF` originale
+When *CyclesMod* is executed without arguments, all the fields are preloaded with the default values ​​for all motorcycles.
 
-Nel caso in cui si volessero ripristinare le configurazioni originali di tutte le moto, &egrave; sufficiente utilizzare la funzione *Reimposta* (men&ugrave; *Modifica*), che provveder&agrave; a ricaricare le impostazioni del `BIKES.INF` originale fornito insieme al gioco. Dopo di che, utilizzare la funzione *Salva* o *Salva con nome...* per ricreare la versione originale del file `BIKES.INF`.
+Through the menu bar it is possible to:
 
+* open an existing `BIKES.INF` file;
+* save the current settings in a `BIKES.INF` file;
+* restore the default settings for one or all bikes (any unsaved customization is lost);
+* modify or draw the power curve in a special dialog box;
+* change the numeral system (decimal/hexadecimal);
+* change the interface language;
+* view *CyclesMod* version, license and acknowledgements.
 
-## Configurazione delle moto
+After modifying the desired properties, simply use the *Save* or *Save as...* function (*File* menu) to save the `BIKES.INF` file in the game directory. The file will almost certainly already be there, so you will be prompted to overwrite it, so **make sure you have a backup copy of the file you will overwrite**. You can now run the game in a DOS emulator such as *DOSBox*. The configuration is reloaded every time you start a new race, so you don't need to completely restart the game.
 
-### Impostazioni generali
-Ogni moto dispone di otto impostazioni generali che determinano le seguenti caratteristiche:
-* **Numero marce**: il numero di rapporti del cambio di velocit&agrave;. Intervallo di valori validi: da `0` a `9`.
-* **Regime inizio zona rossa**: regime oltre il quale, dopo un tempo variabile determinato dall'impostazione *Tolleranza fuorigiri* e dal livello di difficolt&agrave; impostato, si verifica la rottura del motore. Ai livelli di difficolt&agrave; 1 e 2 (i pi&ugrave; bassi), questo valore determina anche il regime di cambiata. Intervallo di valori validi: `8500`-`32767` giri/min.
-* **Regime massimo**: regime massimo raggiungibile dal motore (limitatore). Intervallo di valori validi: `768`-`14335` giri/min. Notare che, una volta raggiunto il limite, la moto continua ad accelerare con una potenza motrice pari a quella impostata per il regime limite, pertanto, per limitare efficacemente il regime ad un certo valore, occorre azzerare i valori della [potenza](#potenza-motrice) nell'intorno del regime limite.
-* **Tolleranza fuorigiri**: periodo di grazia durante il quale il motore non si guasta nonostante giri ad un regime maggiore del *Regime inizio zona rossa*; il valore &egrave; espresso in un'unit&agrave; di misura del tempo *lineare* variabile a seconda del livello di difficolt&agrave;. Intervallo di valori validi: `0`-`32767`.
-Segue un elenco per la determinazione del valore in base ai secondi di tolleranza desiderati a seconda del livello di difficolt&agrave;:
-	* Livello 1/5 (Beg.): il motore non si guasta mai, a meno di non impostare `0`.
-	* Livello 2/5: 1 sec. = `50` (&egrave; comunque attivo il cambio automatico).
-	* Livello 3/5: 1 sec. = `80`.
-	* Livello 4/5: 1 sec. = `120`.
-	* Livello 5/5 (Pro): 1 sec. = `160`.
-* **Aderenza**: soglia di slittamento della moto, che determina la velocit&agrave; con cui &egrave; possibile affrontare le curve. Valori validi compresi tra `0` (la moto slitta immediatamente e non curva affatto) e `65535` (la moto non slitta mai).
-* **Velocit&agrave; di frenata**: determina il tempo di arresto della moto. Valori validi compresi tra `0` (la moto non frena, anzi si azzerano addirittura gli attriti e la resistenza aerodinamica) e `65535` (la moto si arresta istantaneamente alla minima frenata).
-* **Soglia testacoda**: facilit&agrave; con cui la moto va in testacoda mentre si percorre una curva slittando. Valori validi compresi tra `0` (la moto va in testacoda al primo accenno di slittamento) e `65535` (la moto non va mai in testacoda).
-* **Regime di scalata**: significativo solo nei livelli di difficolt&agrave; pi&ugrave; bassi che prevedono il cambio automatico, determina il regime al di sotto del quale il cambio automatico innesta la marcia inferiore, se disponibile. Valori validi compresi tra `0` (non scala mai) e `32767` giri/min. (scala in continuazione, di fatto rende impossibile la cambiata).
+#### Restoration of the original `BIKES.INF` file
 
->Sono inoltre presenti tre valori di significato sconosciuto, probabilmente irrilevanti, che &egrave; comunque possibile modificare a scopo sperimentale.
+If you want to restore the original configurations of all the bikes, simply use the *Reset* function (*Edit* menu), which will reset the settings like the original `BIKES.INF` file supplied with the game. After that, use the *Save* or *Save as...* function to re-create the original version of the `BIKES.INF` file.
 
-### Cambio di velocit&agrave;
-&Egrave; possibile configurare i rapporti del cambio di velocit&agrave; per ogni singola marcia. A valori pi&ugrave; elevati corrispondono rapporti pi&ugrave; corti. I valori ammessi sono compresi tra `0` e `65535` per le marce da 1 a 9, mentre per marcia *N* (folle) il valore &egrave; irrilevante.
+## Bike configuration
 
-### Potenza motrice
-La curva di potenza del motore viene costruita a partire dai valori presenti in questa sezione. Ogni valore rappresenta la potenza del motore in N&middot;m a un determinato regime indicato nell'etichetta posta sulla sinistra della casella contenente il valore. I valori ammessi sono compresi tra `0` e `255` N&middot;m. La curva risultante viene rappresentata graficamente nel relativo riquadro.
-Utilizzando la funzione di men&ugrave; *Modifica - Curva di potenza* (o facendo doppio clic sul grafico) si accede ad una finestra che consente di disegnare e modificare la curva in modalit&agrave; grafica.
+### General Settings
 
+Each bike has eight general settings that determine the following characteristics:
+
+* **Gears count**: the number of gears of the gearbox. Valid value range: `0`-`9`.
+
+* **RPM redline**: engine speed beyond which, after a variable time determined by the *Overspeed grace period* setting and the skill level chosen, the engine breaks down. At skill levels 1 and 2 (the lowest), this value also determines the upshift speed. Valid value range: `8500`-`32767` RPM.
+
+* **RPM limit**: maximum speed that the engine can reach (limiter). Valid value range: `768`-`14335` RPM. Note that, once the limit is reached, the motorcycle continues to accelerate with the engine power set for the limit RPM, therefore, to effectively limit the speed to a certain value, it is necessary to set to zero the power values ​​around this RPM limit.
+
+* **Overspeed grace period**: grace period during which the engine does not fail despite running at a higher speed than the *RPM redline*; the value is expressed in a unit of measurement of linear time which varies according to the level of difficulty. Valid value range: `0`-`32767`. The following list can be useful to determine the value based on the desired tolerance in seconds, depending on the skill level:
+
+   * Level 1/5 (Beg.): The enine never fails unless `0` is set.
+   * Level 2/5: 1 sec. = `50` (automatic transmission is still active).
+   * Level 3/5: 1 sec. = `80`.
+   * Level 4/5: 1 sec. = `120`.
+   * Level 5/5 (Pro): 1 sec. = `160`.
+
+* **Grip**: bike's slip threshold, which determines the speed with which it is possible to take curves. Valid values ​​between `0` (the bike skids immediately and does not turn at all) and `65535` (the bike never skids).
+
+* **Braking speed**: determines the stopping time of the motorcycle. Valid values ​​between `0` (the bike does not brake, on the contrary, friction and aerodynamic resistance are eliminated) and `65535` (the bike stops instantly on brake).
+
+* **Spin threshold**: ease with which the bike spins while skidding around a corner. Valid values ​​between `0` (the bike spins at the first hint of skidding) and `65535` (the bike never spins).
+
+* **RPM downshift**: significant only for the lower skill levels that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values ​​between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
+
+> There are also three other values ​​of unknown meaning, probably irrelevant, which can in any case be modified for experimental purposes.
+
+### Gearbox
+
+Gear ratios can be configured for each individual gear. Higher values ​​correspond to shorter ratios. The permitted values ​​are between `0` and `65535` for gears 1 to 9, while for *N* (neutral) gear the value is irrelevant.
+
+### Power
+
+The engine power curve is constructed from the values present ​​in this group. Each value represents the engine power in *hp* at a given engine speed indicated on the label associated with the field containing the value. Allowed values ​​are between `0` and `255` hp. The resulting curve is graphically represented in its frame. 
+
+It is also possibile to draw and modify the curve using the pointing device in the Power Graph window, that is reachable from the *Edit* menu or double clicking on the graph.
 
 ## Versione da riga di comando
 
-Se, per qualsiasi motivo, si preferisce operare senza interfaccia grafica, &egrave; disponibile una versione dell'applicazione che funziona da riga di comando, certamente molto meno comoda rispetto alla versione con interfaccia grafica, ma comunque pienamente funzionante.
-Gli script di avvio ([**`CyclesMod.bat`**](src/main/scripts/CyclesMod.bat), [**`cyclesmod.sh`**](src/main/scripts/cyclesmod.sh) e [**`cyclesmod.command`**](src/main/scripts/cyclesmod.command)) prevedono un'apposita opzione per avviare l'applicazione in questa modalit&agrave; "console":
-* Windows: **`CyclesMod.bat -c`**
-* Linux: **`cyclesmod.sh -c`**
-* OS X: **`cyclesmod.command -c`**
+If you prefer to operate without a graphical interface, a fully functional command line version of CyclesMod is available. It can be executed using the following executables:
 
-Una volta eseguito, il programma verifica per prima cosa l'esistenza di un file di testo denominato `BIKES.CFG`; se non presente, ne crea uno di default a partire dal file binario `BIKES.INF` originale. Il file `BIKES.CFG` &egrave; in pratica una "traduzione" in testo semplice del file `INF`; aprendolo con un editor di testo, &egrave; possibile accedere direttamente ai parametri delle moto, i quali sono abbastanza autoesplicativi e suddivisi nei soliti tre gruppi: *impostazioni generali* (settings), *cambio di velocit&agrave;* (gearbox) e *potenza motrice* (power). Dunque, inizialmente il file `CFG` conterr&agrave; i valori predefiniti del gioco, derivando direttamente dal file `INF` originale.
+* Windows: `CyclesMod.exe`
+* Linux: `cyclesmod.sh`
+* macOS: `cyclesmod.command`
 
-A seguire, il programma rileva l'esistenza del file `BIKES.CFG`, ne legge il contenuto e infine produce un nuovo file `BIKES.INF`, sovrascrivendo quello eventualmente preesistente. A questo punto &egrave; sufficiente copiare nella directory del gioco il file `BIKES.INF` generato, sovrascrivendo il file preesistente, **avendone fatto prima una copia di backup**. Avviando il gioco sar&agrave; quindi possibile sperimentare le modifiche apportate alla configurazione.
+Once executed, the program first checks for the existence of a text file called `BIKES.CFG`; if not present, it creates a default one mapping the original `BIKES.INF` binary file. The `BIKES.CFG` file is basically a plain text translation of the `BIKES.INF` file; opening it with a text editor, it is possible to directly access the motorcycle parameters, which are quite self-explanatory and divided into the usual three groups: *settings*, *gearbox* and *power*. Thus, initially the `BIKES.CFG` file will contain the game defaults derived directly from the original `BIKES.INF` file.
 
-Per effettuare modifiche alle moto, &egrave; quindi sufficiente aprire il file `CFG`, modificare i parametri di interesse, salvare il file e far girare *CyclesMod*. Il programma rilever&agrave; l'esistenza del file `BIKES.CFG` e produrr&agrave; un nuovo `BIKES.INF` contenente le modifiche apportate. In caso di errori saranno mostrati opportuni messaggi in console.
+Next, the program reads the `BIKES.CFG` file contents and finally produces a new `BIKES.INF` file, making a backup of the existing one, if any. At this point it is sufficient to copy the generated `BIKES.INF` file into the game directory. Starting the game you will then be able to experiment with the changes made to the configuration.
 
-**Volendo rigenerare il file `BIKES.INF` originale di *The Cycles*, &egrave; sufficiente cancellare il file `BIKES.CFG` e far girare il programma "a vuoto": esso generer&agrave; automaticamente un `BIKES.CFG` predefinito e un `BIKES.INF` analogo a quello originale.**
+To make further changes to the bikes, simply open the `BIKES.CFG` file, modify the parameters of interest, save the file and re-run *CyclesMod*. The program will detect the existence of the `BIKES.CFG` file and will produce a new `BIKES.INF` containing the changes made. In case of errors, appropriate console messages will be displayed.
 
+**If you want to restore the original `BIKES.INF` file shipped with the game, simply delete the `BIKES.CFG` file and run the program without arguments: it will automatically generate default `BIKES.CFG` and `BIKES.INF` files.**
 
-## Riconoscimenti
+## Acknowledgements
 
-Quest'applicazione include componenti realizzati da [Eclipse Foundation](lib/license/org.eclipse.LICENSE.txt).
+Icon designed by [Everaldo Coelho](http://www.everaldo.com).
 
-L'icona dell'applicazione &egrave; stata realizzata da [Everaldo Coelho](http://www.everaldo.com) (licenza [LGPL](http://www.gnu.org/licenses/lgpl.html)), e prelevata da [Iconfinder](http://www.iconfinder.com).
+This application uses or includes portions of the following third party software:
+
+|Component                   |Author                     |License                                                     |Home page                                              |
+|----------------------------|---------------------------|------------------------------------------------------------|-------------------------------------------------------|
+|Eclipse Platform & SWT      |Eclipse Foundation         |[License](https://www.eclipse.org/legal/epl-2.0/)           |[Home page](https://www.eclipse.org)                   |
+|Inno Setup                  |Jordan Russell             |[License](https://jrsoftware.org/files/is/license.txt)      |[Home page](https://jrsoftware.org/isinfo.php)         |
+|Jakarta XML Binding         |Eclipse Foundation         |[License](https://www.eclipse.org/org/documents/edl-v10.php)|[Home page](https://projects.eclipse.org/projects/ee4j)|
+|Launch4j                    |Grzegorz Kowal             |[License](https://opensource.org/licenses/BSD-3-Clause)     |[Home page](http://launch4j.sourceforge.net)           |
+|Picocli                     |Remko Popma                |[License](https://git.io/JUqAY)                             |[Home page](https://picocli.info)                      |
+|Reflections                 |ronmamo                    |[License](https://git.io/Jtp8i)                             |[Home page](https://git.io/Jtp81)                      |
+|universalJavaApplicationStub|Tobias Fischer             |[License](https://git.io/JUqAq)                             |[Home page](https://git.io/JUqAF)                      |
