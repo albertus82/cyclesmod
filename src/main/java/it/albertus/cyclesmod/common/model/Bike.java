@@ -15,17 +15,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Bike implements ByteList {
 
-	@Getter
-	@RequiredArgsConstructor
-	public enum BikeType {
-
-		CLASS_125(125),
-		CLASS_250(250),
-		CLASS_500(500);
-
-		private final int displacement;
-	}
-
 	public static final int LENGTH = Settings.LENGTH + Gearbox.LENGTH + Power.LENGTH;
 
 	private final BikeType type;
