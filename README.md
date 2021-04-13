@@ -6,7 +6,9 @@ CyclesMod
 [![Build status](https://ci.appveyor.com/api/projects/status/github/albertus82/cyclesmod?branch=master&svg=true)](https://ci.appveyor.com/project/albertus82/cyclesmod)
 [![Known Vulnerabilities](https://snyk.io/test/github/albertus82/cyclesmod/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/albertus82/cyclesmod?targetFile=pom.xml)
 
-**The Cycles - International Grand Prix Racing** is a motorcycle simulation video game. Dating back to 1989, it was distributed for the most popular platforms of the time, from the Commodore 64 to the IBM PC (DOS), and is now easily available as *Abandonware*. The game cannot be executed natively on modern operating systems, but runs greatly in [**DOSBox**](https://www.dosbox.com).
+**The Cycles - International Grand Prix Racing** is a motorcycle simulation video game. Dating back to 1989, it was distributed for the most popular platforms of the time, from the Commodore 64 to the IBM PC (DOS), and is now easily available as *Abandonware*.
+
+The game cannot be executed natively on modern operating systems, but runs greatly in [**DOSBox**](https://www.dosbox.com).
 
 **CyclesMod** is a *mod* for the DOS version of this game, which allows you to **change the configurations of the bikes**, which are usually not accessible to the user:
 
