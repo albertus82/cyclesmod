@@ -103,7 +103,7 @@ The engine power curve is constructed from the values present ​​in this grou
 
 It is also possibile to draw and modify the curve using the pointing device in the Power Graph window, that is reachable from the *Edit* menu or double clicking on the graph.
 
-## Versione da riga di comando
+## Command line version
 
 If you prefer to operate without a graphical interface, a fully functional command line version of CyclesMod is available. It can be executed using the following executables:
 
