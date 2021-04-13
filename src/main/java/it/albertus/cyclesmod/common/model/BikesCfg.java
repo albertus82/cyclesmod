@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import it.albertus.cyclesmod.common.model.Bike.BikeType;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.NewLine;
 
