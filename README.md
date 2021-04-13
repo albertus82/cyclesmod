@@ -71,11 +71,11 @@ Each bike has eight general settings that determine the following characteristic
 
 * **Gears count**: the number of gears of the gearbox. Valid value range: `0`-`9`.
 
-* **RPM redline**: engine speed beyond which, after a variable time determined by the *Overspeed grace period* setting and the skill level chosen, the engine breaks down. At skill levels 1 and 2 (the lowest), this value also determines the upshift speed. Valid value range: `8500`-`32767` RPM.
+* **RPM redline**: engine speed beyond which, after a variable time determined by the *Overspeed grace period* setting and the difficulty level chosen, the engine breaks down. At difficulty levels 1 and 2 (the lowest), this value also determines the upshift speed. Valid value range: `8500`-`32767` RPM.
 
 * **RPM limit**: maximum speed that the engine can reach (limiter). Valid value range: `768`-`14335` RPM. Note that, once the limit is reached, the motorcycle continues to accelerate with the engine power set for the limit RPM, therefore, to effectively limit the speed to a certain value, it is necessary to set to zero the power values ​​around this RPM limit.
 
-* **Overspeed grace period**: grace period during which the engine does not fail despite running at a higher speed than the *RPM redline*; the value is expressed in a unit of measurement of linear time which varies according to the level of difficulty. Valid value range: `0`-`32767`. The following list can be useful to determine the value based on the desired tolerance in seconds, depending on the skill level:
+* **Overspeed grace period**: grace period during which the engine does not fail despite running at a higher speed than the *RPM redline*; the value is expressed in a linear unit of measurement of time which varies according to the difficulty level. Valid value range: `0`-`32767`. The following list can be useful to determine the value based on the desired tolerance in seconds, depending on the difficulty level:
 
    * Level 1/5 (Beg.): The engine never fails unless `0` is set.
    * Level 2/5: 1 sec. = `50` (automatic transmission is still active).
@@ -89,7 +89,7 @@ Each bike has eight general settings that determine the following characteristic
 
 * **Spin threshold**: ease with which the bike spins while skidding around a corner. Valid values between `0` (the bike spins at the first hint of skidding) and `65535` (the bike never spins).
 
-* **RPM downshift**: significant only for the lower skill levels that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
+* **RPM downshift**: significant only for the lower difficulty levels that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
 
 > There are also three other values of unknown meaning, probably irrelevant, which can in any case be modified for experimental purposes.
 
@@ -101,7 +101,7 @@ Gear ratios can be configured for each individual gear. Higher values correspond
 
 The engine power curve is constructed from the values present in this group. Each value represents the engine power in *hp* at a given engine speed indicated on the label associated with the field containing the value. Allowed values are between `0` and `255` hp. The resulting curve is graphically represented in its frame. 
 
-It is also possibile to draw and modify the curve using the pointing device in the Power Graph window, that is reachable from the *Edit* menu or double clicking on the graph.
+It is also possibile to draw and modify the curve using the pointing device from the *Power Graph* window, reachable from the *Edit* menu or simply double clicking on the graph in the main window.
 
 ## Command line version
 
