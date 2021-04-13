@@ -10,6 +10,7 @@ import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
+import lombok.NonNull;
 
 public class UpdateTitleListener implements MouseMotionListener {
 
@@ -28,7 +29,7 @@ public class UpdateTitleListener implements MouseMotionListener {
 	}
 
 	@Override
-	public void mouseDragged(final MouseEvent me) {
+	public void mouseDragged(@NonNull final MouseEvent me) {
 		execute(me.getLocation());
 	}
 
@@ -39,7 +40,7 @@ public class UpdateTitleListener implements MouseMotionListener {
 	}
 
 	@Override
-	public void mouseMoved(final MouseEvent me) {
+	public void mouseMoved(@NonNull final MouseEvent me) {
 		execute(me.getLocation());
 	}
 
