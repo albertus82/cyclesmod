@@ -38,14 +38,14 @@ Download the [latest release](https://github.com/albertus82/cyclesmod/releases/l
 The main application window has three tabs, one for each motorcycle category: 125, 250 and 500 cc. Each tab is divided into three groups:
 
 * General **Settings**
-* **Greabox**;
+* **Greabox**
 * Engine **Power**
 
-There is also a graph of the power/torque curve that is generated in real time from the engine power values ​​present in the relevant group.
+There is also a graph of the power/torque curve that is generated in real time from the engine power values present in the relevant group.
 
 Each group has several fields with descriptive labels. Customized values are shown in bold typeface to highlight the fact that the value is different from the default one. Anyhowm the default value of a field is always available as tooltip, just move the mouse over the field and wait for the suggestion to appear.
 
-When *CyclesMod* is executed without arguments, all the fields are preloaded with the default values ​​for all motorcycles.
+When *CyclesMod* is executed without arguments, all the fields are preloaded with the default values for all motorcycles.
 
 Through the menu bar it is possible to:
 
@@ -77,29 +77,29 @@ Each bike has eight general settings that determine the following characteristic
 
 * **Overspeed grace period**: grace period during which the engine does not fail despite running at a higher speed than the *RPM redline*; the value is expressed in a unit of measurement of linear time which varies according to the level of difficulty. Valid value range: `0`-`32767`. The following list can be useful to determine the value based on the desired tolerance in seconds, depending on the skill level:
 
-   * Level 1/5 (Beg.): The enine never fails unless `0` is set.
+   * Level 1/5 (Beg.): The engine never fails unless `0` is set.
    * Level 2/5: 1 sec. = `50` (automatic transmission is still active).
    * Level 3/5: 1 sec. = `80`.
    * Level 4/5: 1 sec. = `120`.
    * Level 5/5 (Pro): 1 sec. = `160`.
 
-* **Grip**: bike's slip threshold, which determines the speed with which it is possible to take curves. Valid values ​​between `0` (the bike skids immediately and does not turn at all) and `65535` (the bike never skids).
+* **Grip**: bike's slip threshold, which determines the speed with which it is possible to take curves. Valid values between `0` (the bike skids immediately and does not turn at all) and `65535` (the bike never skids).
 
-* **Braking speed**: determines the stopping time of the motorcycle. Valid values ​​between `0` (the bike does not brake, on the contrary, friction and aerodynamic resistance are eliminated) and `65535` (the bike stops instantly on brake).
+* **Braking speed**: determines the stopping time of the motorcycle. Valid values between `0` (the bike does not brake, on the contrary, friction and aerodynamic resistance are eliminated) and `65535` (the bike stops instantly on brake).
 
-* **Spin threshold**: ease with which the bike spins while skidding around a corner. Valid values ​​between `0` (the bike spins at the first hint of skidding) and `65535` (the bike never spins).
+* **Spin threshold**: ease with which the bike spins while skidding around a corner. Valid values between `0` (the bike spins at the first hint of skidding) and `65535` (the bike never spins).
 
-* **RPM downshift**: significant only for the lower skill levels that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values ​​between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
+* **RPM downshift**: significant only for the lower skill levels that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
 
-> There are also three other values ​​of unknown meaning, probably irrelevant, which can in any case be modified for experimental purposes.
+> There are also three other values of unknown meaning, probably irrelevant, which can in any case be modified for experimental purposes.
 
 ### Gearbox
 
-Gear ratios can be configured for each individual gear. Higher values ​​correspond to shorter ratios. The permitted values ​​are between `0` and `65535` for gears 1 to 9, while for *N* (neutral) gear the value is irrelevant.
+Gear ratios can be configured for each individual gear. Higher values correspond to shorter ratios. The permitted values are between `0` and `65535` for gears 1 to 9, while for *N* (neutral) gear the value is irrelevant.
 
 ### Power
 
-The engine power curve is constructed from the values present ​​in this group. Each value represents the engine power in *hp* at a given engine speed indicated on the label associated with the field containing the value. Allowed values ​​are between `0` and `255` hp. The resulting curve is graphically represented in its frame. 
+The engine power curve is constructed from the values present in this group. Each value represents the engine power in *hp* at a given engine speed indicated on the label associated with the field containing the value. Allowed values are between `0` and `255` hp. The resulting curve is graphically represented in its frame. 
 
 It is also possibile to draw and modify the curve using the pointing device in the Power Graph window, that is reachable from the *Edit* menu or double clicking on the graph.
 
