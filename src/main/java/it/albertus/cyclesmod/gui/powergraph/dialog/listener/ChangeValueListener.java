@@ -8,7 +8,10 @@ import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.dialog.ChangeValueCommand;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ChangeValueListener implements MouseListener, MouseMotionListener {
 
 	private static final int BUTTON_LEFT = 1;
@@ -18,24 +21,20 @@ public class ChangeValueListener implements MouseListener, MouseMotionListener {
 	private int mouseButton; // needed to detect drag only for left button.
 	private Point mouseEnteredLocation; // needed to manage double click (maximize) on the title bar.
 
-	public ChangeValueListener(final IPowerGraph powerGraph) {
-		this.powerGraph = powerGraph;
-	}
-
 	@Override
-	public void mouseDragged(final MouseEvent me) {
+	public void mouseDragged(@NonNull final MouseEvent me) {
 		if (BUTTON_LEFT == mouseButton && ZoomType.NONE.equals(powerGraph.getXyGraph().getZoomType()) && !me.getLocation().equals(mouseEnteredLocation)) {
 			execute(me.getLocation());
 		}
 	}
 
 	@Override
-	public void mouseEntered(final MouseEvent me) {
+	public void mouseEntered(@NonNull final MouseEvent me) {
 		mouseEnteredLocation = me.getLocation();
 	}
 
 	@Override
-	public void mousePressed(final MouseEvent me) {
+	public void mousePressed(@NonNull final MouseEvent me) {
 		mouseButton = me.button;
 		if (BUTTON_LEFT == mouseButton) { // left click
 			execute(me.getLocation());

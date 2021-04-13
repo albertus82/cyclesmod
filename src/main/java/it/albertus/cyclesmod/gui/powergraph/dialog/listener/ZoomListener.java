@@ -9,15 +9,14 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public abstract class ZoomListener implements KeyListener, SelectionListener {
 
 	protected static final double ZOOM_RATIO = 0.1;
 
 	protected final IXYGraph xyGraph;
-
-	protected ZoomListener(final IXYGraph graph) {
-		this.xyGraph = graph;
-	}
 
 	protected abstract void execute();
 

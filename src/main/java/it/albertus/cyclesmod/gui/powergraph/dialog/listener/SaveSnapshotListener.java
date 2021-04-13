@@ -13,19 +13,17 @@ import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.jface.SwtUtils;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class SaveSnapshotListener implements KeyListener, SelectionListener {
 
-	private final Shell shell;
-	private final IXYGraph xyGraph;
-
-	public SaveSnapshotListener(final Shell shell, final IXYGraph xyGraph) {
-		this.shell = shell;
-		this.xyGraph = xyGraph;
-	}
+	@NonNull private final Shell shell;
+	@NonNull private final IXYGraph xyGraph;
 
 	@Override
-	public void keyPressed(final KeyEvent e) {
+	public void keyPressed(@NonNull final KeyEvent e) {
 		if (SWT.MOD1 == e.stateMask && SwtUtils.KEY_SAVE == e.keyCode) {
 			execute();
 		}

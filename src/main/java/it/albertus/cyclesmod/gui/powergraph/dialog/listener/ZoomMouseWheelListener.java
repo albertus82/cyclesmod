@@ -11,7 +11,10 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 
 import it.albertus.cyclesmod.common.resources.Messages;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class ZoomMouseWheelListener implements MouseWheelListener {
 
 	private static final double ZOOM_RATIO = 0.1;
@@ -19,12 +22,8 @@ public class ZoomMouseWheelListener implements MouseWheelListener {
 
 	private final IXYGraph xyGraph;
 
-	public ZoomMouseWheelListener(final IXYGraph xyGraph) {
-		this.xyGraph = xyGraph;
-	}
-
 	@Override
-	public void mouseScrolled(final MouseEvent e) {
+	public void mouseScrolled(@NonNull final MouseEvent e) {
 		final IFigure figureUnderMouse = xyGraph.findFigureAt(e.x, e.y, new TreeSearch() {
 			@Override
 			public boolean prune(final IFigure figure) {

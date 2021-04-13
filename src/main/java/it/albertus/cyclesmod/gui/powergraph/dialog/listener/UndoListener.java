@@ -8,17 +8,16 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
 import it.albertus.jface.SwtUtils;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class UndoListener implements KeyListener, SelectionListener {
 
 	private final OperationsManager manager;
 
-	public UndoListener(final OperationsManager manager) {
-		this.manager = manager;
-	}
-
 	@Override
-	public void keyPressed(final KeyEvent e) {
+	public void keyPressed(@NonNull final KeyEvent e) {
 		if (SWT.MOD1 == e.stateMask && SwtUtils.KEY_UNDO == e.keyCode) {
 			manager.undo();
 		}

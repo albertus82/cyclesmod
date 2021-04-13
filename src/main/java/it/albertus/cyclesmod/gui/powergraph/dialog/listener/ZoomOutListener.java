@@ -8,6 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 
 import it.albertus.cyclesmod.common.resources.Messages;
+import lombok.NonNull;
 
 public class ZoomOutListener extends ZoomListener {
 
@@ -16,7 +17,7 @@ public class ZoomOutListener extends ZoomListener {
 	}
 
 	@Override
-	public void keyPressed(final KeyEvent e) {
+	public void keyPressed(@NonNull final KeyEvent e) {
 		if ('-' == e.keyCode || SWT.KEYPAD_SUBTRACT == e.keyCode) {
 			execute();
 		}

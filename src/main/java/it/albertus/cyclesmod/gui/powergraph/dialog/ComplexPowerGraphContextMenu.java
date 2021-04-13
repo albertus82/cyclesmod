@@ -20,10 +20,11 @@ import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UndoListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import it.albertus.jface.SwtUtils;
+import lombok.Getter;
 
 public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 
-	private final MenuItem showTorqueMenuItem;
+	@Getter private final MenuItem showTorqueMenuItem;
 
 	public ComplexPowerGraphContextMenu(final Control control, final IPowerGraph powerGraph) {
 		super(control, powerGraph);
@@ -135,10 +136,6 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 
 			menu.setVisible(true);
 		});
-	}
-
-	public MenuItem getShowTorqueMenuItem() {
-		return showTorqueMenuItem;
 	}
 
 }
