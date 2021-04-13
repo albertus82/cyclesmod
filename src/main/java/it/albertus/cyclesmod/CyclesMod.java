@@ -3,15 +3,14 @@ package it.albertus.cyclesmod;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.console.CyclesModConsole;
 import it.albertus.cyclesmod.gui.CyclesModGui;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CyclesMod {
 
 	private static final String ARG_HELP = "--help";
 	private static final String ARG_CONSOLE = "-c";
-
-	private CyclesMod() {
-		throw new IllegalAccessError();
-	}
 
 	/* Unique entry point */
 	public static final void main(final String[] args) {
