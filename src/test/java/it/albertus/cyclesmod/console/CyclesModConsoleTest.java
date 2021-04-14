@@ -18,7 +18,9 @@ public class CyclesModConsoleTest extends BaseTest {
 	@Test
 	public void test() throws IOException {
 		final Path outputDir = Paths.get(projectProperties.getProperty("project.build.directory"), "test-output");
-		Files.createDirectories(outputDir);
+		if (!Files.deleteIfExists(Paths.get(outputDir.toString(), "BIKES.CFG"))) {
+			Files.createDirectories(outputDir);
+		}
 		CyclesModConsole.start(outputDir.toString());
 		final Properties expected = new Properties();
 		final Properties actual = new Properties();
