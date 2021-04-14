@@ -9,27 +9,20 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class CyclesModConsoleTest {
+import it.albertus.cyclesmod.BaseTest;
 
-	private static final Properties testProperties = new Properties();
-
-	@BeforeClass
-	public static void beforeAll() throws IOException {
-		try (final InputStream is = CyclesModConsoleTest.class.getResourceAsStream("/test.properties")) {
-			testProperties.load(is);
-		}
-	}
+public class CyclesModConsoleTest extends BaseTest {
 
 	@Test
 	public void test() throws IOException {
-		final Path basedir = Paths.get(testProperties.getProperty("project.basedir"));
-		CyclesModConsole.start(basedir.toString());
+		final Path outputDir = Paths.get(projectProperties.getProperty("project.build.directory"), "test-output");
+		Files.createDirectories(outputDir);
+		CyclesModConsole.start(outputDir.toString());
 		final Properties expected = new Properties();
 		final Properties actual = new Properties();
-		try (final InputStream is = getClass().getResourceAsStream("/bikes.cfg.default"); final Reader r = Files.newBufferedReader(Paths.get(basedir.toString(), "BIKES.CFG"))) {
+		try (final InputStream is = getClass().getResourceAsStream("/bikes.cfg.default"); final Reader r = Files.newBufferedReader(Paths.get(outputDir.toString(), "BIKES.CFG"))) {
 			expected.load(is);
 			actual.load(r);
 		}
