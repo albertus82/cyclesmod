@@ -88,7 +88,7 @@ public class Tabs implements Multilanguage {
 			GridLayoutFactory.swtDefaults().numColumns(2).applyTo(tabComposite);
 
 			// Settings
-			final Group settingsGroup = newLocalizedGroup(tabComposite, SWT.NULL, "lbl.settings");
+			final Group settingsGroup = newLocalizedGroup(tabComposite, SWT.NULL, "gui.lbl.settings");
 			// Posizionamento dell'elemento all'interno del contenitore...
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(settingsGroup);
 			// Definizione di come saranno disposti gli elementi contenuti...
@@ -99,7 +99,7 @@ public class Tabs implements Multilanguage {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
-				final String labelTextKey = "lbl." + setting.getKey();
+				final String labelTextKey = "gui.lbl." + setting.getKey();
 				label.setText(messages.get(labelTextKey));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setToolTipText(key);
@@ -136,7 +136,7 @@ public class Tabs implements Multilanguage {
 			powerCanvases.put(bike.getType(), canvas);
 
 			// Gearbox
-			final Group gearboxGroup = newLocalizedGroup(tabComposite, SWT.NULL, "lbl.gearbox");
+			final Group gearboxGroup = newLocalizedGroup(tabComposite, SWT.NULL, "gui.lbl.gearbox");
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(gearboxGroup);
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
 
@@ -145,7 +145,7 @@ public class Tabs implements Multilanguage {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(gearboxGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
-				final String labelTextKey = "lbl.gear";
+				final String labelTextKey = "gui.lbl.gear";
 				final String labelTextArgument = index != 0 ? String.valueOf(index) : "N";
 				label.setText(messages.get(labelTextKey, labelTextArgument));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
@@ -166,7 +166,7 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Power
-			final Group powerGroup = newLocalizedGroup(tabComposite, SWT.NULL, "lbl.power");
+			final Group powerGroup = newLocalizedGroup(tabComposite, SWT.NULL, "gui.lbl.power");
 			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(powerGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
 
@@ -175,7 +175,7 @@ public class Tabs implements Multilanguage {
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = new Label(powerGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
-				final String labelTextKey = "lbl.rpm";
+				final String labelTextKey = "gui.lbl.rpm";
 				final String labelTextArgument = String.valueOf(Power.getRpm(index));
 				label.setText(messages.get(labelTextKey, labelTextArgument));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
@@ -236,7 +236,7 @@ public class Tabs implements Multilanguage {
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
-			throw new IllegalStateException(messages.get("err.properties.number"));
+			throw new IllegalStateException(messages.get("gui.err.properties.number"));
 		}
 
 		// Update screen values...
@@ -257,7 +257,7 @@ public class Tabs implements Multilanguage {
 	private void updateFields(final Map<String, Integer> properties) {
 		for (final Entry<String, FormProperty> entry : formProperties.entrySet()) {
 			if (!properties.containsKey(entry.getKey())) {
-				throw new IllegalStateException(messages.get("err.property.missing", entry.getKey()));
+				throw new IllegalStateException(messages.get("gui.err.property.missing", entry.getKey()));
 			}
 			final Text field = entry.getValue().getText();
 
@@ -286,7 +286,7 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Update tooltip text...
-			final String toolTipText = messages.get("msg.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			final String toolTipText = messages.get("gui.msg.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}

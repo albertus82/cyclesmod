@@ -28,7 +28,7 @@ public class ZoomInListener extends ZoomListener {
 
 	@Override
 	protected void execute() {
-		final SaveStateCommand command = new ZoomCommand(messages.get("lbl.graph.action.zoomIn"), xyGraph.getXAxisList(), xyGraph.getYAxisList());
+		final SaveStateCommand command = new ZoomCommand(messages.get("gui.lbl.graph.action.zoomIn"), xyGraph.getXAxisList(), xyGraph.getYAxisList());
 		final Point plotAreaCenter = getPlotAreaCenter();
 		xyGraph.getPlotArea().zoomInOut(true, true, plotAreaCenter.x, plotAreaCenter.y, ZOOM_RATIO);
 		saveUndo(command);

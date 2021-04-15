@@ -40,7 +40,7 @@ public class ZoomMouseWheelListener implements MouseWheelListener {
 		});
 
 		if (figureUnderMouse != null) {
-			final String zoomTypeDescription = messages.get(e.count > 0 ? "lbl.graph.action.zoomIn" : "lbl.graph.action.zoomOut");
+			final String zoomTypeDescription = messages.get(e.count > 0 ? "gui.lbl.graph.action.zoomIn" : "gui.lbl.graph.action.zoomOut");
 			final SaveStateCommand command = new ZoomCommand(zoomTypeDescription, xyGraph.getXAxisList(), xyGraph.getYAxisList());
 
 			if (figureUnderMouse instanceof PlotArea) {

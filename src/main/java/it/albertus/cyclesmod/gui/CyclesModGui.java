@@ -37,8 +37,8 @@ import lombok.extern.java.Log;
 @Log
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
-	private static final String MSG_KEY_WARNING = "msg.warning";
-	private static final String MSG_KEY_WIN_TITLE = "win.title";
+	private static final String MSG_KEY_WARNING = "gui.msg.warning";
+	private static final String MSG_KEY_WIN_TITLE = "gui.win.title";
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
@@ -158,13 +158,13 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			else {
 				final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
 				messageBox.setText(messages.get(MSG_KEY_WARNING));
-				messageBox.setMessage(messages.get("err.file.invalid"));
+				messageBox.setMessage(messages.get("gui.err.file.invalid"));
 				messageBox.open();
 			}
 		}
 		catch (final Exception e) {
 			log.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("err.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("gui.err.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
 		}
 	}
 
@@ -190,7 +190,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("err.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("gui.err.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
@@ -219,7 +219,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("err.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("gui.err.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			bikesInfFileName = fileName;
