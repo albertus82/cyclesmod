@@ -3,6 +3,7 @@ package it.albertus.cyclesmod.gui;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -85,13 +86,13 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	/* GUI entry point. */
-	public static void main(final String fileName) {
+	public static void main(final Path fileName) {
 		Display.setAppName(messages.get("gui.label.window.title"));
 		Display.setAppVersion(Version.getNumber());
 		final Display display = Display.getDefault();
 		Shell shell = null;
 		try {
-			final CyclesModGui gui = new CyclesModGui(display, fileName);
+			final CyclesModGui gui = new CyclesModGui(display, fileName != null ? fileName.toString() : null);
 			shell = gui.getShell();
 			shell.open();
 			while (!shell.isDisposed()) {

@@ -3,6 +3,7 @@ package it.albertus.cyclesmod.cli;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.logging.Level;
 
 import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
@@ -34,17 +35,18 @@ public class CyclesModCli extends CyclesModEngine {
 		this.path = path;
 	}
 
-	public static void main(final String providedPath) {
+	public static void main(final Path providedPath) {
+		final String pathName = providedPath != null ? providedPath.toString() : null;
 		try {
 			final String path;
-			if (providedPath == null) {
+			if (pathName == null) {
 				path = DEFAULT_DESTINATION_PATH;
 			}
-			else if (!providedPath.isEmpty() && !providedPath.endsWith("/") && !providedPath.endsWith("\\") && !providedPath.endsWith(File.separator)) {
-				path = providedPath + File.separator;
+			else if (!pathName.isEmpty() && !pathName.endsWith("/") && !pathName.endsWith("\\") && !pathName.endsWith(File.separator)) {
+				path = pathName + File.separator;
 			}
 			else {
-				path = providedPath;
+				path = pathName;
 			}
 
 			new CyclesModCli(path).execute();
