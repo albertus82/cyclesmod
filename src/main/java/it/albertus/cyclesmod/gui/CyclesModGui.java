@@ -33,6 +33,7 @@ import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.util.ExceptionUtils;
 import it.albertus.util.IOUtils;
 import it.albertus.util.Version;
+import lombok.Getter;
 import lombok.extern.java.Log;
 
 @Log
@@ -43,9 +44,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	private final Map<String, Integer> defaultProperties = new HashMap<>();
 	private final Map<String, Integer> lastPersistedProperties = new HashMap<>();
 
-	private final Shell shell;
-	private final MenuBar menuBar;
-	private final Tabs tabs;
+	@Getter private final Shell shell;
+	@Getter private final MenuBar menuBar;
+	@Getter private final Tabs tabs;
 
 	private String bikesInfFileName;
 
@@ -119,7 +120,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		shell.setRedraw(true);
 	}
 
-	public void updateModelValues(boolean lenient) {
+	public void updateModelValues(final boolean lenient) {
 		for (final String key : tabs.getFormProperties().keySet()) {
 			applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
 		}
@@ -137,13 +138,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			else if (fileName.toLowerCase(Locale.ROOT).endsWith(".cfg")) {
 				bikesInfFileName = null;
-				InputStream is = null;
-				try {
-					is = new DefaultBikes().getInputStream();
+				try (final InputStream is = new DefaultBikes().getInputStream()) {
 					setBikesInf(new BikesInf(is));
-				}
-				finally {
-					IOUtils.closeQuietly(is);
 				}
 
 				final BikesCfg bikesCfg = new BikesCfg(fileName);
@@ -244,19 +240,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	private void setLastPersistedProperties(final Map<String, Integer> lastPersistedProperties) {
 		this.lastPersistedProperties.clear();
 		this.lastPersistedProperties.putAll(lastPersistedProperties);
-	}
-
-	@Override
-	public Shell getShell() {
-		return shell;
-	}
-
-	public MenuBar getMenuBar() {
-		return menuBar;
-	}
-
-	public Tabs getTabs() {
-		return tabs;
 	}
 
 	public Map<String, Integer> getDefaultProperties() {
