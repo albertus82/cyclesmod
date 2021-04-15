@@ -15,7 +15,9 @@ import java.util.Properties;
 
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.NewLine;
+import lombok.extern.java.Log;
 
+@Log
 public class BikesCfg {
 
 	private static final String FILE_NAME = "BIKES.CFG";
@@ -36,21 +38,21 @@ public class BikesCfg {
 		try (final FileReader fr = new FileReader(fileName)) {
 			populateProperties(fr); // buffered internally
 		}
-		System.out.println(Messages.get("msg.file.read", FILE_NAME));
+		log.info(Messages.get("msg.file.read", FILE_NAME));
 	}
 
 	public BikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
-		System.out.println(Messages.get("msg.reading.file", FILE_NAME));
+		log.info(Messages.get("msg.reading.file", FILE_NAME));
 		final File file = new File(path + FILE_NAME);
 		if (!file.exists()) {
-			System.out.println(Messages.get("msg.file.not.found.creating.default", FILE_NAME));
+			log.info(Messages.get("msg.file.not.found.creating.default", FILE_NAME));
 			writeDefaultBikesCfg(originalBikesInf, file);
-			System.out.println(Messages.get("msg.default.file.created", FILE_NAME));
+			log.info(Messages.get("msg.default.file.created", FILE_NAME));
 		}
 		try (final FileReader fr = new FileReader(file)) {
 			populateProperties(fr); // buffered internally
 		}
-		System.out.println(Messages.get("msg.file.read", FILE_NAME));
+		log.info(Messages.get("msg.file.read", FILE_NAME));
 	}
 
 	private void populateProperties(final Reader reader) throws IOException {

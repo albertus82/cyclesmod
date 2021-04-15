@@ -10,7 +10,9 @@ import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
+@Log
 @Getter
 @Setter
 public abstract class CyclesModEngine implements NumeralSystemProvider {
@@ -144,7 +146,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 	}
 
 	private void logChange(final String key, final int defaultValue, final int newValue) {
-		System.out.println(Messages.get("msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
+		log.info(Messages.get("msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
 	}
 
 	private Bike getBike(final String key, final String value) {

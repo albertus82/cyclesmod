@@ -22,7 +22,9 @@ import it.albertus.cyclesmod.common.data.DefaultBikes;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.ByteUtils;
 import it.albertus.util.IOUtils;
+import lombok.extern.java.Log;
 
+@Log
 public class BikesInf {
 
 	public static final String FILE_NAME = "BIKES.INF";
@@ -56,7 +58,7 @@ public class BikesInf {
 		if (wrongFileSize) {
 			throw new IllegalStateException(Messages.get("err.wrong.file.size"));
 		}
-		System.out.println(Messages.get("msg.file.read", FILE_NAME));
+		log.info(Messages.get("msg.file.read", FILE_NAME));
 
 		if (types == null || types.length == 0) {
 			/* Full reading */
@@ -74,14 +76,14 @@ public class BikesInf {
 				bikes[type.ordinal()] = new Bike(type, infs[type.ordinal()]);
 			}
 		}
-		System.out.println(Messages.get("msg.file.parsed", FILE_NAME));
+		log.info(Messages.get("msg.file.parsed", FILE_NAME));
 	}
 
 	public void write(final String fileName, final boolean backupExisting) throws IOException {
 		final byte[] newBikesInf = this.toByteArray();
 		final Checksum crc = new CRC32();
 		crc.update(newBikesInf, 0, newBikesInf.length);
-		System.out.println(Messages.get("msg.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + Messages.get("msg.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
+		log.info(Messages.get("msg.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + Messages.get("msg.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
 
 		final File file = new File(fileName);
 		if (file.exists() && !file.isDirectory()) {
@@ -90,7 +92,7 @@ public class BikesInf {
 					IOUtils.copy(is, os, FILE_SIZE);
 				}
 				if (Arrays.equals(os.toByteArray(), newBikesInf)) {
-					System.out.println(Messages.get("msg.already.uptodate", FILE_NAME));
+					log.info(Messages.get("msg.already.uptodate", FILE_NAME));
 				}
 				else {
 					if (backupExisting) {
@@ -108,7 +110,7 @@ public class BikesInf {
 	private void doWrite(final String fileName, final byte[] newBikesInf, final Checksum crc) throws IOException {
 		try (final OutputStream fos = new FileOutputStream(fileName); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
 			bos.write(newBikesInf);
-			System.out.println(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
+			log.info(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
 		}
 	}
 
@@ -128,7 +130,7 @@ public class BikesInf {
 			zos.putNextEntry(new ZipEntry(existingFile.getName()));
 			IOUtils.copy(fis, zos, FILE_SIZE);
 			zos.closeEntry();
-			System.out.println(Messages.get("msg.old.file.backed.up", FILE_NAME, backupFile));
+			log.info(Messages.get("msg.old.file.backed.up", FILE_NAME, backupFile));
 		}
 	}
 
