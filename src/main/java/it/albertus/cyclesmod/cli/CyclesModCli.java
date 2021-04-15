@@ -12,11 +12,14 @@ import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
-import it.albertus.util.IOUtils;
 import it.albertus.util.logging.LoggingSupport;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 @Log
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@SuppressWarnings("java:S106") // Replace this use of System.out or System.err by a logger. Standard outputs should not be used directly to log anything (java:S106)
 public class CyclesModCli extends CyclesModEngine {
 
 	static {
@@ -30,10 +33,6 @@ public class CyclesModCli extends CyclesModEngine {
 	private static final Messages messages = ConsoleMessages.INSTANCE;
 
 	private final String path;
-
-	private CyclesModCli(String path) {
-		this.path = path;
-	}
 
 	public static void main(final Path providedPath) {
 		final String pathName = providedPath != null ? providedPath.toString() : null;
@@ -58,13 +57,8 @@ public class CyclesModCli extends CyclesModEngine {
 
 	private void execute() throws IOException {
 		System.out.println(messages.get("console.message.reading.original.file", BikesInf.FILE_NAME));
-		InputStream is = null;
-		try {
-			is = new DefaultBikes().getInputStream();
+		try (final InputStream is = new DefaultBikes().getInputStream()) {
 			setBikesInf(new BikesInf(is));
-		}
-		finally {
-			IOUtils.closeQuietly(is);
 		}
 
 		System.out.println(messages.get("console.message.applying.customizations"));
