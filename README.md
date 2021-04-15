@@ -51,7 +51,7 @@ Through the menu bar it is possible to:
 
 * open an existing `BIKES.INF` file;
 * save the current settings in a `BIKES.INF` file;
-* restore the default settings for one or all bikes (any unsaved customization is lost);
+* restore the default settings for one or all bikes (any unsaved customization will be lost);
 * modify or draw the power curve in a special dialog box;
 * change the numeral system (decimal/hexadecimal);
 * change the interface language;
@@ -91,7 +91,7 @@ Each bike has eight general settings that determine the following characteristic
 
 * **RPM downshift**: significant only for the lower difficulty levels that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
 
-> There are also three other values of unknown meaning, probably irrelevant, which can in any case be modified for experimental purposes.
+> There are also three values of unknown meaning, probably irrelevant, which can in any case be modified for experimental purposes.
 
 ### Gearbox
 
