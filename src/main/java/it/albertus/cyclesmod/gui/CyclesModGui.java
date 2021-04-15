@@ -31,7 +31,6 @@ import it.albertus.cyclesmod.gui.listener.CloseListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.util.ExceptionUtils;
-import it.albertus.util.IOUtils;
 import it.albertus.util.Version;
 import lombok.Getter;
 import lombok.extern.java.Log;
@@ -52,13 +51,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private CyclesModGui(final Display display, final String fileName) throws IOException {
 		// Loading default properties...
-		InputStream is = null;
-		try {
-			is = new DefaultBikes().getInputStream();
+		try (final InputStream is = new DefaultBikes().getInputStream()) {
 			setBikesInf(new BikesInf(is));
-		}
-		finally {
-			IOUtils.closeQuietly(is);
 		}
 		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
 

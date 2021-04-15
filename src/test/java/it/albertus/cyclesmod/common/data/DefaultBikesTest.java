@@ -23,23 +23,20 @@ public class DefaultBikesTest {
 
 	@Test
 	public void test() throws IOException {
-		final InputStream is = new DefaultBikes().getInputStream();
-		final ByteArrayOutputStream os = new ByteArrayOutputStream();
-		try {
-			IOUtils.copy(is, os, 128);
-		}
-		finally {
-			IOUtils.closeQuietly(os, is);
-		}
-		Assert.assertEquals(BikesInf.FILE_SIZE, os.size());
+		try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+			try (final InputStream is = new DefaultBikes().getInputStream()) {
+				IOUtils.copy(is, os, 128);
+			}
+			Assert.assertEquals(BikesInf.FILE_SIZE, os.size());
 
-		final CRC32 crc = new CRC32();
-		crc.update(os.toByteArray());
-		Assert.assertEquals(DefaultBikes.CRC, crc.getValue());
+			final CRC32 crc = new CRC32();
+			crc.update(os.toByteArray());
+			Assert.assertEquals(DefaultBikes.CRC, crc.getValue());
 
-		crc.reset();
-		crc.update(new DefaultBikes().getByteArray());
-		Assert.assertEquals(DefaultBikes.CRC, crc.getValue());
+			crc.reset();
+			crc.update(new DefaultBikes().getByteArray());
+			Assert.assertEquals(DefaultBikes.CRC, crc.getValue());
+		}
 	}
 
 	@Test

@@ -15,7 +15,6 @@ import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.util.ExceptionUtils;
-import it.albertus.util.IOUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -23,7 +22,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 public class ResetAllSelectionListener extends SelectionAdapter {
-	
+
 	private static final Messages messages = GuiMessages.INSTANCE;
 
 	@NonNull private final CyclesModGui gui;
@@ -49,14 +48,9 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 	}
 
 	private void reset() throws IOException {
-		InputStream is = null;
-		try {
-			is = new DefaultBikes().getInputStream();
+		try (final InputStream is = new DefaultBikes().getInputStream()) {
 			gui.setBikesInf(new BikesInf(is));
 			gui.getTabs().updateFormValues();
-		}
-		finally {
-			IOUtils.closeQuietly(is);
 		}
 	}
 
