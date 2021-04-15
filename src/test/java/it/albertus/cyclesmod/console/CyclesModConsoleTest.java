@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.zip.GZIPInputStream;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,8 +38,8 @@ public class CyclesModConsoleTest extends BaseTest {
 		CyclesModConsole.start(outputDir.toString());
 		final Properties expected = new Properties();
 		final Properties actual = new Properties();
-		try (final InputStream is = getClass().getResourceAsStream("/bikes.cfg.default"); final Reader r = Files.newBufferedReader(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
-			expected.load(is);
+		try (final InputStream is = getClass().getResourceAsStream("/bikes.cfg.default.gz"); final InputStream gzis = new GZIPInputStream(is); final Reader r = Files.newBufferedReader(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
+			expected.load(gzis);
 			actual.load(r);
 		}
 		Assert.assertEquals(expected, actual); // Check default
