@@ -16,10 +16,10 @@ import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Command(versionProvider = VersionProvider.class, mixinStandardHelpOptions = true)
+@Command(versionProvider = VersionProvider.class, mixinStandardHelpOptions = true, resourceBundle = "it.albertus.cyclesmod.cli.resources.picocli")
 public class CyclesMod implements Callable<Integer> {
 
-	@Parameters(arity = "0..1") private Path path;
+	@Parameters(arity = "0..1", descriptionKey = "parameter.path") private Path path;
 
 	public static void main(final String... args) {
 		System.exit(new CommandLine(new CyclesMod()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).execute(args));
@@ -27,7 +27,7 @@ public class CyclesMod implements Callable<Integer> {
 
 	@Override
 	public Integer call() {
-		final String mode = System.getProperty(CyclesMod.class.getName() + ".main.mode");
+		final String mode = System.getProperty(getClass().getName() + ".main.mode");
 		if (mode != null) {
 			if ("cli".equalsIgnoreCase(mode)) {
 				CyclesModCli.main(path);
