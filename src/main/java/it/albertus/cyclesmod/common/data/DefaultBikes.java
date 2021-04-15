@@ -40,10 +40,10 @@ public class DefaultBikes {
 		final Checksum crc = new CRC32();
 		crc.update(DEFAULT, 0, DEFAULT.length);
 		if (crc.getValue() != CRC) {
-			throw new StreamCorruptedException(messages.get("common.err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC), String.format("%08X", crc.getValue())));
+			throw new StreamCorruptedException(messages.get("common.error.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC), String.format("%08X", crc.getValue())));
 		}
 		if (DEFAULT.length != BikesInf.FILE_SIZE) {
-			throw new StreamCorruptedException(messages.get("common.err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));
+			throw new StreamCorruptedException(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));
 		}
 	}
 

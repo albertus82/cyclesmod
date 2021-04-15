@@ -50,7 +50,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
 	public int open(final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
-		shell.setText(messages.get("gui.lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+		shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", bikeType.getDisplacement()));
 		shell.setImages(Images.getAppIconArray());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
 		createContents(shell, map, bikeType, torqueVisible);

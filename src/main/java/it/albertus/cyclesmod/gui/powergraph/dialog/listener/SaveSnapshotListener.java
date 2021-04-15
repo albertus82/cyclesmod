@@ -41,7 +41,7 @@ public class SaveSnapshotListener implements KeyListener, SelectionListener {
 		final ImageLoader loader = new ImageLoader();
 		loader.data = new ImageData[] { xyGraph.getImage().getImageData() };
 		final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-		dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", messages.get("gui.lbl.graph.save.allFiles", "(*.*)") });
+		dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", messages.get("gui.label.graph.save.allFiles", "(*.*)") });
 		dialog.setFilterExtensions(new String[] { "*.PNG;*.png", "*.*" }); // Windows
 		final String path = dialog.open();
 		if ((path != null) && !path.isEmpty()) {

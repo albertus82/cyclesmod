@@ -50,7 +50,7 @@ public class Settings implements ByteList {
 	public static int parse(final String key, @NonNull final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(messages.get("common.err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
+			throw new InvalidPropertyException(messages.get("common.error.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
 		}
 		return (int) newValue;
 	}
