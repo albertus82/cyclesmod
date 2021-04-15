@@ -37,9 +37,6 @@ import lombok.extern.java.Log;
 @Log
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
-	private static final String MSG_KEY_WARNING = "gui.message.warning";
-	private static final String MSG_KEY_WIN_TITLE = "gui.label.window.title";
-
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
 	private final Map<String, Integer> defaultProperties = new HashMap<>();
@@ -66,7 +63,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		// Shell creation...
 		shell = new Shell(display);
 		shell.setImages(Images.getAppIconArray());
-		shell.setText(messages.get(MSG_KEY_WIN_TITLE));
+		shell.setText(messages.get("gui.label.window.title"));
 		shell.setLayout(new FillLayout());
 		shell.addShellListener(new CloseListener(this));
 
@@ -89,7 +86,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	/* GUI entry point. */
 	public static void main(final String fileName) {
-		Display.setAppName(messages.get(MSG_KEY_WIN_TITLE));
+		Display.setAppName(messages.get("gui.label.window.title"));
 		Display.setAppVersion(Version.getNumber());
 		final Display display = Display.getDefault();
 		Shell shell = null;
@@ -106,7 +103,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		catch (final Exception e) {
 			final String message = e.toString();
 			log.log(Level.SEVERE, message, e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, messages.get(MSG_KEY_WARNING), message, IStatus.ERROR, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell != null ? shell : null, messages.get("gui.message.warning"), message, IStatus.ERROR, e, Images.getAppIconArray());
 		}
 		finally {
 			display.dispose();
@@ -135,7 +132,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				tabs.updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 				bikesInfFileName = bikesInfFile.getCanonicalPath();
-				shell.setText(messages.get(MSG_KEY_WIN_TITLE) + " - " + bikesInfFileName);
+				shell.setText(messages.get("gui.label.window.title") + " - " + bikesInfFileName);
 			}
 			else if (fileName.toLowerCase(Locale.ROOT).endsWith(".cfg")) {
 				bikesInfFileName = null;
@@ -157,14 +154,14 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			else {
 				final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-				messageBox.setText(messages.get(MSG_KEY_WARNING));
+				messageBox.setText(messages.get("gui.message.warning"));
 				messageBox.setMessage(messages.get("gui.error.file.invalid"));
 				messageBox.open();
 			}
 		}
 		catch (final Exception e) {
 			log.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("gui.error.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, messages.get("gui.message.warning"), messages.get("gui.error.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
 		}
 	}
 
@@ -182,7 +179,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final InvalidPropertyException e) {
 				log.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, messages.get("gui.message.warning"), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			try {
@@ -190,7 +187,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, messages.get("gui.message.warning"), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
@@ -204,7 +201,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, messages.get("gui.message.warning"), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
@@ -219,11 +216,11 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, messages.get(MSG_KEY_WARNING), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, messages.get("gui.message.warning"), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			bikesInfFileName = fileName;
-			shell.setText(messages.get(MSG_KEY_WIN_TITLE) + " - " + bikesInfFileName);
+			shell.setText(messages.get("gui.label.window.title") + " - " + bikesInfFileName);
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 			return true;
 		}
