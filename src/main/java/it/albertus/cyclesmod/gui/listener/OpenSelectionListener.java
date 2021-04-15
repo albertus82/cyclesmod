@@ -22,7 +22,7 @@ public class OpenSelectionListener extends AskForSavingListener implements Selec
 
 	@Override
 	public void widgetSelected(final SelectionEvent event) {
-		if (askForSaving(messages.get("gui.win.title"), messages.get("gui.message.confirm.open.message"))) {
+		if (askForSaving(messages.get("gui.label.window.title"), messages.get("gui.message.confirm.open.message"))) {
 			final FileDialog openDialog = new FileDialog(gui.getShell(), SWT.OPEN);
 			openDialog.setFilterExtensions(EXTENSIONS);
 			final String fileName = openDialog.open();
