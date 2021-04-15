@@ -15,10 +15,17 @@ import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.IOUtils;
 import it.albertus.util.NewLine;
 import it.albertus.util.Version;
+import it.albertus.util.logging.LoggingSupport;
 import lombok.extern.java.Log;
 
 @Log
 public class CyclesModConsole extends CyclesModEngine {
+
+	static {
+		if (LoggingSupport.getFormat() == null) {
+			LoggingSupport.setFormat("%5$s%6$s%n");
+		}
+	}
 
 	private static final String DEFAULT_DESTINATION_PATH = "";
 
