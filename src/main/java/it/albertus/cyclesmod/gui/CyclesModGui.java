@@ -85,7 +85,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	/* GUI entry point. */
-	public static void start(final String fileName) {
+	public static void main(final String fileName) {
 		Display.setAppName(Messages.get(MSG_KEY_WIN_TITLE));
 		Display.setAppVersion(Version.getNumber());
 		final Display display = Display.getDefault();
