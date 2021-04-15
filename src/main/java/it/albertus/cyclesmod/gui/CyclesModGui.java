@@ -38,7 +38,7 @@ import lombok.extern.java.Log;
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private static final String MSG_KEY_WARNING = "gui.message.warning";
-	private static final String MSG_KEY_WIN_TITLE = "gui.win.title";
+	private static final String MSG_KEY_WIN_TITLE = "gui.label.window.title";
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
