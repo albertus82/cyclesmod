@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.console;
+package it.albertus.cyclesmod.cli;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import it.albertus.util.logging.LoggingSupport;
 import lombok.extern.java.Log;
 
 @Log
-public class CyclesModConsole extends CyclesModEngine {
+public class CyclesModCli extends CyclesModEngine {
 
 	static {
 		if (LoggingSupport.getFormat() == null) {
@@ -31,11 +31,11 @@ public class CyclesModConsole extends CyclesModEngine {
 
 	private final String path;
 
-	private CyclesModConsole(String path) {
+	private CyclesModCli(String path) {
 		this.path = path;
 	}
 
-	public static void start(final String providedPath) {
+	public static void main(final String providedPath) {
 		try {
 			System.out.println(getWelcomeMessage());
 
@@ -50,7 +50,7 @@ public class CyclesModConsole extends CyclesModEngine {
 				path = providedPath;
 			}
 
-			new CyclesModConsole(path).execute();
+			new CyclesModCli(path).execute();
 		}
 		catch (final Exception e) {
 			log.log(Level.SEVERE, e.toString(), e);
