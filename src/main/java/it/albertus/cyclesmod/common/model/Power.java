@@ -35,7 +35,7 @@ public class Power implements ByteList {
 
 	public Power(@NonNull final short[] curve) {
 		if (curve.length > LENGTH) {
-			throw new IllegalArgumentException(messages.get("err.power", LENGTH, curve.length));
+			throw new IllegalArgumentException(messages.get("common.err.power", LENGTH, curve.length));
 		}
 		this.curve = Arrays.copyOf(curve, LENGTH);
 	}
@@ -60,7 +60,7 @@ public class Power implements ByteList {
 	public static short parse(final String key, @NonNull final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
+			throw new InvalidPropertyException(messages.get("common.err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
 		}
 		return (short) newValue;
 	}
