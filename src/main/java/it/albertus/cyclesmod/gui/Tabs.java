@@ -273,7 +273,7 @@ public class Tabs implements Multilanguage {
 				textLimit = Integer.toString(Power.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else {
-				throw new IllegalStateException(messages.get("err.unsupported.property", entry.getKey(), entry.getValue().getValue()));
+				throw new IllegalStateException(messages.get("common.err.unsupported.property", entry.getKey(), entry.getValue().getValue()));
 			}
 			if (field.getTextLimit() != textLimit) {
 				field.setTextLimit(textLimit);

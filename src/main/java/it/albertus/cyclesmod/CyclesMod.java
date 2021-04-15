@@ -10,9 +10,6 @@ import picocli.CommandLine.Command;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Command(versionProvider = VersionProvider.class)
 public class CyclesMod {
-	
-	
-	
 
 	/* Unique entry point */
 	public static final void main(final String... args) {
@@ -26,7 +23,7 @@ public class CyclesMod {
 			}
 		}
 		else {
-			
+			// if args[0] is "File" and exists and  isDirectory then cli else gui
 		}
 	}
 }

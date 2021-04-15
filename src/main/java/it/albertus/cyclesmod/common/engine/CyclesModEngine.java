@@ -18,7 +18,7 @@ import lombok.extern.java.Log;
 @Setter
 public abstract class CyclesModEngine implements NumeralSystemProvider {
 
-	private static final String MSG_KEY_ERR_UNSUPPORTED_PROPERTY = "err.unsupported.property";
+	private static final String MSG_KEY_ERR_UNSUPPORTED_PROPERTY = "common.err.unsupported.property";
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
