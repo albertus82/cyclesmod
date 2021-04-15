@@ -3,18 +3,15 @@ package it.albertus.cyclesmod.cli;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.logging.Level;
 
+import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
 import it.albertus.cyclesmod.common.data.DefaultBikes;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.IOUtils;
-import it.albertus.util.NewLine;
-import it.albertus.util.Version;
 import it.albertus.util.logging.LoggingSupport;
 import lombok.extern.java.Log;
 
@@ -29,6 +26,8 @@ public class CyclesModCli extends CyclesModEngine {
 
 	private static final String DEFAULT_DESTINATION_PATH = "";
 
+	private static final Messages messages = ConsoleMessages.INSTANCE;
+
 	private final String path;
 
 	private CyclesModCli(String path) {
@@ -37,8 +36,6 @@ public class CyclesModCli extends CyclesModEngine {
 
 	public static void main(final String providedPath) {
 		try {
-			System.out.println(getWelcomeMessage());
-
 			final String path;
 			if (providedPath == null) {
 				path = DEFAULT_DESTINATION_PATH;
@@ -57,23 +54,8 @@ public class CyclesModCli extends CyclesModEngine {
 		}
 	}
 
-	public static String getWelcomeMessage() {
-		return Messages.get("msg.welcome", Version.getNumber(), getFormattedVersionDate(), Messages.get("msg.info.site")) + NewLine.SYSTEM_LINE_SEPARATOR;
-	}
-
-	private static String getFormattedVersionDate() {
-		Date date;
-		try {
-			date = Version.getDate();
-		}
-		catch (final Exception e) {
-			date = new Date();
-		}
-		return DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(date);
-	}
-
 	private void execute() throws IOException {
-		System.out.println(Messages.get("msg.reading.original.file", BikesInf.FILE_NAME));
+		System.out.println(messages.get("msg.reading.original.file", BikesInf.FILE_NAME));
 		InputStream is = null;
 		try {
 			is = new DefaultBikes().getInputStream();
@@ -83,10 +65,10 @@ public class CyclesModCli extends CyclesModEngine {
 			IOUtils.closeQuietly(is);
 		}
 
-		System.out.println(Messages.get("msg.applying.customizations"));
+		System.out.println(messages.get("msg.applying.customizations"));
 		customize();
 
-		System.out.println(Messages.get("msg.preparing.new.file", BikesInf.FILE_NAME));
+		System.out.println(messages.get("msg.preparing.new.file", BikesInf.FILE_NAME));
 		getBikesInf().write(path + BikesInf.FILE_NAME, true);
 	}
 
@@ -101,7 +83,7 @@ public class CyclesModCli extends CyclesModEngine {
 				changesCount++;
 			}
 		}
-		System.out.println(Messages.get("msg.customizations.applied", changesCount));
+		System.out.println(messages.get("msg.customizations.applied", changesCount));
 	}
 
 }

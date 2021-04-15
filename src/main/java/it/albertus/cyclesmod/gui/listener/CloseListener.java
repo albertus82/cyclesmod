@@ -10,15 +10,18 @@ import org.eclipse.swt.widgets.Listener;
 
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 
 public class CloseListener extends AskForSavingListener implements ShellListener, SelectionListener, Listener {
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	public CloseListener(final CyclesModGui gui) {
 		super(gui);
 	}
 
 	private boolean canClose() {
-		return askForSaving(Messages.get("msg.confirm.close.text"), Messages.get("msg.confirm.close.message"));
+		return askForSaving(messages.get("msg.confirm.close.text"), messages.get("msg.confirm.close.message"));
 	}
 
 	private void disposeShellAndDisplay() {

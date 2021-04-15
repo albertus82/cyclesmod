@@ -8,9 +8,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import lombok.NonNull;
 
 public class ZoomOutListener extends ZoomListener {
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	public ZoomOutListener(final IXYGraph xyGraph) {
 		super(xyGraph);
@@ -25,7 +28,7 @@ public class ZoomOutListener extends ZoomListener {
 
 	@Override
 	protected void execute() {
-		final SaveStateCommand command = new ZoomCommand(Messages.get("lbl.graph.action.zoomOut"), xyGraph.getXAxisList(), xyGraph.getYAxisList());
+		final SaveStateCommand command = new ZoomCommand(messages.get("lbl.graph.action.zoomOut"), xyGraph.getXAxisList(), xyGraph.getYAxisList());
 		final Point plotAreaCenter = getPlotAreaCenter();
 		xyGraph.getPlotArea().zoomInOut(true, true, plotAreaCenter.x, plotAreaCenter.y, ZOOM_RATIO * -1);
 		saveUndo(command);

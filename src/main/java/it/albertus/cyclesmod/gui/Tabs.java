@@ -38,6 +38,7 @@ import it.albertus.cyclesmod.gui.listener.PropertyKeyListener;
 import it.albertus.cyclesmod.gui.listener.PropertyVerifyListener;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.simple.PowerGraphCanvas;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.Multilanguage;
 import it.albertus.jface.i18n.LocalizedWidgets;
 import it.albertus.util.ISupplier;
@@ -45,6 +46,8 @@ import lombok.Getter;
 import lombok.NonNull;
 
 public class Tabs implements Multilanguage {
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private final CyclesModGui gui;
 
@@ -97,7 +100,7 @@ public class Tabs implements Multilanguage {
 				final Label label = new Label(settingsGroup, SWT.NULL);
 				GridDataFactory.swtDefaults().applyTo(label);
 				final String labelTextKey = "lbl." + setting.getKey();
-				label.setText(Messages.get(labelTextKey));
+				label.setText(messages.get(labelTextKey));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
@@ -144,7 +147,7 @@ public class Tabs implements Multilanguage {
 				GridDataFactory.swtDefaults().applyTo(label);
 				final String labelTextKey = "lbl.gear";
 				final String labelTextArgument = index != 0 ? String.valueOf(index) : "N";
-				label.setText(Messages.get(labelTextKey, labelTextArgument));
+				label.setText(messages.get(labelTextKey, labelTextArgument));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setData(LabelDataKey.ARGUMENT.toString(), labelTextArgument);
 				label.setToolTipText(key);
@@ -174,7 +177,7 @@ public class Tabs implements Multilanguage {
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				final String labelTextKey = "lbl.rpm";
 				final String labelTextArgument = String.valueOf(Power.getRpm(index));
-				label.setText(Messages.get(labelTextKey, labelTextArgument));
+				label.setText(messages.get(labelTextKey, labelTextArgument));
 				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setData(LabelDataKey.ARGUMENT.toString(), labelTextArgument);
 				label.setToolTipText(key);
@@ -212,7 +215,7 @@ public class Tabs implements Multilanguage {
 		disableTextListeners();
 		for (final FormProperty formProperty : formProperties.values()) {
 			final Label label = formProperty.getLabel();
-			final String updatedLabelText = Messages.get((String) label.getData(LabelDataKey.KEY.toString()), label.getData(LabelDataKey.ARGUMENT.toString()));
+			final String updatedLabelText = messages.get((String) label.getData(LabelDataKey.KEY.toString()), label.getData(LabelDataKey.ARGUMENT.toString()));
 			if (!label.getText().equals(updatedLabelText)) {
 				label.setText(updatedLabelText);
 			}
@@ -233,7 +236,7 @@ public class Tabs implements Multilanguage {
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
-			throw new IllegalStateException(Messages.get("err.properties.number"));
+			throw new IllegalStateException(messages.get("err.properties.number"));
 		}
 
 		// Update screen values...
@@ -254,7 +257,7 @@ public class Tabs implements Multilanguage {
 	private void updateFields(final Map<String, Integer> properties) {
 		for (final Entry<String, FormProperty> entry : formProperties.entrySet()) {
 			if (!properties.containsKey(entry.getKey())) {
-				throw new IllegalStateException(Messages.get("err.property.missing", entry.getKey()));
+				throw new IllegalStateException(messages.get("err.property.missing", entry.getKey()));
 			}
 			final Text field = entry.getValue().getText();
 
@@ -270,7 +273,7 @@ public class Tabs implements Multilanguage {
 				textLimit = Integer.toString(Power.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else {
-				throw new IllegalStateException(Messages.get("err.unsupported.property", entry.getKey(), entry.getValue().getValue()));
+				throw new IllegalStateException(messages.get("err.unsupported.property", entry.getKey(), entry.getValue().getValue()));
 			}
 			if (field.getTextLimit() != textLimit) {
 				field.setTextLimit(textLimit);
@@ -283,7 +286,7 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Update tooltip text...
-			final String toolTipText = Messages.get("msg.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			final String toolTipText = messages.get("msg.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}
@@ -312,7 +315,7 @@ public class Tabs implements Multilanguage {
 	}
 
 	private Group newLocalizedGroup(@NonNull final Composite parent, final int style, @NonNull final String messageKey) {
-		return newLocalizedGroup(parent, style, () -> Messages.get(messageKey));
+		return newLocalizedGroup(parent, style, () -> messages.get(messageKey));
 	}
 
 	private Group newLocalizedGroup(@NonNull final Composite parent, final int style, @NonNull final ISupplier<String> textSupplier) {

@@ -11,6 +11,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseWheelListener;
 
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +20,8 @@ public class ZoomMouseWheelListener implements MouseWheelListener {
 
 	private static final double ZOOM_RATIO = 0.1;
 	private static final int DIVISOR = 3;
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private final IXYGraph xyGraph;
 
@@ -37,7 +40,7 @@ public class ZoomMouseWheelListener implements MouseWheelListener {
 		});
 
 		if (figureUnderMouse != null) {
-			final String zoomTypeDescription = Messages.get(e.count > 0 ? "lbl.graph.action.zoomIn" : "lbl.graph.action.zoomOut");
+			final String zoomTypeDescription = messages.get(e.count > 0 ? "lbl.graph.action.zoomIn" : "lbl.graph.action.zoomOut");
 			final SaveStateCommand command = new ZoomCommand(zoomTypeDescription, xyGraph.getXAxisList(), xyGraph.getYAxisList());
 
 			if (figureUnderMouse instanceof PlotArea) {

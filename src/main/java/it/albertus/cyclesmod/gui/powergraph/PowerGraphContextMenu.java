@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.Multilanguage;
 import it.albertus.jface.i18n.LocalizedWidgets;
 import it.albertus.util.ISupplier;
@@ -31,6 +32,8 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 	private static final byte[] POINT_SIZE_OPTIONS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 	private static final short[] AREA_ALPHA_OPTIONS = { 26, 51, 77, 102, 128, 153, 179, 204, 230, 255 };
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
 
@@ -225,7 +228,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 	}
 
 	protected MenuItem newLocalizedMenuItem(@NonNull final Menu parent, final int style, @NonNull final String messageKey) {
-		return newLocalizedMenuItem(parent, style, () -> Messages.get(messageKey));
+		return newLocalizedMenuItem(parent, style, () -> messages.get(messageKey));
 	}
 
 	protected MenuItem newLocalizedMenuItem(@NonNull final Menu parent, final int style, @NonNull final ISupplier<String> textSupplier) {

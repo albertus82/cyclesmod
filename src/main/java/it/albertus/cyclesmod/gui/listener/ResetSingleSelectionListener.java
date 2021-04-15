@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import it.albertus.cyclesmod.common.model.BikeType;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.util.ExceptionUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 public class ResetSingleSelectionListener extends SelectionAdapter {
+	
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	@NonNull private final CyclesModGui gui;
 
@@ -26,8 +29,8 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 	public void widgetSelected(final SelectionEvent se) {
 		final BikeType type = BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()];
 		MessageBox messageBox = new MessageBox(gui.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText(Messages.get("msg.warning"));
-		messageBox.setMessage(Messages.get("msg.reset.overwrite.single", type.getDisplacement()));
+		messageBox.setText(messages.get("msg.warning"));
+		messageBox.setMessage(messages.get("msg.reset.overwrite.single", type.getDisplacement()));
 		int choose = messageBox.open();
 		if (choose == SWT.YES) {
 			try {
@@ -36,8 +39,8 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
 				messageBox = new MessageBox(gui.getShell(), SWT.ICON_ERROR);
-				messageBox.setText(Messages.get("msg.warning"));
-				messageBox.setMessage(Messages.get("err.reset", ExceptionUtils.getUIMessage(e)));
+				messageBox.setText(messages.get("msg.warning"));
+				messageBox.setMessage(messages.get("err.reset", ExceptionUtils.getUIMessage(e)));
 				messageBox.open();
 			}
 		}

@@ -10,6 +10,7 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
 import it.albertus.cyclesmod.common.model.BikesInf;
+import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import jakarta.xml.bind.DatatypeConverter;
 
@@ -18,6 +19,8 @@ public class DefaultBikes {
 	public static final int CRC = 0x28A33682;
 
 	private static final byte[] DEFAULT = new byte[BikesInf.FILE_SIZE];
+
+	private static final Messages messages = CommonMessages.INSTANCE;
 
 	static {
 		final Inflater inflater = new Inflater();
@@ -37,10 +40,10 @@ public class DefaultBikes {
 		final Checksum crc = new CRC32();
 		crc.update(DEFAULT, 0, DEFAULT.length);
 		if (crc.getValue() != CRC) {
-			throw new StreamCorruptedException(Messages.get("err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC), String.format("%08X", crc.getValue())));
+			throw new StreamCorruptedException(messages.get("err.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC), String.format("%08X", crc.getValue())));
 		}
 		if (DEFAULT.length != BikesInf.FILE_SIZE) {
-			throw new StreamCorruptedException(Messages.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));
+			throw new StreamCorruptedException(messages.get("err.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, DEFAULT.length));
 		}
 	}
 

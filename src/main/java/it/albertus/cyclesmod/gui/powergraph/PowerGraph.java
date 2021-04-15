@@ -21,10 +21,13 @@ import it.albertus.cyclesmod.common.model.Bike;
 import it.albertus.cyclesmod.common.model.BikeType;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 
 public class PowerGraph implements IPowerGraph {
 
 	public static final int RPM_DIVISOR = 1000;
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private static final IDataProvider nullDataProvider = new NullDataProvider();
 
@@ -33,8 +36,8 @@ public class PowerGraph implements IPowerGraph {
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
 	private final CircularBufferDataProvider powerDataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
-	private final Trace powerTrace = new Trace(Messages.get("lbl.graph.trace.power"), abscissae, ordinates, powerDataProvider);
-	private final Trace torqueTrace = new Trace(Messages.get("lbl.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
+	private final Trace powerTrace = new Trace(messages.get("lbl.graph.trace.power"), abscissae, ordinates, powerDataProvider);
+	private final Trace torqueTrace = new Trace(messages.get("lbl.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
 	private final double[] powerValues = new double[Power.LENGTH];
 	private final double[] torqueValues = new double[Power.LENGTH];
 	private final double[] xDataArray = new double[Power.LENGTH];
@@ -74,11 +77,11 @@ public class PowerGraph implements IPowerGraph {
 
 		final Font axisTitleFont = Display.getCurrent().getSystemFont();
 
-		abscissae.setTitle(Messages.get("lbl.graph.axis.x", RPM_DIVISOR));
+		abscissae.setTitle(messages.get("lbl.graph.axis.x", RPM_DIVISOR));
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
-		ordinates.setTitle(Messages.get("lbl.graph.axis.y.power"));
+		ordinates.setTitle(messages.get("lbl.graph.axis.y.power"));
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 
@@ -173,12 +176,12 @@ public class PowerGraph implements IPowerGraph {
 		if (visibility) {
 			torqueTrace.setDataProvider(torqueDataProvider);
 			xyGraph.addTrace(torqueTrace);
-			ordinates.setTitle(Messages.get("lbl.graph.axis.y.power") + " / " + Messages.get("lbl.graph.axis.y.torque"));
+			ordinates.setTitle(messages.get("lbl.graph.axis.y.power") + " / " + messages.get("lbl.graph.axis.y.torque"));
 		}
 		else {
 			xyGraph.removeTrace(torqueTrace);
 			torqueTrace.setDataProvider(new NullDataProvider());
-			ordinates.setTitle(Messages.get("lbl.graph.axis.y.power"));
+			ordinates.setTitle(messages.get("lbl.graph.axis.y.power"));
 		}
 	}
 
