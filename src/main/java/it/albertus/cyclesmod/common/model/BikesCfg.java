@@ -41,21 +41,21 @@ public class BikesCfg {
 		try (final FileReader fr = new FileReader(fileName)) {
 			populateProperties(fr); // buffered internally
 		}
-		log.info(messages.get("common.msg.file.read", FILE_NAME));
+		log.info(messages.get("common.message.file.read", FILE_NAME));
 	}
 
 	public BikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
-		log.info(messages.get("common.msg.reading.file", FILE_NAME));
+		log.info(messages.get("common.message.reading.file", FILE_NAME));
 		final File file = new File(path + FILE_NAME);
 		if (!file.exists()) {
-			log.info(messages.get("common.msg.file.not.found.creating.default", FILE_NAME));
+			log.info(messages.get("common.message.file.not.found.creating.default", FILE_NAME));
 			writeDefaultBikesCfg(originalBikesInf, file);
-			log.info(messages.get("common.msg.default.file.created", FILE_NAME));
+			log.info(messages.get("common.message.default.file.created", FILE_NAME));
 		}
 		try (final FileReader fr = new FileReader(file)) {
 			populateProperties(fr); // buffered internally
 		}
-		log.info(messages.get("common.msg.file.read", FILE_NAME));
+		log.info(messages.get("common.message.file.read", FILE_NAME));
 	}
 
 	private void populateProperties(final Reader reader) throws IOException {

@@ -21,7 +21,7 @@ public class CloseListener extends AskForSavingListener implements ShellListener
 	}
 
 	private boolean canClose() {
-		return askForSaving(messages.get("gui.msg.confirm.close.text"), messages.get("gui.msg.confirm.close.message"));
+		return askForSaving(messages.get("gui.message.confirm.close.text"), messages.get("gui.message.confirm.close.message"));
 	}
 
 	private void disposeShellAndDisplay() {

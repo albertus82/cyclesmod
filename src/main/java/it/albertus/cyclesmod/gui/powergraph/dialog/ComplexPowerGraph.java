@@ -98,11 +98,11 @@ public class ComplexPowerGraph extends PowerGraph {
 					if (button.getToolTip() instanceof Label) {
 						final String labelText = ((Label) button.getToolTip()).getText();
 						if ("undo".equalsIgnoreCase(labelText)) {
-							button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.undo", "")));
+							button.setToolTip(new Label(messages.get("gui.label.graph.toolbar.undo", "")));
 							addUndoListener(button, manager);
 						}
 						else if ("redo".equalsIgnoreCase(labelText)) {
-							button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.redo", "")));
+							button.setToolTip(new Label(messages.get("gui.label.graph.toolbar.redo", "")));
 							addRedoListener(button, manager);
 						}
 					}
@@ -120,11 +120,11 @@ public class ComplexPowerGraph extends PowerGraph {
 			if (undoCommandsSize > 0) {
 				button.setEnabled(true);
 				final String cmdName = m.getUndoCommands()[undoCommandsSize - 1].toString();
-				button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.undo", cmdName)));
+				button.setToolTip(new Label(messages.get("gui.label.graph.toolbar.undo", cmdName)));
 			}
 			else {
 				button.setEnabled(false);
-				button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.undo", "")));
+				button.setToolTip(new Label(messages.get("gui.label.graph.toolbar.undo", "")));
 			}
 		});
 	}
@@ -135,11 +135,11 @@ public class ComplexPowerGraph extends PowerGraph {
 			if (redoCommandsSize > 0) {
 				button.setEnabled(true);
 				final String cmdName = m.getRedoCommands()[redoCommandsSize - 1].toString();
-				button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.redo", cmdName)));
+				button.setToolTip(new Label(messages.get("gui.label.graph.toolbar.redo", cmdName)));
 			}
 			else {
 				button.setEnabled(false);
-				button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.redo", "")));
+				button.setToolTip(new Label(messages.get("gui.label.graph.toolbar.redo", "")));
 			}
 		});
 	}
@@ -149,10 +149,10 @@ public class ComplexPowerGraph extends PowerGraph {
 		super.toggleTorqueVisibility(visibility);
 		if (shell != null && !shell.isDisposed()) {
 			if (visibility) {
-				shell.setText(messages.get("gui.lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+				shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", bikeType.getDisplacement()));
 			}
 			else {
-				shell.setText(messages.get("gui.lbl.graph.dialog.title.power", bikeType.getDisplacement()));
+				shell.setText(messages.get("gui.label.graph.dialog.title.power", bikeType.getDisplacement()));
 			}
 		}
 	}

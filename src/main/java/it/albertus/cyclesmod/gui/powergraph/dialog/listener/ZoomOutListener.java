@@ -28,7 +28,7 @@ public class ZoomOutListener extends ZoomListener {
 
 	@Override
 	protected void execute() {
-		final SaveStateCommand command = new ZoomCommand(messages.get("gui.lbl.graph.action.zoomOut"), xyGraph.getXAxisList(), xyGraph.getYAxisList());
+		final SaveStateCommand command = new ZoomCommand(messages.get("gui.label.graph.action.zoomOut"), xyGraph.getXAxisList(), xyGraph.getYAxisList());
 		final Point plotAreaCenter = getPlotAreaCenter();
 		xyGraph.getPlotArea().zoomInOut(true, true, plotAreaCenter.x, plotAreaCenter.y, ZOOM_RATIO * -1);
 		saveUndo(command);

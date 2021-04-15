@@ -41,7 +41,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		boolean applied = false;
 		try {
 			if (value == null || value.trim().length() == 0 || !isNumeric(value.trim())) {
-				throw new InvalidPropertyException(messages.get("common.err.unsupported.property", key, value));
+				throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
 			}
 
 			// Settings
@@ -60,7 +60,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 
 			else {
-				throw new InvalidPropertyException(messages.get("common.err.unsupported.property", key, value));
+				throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
 			}
 		}
 		catch (final InvalidPropertyException e) {
@@ -99,7 +99,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get("common.err.unsupported.property", key, value));
+			throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
 		}
 		return applied;
 	}
@@ -120,7 +120,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get("common.err.unsupported.property", key, value));
+			throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
 		}
 		return applied;
 	}
@@ -141,19 +141,19 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get("common.err.unsupported.property", key, value));
+			throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
 		}
 		return applied;
 	}
 
 	private void logChange(final String key, final int defaultValue, final int newValue) {
-		log.info(messages.get("common.msg.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
+		log.info(messages.get("common.message.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
 	}
 
 	private Bike getBike(final String key, final String value) {
 		final Bike bike = bikesInf.getBike(Integer.parseInt(StringUtils.substringBefore(key, ".")));
 		if (bike == null) {
-			throw new InvalidPropertyException(messages.get("common.err.unsupported.property", key, value));
+			throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
 		}
 		return bike;
 	}

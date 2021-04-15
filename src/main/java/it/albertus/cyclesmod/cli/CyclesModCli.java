@@ -55,7 +55,7 @@ public class CyclesModCli extends CyclesModEngine {
 	}
 
 	private void execute() throws IOException {
-		System.out.println(messages.get("console.msg.reading.original.file", BikesInf.FILE_NAME));
+		System.out.println(messages.get("console.message.reading.original.file", BikesInf.FILE_NAME));
 		InputStream is = null;
 		try {
 			is = new DefaultBikes().getInputStream();
@@ -65,10 +65,10 @@ public class CyclesModCli extends CyclesModEngine {
 			IOUtils.closeQuietly(is);
 		}
 
-		System.out.println(messages.get("console.msg.applying.customizations"));
+		System.out.println(messages.get("console.message.applying.customizations"));
 		customize();
 
-		System.out.println(messages.get("console.msg.preparing.new.file", BikesInf.FILE_NAME));
+		System.out.println(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME));
 		getBikesInf().write(path + BikesInf.FILE_NAME, true);
 	}
 
@@ -83,7 +83,7 @@ public class CyclesModCli extends CyclesModEngine {
 				changesCount++;
 			}
 		}
-		System.out.println(messages.get("console.msg.customizations.applied", changesCount));
+		System.out.println(messages.get("console.message.customizations.applied", changesCount));
 	}
 
 }
