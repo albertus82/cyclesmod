@@ -24,6 +24,7 @@ import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UpdateTitleListener;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import lombok.Getter;
 import lombok.extern.java.Log;
 
@@ -39,6 +40,8 @@ public class ComplexPowerGraph extends PowerGraph {
 	private static final boolean DEFAULT_AUTOSCALE = false;
 
 	private static final float TITLE_HEIGHT_FACTOR = 0.80f;
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private final Shell shell;
 	private final BikeType bikeType;
@@ -98,11 +101,11 @@ public class ComplexPowerGraph extends PowerGraph {
 					if (button.getToolTip() instanceof Label) {
 						final String labelText = ((Label) button.getToolTip()).getText();
 						if ("undo".equalsIgnoreCase(labelText)) {
-							button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
+							button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
 							addUndoListener(button, manager);
 						}
 						else if ("redo".equalsIgnoreCase(labelText)) {
-							button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
+							button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
 							addRedoListener(button, manager);
 						}
 					}
@@ -120,11 +123,11 @@ public class ComplexPowerGraph extends PowerGraph {
 			if (undoCommandsSize > 0) {
 				button.setEnabled(true);
 				final String cmdName = m.getUndoCommands()[undoCommandsSize - 1].toString();
-				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
+				button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
 			}
 			else {
 				button.setEnabled(false);
-				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
+				button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
 			}
 		});
 	}
@@ -135,11 +138,11 @@ public class ComplexPowerGraph extends PowerGraph {
 			if (redoCommandsSize > 0) {
 				button.setEnabled(true);
 				final String cmdName = m.getRedoCommands()[redoCommandsSize - 1].toString();
-				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, cmdName)));
+				button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_REDO, cmdName)));
 			}
 			else {
 				button.setEnabled(false);
-				button.setToolTip(new Label(Messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
+				button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
 			}
 		});
 	}
@@ -149,10 +152,10 @@ public class ComplexPowerGraph extends PowerGraph {
 		super.toggleTorqueVisibility(visibility);
 		if (shell != null && !shell.isDisposed()) {
 			if (visibility) {
-				shell.setText(Messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+				shell.setText(messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
 			}
 			else {
-				shell.setText(Messages.get("lbl.graph.dialog.title.power", bikeType.getDisplacement()));
+				shell.setText(messages.get("lbl.graph.dialog.title.power", bikeType.getDisplacement()));
 			}
 		}
 	}

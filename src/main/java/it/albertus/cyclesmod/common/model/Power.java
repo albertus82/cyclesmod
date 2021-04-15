@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
+import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import lombok.NonNull;
 
@@ -16,6 +17,8 @@ public class Power implements ByteList {
 	public static final short MAX_VALUE = 255;
 
 	public static final String PREFIX = "power";
+
+	private static final Messages messages = CommonMessages.INSTANCE;
 
 	/**
 	 * 0-767: overlap con Gearbox '7' (0-255), '8' (256-511) e '9' (512-767). Il
@@ -32,7 +35,7 @@ public class Power implements ByteList {
 
 	public Power(@NonNull final short[] curve) {
 		if (curve.length > LENGTH) {
-			throw new IllegalArgumentException(Messages.get("err.power", LENGTH, curve.length));
+			throw new IllegalArgumentException(messages.get("err.power", LENGTH, curve.length));
 		}
 		this.curve = Arrays.copyOf(curve, LENGTH);
 	}
@@ -57,7 +60,7 @@ public class Power implements ByteList {
 	public static short parse(final String key, @NonNull final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
+			throw new InvalidPropertyException(messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
 		}
 		return (short) newValue;
 	}

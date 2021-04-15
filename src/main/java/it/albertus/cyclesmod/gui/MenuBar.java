@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
 import it.albertus.cyclesmod.common.model.BikeType;
-import it.albertus.cyclesmod.common.resources.Messages;
-import it.albertus.cyclesmod.common.resources.Messages.Language;
+import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
+import it.albertus.cyclesmod.common.resources.Language;
 import it.albertus.cyclesmod.gui.listener.AboutListener;
 import it.albertus.cyclesmod.gui.listener.ArmMenuListener;
 import it.albertus.cyclesmod.gui.listener.CloseListener;
@@ -26,6 +26,7 @@ import it.albertus.cyclesmod.gui.listener.PasteSelectionListener;
 import it.albertus.cyclesmod.gui.listener.RadixSelectionListener;
 import it.albertus.cyclesmod.gui.listener.ResetAllSelectionListener;
 import it.albertus.cyclesmod.gui.listener.ResetSingleSelectionListener;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.Multilanguage;
 import it.albertus.jface.SwtUtils;
 import it.albertus.jface.cocoa.CocoaEnhancerException;
@@ -49,6 +50,8 @@ import lombok.extern.java.Log;
 @Getter
 public class MenuBar implements Multilanguage {
 
+	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
+
 	private final MenuItem editCutMenuItem;
 	private final MenuItem editCopyMenuItem;
 	private final MenuItem editPasteMenuItem;
@@ -66,7 +69,7 @@ public class MenuBar implements Multilanguage {
 				cocoaMenuCreated = true;
 			}
 			catch (final CocoaEnhancerException cee) {
-				log.log(Level.WARNING, Messages.get("err.cocoa.enhancer"), cee);
+				log.log(Level.WARNING, messages.get("err.cocoa.enhancer"), cee);
 			}
 		}
 
@@ -76,11 +79,11 @@ public class MenuBar implements Multilanguage {
 		final Menu fileMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		newLocalizedMenuItem(bar, SWT.CASCADE, "lbl.menu.header.file").setMenu(fileMenu);
 
-		final MenuItem fileOpenMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, () -> Messages.get("lbl.menu.item.open") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
+		final MenuItem fileOpenMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, () -> messages.get("lbl.menu.item.open") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
 		fileOpenMenuItem.addSelectionListener(new OpenSelectionListener(gui));
 		fileOpenMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_OPEN);
 
-		final MenuItem fileSaveMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, () -> Messages.get("lbl.menu.item.save") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+		final MenuItem fileSaveMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, () -> messages.get("lbl.menu.item.save") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
 		fileSaveMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -110,15 +113,15 @@ public class MenuBar implements Multilanguage {
 		editMenu.addMenuListener(editMenuListener);
 		editMenuHeader.addArmListener(editMenuListener);
 
-		editCutMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> Messages.get("lbl.menu.item.cut") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_CUT));
+		editCutMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> messages.get("lbl.menu.item.cut") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_CUT));
 		editCutMenuItem.addSelectionListener(new CutSelectionListener(gui::getTabs));
 		editCutMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_CUT);
 
-		editCopyMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> Messages.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
+		editCopyMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> messages.get("lbl.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
 		editCopyMenuItem.addSelectionListener(new CopySelectionListener(gui::getTabs));
 		editCopyMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_COPY);
 
-		editPasteMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> Messages.get("lbl.menu.item.paste") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_PASTE));
+		editPasteMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> messages.get("lbl.menu.item.paste") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_PASTE));
 		editPasteMenuItem.addSelectionListener(new PasteSelectionListener(gui::getTabs));
 		editPasteMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_PASTE);
 
@@ -130,7 +133,7 @@ public class MenuBar implements Multilanguage {
 		editPowerSubMenuItem.setMenu(editPowerSubMenu);
 
 		for (final BikeType bikeType : BikeType.values()) {
-			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> Messages.get("lbl.menu.item.power.curve.bike", bikeType.getDisplacement())).addSelectionListener(new OpenPowerGraphDialogListener(gui, bikeType));
+			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> messages.get("lbl.menu.item.power.curve.bike", bikeType.getDisplacement())).addSelectionListener(new OpenPowerGraphDialogListener(gui, bikeType));
 		}
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
@@ -155,7 +158,7 @@ public class MenuBar implements Multilanguage {
 		final RadixSelectionListener radixSelectionListener = new RadixSelectionListener(gui);
 
 		for (final NumeralSystem numeralSystem : NumeralSystem.values()) {
-			final MenuItem radixMenuItem = newLocalizedMenuItem(viewRadixSubMenu, SWT.RADIO, () -> Messages.get("lbl.menu.item.radix." + numeralSystem.getRadix()));
+			final MenuItem radixMenuItem = newLocalizedMenuItem(viewRadixSubMenu, SWT.RADIO, () -> messages.get("lbl.menu.item.radix." + numeralSystem.getRadix()));
 			radixMenuItem.setData(numeralSystem);
 			radixMenuItem.addSelectionListener(radixSelectionListener);
 			if (numeralSystem.equals(gui.getNumeralSystem())) {
@@ -176,7 +179,7 @@ public class MenuBar implements Multilanguage {
 			languageMenuItem.setText(language.getLocale().getDisplayLanguage(language.getLocale()));
 			languageMenuItem.setData(language);
 			languageMenuItem.addSelectionListener(languageSelectionListener);
-			if (language.equals(Messages.getLanguage())) {
+			if (language.equals(messages.getLanguage())) {
 				languageMenuItem.setSelection(true);
 			}
 		}
@@ -213,7 +216,7 @@ public class MenuBar implements Multilanguage {
 	}
 
 	private MenuItem newLocalizedMenuItem(@NonNull final Menu parent, final int style, @NonNull final String messageKey) {
-		return newLocalizedMenuItem(parent, style, () -> Messages.get(messageKey));
+		return newLocalizedMenuItem(parent, style, () -> messages.get(messageKey));
 	}
 
 	private MenuItem newLocalizedMenuItem(@NonNull final Menu parent, final int style, @NonNull final ISupplier<String> textSupplier) {

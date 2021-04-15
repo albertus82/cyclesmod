@@ -28,12 +28,15 @@ import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UndoListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomMouseWheelListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.JFaceMessages;
 import it.albertus.jface.SwtUtils;
 
 public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
 	private static final int SHELL_SIZE_FACTOR = 3;
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private int returnCode = SWT.CANCEL;
 	private ComplexPowerGraph powerGraph;
@@ -48,7 +51,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
 	public int open(final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
-		shell.setText(Messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+		shell.setText(messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
 		shell.setImages(Images.getAppIconArray());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
 		createContents(shell, map, bikeType, torqueVisible);

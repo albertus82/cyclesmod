@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.common.resources;
+package it.albertus.cyclesmod.resources;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,6 +28,9 @@ import org.reflections.scanners.ResourcesScanner;
 
 import it.albertus.cyclesmod.BaseTest;
 import it.albertus.cyclesmod.CyclesMod;
+import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
+import it.albertus.cyclesmod.common.resources.CommonMessages;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.util.StringUtils;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -37,7 +40,9 @@ public class MessagesTest extends BaseTest {
 
 	@Test
 	public void checkMessageFiles() throws IOException {
-		checkMessageFiles(getResourceNames(Messages.class), null);
+		checkMessageFiles(getResourceNames(ConsoleMessages.class), "console.");
+		checkMessageFiles(getResourceNames(GuiMessages.class), "gui.");
+		checkMessageFiles(getResourceNames(CommonMessages.class), "common.");
 	}
 
 	private void checkMessageFiles(@NonNull final Iterable<String> resourceNames, final String prefix) throws IOException {
@@ -64,8 +69,59 @@ public class MessagesTest extends BaseTest {
 	}
 
 	@Test
+	public void checkMissingMessages() throws IOException {
+		final Set<String> keys = new TreeSet<>();
+		try (final Stream<Path> paths = newSourceStream()) {
+			paths.forEach(path -> {
+				log.log(Level.FINE, "{0}", path);
+				try {
+					// @formatter:off
+					keys.addAll(Files.readAllLines(path).stream()
+							.map(line -> line.trim().replace(" ", ""))
+							.filter(e -> e.toLowerCase(Locale.ROOT).contains("messages.get(\""))
+							.flatMap(e -> Arrays.stream(e.split("(?i)(?>=messages\\.get\\(\")|(?=messages\\.get\\(\")")))
+							.filter(e -> e.toLowerCase(Locale.ROOT).startsWith("messages"))
+							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, "\""), "\""))
+							.filter(key -> !key.endsWith("."))
+							.collect(Collectors.toSet()));
+					// @formatter:on
+				}
+				catch (final IOException e) {
+					throw new UncheckedIOException(e);
+				}
+			});
+		}
+		log.log(Level.INFO, "Found {0} message keys referenced in sources", keys.size());
+		Assert.assertFalse("No message keys found in sources", keys.isEmpty());
+		final Collection<String> consoleKeys = ConsoleMessages.INSTANCE.getKeys();
+		log.log(Level.INFO, "{0} message keys available in resource bundle: {1}", new Serializable[] { consoleKeys.size(), ConsoleMessages.class.getSimpleName() });
+		Assert.assertFalse("No message keys found in resource bundle: " + ConsoleMessages.class.getSimpleName(), consoleKeys.isEmpty());
+		final Collection<String> guiKeys = GuiMessages.INSTANCE.getKeys();
+		log.log(Level.INFO, "{0} message keys available in resource bundle: {1}", new Serializable[] { guiKeys.size(), GuiMessages.class.getSimpleName() });
+		Assert.assertFalse("No message keys found in resource bundle: " + GuiMessages.class.getSimpleName(), guiKeys.isEmpty());
+
+		for (final String key : new TreeSet<>(keys)) {
+			if (key.startsWith("console.")) {
+				Assert.assertTrue("Missing message key '" + key + "' in " + ConsoleMessages.class.getSimpleName(), consoleKeys.contains(key));
+			}
+			else if (key.startsWith("gui.")) {
+				Assert.assertTrue("Missing message key '" + key + "' in " + GuiMessages.class.getSimpleName(), guiKeys.contains(key));
+			}
+			else if (key.startsWith("common.")) {
+				Assert.assertTrue("Missing message key '" + key + "' in " + ConsoleMessages.class.getSimpleName(), consoleKeys.contains(key));
+				Assert.assertTrue("Missing message key '" + key + "' in " + GuiMessages.class.getSimpleName(), guiKeys.contains(key));
+			}
+			else {
+				Assert.assertTrue("Invalid message key prefix: '" + key + "'", false);
+			}
+		}
+	}
+
+	@Test
 	public void checkUnreferencedMessages() throws IOException {
-		checkUnreferencedMessages(getResourceNames(Messages.class).iterator().next());
+		checkUnreferencedMessages(getResourceNames(ConsoleMessages.class).iterator().next());
+		checkUnreferencedMessages(getResourceNames(GuiMessages.class).iterator().next());
+		checkUnreferencedMessages(getResourceNames(CommonMessages.class).iterator().next());
 	}
 
 	private void checkUnreferencedMessages(@NonNull final String resourceName) throws IOException {
@@ -99,39 +155,6 @@ public class MessagesTest extends BaseTest {
 		final Set<String> unreferencedKeys = new TreeSet<>(allKeys.stream().filter(key -> !usedKeys.contains(key)).collect(Collectors.toSet()));
 		if (!unreferencedKeys.isEmpty()) {
 			log.log(Level.WARNING, "Unreferenced message keys: {0}", unreferencedKeys);
-		}
-	}
-
-	@Test
-	public void checkMissingMessages() throws IOException {
-		final Set<String> keys = new TreeSet<>();
-		try (final Stream<Path> paths = newSourceStream()) {
-			paths.forEach(path -> {
-				log.log(Level.FINE, "{0}", path);
-				try {
-					// @formatter:off
-					keys.addAll(Files.readAllLines(path).stream()
-							.map(line -> line.trim().replace(" ", ""))
-							.filter(e -> e.toLowerCase(Locale.ROOT).contains("messages.get(\""))
-							.flatMap(e -> Arrays.stream(e.split("(?i)(?>=messages\\.get\\(\")|(?=messages\\.get\\(\")")))
-							.filter(e -> e.toLowerCase(Locale.ROOT).startsWith("messages"))
-							.map(e -> StringUtils.substringBefore(StringUtils.substringAfter(e, "\""), "\""))
-							.filter(key -> !key.endsWith("."))
-							.collect(Collectors.toSet()));
-					// @formatter:on
-				}
-				catch (final IOException e) {
-					throw new UncheckedIOException(e);
-				}
-			});
-		}
-		log.log(Level.INFO, "Found {0} message keys referenced in sources", keys.size());
-		Assert.assertFalse("No message keys found in sources", keys.isEmpty());
-		final Collection<String> allKeys = Messages.getKeys();
-		log.log(Level.INFO, "{0} message keys available in resource bundle: {1}", new Serializable[] { allKeys.size(), Messages.class.getSimpleName() });
-		Assert.assertFalse("No message keys found in resource bundle: " + Messages.class.getSimpleName(), allKeys.isEmpty());
-		for (final String key : new TreeSet<>(keys)) {
-			Assert.assertTrue("Missing message key '" + key + "'", allKeys.contains(key));
 		}
 	}
 

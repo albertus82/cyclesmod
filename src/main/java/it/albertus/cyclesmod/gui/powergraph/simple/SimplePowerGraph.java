@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import it.albertus.cyclesmod.common.model.Bike;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.Multilanguage;
 
 public class SimplePowerGraph extends PowerGraph implements Multilanguage {
@@ -17,6 +18,8 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 	private static final byte DEFAULT_LINE_WIDTH = 2;
 
 	private static final boolean DEFAULT_AUTOSCALE = true;
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	public SimplePowerGraph(final Bike bike) {
 		super(bike);
@@ -36,7 +39,7 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 		torqueTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
 		final IXYGraph xyGraph = getXyGraph();
-		xyGraph.setTitle(Messages.get("lbl.graph.title.power.torque"));
+		xyGraph.setTitle(messages.get("lbl.graph.title.power.torque"));
 		xyGraph.setTitleFont(Display.getCurrent().getSystemFont());
 	}
 
@@ -44,23 +47,23 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 	public void toggleTorqueVisibility(final boolean visibility) {
 		super.toggleTorqueVisibility(visibility);
 		if (visibility) {
-			getXyGraph().setTitle(Messages.get("lbl.graph.title.power.torque"));
+			getXyGraph().setTitle(messages.get("lbl.graph.title.power.torque"));
 		}
 		else {
-			getXyGraph().setTitle(Messages.get("lbl.graph.title.power"));
+			getXyGraph().setTitle(messages.get("lbl.graph.title.power"));
 		}
 	}
 
 	@Override
 	public void updateLanguage() {
-		getAbscissae().setTitle(Messages.get("lbl.graph.axis.x", RPM_DIVISOR));
+		getAbscissae().setTitle(messages.get("lbl.graph.axis.x", RPM_DIVISOR));
 		if (isTorqueVisible()) {
-			getXyGraph().setTitle(Messages.get("lbl.graph.title.power.torque"));
-			getOrdinates().setTitle(Messages.get("lbl.graph.axis.y.power") + " / " + Messages.get("lbl.graph.axis.y.torque"));
+			getXyGraph().setTitle(messages.get("lbl.graph.title.power.torque"));
+			getOrdinates().setTitle(messages.get("lbl.graph.axis.y.power") + " / " + messages.get("lbl.graph.axis.y.torque"));
 		}
 		else {
-			getXyGraph().setTitle(Messages.get("lbl.graph.title.power"));
-			getOrdinates().setTitle(Messages.get("lbl.graph.axis.y.power"));
+			getXyGraph().setTitle(messages.get("lbl.graph.title.power"));
+			getOrdinates().setTitle(messages.get("lbl.graph.axis.y.power"));
 		}
 	}
 

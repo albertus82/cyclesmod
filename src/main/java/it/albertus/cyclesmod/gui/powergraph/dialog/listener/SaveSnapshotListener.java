@@ -12,12 +12,15 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.SwtUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class SaveSnapshotListener implements KeyListener, SelectionListener {
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	@NonNull private final Shell shell;
 	@NonNull private final IXYGraph xyGraph;
@@ -38,7 +41,7 @@ public class SaveSnapshotListener implements KeyListener, SelectionListener {
 		final ImageLoader loader = new ImageLoader();
 		loader.data = new ImageData[] { xyGraph.getImage().getImageData() };
 		final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-		dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", Messages.get("lbl.graph.save.allFiles", "(*.*)") });
+		dialog.setFilterNames(new String[] { "Portable Network Graphics (*.png)", messages.get("lbl.graph.save.allFiles", "(*.*)") });
 		dialog.setFilterExtensions(new String[] { "*.PNG;*.png", "*.*" }); // Windows
 		final String path = dialog.open();
 		if ((path != null) && !path.isEmpty()) {

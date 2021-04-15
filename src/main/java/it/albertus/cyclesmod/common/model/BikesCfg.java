@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.NewLine;
 import lombok.extern.java.Log;
@@ -22,6 +23,8 @@ public class BikesCfg {
 
 	private static final String FILE_NAME = "BIKES.CFG";
 	private static final int RADIX = 10;
+
+	private static final Messages messages = CommonMessages.INSTANCE;
 
 	private final Properties properties = new Properties();
 
@@ -38,21 +41,21 @@ public class BikesCfg {
 		try (final FileReader fr = new FileReader(fileName)) {
 			populateProperties(fr); // buffered internally
 		}
-		log.info(Messages.get("msg.file.read", FILE_NAME));
+		log.info(messages.get("msg.file.read", FILE_NAME));
 	}
 
 	public BikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
-		log.info(Messages.get("msg.reading.file", FILE_NAME));
+		log.info(messages.get("msg.reading.file", FILE_NAME));
 		final File file = new File(path + FILE_NAME);
 		if (!file.exists()) {
-			log.info(Messages.get("msg.file.not.found.creating.default", FILE_NAME));
+			log.info(messages.get("msg.file.not.found.creating.default", FILE_NAME));
 			writeDefaultBikesCfg(originalBikesInf, file);
-			log.info(Messages.get("msg.default.file.created", FILE_NAME));
+			log.info(messages.get("msg.default.file.created", FILE_NAME));
 		}
 		try (final FileReader fr = new FileReader(file)) {
 			populateProperties(fr); // buffered internally
 		}
-		log.info(Messages.get("msg.file.read", FILE_NAME));
+		log.info(messages.get("msg.file.read", FILE_NAME));
 	}
 
 	private void populateProperties(final Reader reader) throws IOException {
@@ -81,11 +84,11 @@ public class BikesCfg {
 
 	private String createProperties(final BikesInf bikesInf) {
 		final String lineSeparator = NewLine.SYSTEM_LINE_SEPARATOR;
-		final StringBuilder props = new StringBuilder(Messages.get("str.cfg.header"));
+		final StringBuilder props = new StringBuilder(messages.get("str.cfg.header"));
 
 		for (final Bike bike : bikesInf.getBikes()) {
 			props.append(lineSeparator).append(lineSeparator);
-			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.begin") + "... ###");
+			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("str.cfg.begin") + "... ###");
 
 			// Settings
 			props.append(lineSeparator);
@@ -124,11 +127,11 @@ public class BikesCfg {
 				props.append(lineSeparator);
 			}
 
-			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + Messages.get("str.cfg.end") + ". ###");
+			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("str.cfg.end") + ". ###");
 		}
 
 		props.append(lineSeparator).append(lineSeparator);
-		props.append(Messages.get("str.cfg.footer")).append(lineSeparator);
+		props.append(messages.get("str.cfg.footer")).append(lineSeparator);
 		return props.toString();
 	}
 

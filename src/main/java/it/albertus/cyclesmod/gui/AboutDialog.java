@@ -55,8 +55,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
 import it.albertus.cyclesmod.gui.listener.LinkSelectionListener;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.SwtUtils;
 import it.albertus.jface.closeable.CloseableResource;
 import it.albertus.util.Version;
@@ -78,6 +79,8 @@ public class AboutDialog extends Dialog {
 	private static final String SYM_NAME_FONT_APPNAME = AboutDialog.class.getName() + ".appname";
 	private static final String SYM_NAME_FONT_DEFAULT = AboutDialog.class.getName() + ".default";
 
+	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
+
 	private final LinkSelectionListener linkSelectionListener = new LinkSelectionListener();
 
 	private Text appLicenseText;
@@ -89,7 +92,7 @@ public class AboutDialog extends Dialog {
 
 	private AboutDialog(@NonNull final Shell parent, final int style) {
 		super(parent, style);
-		this.setText(Messages.get("gui.label.about.title"));
+		this.setText(messages.get("gui.label.about.title"));
 	}
 
 	public void open() {
@@ -112,7 +115,7 @@ public class AboutDialog extends Dialog {
 
 		final Link appLicenseLink = new Link(shell, SWT.WRAP);
 		GridDataFactory.swtDefaults().grab(true, false).applyTo(appLicenseLink);
-		appLicenseLink.setText(Messages.get("gui.label.about.license", buildAnchor(Messages.get("gui.label.about.license.gpl.a.href"), Messages.get("gui.label.about.license.gpl.a.text"))));
+		appLicenseLink.setText(messages.get("gui.label.about.license", buildAnchor(messages.get("gui.label.about.license.gpl.a.href"), messages.get("gui.label.about.license.gpl.a.text"))));
 		appLicenseLink.addSelectionListener(linkSelectionListener);
 
 		appLicenseText = new Text(shell, SWT.BORDER | SWT.V_SCROLL);
@@ -125,7 +128,7 @@ public class AboutDialog extends Dialog {
 
 		final Label thirdPartySoftwareLabel = new Label(shell, SWT.WRAP);
 		GridDataFactory.swtDefaults().grab(true, false).applyTo(thirdPartySoftwareLabel);
-		thirdPartySoftwareLabel.setText(Messages.get("gui.label.about.3rdparty"));
+		thirdPartySoftwareLabel.setText(messages.get("gui.label.about.3rdparty"));
 
 		thirdPartyScrolledComposite = new ScrolledComposite(shell, SWT.V_SCROLL | SWT.H_SCROLL);
 		thirdPartyScrolledComposite.setLayout(new FillLayout());
@@ -136,7 +139,7 @@ public class AboutDialog extends Dialog {
 		GridDataFactory.fillDefaults().grab(true, true).hint(SWT.DEFAULT, SwtUtils.convertVerticalDLUsToPixels(thirdPartyScrolledComposite, SCROLLABLE_VERTICAL_SIZE_DLUS)).applyTo(thirdPartyScrolledComposite);
 
 		final Button okButton = new Button(shell, SWT.PUSH);
-		okButton.setText(Messages.get("gui.label.button.ok"));
+		okButton.setText(messages.get("gui.label.button.ok"));
 		final int buttonWidth = SwtUtils.convertHorizontalDLUsToPixels(okButton, IDialogConstants.BUTTON_WIDTH);
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).minSize(buttonWidth, SWT.DEFAULT).applyTo(okButton);
 		okButton.setFocus();
@@ -180,7 +183,7 @@ public class AboutDialog extends Dialog {
 		}
 		applicationNameLabel.setFont(fontRegistry.getBold(SYM_NAME_FONT_APPNAME));
 		GridDataFactory.swtDefaults().grab(true, false).applyTo(applicationNameLabel);
-		applicationNameLabel.setText(Messages.get("gui.message.application.name"));
+		applicationNameLabel.setText(messages.get("gui.message.application.name"));
 
 		final Link versionAndHomePageLink = new Link(headerComposite, SWT.NONE);
 		Date versionDate;
@@ -191,8 +194,8 @@ public class AboutDialog extends Dialog {
 			log.log(Level.WARNING, "Invalid version date:", e);
 			versionDate = new Date();
 		}
-		final String version = Messages.get("gui.label.about.version", Version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, Messages.getLanguage().getLocale()).format(versionDate));
-		final String homePageAnchor = buildAnchor(Messages.get("gui.message.project.url"), Messages.get("gui.label.about.home.page"));
+		final String version = messages.get("gui.label.about.version", Version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, messages.getLanguage().getLocale()).format(versionDate));
+		final String homePageAnchor = buildAnchor(messages.get("gui.message.project.url"), messages.get("gui.label.about.home.page"));
 		versionAndHomePageLink.setText(version + " - " + homePageAnchor);
 		if (!fontRegistry.hasValueFor(SYM_NAME_FONT_DEFAULT)) {
 			fontRegistry.put(SYM_NAME_FONT_DEFAULT, versionAndHomePageLink.getFont().getFontData());
@@ -208,12 +211,12 @@ public class AboutDialog extends Dialog {
 			acknowledgementsGroup.setLayoutData(layoutData);
 		}
 		acknowledgementsGroup.setForeground(acknowledgementsGroup.getDisplay().getSystemColor(SWT.COLOR_WIDGET_DARK_SHADOW));
-		acknowledgementsGroup.setText(Messages.get("gui.label.about.acknowledgements"));
+		acknowledgementsGroup.setText(messages.get("gui.label.about.acknowledgements"));
 		GridLayoutFactory.swtDefaults().applyTo(acknowledgementsGroup);
 
 		final Link acknowledgementsIconLink = new Link(acknowledgementsGroup, SWT.WRAP);
 		GridDataFactory.swtDefaults().grab(true, false).applyTo(acknowledgementsIconLink);
-		acknowledgementsIconLink.setText(Messages.get("gui.label.about.acknowledgements.icon", buildAnchor(Messages.get("gui.label.about.acknowledgements.icon.a.href"), Messages.get("gui.label.about.acknowledgements.icon.a.text"))));
+		acknowledgementsIconLink.setText(messages.get("gui.label.about.acknowledgements.icon", buildAnchor(messages.get("gui.label.about.acknowledgements.icon.a.href"), messages.get("gui.label.about.acknowledgements.icon.a.text"))));
 		acknowledgementsIconLink.addSelectionListener(linkSelectionListener);
 	}
 
@@ -288,18 +291,18 @@ public class AboutDialog extends Dialog {
 			table.setHeaderVisible(true);
 
 			final TableViewerColumn nameColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-			nameColumn.getColumn().setText(Messages.get("gui.label.about.3rdparty.name"));
+			nameColumn.getColumn().setText(messages.get("gui.label.about.3rdparty.name"));
 			nameColumn.setLabelProvider(new TextColumnLabelProvider(ThirdPartySoftware::getName));
 
 			final TableViewerColumn authorColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-			authorColumn.getColumn().setText(Messages.get("gui.label.about.3rdparty.author"));
+			authorColumn.getColumn().setText(messages.get("gui.label.about.3rdparty.author"));
 			authorColumn.setLabelProvider(new TextColumnLabelProvider(ThirdPartySoftware::getAuthor));
 
 			final TableViewerColumn licenseColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-			licenseColumn.setLabelProvider(new LinkStyledCellLabelProvider(Messages.get("gui.label.about.3rdparty.license"), ThirdPartySoftware::getLicenseUri));
+			licenseColumn.setLabelProvider(new LinkStyledCellLabelProvider(messages.get("gui.label.about.3rdparty.license"), ThirdPartySoftware::getLicenseUri));
 
 			final TableViewerColumn homePageColumn = new TableViewerColumn(tableViewer, SWT.NONE);
-			homePageColumn.setLabelProvider(new LinkStyledCellLabelProvider(Messages.get("gui.label.about.3rdparty.homepage"), ThirdPartySoftware::getHomePageUri));
+			homePageColumn.setLabelProvider(new LinkStyledCellLabelProvider(messages.get("gui.label.about.3rdparty.homepage"), ThirdPartySoftware::getHomePageUri));
 
 			tableViewer.add(ThirdPartySoftware.loadFromProperties().toArray());
 

@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
+import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.ByteUtils;
 import lombok.NonNull;
@@ -18,6 +19,8 @@ public class Settings implements ByteList {
 	public static final int MAX_VALUE = 65535;
 
 	public static final String PREFIX = "settings";
+
+	private static final Messages messages = CommonMessages.INSTANCE;
 
 	private final Map<Setting, Integer> values = new EnumMap<>(Setting.class);
 
@@ -47,7 +50,7 @@ public class Settings implements ByteList {
 	public static int parse(final String key, @NonNull final String value, final int radix) {
 		final long newValue = Long.parseLong(value.trim(), radix);
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(Messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
+			throw new InvalidPropertyException(messages.get("err.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
 		}
 		return (int) newValue;
 	}

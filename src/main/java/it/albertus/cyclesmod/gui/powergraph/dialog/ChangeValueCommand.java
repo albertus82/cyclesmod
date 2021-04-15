@@ -4,11 +4,14 @@ import org.eclipse.nebula.visualization.internal.xygraph.undo.IUndoableCommand;
 
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
+import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class ChangeValueCommand implements IUndoableCommand {
+
+	private static final Messages messages = GuiMessages.INSTANCE;
 
 	@NonNull private final IPowerGraph powerGraph;
 	private final int index;
@@ -29,7 +32,7 @@ public class ChangeValueCommand implements IUndoableCommand {
 
 	@Override
 	public String toString() {
-		return Messages.get("lbl.graph.action.valueChange");
+		return messages.get("lbl.graph.action.valueChange");
 	}
 
 }

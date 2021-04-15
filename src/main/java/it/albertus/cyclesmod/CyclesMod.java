@@ -1,14 +1,18 @@
 package it.albertus.cyclesmod;
 
 import it.albertus.cyclesmod.cli.CyclesModCli;
+import it.albertus.cyclesmod.cli.VersionProvider;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import picocli.CommandLine.Command;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Command
+@Command(versionProvider = VersionProvider.class)
 public class CyclesMod {
+	
+	
+	
 
 	/* Unique entry point */
 	public static final void main(final String... args) {

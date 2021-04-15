@@ -19,6 +19,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import it.albertus.cyclesmod.common.data.DefaultBikes;
+import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.ByteUtils;
 import it.albertus.util.IOUtils;
@@ -31,6 +32,8 @@ public class BikesInf {
 	public static final short FILE_SIZE = 444;
 
 	private final Bike[] bikes = new Bike[BikeType.values().length];
+
+	private static final Messages messages = CommonMessages.INSTANCE;
 
 	public BikesInf(final InputStream bikesInfInputStream) throws IOException {
 		read(bikesInfInputStream);
@@ -56,9 +59,9 @@ public class BikesInf {
 		final boolean wrongFileSize = inf.read(inf125) != Bike.LENGTH || inf.read(inf250) != Bike.LENGTH || inf.read(inf500) != Bike.LENGTH || inf.read() != -1;
 		inf.close();
 		if (wrongFileSize) {
-			throw new IllegalStateException(Messages.get("err.wrong.file.size"));
+			throw new IllegalStateException(messages.get("err.wrong.file.size"));
 		}
-		log.info(Messages.get("msg.file.read", FILE_NAME));
+		log.info(messages.get("msg.file.read", FILE_NAME));
 
 		if (types == null || types.length == 0) {
 			/* Full reading */
@@ -76,14 +79,14 @@ public class BikesInf {
 				bikes[type.ordinal()] = new Bike(type, infs[type.ordinal()]);
 			}
 		}
-		log.info(Messages.get("msg.file.parsed", FILE_NAME));
+		log.info(messages.get("msg.file.parsed", FILE_NAME));
 	}
 
 	public void write(final String fileName, final boolean backupExisting) throws IOException {
 		final byte[] newBikesInf = this.toByteArray();
 		final Checksum crc = new CRC32();
 		crc.update(newBikesInf, 0, newBikesInf.length);
-		log.info(Messages.get("msg.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + Messages.get("msg.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
+		log.info(messages.get("msg.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + messages.get("msg.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
 
 		final File file = new File(fileName);
 		if (file.exists() && !file.isDirectory()) {
@@ -92,7 +95,7 @@ public class BikesInf {
 					IOUtils.copy(is, os, FILE_SIZE);
 				}
 				if (Arrays.equals(os.toByteArray(), newBikesInf)) {
-					log.info(Messages.get("msg.already.uptodate", FILE_NAME));
+					log.info(messages.get("msg.already.uptodate", FILE_NAME));
 				}
 				else {
 					if (backupExisting) {
@@ -110,7 +113,7 @@ public class BikesInf {
 	private void doWrite(final String fileName, final byte[] newBikesInf, final Checksum crc) throws IOException {
 		try (final OutputStream fos = new FileOutputStream(fileName); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
 			bos.write(newBikesInf);
-			log.info(Messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
+			log.info(messages.get("msg.new.file.written.into.path", FILE_NAME, "".equals(fileName) ? '.' : fileName, String.format("%08X", crc.getValue())));
 		}
 	}
 
@@ -130,7 +133,7 @@ public class BikesInf {
 			zos.putNextEntry(new ZipEntry(existingFile.getName()));
 			IOUtils.copy(fis, zos, FILE_SIZE);
 			zos.closeEntry();
-			log.info(Messages.get("msg.old.file.backed.up", FILE_NAME, backupFile));
+			log.info(messages.get("msg.old.file.backed.up", FILE_NAME, backupFile));
 		}
 	}
 
@@ -146,7 +149,7 @@ public class BikesInf {
 			byteList.addAll(bike.toByteList());
 		}
 		if (byteList.size() != FILE_SIZE) {
-			throw new IllegalStateException(Messages.get("err.wrong.file.size.detailed", FILE_NAME, FILE_SIZE, byteList.size()));
+			throw new IllegalStateException(messages.get("err.wrong.file.size.detailed", FILE_NAME, FILE_SIZE, byteList.size()));
 		}
 		return ByteUtils.toByteArray(byteList);
 	}
