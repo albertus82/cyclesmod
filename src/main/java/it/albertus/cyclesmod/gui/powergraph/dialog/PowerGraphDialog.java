@@ -112,7 +112,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(buttonComposite);
 
 		final Button okButton = new Button(buttonComposite, SWT.PUSH);
-		okButton.setText(messages.get("lbl.button.ok"));
+		okButton.setText(messages.get("gui.label.button.ok"));
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.FILL).grab(true, false).minSize(SwtUtils.convertHorizontalDLUsToPixels(okButton, IDialogConstants.BUTTON_WIDTH), SWT.DEFAULT).applyTo(okButton);
 		okButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -123,7 +123,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		});
 
 		final Button cancelButton = new Button(buttonComposite, SWT.PUSH);
-		cancelButton.setText(messages.get("lbl.button.cancel"));
+		cancelButton.setText(messages.get("gui.label.button.cancel"));
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.FILL).grab(true, false).minSize(SwtUtils.convertHorizontalDLUsToPixels(cancelButton, IDialogConstants.BUTTON_WIDTH), SWT.DEFAULT).applyTo(cancelButton);
 		cancelButton.addSelectionListener(new SelectionAdapter() {
 			@Override
