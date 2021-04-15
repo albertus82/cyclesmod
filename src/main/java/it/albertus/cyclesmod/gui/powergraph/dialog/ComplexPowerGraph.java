@@ -31,9 +31,6 @@ import lombok.extern.java.Log;
 @Log
 public class ComplexPowerGraph extends PowerGraph {
 
-	private static final String LBL_GRAPH_TOOLBAR_UNDO = "lbl.graph.toolbar.undo";
-	private static final String LBL_GRAPH_TOOLBAR_REDO = "lbl.graph.toolbar.redo";
-
 	private static final byte DEFAULT_POINT_SIZE = 6;
 	private static final byte DEFAULT_LINE_WIDTH = 2;
 
@@ -101,11 +98,11 @@ public class ComplexPowerGraph extends PowerGraph {
 					if (button.getToolTip() instanceof Label) {
 						final String labelText = ((Label) button.getToolTip()).getText();
 						if ("undo".equalsIgnoreCase(labelText)) {
-							button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
+							button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.undo", "")));
 							addUndoListener(button, manager);
 						}
 						else if ("redo".equalsIgnoreCase(labelText)) {
-							button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
+							button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.redo", "")));
 							addRedoListener(button, manager);
 						}
 					}
@@ -123,11 +120,11 @@ public class ComplexPowerGraph extends PowerGraph {
 			if (undoCommandsSize > 0) {
 				button.setEnabled(true);
 				final String cmdName = m.getUndoCommands()[undoCommandsSize - 1].toString();
-				button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_UNDO, cmdName)));
+				button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.undo", cmdName)));
 			}
 			else {
 				button.setEnabled(false);
-				button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_UNDO, "")));
+				button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.undo", "")));
 			}
 		});
 	}
@@ -138,11 +135,11 @@ public class ComplexPowerGraph extends PowerGraph {
 			if (redoCommandsSize > 0) {
 				button.setEnabled(true);
 				final String cmdName = m.getRedoCommands()[redoCommandsSize - 1].toString();
-				button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_REDO, cmdName)));
+				button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.redo", cmdName)));
 			}
 			else {
 				button.setEnabled(false);
-				button.setToolTip(new Label(messages.get(LBL_GRAPH_TOOLBAR_REDO, "")));
+				button.setToolTip(new Label(messages.get("gui.lbl.graph.toolbar.redo", "")));
 			}
 		});
 	}
@@ -152,10 +149,10 @@ public class ComplexPowerGraph extends PowerGraph {
 		super.toggleTorqueVisibility(visibility);
 		if (shell != null && !shell.isDisposed()) {
 			if (visibility) {
-				shell.setText(messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+				shell.setText(messages.get("gui.lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
 			}
 			else {
-				shell.setText(messages.get("lbl.graph.dialog.title.power", bikeType.getDisplacement()));
+				shell.setText(messages.get("gui.lbl.graph.dialog.title.power", bikeType.getDisplacement()));
 			}
 		}
 	}

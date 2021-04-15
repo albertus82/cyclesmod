@@ -17,7 +17,7 @@ public class SimplePowerGraphContextMenu extends PowerGraphContextMenu {
 
 		final Menu menu = getMenu();
 
-		final MenuItem editMenuItem = newLocalizedMenuItem(menu, SWT.PUSH, "lbl.menu.item.graph.edit");
+		final MenuItem editMenuItem = newLocalizedMenuItem(menu, SWT.PUSH, "gui.lbl.menu.item.graph.edit");
 		editMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {

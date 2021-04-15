@@ -53,7 +53,7 @@ public class UpdateTitleListener implements MouseMotionListener {
 		final int rpm = Power.getRpm(powerGraph.getPowerIndex(location));
 		final double nm = PowerGraph.hpToNm(hp, rpm);
 		final double lbft = nm * NM_TO_LBFT;
-		final String currentPosition = messages.get("lbl.graph.powerAtRpm", hp, numberFormat.format(kw), numberFormat.format(nm), numberFormat.format(lbft), rpm);
+		final String currentPosition = messages.get("gui.lbl.graph.powerAtRpm", hp, numberFormat.format(kw), numberFormat.format(nm), numberFormat.format(lbft), rpm);
 		if (!currentPosition.equals(lastPosition)) {
 			lastPosition = currentPosition;
 			powerGraph.getXyGraph().setTitle(lastPosition);

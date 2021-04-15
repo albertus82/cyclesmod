@@ -52,7 +52,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 	protected SubMenu<TraceType> addTraceTypeSubMenu() {
 		final Map<TraceType, MenuItem> traceTypeSubMenuItems = new EnumMap<>(TraceType.class);
-		final MenuItem traceTypeMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "lbl.menu.item.graph.traceType");
+		final MenuItem traceTypeMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "gui.lbl.menu.item.graph.traceType");
 
 		final Menu traceTypeSubMenu = new Menu(traceTypeMenuItem);
 		traceTypeMenuItem.setMenu(traceTypeSubMenu);
@@ -72,7 +72,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 			traceTypeSubMenuItems.put(traceType, menuItem);
 		}
 
-		final MenuItem areaAlphaMenuItem = newLocalizedMenuItem(traceTypeSubMenu, SWT.CASCADE, "lbl.menu.item.graph.areaAlpha");
+		final MenuItem areaAlphaMenuItem = newLocalizedMenuItem(traceTypeSubMenu, SWT.CASCADE, "gui.lbl.menu.item.graph.areaAlpha");
 
 		final Menu areaAlphaSubMenu = new Menu(areaAlphaMenuItem);
 		areaAlphaMenuItem.setMenu(areaAlphaSubMenu);
@@ -109,7 +109,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 	protected SubMenu<Integer> addLineWidthSubMenu() {
 		final Map<Integer, MenuItem> lineWidthSubMenuItems = new HashMap<>();
-		final MenuItem lineWidthMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "lbl.menu.item.graph.lineWidth");
+		final MenuItem lineWidthMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "gui.lbl.menu.item.graph.lineWidth");
 
 		final Menu lineWidthSubMenu = new Menu(lineWidthMenuItem);
 		lineWidthMenuItem.setMenu(lineWidthSubMenu);
@@ -141,7 +141,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 	protected SubMenu<PointStyle> addPointStyleSubMenu() {
 		final Map<PointStyle, MenuItem> pointStyleSubMenuItems = new EnumMap<>(PointStyle.class);
-		final MenuItem pointStyleMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "lbl.menu.item.graph.pointStyle");
+		final MenuItem pointStyleMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "gui.lbl.menu.item.graph.pointStyle");
 
 		final Menu traceTypeSubMenu = new Menu(pointStyleMenuItem);
 		pointStyleMenuItem.setMenu(traceTypeSubMenu);
@@ -174,7 +174,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 		final Trace trace = powerGraph.getPowerTrace();
 
 		final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<>();
-		final MenuItem pointSizeMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "lbl.menu.item.graph.pointSize");
+		final MenuItem pointSizeMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "gui.lbl.menu.item.graph.pointSize");
 
 		final Menu pointSizeSubMenu = new Menu(pointSizeMenuItem);
 		pointSizeMenuItem.setMenu(pointSizeSubMenu);
@@ -204,7 +204,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 	}
 
 	protected MenuItem addShowTorqueMenuItem() {
-		final MenuItem showTorqueMenuItem = newLocalizedMenuItem(menu, SWT.CHECK, "lbl.menu.item.graph.showTorque");
+		final MenuItem showTorqueMenuItem = newLocalizedMenuItem(menu, SWT.CHECK, "gui.lbl.menu.item.graph.showTorque");
 		showTorqueMenuItem.setSelection(powerGraph.isTorqueVisible());
 		showTorqueMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override

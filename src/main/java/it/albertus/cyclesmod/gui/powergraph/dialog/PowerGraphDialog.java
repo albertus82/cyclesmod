@@ -29,7 +29,6 @@ import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomMouseWheelListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
-import it.albertus.jface.JFaceMessages;
 import it.albertus.jface.SwtUtils;
 
 public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
@@ -51,7 +50,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
 	public int open(final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
-		shell.setText(messages.get("lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+		shell.setText(messages.get("gui.lbl.graph.dialog.title.power.torque", bikeType.getDisplacement()));
 		shell.setImages(Images.getAppIconArray());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
 		createContents(shell, map, bikeType, torqueVisible);
@@ -113,7 +112,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.CENTER).grab(true, false).applyTo(buttonComposite);
 
 		final Button okButton = new Button(buttonComposite, SWT.PUSH);
-		okButton.setText(JFaceMessages.get("lbl.button.ok"));
+		okButton.setText(messages.get("lbl.button.ok"));
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.FILL).grab(true, false).minSize(SwtUtils.convertHorizontalDLUsToPixels(okButton, IDialogConstants.BUTTON_WIDTH), SWT.DEFAULT).applyTo(okButton);
 		okButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -124,7 +123,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		});
 
 		final Button cancelButton = new Button(buttonComposite, SWT.PUSH);
-		cancelButton.setText(JFaceMessages.get("lbl.button.cancel"));
+		cancelButton.setText(messages.get("lbl.button.cancel"));
 		GridDataFactory.swtDefaults().align(SWT.CENTER, SWT.FILL).grab(true, false).minSize(SwtUtils.convertHorizontalDLUsToPixels(cancelButton, IDialogConstants.BUTTON_WIDTH), SWT.DEFAULT).applyTo(cancelButton);
 		cancelButton.addSelectionListener(new SelectionAdapter() {
 			@Override

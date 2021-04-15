@@ -31,8 +31,8 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
 		MessageBox messageBox = new MessageBox(gui.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText(messages.get("msg.warning"));
-		messageBox.setMessage(messages.get("msg.reset.overwrite.all"));
+		messageBox.setText(messages.get("gui.msg.warning"));
+		messageBox.setMessage(messages.get("gui.msg.reset.overwrite.all"));
 		int choose = messageBox.open();
 		if (choose == SWT.YES) {
 			try {
@@ -41,8 +41,8 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
 				messageBox = new MessageBox(gui.getShell(), SWT.ICON_ERROR);
-				messageBox.setText(messages.get("msg.warning"));
-				messageBox.setMessage(messages.get("err.reset", ExceptionUtils.getUIMessage(e)));
+				messageBox.setText(messages.get("gui.msg.warning"));
+				messageBox.setMessage(messages.get("gui.err.reset", ExceptionUtils.getUIMessage(e)));
 				messageBox.open();
 			}
 		}

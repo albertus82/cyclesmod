@@ -32,7 +32,7 @@ public class ChangeValueCommand implements IUndoableCommand {
 
 	@Override
 	public String toString() {
-		return messages.get("lbl.graph.action.valueChange");
+		return messages.get("gui.lbl.graph.action.valueChange");
 	}
 
 }

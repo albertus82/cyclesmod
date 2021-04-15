@@ -39,7 +39,7 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 		torqueTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
 		final IXYGraph xyGraph = getXyGraph();
-		xyGraph.setTitle(messages.get("lbl.graph.title.power.torque"));
+		xyGraph.setTitle(messages.get("gui.lbl.graph.title.power.torque"));
 		xyGraph.setTitleFont(Display.getCurrent().getSystemFont());
 	}
 
@@ -47,23 +47,23 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 	public void toggleTorqueVisibility(final boolean visibility) {
 		super.toggleTorqueVisibility(visibility);
 		if (visibility) {
-			getXyGraph().setTitle(messages.get("lbl.graph.title.power.torque"));
+			getXyGraph().setTitle(messages.get("gui.lbl.graph.title.power.torque"));
 		}
 		else {
-			getXyGraph().setTitle(messages.get("lbl.graph.title.power"));
+			getXyGraph().setTitle(messages.get("gui.lbl.graph.title.power"));
 		}
 	}
 
 	@Override
 	public void updateLanguage() {
-		getAbscissae().setTitle(messages.get("lbl.graph.axis.x", RPM_DIVISOR));
+		getAbscissae().setTitle(messages.get("gui.lbl.graph.axis.x", RPM_DIVISOR));
 		if (isTorqueVisible()) {
-			getXyGraph().setTitle(messages.get("lbl.graph.title.power.torque"));
-			getOrdinates().setTitle(messages.get("lbl.graph.axis.y.power") + " / " + messages.get("lbl.graph.axis.y.torque"));
+			getXyGraph().setTitle(messages.get("gui.lbl.graph.title.power.torque"));
+			getOrdinates().setTitle(messages.get("gui.lbl.graph.axis.y.power") + " / " + messages.get("gui.lbl.graph.axis.y.torque"));
 		}
 		else {
-			getXyGraph().setTitle(messages.get("lbl.graph.title.power"));
-			getOrdinates().setTitle(messages.get("lbl.graph.axis.y.power"));
+			getXyGraph().setTitle(messages.get("gui.lbl.graph.title.power"));
+			getOrdinates().setTitle(messages.get("gui.lbl.graph.axis.y.power"));
 		}
 	}
 

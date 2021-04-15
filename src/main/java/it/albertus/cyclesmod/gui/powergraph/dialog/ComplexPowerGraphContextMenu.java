@@ -50,14 +50,14 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 
 		final MenuItem saveImageMenuItem = new MenuItem(menu, SWT.PUSH);
 		saveImageMenuItem.setImage(mediaFactory.getImage("images/camera.png"));
-		saveImageMenuItem.setText(messages.get("lbl.menu.item.graph.saveImageAs") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
+		saveImageMenuItem.setText(messages.get("gui.lbl.menu.item.graph.saveImageAs") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
 		saveImageMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_SAVE);
 		saveImageMenuItem.addSelectionListener(new SaveSnapshotListener(control.getShell(), powerGraph.getXyGraph()));
 
 		new MenuItem(menu, SWT.SEPARATOR);
 
 		final MenuItem autoScaleMenuItem = new MenuItem(menu, SWT.CHECK);
-		autoScaleMenuItem.setText(messages.get("lbl.menu.item.graph.autoscaling"));
+		autoScaleMenuItem.setText(messages.get("gui.lbl.menu.item.graph.autoscaling"));
 		autoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
@@ -73,19 +73,19 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 		});
 
 		final MenuItem zoomInMenuItem = new MenuItem(menu, SWT.PUSH);
-		zoomInMenuItem.setText(messages.get("lbl.menu.item.graph.zoomIn") + SwtUtils.getShortcutLabel("+"));
+		zoomInMenuItem.setText(messages.get("gui.lbl.menu.item.graph.zoomIn") + SwtUtils.getShortcutLabel("+"));
 		zoomInMenuItem.setAccelerator('+');
 		zoomInMenuItem.setImage(ZoomType.ZOOM_IN.getIconImage());
 		zoomInMenuItem.addSelectionListener(new ZoomInListener(powerGraph.getXyGraph()));
 
 		final MenuItem zoomOutMenuItem = new MenuItem(menu, SWT.PUSH);
-		zoomOutMenuItem.setText(messages.get("lbl.menu.item.graph.zoomOut") + SwtUtils.getShortcutLabel("-"));
+		zoomOutMenuItem.setText(messages.get("gui.lbl.menu.item.graph.zoomOut") + SwtUtils.getShortcutLabel("-"));
 		zoomOutMenuItem.setAccelerator('-');
 		zoomOutMenuItem.setImage(ZoomType.ZOOM_OUT.getIconImage());
 		zoomOutMenuItem.addSelectionListener(new ZoomOutListener(powerGraph.getXyGraph()));
 
 		final MenuItem performAutoScaleMenuItem = new MenuItem(menu, SWT.PUSH);
-		performAutoScaleMenuItem.setText(messages.get("lbl.menu.item.graph.autoscaleNow"));
+		performAutoScaleMenuItem.setText(messages.get("gui.lbl.menu.item.graph.autoscaleNow"));
 		performAutoScaleMenuItem.setImage(mediaFactory.getImage("images/AutoScale.png"));
 		performAutoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -118,23 +118,23 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 				undoMenuItem.setEnabled(true);
 				undoMenuItem.setImage(imageUndo);
 				final String cmdName = manager.getUndoCommands()[manager.getUndoCommandsSize() - 1].toString();
-				undoMenuItem.setText(messages.get("lbl.menu.item.graph.undo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
+				undoMenuItem.setText(messages.get("gui.lbl.menu.item.graph.undo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
 			}
 			else {
 				undoMenuItem.setEnabled(false);
 				undoMenuItem.setImage(imageUndoGray);
-				undoMenuItem.setText(messages.get("lbl.menu.item.graph.undo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
+				undoMenuItem.setText(messages.get("gui.lbl.menu.item.graph.undo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_UNDO));
 			}
 			if (manager.getRedoCommandsSize() > 0) {
 				redoMenuItem.setEnabled(true);
 				redoMenuItem.setImage(imageRedo);
 				final String cmdName = manager.getRedoCommands()[manager.getRedoCommandsSize() - 1].toString();
-				redoMenuItem.setText(messages.get("lbl.menu.item.graph.redo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
+				redoMenuItem.setText(messages.get("gui.lbl.menu.item.graph.redo", cmdName) + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
 			}
 			else {
 				redoMenuItem.setEnabled(false);
 				redoMenuItem.setImage(imageRedoGray);
-				redoMenuItem.setText(messages.get("lbl.menu.item.graph.redo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
+				redoMenuItem.setText(messages.get("gui.lbl.menu.item.graph.redo", "") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_REDO));
 			}
 
 			menu.setVisible(true);
