@@ -52,7 +52,7 @@ public class CyclesModCli extends CyclesModEngine {
 		customize();
 
 		System.out.println(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME));
-		getBikesInf().write(Paths.get(path.toString(), BikesInf.FILE_NAME).toString(), true);
+		getBikesInf().write(Paths.get(path.toString(), BikesInf.FILE_NAME), true);
 	}
 
 	private void customize() throws IOException {

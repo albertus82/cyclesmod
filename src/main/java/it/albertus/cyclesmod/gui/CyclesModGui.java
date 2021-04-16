@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -50,7 +51,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private String bikesInfFileName;
 
-	private CyclesModGui(final Display display, final Path fileName) throws IOException {
+	private CyclesModGui(final Display display, final Path fileToOpen) throws IOException {
 		// Loading default properties...
 		try (final InputStream is = new DefaultBikes().getInputStream()) {
 			setBikesInf(new BikesInf(is));
@@ -76,8 +77,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		setLastPersistedProperties(defaultProperties);
 
 		// Loading custom properties...
-		if (fileName != null) {
-			open(fileName);
+		if (fileToOpen != null) {
+			open(fileToOpen);
 		}
 	}
 
@@ -121,23 +122,22 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
-	public void open(@NonNull final Path fileName) {
+	public void open(@NonNull final Path file) {
 		try {
-			if (fileName.toString().toLowerCase(Locale.ROOT).endsWith(".inf")) {
-				final File bikesInfFile = fileName.toFile();
-				setBikesInf(new BikesInf(bikesInfFile));
+			if (file.toString().toLowerCase(Locale.ROOT).endsWith(".inf")) {
+				setBikesInf(new BikesInf(file));
 				tabs.updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-				bikesInfFileName = bikesInfFile.getCanonicalPath();
+				bikesInfFileName = file.toFile().getCanonicalPath();
 				shell.setText(messages.get("gui.label.window.title") + " - " + bikesInfFileName);
 			}
-			else if (fileName.toString().toLowerCase(Locale.ROOT).endsWith(".cfg")) {
+			else if (file.toString().toLowerCase(Locale.ROOT).endsWith(".cfg")) {
 				bikesInfFileName = null;
 				try (final InputStream is = new DefaultBikes().getInputStream()) {
 					setBikesInf(new BikesInf(is));
 				}
 
-				final BikesCfg bikesCfg = new BikesCfg(fileName);
+				final BikesCfg bikesCfg = new BikesCfg(file);
 				for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
 					applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
 				}
@@ -175,7 +175,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				return false;
 			}
 			try {
-				getBikesInf().write(bikesInfFileName, false);
+				getBikesInf().write(Paths.get(bikesInfFileName), false);
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
@@ -204,7 +204,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
-				getBikesInf().write(fileName, false);
+				getBikesInf().write(Paths.get(fileName), false);
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
