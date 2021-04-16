@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 
 import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
@@ -33,7 +32,7 @@ public class CyclesModCli extends CyclesModEngine {
 
 	private static final Messages messages = ConsoleMessages.INSTANCE;
 
-	private final Path path;
+	private final String path;
 
 	public static void main(final Path providedPath) {
 		final String pathName = providedPath != null ? providedPath.toString() : null;
@@ -49,7 +48,7 @@ public class CyclesModCli extends CyclesModEngine {
 				path = pathName;
 			}
 
-			new CyclesModCli(Paths.get(path)).execute();
+			new CyclesModCli(path).execute();
 		}
 		catch (final Exception e) {
 			log.log(Level.SEVERE, e.toString(), e);
