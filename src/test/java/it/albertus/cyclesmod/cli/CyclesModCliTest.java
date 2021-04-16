@@ -7,7 +7,6 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
@@ -46,8 +45,8 @@ public class CyclesModCliTest extends BaseTest {
 		Assert.assertEquals(expected, actual);
 
 		// Check custom (all zeros)
-		for (final Object key : Collections.list(actual.propertyNames())) {
-			actual.setProperty(key.toString(), "0");
+		for (final String key : actual.stringPropertyNames()) {
+			actual.setProperty(key, "0");
 		}
 		try (final Writer os = Files.newBufferedWriter(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
 			actual.store(os, null);
@@ -65,8 +64,8 @@ public class CyclesModCliTest extends BaseTest {
 
 		// Check custom (randon non-zero)
 		final short value = 0xBB; // A random byte value
-		for (final Object key : Collections.list(actual.propertyNames())) {
-			actual.setProperty(key.toString(), Integer.toString(key.toString().contains("power") ? value : (value << 010) + value));
+		for (final String key : actual.stringPropertyNames()) {
+			actual.setProperty(key, Integer.toString(key.contains("power") ? value : (value << 010) + value));
 		}
 		try (final Writer os = Files.newBufferedWriter(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
 			actual.store(os, null);
