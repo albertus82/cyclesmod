@@ -3,10 +3,12 @@ package it.albertus.cyclesmod;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
 import it.albertus.cyclesmod.cli.CyclesModCli;
 import it.albertus.cyclesmod.cli.VersionProvider;
+import it.albertus.cyclesmod.cli.resources.Picocli;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -16,13 +18,13 @@ import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Command(versionProvider = VersionProvider.class, mixinStandardHelpOptions = true, resourceBundle = "it.albertus.cyclesmod.cli.resources.picocli")
+@Command(versionProvider = VersionProvider.class, mixinStandardHelpOptions = true)
 public class CyclesMod implements Callable<Integer> {
 
 	@Parameters(arity = "0..1", descriptionKey = "parameter.path") private Path path;
 
 	public static void main(final String... args) {
-		System.exit(new CommandLine(new CyclesMod()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).execute(args));
+		System.exit(new CommandLine(new CyclesMod()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setResourceBundle(ResourceBundle.getBundle(Picocli.class.getName().toLowerCase(Locale.ROOT))).execute(args));
 	}
 
 	@Override
@@ -31,10 +33,13 @@ public class CyclesMod implements Callable<Integer> {
 		if (mode != null) {
 			if ("cli".equalsIgnoreCase(mode)) {
 				CyclesModCli.main(path);
+				return ExitCode.OK;
 			}
 			else if ("gui".equalsIgnoreCase(mode)) {
 				CyclesModGui.main(path);
+				return ExitCode.OK;
 			}
+			return ExitCode.USAGE;
 		}
 		else {
 			if (path != null && Files.isDirectory(path)) {
@@ -43,8 +48,8 @@ public class CyclesMod implements Callable<Integer> {
 			else {
 				CyclesModGui.main(path);
 			}
+			return ExitCode.OK;
 		}
-		return ExitCode.OK;
 	}
 
 }
