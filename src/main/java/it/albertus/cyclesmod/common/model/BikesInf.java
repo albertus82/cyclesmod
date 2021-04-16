@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -83,16 +82,15 @@ public class BikesInf {
 		log.info(messages.get("common.message.file.parsed", FILE_NAME));
 	}
 
-	public void write(final Path fileName, final boolean backupExisting) throws IOException {
+	public void write(final Path file, final boolean backupExisting) throws IOException {
 		final byte[] newBikesInf = this.toByteArray();
 		final Checksum crc = new CRC32();
 		crc.update(newBikesInf, 0, newBikesInf.length);
 		log.info(messages.get("common.message.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + messages.get("common.message.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
 
-		final File file = fileName.toFile();
-		if (file.exists() && !file.isDirectory()) {
+		if (file.toFile().exists() && !Files.isDirectory(file)) {
 			try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-				try (final InputStream is = Files.newInputStream(fileName)) {
+				try (final InputStream is = Files.newInputStream(file)) {
 					IOUtils.copy(is, os, FILE_SIZE);
 				}
 				if (Arrays.equals(os.toByteArray(), newBikesInf)) {
@@ -100,41 +98,42 @@ public class BikesInf {
 				}
 				else {
 					if (backupExisting) {
-						backup(fileName);
+						backup(file);
 					}
-					doWrite(fileName, newBikesInf, crc);
+					doWrite(file, newBikesInf, crc);
 				}
 			}
 		}
 		else {
-			doWrite(fileName, newBikesInf, crc);
+			doWrite(file, newBikesInf, crc);
 		}
 	}
 
-	private void doWrite(final Path fileName, final byte[] newBikesInf, final Checksum crc) throws IOException {
-		try (final OutputStream fos = Files.newOutputStream(fileName); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
+	private void doWrite(final Path file, final byte[] newBikesInf, final Checksum crc) throws IOException {
+		try (final OutputStream fos = Files.newOutputStream(file); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
 			bos.write(newBikesInf);
-			log.info(messages.get("common.message.new.file.written.into.path", FILE_NAME, "".equals(fileName.toString()) ? '.' : fileName, String.format("%08X", crc.getValue())));
+			log.info(messages.get("common.message.new.file.written.into.path", FILE_NAME, "".equals(file.toString()) ? '.' : file, String.format("%08X", crc.getValue()))); // FIXME
 		}
 	}
 
-	private void backup(final Path existingFile) throws IOException {
-		File backupFile;
+	private Path backup(final Path existingFile) throws IOException {
 		int i = 0;
 		final String parent = existingFile.toFile().getParent();
 		final String prefix = parent != null ? parent + File.separator : "";
+		File backupFile;
 		do {
 			backupFile = new File(prefix + "BIKES" + String.format("%03d", i++) + ".ZIP");
 		}
 		while (backupFile.exists());
 
-		try (final InputStream fis = Files.newInputStream(existingFile); final OutputStream fos = new FileOutputStream(backupFile); final ZipOutputStream zos = new ZipOutputStream(fos)) {
+		try (final InputStream fis = Files.newInputStream(existingFile); final OutputStream fos = Files.newOutputStream(backupFile.toPath()); final ZipOutputStream zos = new ZipOutputStream(fos)) {
 			zos.setLevel(Deflater.BEST_COMPRESSION);
 			zos.putNextEntry(new ZipEntry(existingFile.toFile().getName()));
 			IOUtils.copy(fis, zos, FILE_SIZE);
 			zos.closeEntry();
 			log.info(messages.get("common.message.old.file.backed.up", FILE_NAME, backupFile));
 		}
+		return backupFile.toPath();
 	}
 
 	/**
@@ -145,7 +144,7 @@ public class BikesInf {
 	 */
 	private byte[] toByteArray() {
 		final List<Byte> byteList = new ArrayList<>(FILE_SIZE);
-		for (final Bike bike : bikes) {
+		for (final ByteList bike : bikes) {
 			byteList.addAll(bike.toByteList());
 		}
 		if (byteList.size() != FILE_SIZE) {
