@@ -1,13 +1,14 @@
 package it.albertus.cyclesmod.common.model;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,23 +38,24 @@ public class BikesCfg {
 		}
 	}
 
-	public BikesCfg(final String fileName) throws IOException {
-		try (final FileReader fr = new FileReader(fileName)) {
-			populateProperties(fr); // buffered internally
+	public BikesCfg(final Path sourceFile) throws IOException {
+		log.info(messages.get("common.message.reading.file", FILE_NAME));
+		try (final Reader reader = Files.newBufferedReader(sourceFile, StandardCharsets.ISO_8859_1)) {
+			populateProperties(reader); // buffered internally
 		}
 		log.info(messages.get("common.message.file.read", FILE_NAME));
 	}
 
-	public BikesCfg(final BikesInf originalBikesInf, final String path) throws IOException {
+	public BikesCfg(final BikesInf originalBikesInf, final Path destDir) throws IOException {
 		log.info(messages.get("common.message.reading.file", FILE_NAME));
-		final File file = new File(path + FILE_NAME);
-		if (!file.exists()) {
+		final Path destFile = Paths.get(destDir.toString(), FILE_NAME);
+		if (!destFile.toFile().exists()) {
 			log.info(messages.get("common.message.file.not.found.creating.default", FILE_NAME));
-			writeDefaultBikesCfg(originalBikesInf, file);
+			writeDefaultBikesCfg(originalBikesInf, destFile);
 			log.info(messages.get("common.message.default.file.created", FILE_NAME));
 		}
-		try (final FileReader fr = new FileReader(file)) {
-			populateProperties(fr); // buffered internally
+		try (final Reader reader = Files.newBufferedReader(destFile)) {
+			populateProperties(reader); // buffered internally
 		}
 		log.info(messages.get("common.message.file.read", FILE_NAME));
 	}
@@ -73,16 +75,16 @@ public class BikesCfg {
 		}
 	}
 
-	private void writeDefaultBikesCfg(final BikesInf originalBikesInf, final File destination) throws IOException {
+	private void writeDefaultBikesCfg(final BikesInf originalBikesInf, final Path destFile) throws IOException {
 		final String props = createProperties(originalBikesInf);
 
 		// Salvataggio...
-		try (FileWriter fw = new FileWriter(destination); BufferedWriter bw = new BufferedWriter(fw)) {
-			bw.write(props);
+		try (final Writer writer = Files.newBufferedWriter(destFile, StandardCharsets.ISO_8859_1)) {
+			writer.write(props);
 		}
 	}
 
-	private String createProperties(final BikesInf bikesInf) {
+	private static String createProperties(final BikesInf bikesInf) {
 		final String lineSeparator = NewLine.SYSTEM_LINE_SEPARATOR;
 		final StringBuilder props = new StringBuilder(messages.get("common.str.cfg.header"));
 
