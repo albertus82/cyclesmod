@@ -112,7 +112,7 @@ public class BikesInf {
 	private void doWrite(final Path file, final byte[] newBikesInf, final Checksum crc) throws IOException {
 		try (final OutputStream fos = Files.newOutputStream(file); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
 			bos.write(newBikesInf);
-			log.info(messages.get("common.message.new.file.written.into.path", FILE_NAME, "".equals(file.toString()) ? '.' : file, String.format("%08X", crc.getValue()))); // FIXME
+			log.info(messages.get("common.message.new.file.written.into.path", FILE_NAME, file.toFile().getCanonicalPath(), String.format("%08X", crc.getValue())));
 		}
 	}
 
