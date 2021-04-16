@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod.console;
+package it.albertus.cyclesmod.cli;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,9 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import it.albertus.cyclesmod.BaseTest;
-import it.albertus.cyclesmod.cli.CyclesModCli;
 
-public class CyclesModConsoleTest extends BaseTest {
+public class CyclesModCliTest extends BaseTest {
 
 	private static final String BIKES_INF_FILENAME = "BIKES.INF";
 	private static final String BIKES_CFG_FILENAME = "BIKES.CFG";
@@ -37,7 +36,7 @@ public class CyclesModConsoleTest extends BaseTest {
 		final Path outputDir = Paths.get(projectProperties.getProperty("project.build.directory"), "test-output");
 
 		// Check default
-		CyclesModCli.main(outputDir);
+		new CyclesModCli(outputDir).execute();
 		final Properties expected = new Properties();
 		final Properties actual = new Properties();
 		try (final InputStream is = getClass().getResourceAsStream("/bikes.cfg.default.gz"); final InputStream gzis = new GZIPInputStream(is); final Reader r = Files.newBufferedReader(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
@@ -53,7 +52,7 @@ public class CyclesModConsoleTest extends BaseTest {
 		try (final Writer os = Files.newBufferedWriter(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
 			actual.store(os, null);
 		}
-		CyclesModCli.main(outputDir);
+		new CyclesModCli(outputDir).execute();
 		try (final InputStream is = Files.newInputStream(Paths.get(outputDir.toString(), BIKES_INF_FILENAME))) {
 			short byteCount = 0;
 			int byteValue;
@@ -72,7 +71,7 @@ public class CyclesModConsoleTest extends BaseTest {
 		try (final Writer os = Files.newBufferedWriter(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
 			actual.store(os, null);
 		}
-		CyclesModCli.main(outputDir);
+		new CyclesModCli(outputDir).execute();
 		try (final InputStream is = Files.newInputStream(Paths.get(outputDir.toString(), BIKES_INF_FILENAME))) {
 			short byteCount = 0;
 			int byteValue;
