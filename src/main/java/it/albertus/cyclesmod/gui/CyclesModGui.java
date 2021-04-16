@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -34,6 +33,7 @@ import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.util.ExceptionUtils;
 import it.albertus.util.Version;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
@@ -50,7 +50,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private String bikesInfFileName;
 
-	private CyclesModGui(final Display display, final String fileName) throws IOException {
+	private CyclesModGui(final Display display, final Path fileName) throws IOException {
 		// Loading default properties...
 		try (final InputStream is = new DefaultBikes().getInputStream()) {
 			setBikesInf(new BikesInf(is));
@@ -76,7 +76,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		setLastPersistedProperties(defaultProperties);
 
 		// Loading custom properties...
-		if (fileName != null && !fileName.trim().isEmpty()) {
+		if (fileName != null) {
 			open(fileName);
 		}
 	}
@@ -88,7 +88,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		final Display display = Display.getDefault();
 		Shell shell = null;
 		try {
-			final CyclesModGui gui = new CyclesModGui(display, fileName != null ? fileName.toString() : null);
+			final CyclesModGui gui = new CyclesModGui(display, fileName);
 			shell = gui.getShell();
 			shell.open();
 			while (!shell.isDisposed()) {
@@ -121,23 +121,23 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
-	public void open(final String fileName) {
+	public void open(@NonNull final Path fileName) {
 		try {
-			if (fileName.toLowerCase(Locale.ROOT).endsWith(".inf")) {
-				final File bikesInfFile = new File(fileName);
+			if (fileName.toString().toLowerCase(Locale.ROOT).endsWith(".inf")) {
+				final File bikesInfFile = fileName.toFile();
 				setBikesInf(new BikesInf(bikesInfFile));
 				tabs.updateFormValues();
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 				bikesInfFileName = bikesInfFile.getCanonicalPath();
 				shell.setText(messages.get("gui.label.window.title") + " - " + bikesInfFileName);
 			}
-			else if (fileName.toLowerCase(Locale.ROOT).endsWith(".cfg")) {
+			else if (fileName.toString().toLowerCase(Locale.ROOT).endsWith(".cfg")) {
 				bikesInfFileName = null;
 				try (final InputStream is = new DefaultBikes().getInputStream()) {
 					setBikesInf(new BikesInf(is));
 				}
 
-				final BikesCfg bikesCfg = new BikesCfg(Paths.get(fileName));
+				final BikesCfg bikesCfg = new BikesCfg(fileName);
 				for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
 					applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
 				}
