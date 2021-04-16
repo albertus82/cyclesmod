@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -137,7 +136,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 					setBikesInf(new BikesInf(is));
 				}
 
-				final BikesCfg bikesCfg = new BikesCfg(Paths.get(fileName));
+				final BikesCfg bikesCfg = new BikesCfg(fileName);
 				for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
 					applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
 				}
