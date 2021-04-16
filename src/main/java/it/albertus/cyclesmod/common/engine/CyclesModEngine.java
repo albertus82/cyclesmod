@@ -18,6 +18,8 @@ import lombok.extern.java.Log;
 @Setter
 public abstract class CyclesModEngine implements NumeralSystemProvider {
 
+	private static final String COMMON_ERROR_UNSUPPORTED_PROPERTY = "common.error.unsupported.property";
+
 	private static final Messages messages = CommonMessages.INSTANCE;
 
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
@@ -41,7 +43,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		boolean applied = false;
 		try {
 			if (value == null || value.trim().length() == 0 || !isNumeric(value.trim())) {
-				throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
+				throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
 			}
 
 			// Settings
@@ -60,7 +62,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 
 			else {
-				throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
+				throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
 			}
 		}
 		catch (final InvalidPropertyException e) {
@@ -99,7 +101,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
+			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
 		}
 		return applied;
 	}
@@ -120,7 +122,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
+			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
 		}
 		return applied;
 	}
@@ -141,7 +143,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
+			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
 		}
 		return applied;
 	}
@@ -153,7 +155,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 	private Bike getBike(final String key, final String value) {
 		final Bike bike = bikesInf.getBike(Integer.parseInt(StringUtils.substringBefore(key, ".")));
 		if (bike == null) {
-			throw new InvalidPropertyException(messages.get("common.error.unsupported.property", key, value));
+			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
 		}
 		return bike;
 	}
