@@ -40,21 +40,21 @@ public class BikesInf {
 
 	private final Map<BikeType, Bike> bikeMap = new EnumMap<>(BikeType.class);
 
-	/** Create a new instance based on the default configuration. */
+	/** Creates a new instance based on the default configuration. */
 	public BikesInf() {
 		parse(DefaultBikes.getByteArray());
 	}
 
 	/**
-	 * Create a new instance based on the provided BIKES.INF file.
+	 * Creates a new instance based on the provided INF file.
 	 * 
-	 * @param the BIKES.INF file to read
+	 * @param bikesInfFile the file to read
 	 * 
 	 * @throws IOException if an I/O error occurs
 	 */
-	public BikesInf(@NonNull final Path file) throws IOException {
+	public BikesInf(@NonNull final Path bikesInfFile) throws IOException {
 		try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			try (final InputStream fis = Files.newInputStream(file)) {
+			try (final InputStream fis = Files.newInputStream(bikesInfFile)) {
 				IOUtils.copy(fis, baos, FILE_SIZE);
 			}
 			log.log(Level.FINE, messages.get("common.message.file.read"), FILE_NAME);
@@ -135,7 +135,7 @@ public class BikesInf {
 	}
 
 	/**
-	 * Rebuild the BIKES.INF from the three configurations contained in this object
+	 * Rebuilds the BIKES.INF from the three configurations contained in this object
 	 * (125, 250, 500).
 	 * 
 	 * @return A new byte array representing the BIKES.INF file.
