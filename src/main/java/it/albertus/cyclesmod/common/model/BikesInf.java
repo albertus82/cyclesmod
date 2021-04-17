@@ -40,10 +40,18 @@ public class BikesInf {
 
 	private final Map<BikeType, Bike> bikeMap = new EnumMap<>(BikeType.class);
 
+	/** Create a new instance based on the default configuration. */
 	public BikesInf() {
 		parse(DefaultBikes.getByteArray());
 	}
 
+	/**
+	 * Create a new instance based on the provided BIKES.INF file.
+	 * 
+	 * @param the BIKES.INF file to read
+	 * 
+	 * @throws IOException if an I/O error occurs
+	 */
 	public BikesInf(@NonNull final Path file) throws IOException {
 		try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			try (final InputStream fis = Files.newInputStream(file)) {
@@ -127,10 +135,10 @@ public class BikesInf {
 	}
 
 	/**
-	 * Ricostruisce il file BIKES.INF a partire dalle 3 configurazioni contenute
-	 * nell'oggetto (125, 250, 500).
+	 * Rebuild the BIKES.INF from the three configurations contained in this object
+	 * (125, 250, 500).
 	 * 
-	 * @return L'array di byte corrispondente al file BIKES.INF.
+	 * @return A new byte array representing the BIKES.INF file.
 	 */
 	private byte[] toByteArray() {
 		final List<Byte> byteList = new ArrayList<>(FILE_SIZE);
