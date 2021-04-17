@@ -48,7 +48,7 @@ public class BikesInf {
 	}
 
 	public void reset(final BikeType type) throws IOException {
-		try (final InputStream is = new DefaultBikes().getInputStream()) {
+		try (final InputStream is = DefaultBikes.getInputStream()) {
 			read(is, type);
 		}
 	}

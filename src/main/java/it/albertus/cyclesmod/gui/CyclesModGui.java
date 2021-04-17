@@ -57,7 +57,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private CyclesModGui(final Display display, final Path fileToOpen) throws IOException {
 		// Loading default properties...
-		try (final InputStream is = new DefaultBikes().getInputStream()) {
+		try (final InputStream is = DefaultBikes.getInputStream()) {
 			setBikesInf(new BikesInf(is));
 		}
 		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
@@ -133,7 +133,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			else if (file.toString().toLowerCase(Locale.ROOT).endsWith(".cfg")) {
 				bikesInfFileName = null;
-				try (final InputStream is = new DefaultBikes().getInputStream()) {
+				try (final InputStream is = DefaultBikes.getInputStream()) {
 					setBikesInf(new BikesInf(is));
 				}
 
