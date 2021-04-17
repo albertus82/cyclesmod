@@ -1,19 +1,17 @@
 package it.albertus.cyclesmod.common.data;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.util.Base64;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
-import it.albertus.util.IOUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -31,26 +29,27 @@ public class DefaultBikes {
 	}
 
 	public static byte[] getByteArray() {
-		try (final InputStream is = getInputStream(); final ByteArrayOutputStream os = new ByteArrayOutputStream(BikesInf.FILE_SIZE)) {
-			IOUtils.copy(is, os, 512);
-			final byte[] bytes = os.toByteArray();
-			verify(bytes);
-			return bytes;
+		final Inflater inflater = new Inflater();
+		inflater.setInput(Base64.getDecoder().decode(DEFLATE_BASE64));
+		final byte[] bytes = new byte[BikesInf.FILE_SIZE];
+		try {
+			final int size = inflater.inflate(bytes);
+			if (size != BikesInf.FILE_SIZE) {
+				throw new VerifyError(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, size));
+			}
 		}
-		catch (final IOException e) {
-			throw new UncheckedIOException(e);
+		catch (final DataFormatException e) {
+			throw new IllegalStateException(e);
 		}
-	}
-
-	private static void verify(final byte[] bytes) {
+		finally {
+			inflater.end();
+		}
 		final Checksum crc = new CRC32();
 		crc.update(bytes, 0, bytes.length);
 		if (crc.getValue() != CRC) {
 			throw new VerifyError(messages.get("common.error.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC), String.format("%08X", crc.getValue())));
 		}
-		if (bytes.length != BikesInf.FILE_SIZE) {
-			throw new VerifyError(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, bytes.length));
-		}
+		return bytes;
 	}
 
 }
