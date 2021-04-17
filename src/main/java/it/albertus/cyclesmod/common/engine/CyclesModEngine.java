@@ -162,7 +162,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 	}
 
 	protected void logChange(final String key, final int defaultValue, final int newValue) {
-		log.log(Level.INFO, messages.get("common.message.custom.value.detected"), new Serializable[] { key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue) });
+		log.log(Level.FINE, messages.get("common.message.custom.value.detected"), new Serializable[] { key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue) });
 	}
 
 }
