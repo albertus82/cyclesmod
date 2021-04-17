@@ -1,6 +1,7 @@
 package it.albertus.cyclesmod.cli;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ import lombok.extern.java.Log;
 @SuppressWarnings("java:S106") // Replace this use of System.out or System.err by a logger. Standard outputs should not be used directly to log anything (java:S106)
 public class CyclesModCli extends CyclesModEngine {
 
-	private static final String DEFAULT_DESTINATION_PATH = "";
+	private static final String DEFAULT_WORKING_DIRECTORY = "";
 
 	private static final Messages messages = ConsoleMessages.INSTANCE;
 
@@ -36,8 +37,12 @@ public class CyclesModCli extends CyclesModEngine {
 		}
 	}
 
-	CyclesModCli(final Path path) {
-		this.path = path != null ? path : Paths.get(DEFAULT_DESTINATION_PATH);
+	CyclesModCli(final Path path) throws IOException {
+		final Path workingDirectory = path != null ? path : Paths.get(DEFAULT_WORKING_DIRECTORY);
+		System.out.print(messages.get("console.message.working.directory", workingDirectory.toFile().getCanonicalPath()) + ' ');
+		Files.createDirectories(workingDirectory);
+		this.path = workingDirectory;
+		System.out.println(messages.get("console.message.done"));
 	}
 
 	void execute() throws IOException {
@@ -45,19 +50,27 @@ public class CyclesModCli extends CyclesModEngine {
 		setBikesInf(new BikesInf());
 		System.out.println(messages.get("console.message.done"));
 
-		final Path file = Paths.get(path.toString(), BikesCfg.FILE_NAME);
-		if (!file.toFile().exists()) {
+		final Path bikesCfgFile = Paths.get(path.toString(), BikesCfg.FILE_NAME);
+		if (!bikesCfgFile.toFile().exists()) {
 			System.out.print(messages.get("console.message.creating.default.file", BikesCfg.FILE_NAME) + ' ');
-			BikesCfg.createDefault(file);
+			BikesCfg.writeDefault(bikesCfgFile);
 			System.out.println(messages.get("console.message.done"));
 		}
 
 		System.out.print(messages.get("console.message.applying.customizations") + ' ');
-		short changes = customize(file);
+		final short changes = customize(bikesCfgFile);
 		System.out.println(messages.get("console.message.customizations.applied", changes));
 
-		System.out.println(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME));
-		getBikesInf().write(Paths.get(path.toString(), BikesInf.FILE_NAME), true);
+		System.out.print(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME) + ' ');
+		final Path bikesInfFile = Paths.get(path.toString(), BikesInf.FILE_NAME);
+		final boolean written = getBikesInf().write(bikesInfFile, true);
+		System.out.println(messages.get("console.message.done"));
+		if (written) {
+			System.out.println(messages.get("console.message.new.file.written", BikesInf.FILE_NAME));
+		}
+		else {
+			System.out.println(messages.get("console.message.already.uptodate", BikesInf.FILE_NAME));
+		}
 	}
 
 	private short customize(final Path file) throws IOException {

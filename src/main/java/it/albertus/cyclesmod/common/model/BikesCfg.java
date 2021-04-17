@@ -74,7 +74,7 @@ public class BikesCfg {
 		}
 	}
 
-	public static void createDefault(final Path file) throws IOException {
+	public static void writeDefault(final Path file) throws IOException {
 		final String props = createProperties(new BikesInf());
 
 		// Salvataggio...

@@ -80,11 +80,11 @@ public class BikesInf {
 		}
 	}
 
-	public void write(@NonNull final Path file, final boolean backupExisting) throws IOException {
+	public boolean write(@NonNull final Path file, final boolean backupExisting) throws IOException { // FIXME rimuovere backupExisting
 		final byte[] bytes = toByteArray();
 		final Checksum crc = new CRC32();
 		crc.update(bytes, 0, FILE_SIZE);
-		log.log(Level.INFO, messages.get(crc.getValue() == DefaultBikes.CRC ? "common.message.configuration.not.changed" : "common.message.configuration.changed"), String.format("%08X", crc.getValue()));
+		log.log(Level.FINE, messages.get(crc.getValue() == DefaultBikes.CRC ? "common.message.configuration.not.changed" : "common.message.configuration.changed"), String.format("%08X", crc.getValue()));
 
 		if (file.toFile().exists() && !Files.isDirectory(file)) {
 			try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
@@ -92,25 +92,26 @@ public class BikesInf {
 					IOUtils.copy(is, os, FILE_SIZE);
 				}
 				if (Arrays.equals(os.toByteArray(), bytes)) {
-					log.log(Level.INFO, messages.get("common.message.already.uptodate"), FILE_NAME);
+					return false;
 				}
 				else {
-					if (backupExisting) {
+					if (backupExisting) { // FIXME spostare in console
 						backup(file);
 					}
 					write(file, bytes);
+					return true;
 				}
 			}
 		}
 		else {
 			write(file, bytes);
+			return true;
 		}
 	}
 
 	private void write(@NonNull final Path file, @NonNull final byte[] contents) throws IOException {
 		try (final OutputStream fos = Files.newOutputStream(file); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
 			bos.write(contents);
-			log.log(Level.INFO, messages.get("common.message.new.file.written.into.path"), new String[] { FILE_NAME, file.toFile().getCanonicalPath() });
 		}
 	}
 
