@@ -44,7 +44,7 @@ public class CyclesModCli extends CyclesModEngine {
 
 	void execute() throws IOException {
 		System.out.println(messages.get("console.message.reading.original.file", BikesInf.FILE_NAME));
-		try (final InputStream is = new DefaultBikes().getInputStream()) {
+		try (final InputStream is = DefaultBikes.getInputStream()) {
 			setBikesInf(new BikesInf(is));
 		}
 
