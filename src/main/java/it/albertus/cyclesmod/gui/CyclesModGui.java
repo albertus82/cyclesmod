@@ -1,8 +1,6 @@
 package it.albertus.cyclesmod.gui;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -20,7 +18,6 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import it.albertus.cyclesmod.common.data.DefaultBikes;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
@@ -55,11 +52,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private String bikesInfFileName;
 
-	private CyclesModGui(final Display display, final Path fileToOpen) throws IOException {
+	private CyclesModGui(final Display display, final Path fileToOpen) {
 		// Loading default properties...
-		try (final InputStream is = DefaultBikes.getInputStream()) {
-			setBikesInf(new BikesInf(is));
-		}
+		setBikesInf(new BikesInf());
 		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
 
 		// Shell creation...
@@ -133,9 +128,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			}
 			else if (file.toString().toLowerCase(Locale.ROOT).endsWith(".cfg")) {
 				bikesInfFileName = null;
-				try (final InputStream is = DefaultBikes.getInputStream()) {
-					setBikesInf(new BikesInf(is));
-				}
+				setBikesInf(new BikesInf());
 
 				final BikesCfg bikesCfg = new BikesCfg(file);
 				for (final String key : bikesCfg.getProperties().stringPropertyNames()) {

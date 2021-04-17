@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.logging.Level;
 
 import it.albertus.cyclesmod.common.model.Bike;
+import it.albertus.cyclesmod.common.model.BikeType;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
@@ -151,16 +152,17 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		return applied;
 	}
 
-	private void logChange(final String key, final int defaultValue, final int newValue) {
-		log.log(Level.INFO, messages.get("common.message.custom.value.detected"), new Serializable[] { key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue) });
-	}
-
 	private Bike getBike(final String key, final String value) {
-		final Bike bike = bikesInf.getBike(Integer.parseInt(StringUtils.substringBefore(key, ".")));
-		if (bike == null) {
+		final int displacement = Integer.parseInt(StringUtils.substringBefore(key, "."));
+		final BikeType bikeType = BikeType.forDisplacement(displacement);
+		if (bikeType == null) {
 			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
 		}
-		return bike;
+		return bikesInf.getBikeMap().get(bikeType);
+	}
+
+	protected void logChange(final String key, final int defaultValue, final int newValue) {
+		log.log(Level.INFO, messages.get("common.message.custom.value.detected"), new Serializable[] { key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue) });
 	}
 
 }
