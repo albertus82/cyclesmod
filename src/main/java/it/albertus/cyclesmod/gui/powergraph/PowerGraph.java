@@ -104,7 +104,7 @@ public class PowerGraph implements IPowerGraph {
 		case CLASS_500:
 			return display.getSystemColor(SWT.COLOR_BLACK);
 		default:
-			throw new IllegalStateException("Unknown bike type: " + bikeType);
+			throw new IllegalArgumentException("Unknown bike type: " + bikeType);
 		}
 	}
 
