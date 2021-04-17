@@ -1,5 +1,8 @@
 package it.albertus.cyclesmod.common.engine;
 
+import java.io.Serializable;
+import java.util.logging.Level;
+
 import it.albertus.cyclesmod.common.model.Bike;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.model.Gearbox;
@@ -149,7 +152,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 	}
 
 	private void logChange(final String key, final int defaultValue, final int newValue) {
-		log.info(messages.get("common.message.custom.value.detected", key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue)));
+		log.log(Level.INFO, messages.get("common.message.custom.value.detected"), new Serializable[] { key, newValue, String.format("%X", newValue), defaultValue, String.format("%X", defaultValue) });
 	}
 
 	private Bike getBike(final String key, final String value) {
