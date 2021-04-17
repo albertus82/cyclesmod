@@ -96,7 +96,7 @@ public class BikesCfg {
 		final String lineSeparator = NewLine.SYSTEM_LINE_SEPARATOR;
 		final StringBuilder props = new StringBuilder(messages.get("common.str.cfg.header"));
 
-		for (final Bike bike : bikesInf.getBikes()) {
+		for (final Bike bike : bikesInf.getBikeMap().values()) {
 			props.append(lineSeparator).append(lineSeparator);
 			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("common.str.cfg.begin") + "... ###");
 

@@ -1,6 +1,5 @@
 package it.albertus.cyclesmod.common.model;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -12,7 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
@@ -25,6 +27,7 @@ import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.ByteUtils;
 import it.albertus.util.IOUtils;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
@@ -33,61 +36,46 @@ public class BikesInf {
 	public static final String FILE_NAME = "BIKES.INF";
 	public static final short FILE_SIZE = 444;
 
-	private final Bike[] bikes = new Bike[BikeType.values().length];
-
 	private static final Messages messages = CommonMessages.INSTANCE;
 
-	public BikesInf(final InputStream bikesInfInputStream) throws IOException {
-		read(bikesInfInputStream);
+	private final Map<BikeType, Bike> bikeMap = new EnumMap<>(BikeType.class);
+
+	public BikesInf() {
+		parse(DefaultBikes.getByteArray());
 	}
 
-	public BikesInf(final Path sourceFile) throws IOException {
-		try (final InputStream fis = Files.newInputStream(sourceFile); final InputStream bis = new BufferedInputStream(fis)) {
-			read(bis);
-		}
-	}
-
-	public void reset(final BikeType type) throws IOException {
-		try (final InputStream is = DefaultBikes.getInputStream()) {
-			read(is, type);
-		}
-	}
-
-	private void read(final InputStream inf, BikeType... types) throws IOException {
-		final byte[] inf125 = new byte[Bike.LENGTH];
-		final byte[] inf250 = new byte[Bike.LENGTH];
-		final byte[] inf500 = new byte[Bike.LENGTH];
-
-		final boolean wrongFileSize = inf.read(inf125) != Bike.LENGTH || inf.read(inf250) != Bike.LENGTH || inf.read(inf500) != Bike.LENGTH || inf.read() != -1;
-		inf.close();
-		if (wrongFileSize) {
-			throw new IllegalStateException(messages.get("common.error.wrong.file.size"));
-		}
-		log.log(Level.INFO, messages.get("common.message.file.read"), FILE_NAME);
-
-		if (types == null || types.length == 0) {
-			/* Full reading */
-			bikes[0] = new Bike(BikeType.CLASS_125, inf125);
-			bikes[1] = new Bike(BikeType.CLASS_250, inf250);
-			bikes[2] = new Bike(BikeType.CLASS_500, inf500);
-		}
-		else {
-			/* Replace only selected bikes */
-			final byte[][] infs = new byte[3][];
-			infs[0] = inf125;
-			infs[1] = inf250;
-			infs[2] = inf500;
-			for (final BikeType type : types) {
-				bikes[type.ordinal()] = new Bike(type, infs[type.ordinal()]);
+	public BikesInf(@NonNull final Path file) throws IOException {
+		try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			try (final InputStream fis = Files.newInputStream(file)) {
+				IOUtils.copy(fis, baos, FILE_SIZE);
 			}
+			log.log(Level.FINE, messages.get("common.message.file.read"), FILE_NAME);
+			final byte[] bytes = baos.toByteArray();
+			if (bytes.length != FILE_SIZE) {
+				throw new IllegalStateException(messages.get("common.error.wrong.file.size", FILE_NAME, FILE_SIZE, bytes.length));
+			}
+			parse(bytes);
 		}
-		log.log(Level.INFO, messages.get("common.message.file.parsed"), FILE_NAME);
 	}
 
-	public void write(final Path file, final boolean backupExisting) throws IOException {
-		final byte[] newBikesInf = this.toByteArray();
+	public void reset(final BikeType... bikeTypes) {
+		parse(DefaultBikes.getByteArray(), bikeTypes);
+	}
+
+	private void parse(@NonNull final byte[] bytes, BikeType... bikeTypes) {
+		if (bikeTypes == null || bikeTypes.length == 0) {
+			bikeTypes = BikeType.values();
+		}
+		for (final BikeType bikeType : bikeTypes) {
+			final int ordinal = bikeType.ordinal();
+			bikeMap.put(bikeType, new Bike(bikeType, Arrays.copyOfRange(bytes, Bike.LENGTH * ordinal, Bike.LENGTH * (ordinal + 1))));
+		}
+	}
+
+	public void write(@NonNull final Path file, final boolean backupExisting) throws IOException {
+		final byte[] bytes = toByteArray();
 		final Checksum crc = new CRC32();
-		crc.update(newBikesInf, 0, newBikesInf.length);
+		crc.update(bytes, 0, FILE_SIZE);
 		log.log(Level.INFO, messages.get(crc.getValue() == DefaultBikes.CRC ? "common.message.configuration.not.changed" : "common.message.configuration.changed"), String.format("%08X", crc.getValue()));
 
 		if (file.toFile().exists() && !Files.isDirectory(file)) {
@@ -95,25 +83,25 @@ public class BikesInf {
 				try (final InputStream is = Files.newInputStream(file)) {
 					IOUtils.copy(is, os, FILE_SIZE);
 				}
-				if (Arrays.equals(os.toByteArray(), newBikesInf)) {
+				if (Arrays.equals(os.toByteArray(), bytes)) {
 					log.log(Level.INFO, messages.get("common.message.already.uptodate"), FILE_NAME);
 				}
 				else {
 					if (backupExisting) {
 						backup(file);
 					}
-					doWrite(file, newBikesInf, crc);
+					write(file, bytes);
 				}
 			}
 		}
 		else {
-			doWrite(file, newBikesInf, crc);
+			write(file, bytes);
 		}
 	}
 
-	private void doWrite(final Path file, final byte[] newBikesInf, final Checksum crc) throws IOException {
+	private void write(@NonNull final Path file, @NonNull final byte[] contents) throws IOException {
 		try (final OutputStream fos = Files.newOutputStream(file); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
-			bos.write(newBikesInf);
+			bos.write(contents);
 			log.log(Level.INFO, messages.get("common.message.new.file.written.into.path"), new String[] { FILE_NAME, file.toFile().getCanonicalPath() });
 		}
 	}
@@ -146,26 +134,17 @@ public class BikesInf {
 	 */
 	private byte[] toByteArray() {
 		final List<Byte> byteList = new ArrayList<>(FILE_SIZE);
-		for (final ByteList bike : bikes) {
+		for (final ByteList bike : bikeMap.values()) {
 			byteList.addAll(bike.toByteList());
 		}
 		if (byteList.size() != FILE_SIZE) {
-			throw new IllegalStateException(messages.get("common.error.wrong.file.size.detailed", FILE_NAME, FILE_SIZE, byteList.size()));
+			throw new IllegalStateException(messages.get("common.error.wrong.file.size", FILE_NAME, FILE_SIZE, byteList.size()));
 		}
 		return ByteUtils.toByteArray(byteList);
 	}
 
-	public Bike getBike(int displacement) {
-		for (final Bike bike : bikes) {
-			if (bike.getType().getDisplacement() == displacement) {
-				return bike;
-			}
-		}
-		return null;
-	}
-
-	public Bike[] getBikes() {
-		return bikes;
+	public Map<BikeType, Bike> getBikeMap() {
+		return Collections.unmodifiableMap(bikeMap);
 	}
 
 }

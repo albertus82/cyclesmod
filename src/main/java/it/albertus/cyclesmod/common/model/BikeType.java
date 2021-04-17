@@ -13,4 +13,13 @@ public enum BikeType {
 
 	private final int displacement;
 
+	public static BikeType forDisplacement(final int displacement) {
+		for (final BikeType bikeType : values()) {
+			if (bikeType.displacement == displacement) {
+				return bikeType;
+			}
+		}
+		return null;
+	}
+
 }

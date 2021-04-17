@@ -1,13 +1,10 @@
 package it.albertus.cyclesmod.common.data;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Base64;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
-import java.util.zip.InflaterInputStream;
 
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
@@ -24,10 +21,6 @@ public class DefaultBikes {
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
-	public static InputStream getInputStream() {
-		return new InflaterInputStream(new ByteArrayInputStream(Base64.getDecoder().decode(DEFLATE_BASE64)));
-	}
-
 	public static byte[] getByteArray() {
 		final Inflater inflater = new Inflater();
 		inflater.setInput(Base64.getDecoder().decode(DEFLATE_BASE64));
@@ -39,7 +32,7 @@ public class DefaultBikes {
 			}
 		}
 		catch (final DataFormatException e) {
-			throw new IllegalStateException(e);
+			throw new VerifyError(messages.get("common.error.original.file.corrupted", BikesInf.FILE_NAME), e);
 		}
 		finally {
 			inflater.end();

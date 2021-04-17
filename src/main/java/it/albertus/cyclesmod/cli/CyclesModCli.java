@@ -1,13 +1,11 @@
 package it.albertus.cyclesmod.cli;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 
 import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
-import it.albertus.cyclesmod.common.data.DefaultBikes;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
@@ -44,9 +42,7 @@ public class CyclesModCli extends CyclesModEngine {
 
 	void execute() throws IOException {
 		System.out.println(messages.get("console.message.reading.original.file", BikesInf.FILE_NAME));
-		try (final InputStream is = DefaultBikes.getInputStream()) {
-			setBikesInf(new BikesInf(is));
-		}
+		setBikesInf(new BikesInf());
 
 		System.out.println(messages.get("console.message.applying.customizations"));
 		customize();

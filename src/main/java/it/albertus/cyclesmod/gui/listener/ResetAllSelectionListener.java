@@ -1,7 +1,5 @@
 package it.albertus.cyclesmod.gui.listener;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 
 import org.eclipse.swt.SWT;
@@ -9,7 +7,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
 
-import it.albertus.cyclesmod.common.data.DefaultBikes;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
@@ -47,11 +44,9 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 		}
 	}
 
-	private void reset() throws IOException {
-		try (final InputStream is = DefaultBikes.getInputStream()) {
-			gui.setBikesInf(new BikesInf(is));
-			gui.getTabs().updateFormValues();
-		}
+	private void reset() {
+		gui.setBikesInf(new BikesInf());
+		gui.getTabs().updateFormValues();
 	}
 
 }
