@@ -41,28 +41,37 @@ public class CyclesModCli extends CyclesModEngine {
 	}
 
 	void execute() throws IOException {
-		System.out.println(messages.get("console.message.reading.original.file", BikesInf.FILE_NAME));
+		System.out.print(messages.get("console.message.reading.original.configuration") + ' ');
 		setBikesInf(new BikesInf());
+		System.out.println(messages.get("console.message.done"));
 
-		System.out.println(messages.get("console.message.applying.customizations"));
-		customize();
+		final Path file = Paths.get(path.toString(), BikesCfg.FILE_NAME);
+		if (!file.toFile().exists()) {
+			System.out.print(messages.get("console.message.creating.default.file", BikesCfg.FILE_NAME) + ' ');
+			BikesCfg.createDefault(file);
+			System.out.println(messages.get("console.message.done"));
+		}
+
+		System.out.print(messages.get("console.message.applying.customizations") + ' ');
+		short changes = customize(file);
+		System.out.println(messages.get("console.message.customizations.applied", changes));
 
 		System.out.println(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME));
 		getBikesInf().write(Paths.get(path.toString(), BikesInf.FILE_NAME), true);
 	}
 
-	private void customize() throws IOException {
-		// Lettura del file di properties BIKES.CFG...
-		final BikesCfg bikesCfg = new BikesCfg(getBikesInf(), path);
+	private short customize(final Path file) throws IOException {
+		// Read BIKES.CFG
+		final BikesCfg bikesCfg = new BikesCfg(file);
 
-		// Elaborazione delle properties...
+		// Process properties
 		short changesCount = 0;
 		for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
 			if (applyProperty(key, bikesCfg.getProperties().getProperty(key), false)) {
 				changesCount++;
 			}
 		}
-		System.out.println(messages.get("console.message.customizations.applied", changesCount));
+		return changesCount;
 	}
 
 }
