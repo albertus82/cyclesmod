@@ -7,11 +7,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 import java.util.zip.Deflater;
@@ -61,7 +63,7 @@ public class BikesInf {
 		if (wrongFileSize) {
 			throw new IllegalStateException(messages.get("common.error.wrong.file.size"));
 		}
-		log.info(messages.get("common.message.file.read", FILE_NAME));
+		log.log(Level.INFO, messages.get("common.message.file.read"), FILE_NAME);
 
 		if (types == null || types.length == 0) {
 			/* Full reading */
@@ -79,14 +81,14 @@ public class BikesInf {
 				bikes[type.ordinal()] = new Bike(type, infs[type.ordinal()]);
 			}
 		}
-		log.info(messages.get("common.message.file.parsed", FILE_NAME));
+		log.log(Level.INFO, messages.get("common.message.file.parsed"), FILE_NAME);
 	}
 
 	public void write(final Path file, final boolean backupExisting) throws IOException {
 		final byte[] newBikesInf = this.toByteArray();
 		final Checksum crc = new CRC32();
 		crc.update(newBikesInf, 0, newBikesInf.length);
-		log.info(messages.get("common.message.configuration.changed", crc.getValue() == DefaultBikes.CRC ? ' ' + messages.get("common.message.not") + ' ' : ' ', String.format("%08X", crc.getValue())));
+		log.log(Level.INFO, messages.get(crc.getValue() == DefaultBikes.CRC ? "common.message.configuration.not.changed" : "common.message.configuration.changed"), String.format("%08X", crc.getValue()));
 
 		if (file.toFile().exists() && !Files.isDirectory(file)) {
 			try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
@@ -94,7 +96,7 @@ public class BikesInf {
 					IOUtils.copy(is, os, FILE_SIZE);
 				}
 				if (Arrays.equals(os.toByteArray(), newBikesInf)) {
-					log.info(messages.get("common.message.already.uptodate", FILE_NAME));
+					log.log(Level.INFO, messages.get("common.message.already.uptodate"), FILE_NAME);
 				}
 				else {
 					if (backupExisting) {
@@ -112,7 +114,7 @@ public class BikesInf {
 	private void doWrite(final Path file, final byte[] newBikesInf, final Checksum crc) throws IOException {
 		try (final OutputStream fos = Files.newOutputStream(file); final OutputStream bos = new BufferedOutputStream(fos, FILE_SIZE)) {
 			bos.write(newBikesInf);
-			log.info(messages.get("common.message.new.file.written.into.path", FILE_NAME, file.toFile().getCanonicalPath(), String.format("%08X", crc.getValue())));
+			log.log(Level.INFO, messages.get("common.message.new.file.written.into.path"), new String[] { FILE_NAME, file.toFile().getCanonicalPath() });
 		}
 	}
 
@@ -131,7 +133,7 @@ public class BikesInf {
 			zos.putNextEntry(new ZipEntry(existingFile.toFile().getName()));
 			IOUtils.copy(fis, zos, FILE_SIZE);
 			zos.closeEntry();
-			log.info(messages.get("common.message.old.file.backed.up", FILE_NAME, backupFile));
+			log.log(Level.INFO, messages.get("common.message.old.file.backed.up"), new Serializable[] { FILE_NAME, backupFile });
 		}
 		return backupFile.toPath();
 	}

@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
@@ -24,6 +26,7 @@ public class BikesCfg {
 
 	private static final String FILE_NAME = "BIKES.CFG";
 	private static final int RADIX = 10;
+	private static final Charset CHARSET = StandardCharsets.ISO_8859_1;
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
@@ -39,25 +42,25 @@ public class BikesCfg {
 	}
 
 	public BikesCfg(final Path sourceFile) throws IOException {
-		log.info(messages.get("common.message.reading.file", FILE_NAME));
-		try (final Reader reader = Files.newBufferedReader(sourceFile, StandardCharsets.ISO_8859_1)) {
+		log.log(Level.INFO, messages.get("common.message.reading.file"), FILE_NAME);
+		try (final Reader reader = Files.newBufferedReader(sourceFile, CHARSET)) {
 			populateProperties(reader); // buffered internally
 		}
-		log.info(messages.get("common.message.file.read", FILE_NAME));
+		log.log(Level.INFO, messages.get("common.message.file.read"), FILE_NAME);
 	}
 
 	public BikesCfg(final BikesInf originalBikesInf, final Path destDir) throws IOException {
-		log.info(messages.get("common.message.reading.file", FILE_NAME));
+		log.log(Level.INFO, messages.get("common.message.reading.file"), FILE_NAME);
 		final Path destFile = Paths.get(destDir.toString(), FILE_NAME);
 		if (!destFile.toFile().exists()) {
-			log.info(messages.get("common.message.file.not.found.creating.default", FILE_NAME));
+			log.log(Level.INFO, messages.get("common.message.file.not.found.creating.default"), FILE_NAME);
 			writeDefaultBikesCfg(originalBikesInf, destFile);
-			log.info(messages.get("common.message.default.file.created", FILE_NAME));
+			log.log(Level.INFO, messages.get("common.message.default.file.created"), FILE_NAME);
 		}
 		try (final Reader reader = Files.newBufferedReader(destFile)) {
 			populateProperties(reader); // buffered internally
 		}
-		log.info(messages.get("common.message.file.read", FILE_NAME));
+		log.log(Level.INFO, messages.get("common.message.file.read"), FILE_NAME);
 	}
 
 	private void populateProperties(final Reader reader) throws IOException {
@@ -79,7 +82,12 @@ public class BikesCfg {
 		final String props = createProperties(originalBikesInf);
 
 		// Salvataggio...
-		try (final Writer writer = Files.newBufferedWriter(destFile, StandardCharsets.ISO_8859_1)) {
+		final Path directory = destFile.getParent();
+		if (!directory.toFile().exists()) {
+			Files.createDirectories(directory);
+			log.log(Level.INFO, messages.get("common.message.directory.created"), directory.toFile().getCanonicalPath());
+		}
+		try (final Writer writer = Files.newBufferedWriter(destFile, CHARSET)) {
 			writer.write(props);
 		}
 	}
