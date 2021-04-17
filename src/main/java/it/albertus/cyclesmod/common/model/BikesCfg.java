@@ -83,7 +83,7 @@ public class BikesCfg {
 
 		// Salvataggio...
 		final Path directory = destFile.getParent();
-		if (!directory.toFile().exists()) {
+		if (directory != null && !directory.toFile().exists()) {
 			Files.createDirectories(directory);
 			log.log(Level.INFO, messages.get("common.message.directory.created"), directory.toFile().getCanonicalPath());
 		}
