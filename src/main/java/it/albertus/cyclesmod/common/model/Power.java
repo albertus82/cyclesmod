@@ -3,9 +3,9 @@ package it.albertus.cyclesmod.common.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
-import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
+import it.albertus.cyclesmod.common.engine.InvalidNumberException;
+import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import lombok.NonNull;
@@ -57,10 +57,22 @@ public class Power implements ByteList {
 		return (int) (rpm + (double) POINT_WIDTH_RPM / 2 - BASE_RPM) / POINT_WIDTH_RPM;
 	}
 
-	public static short parse(final String key, @NonNull final String value, final int radix) {
-		final long newValue = Long.parseLong(value.trim(), radix);
+	public static short parse(final String value, final int radix) throws InvalidNumberException, ValueOutOfRangeException {
+		if (value == null) {
+			throw new InvalidNumberException(value, radix, new NullPointerException());
+		}
+		if (value.trim().isEmpty()) {
+			throw new InvalidNumberException(value, radix);
+		}
+		final long newValue;
+		try {
+			newValue = Long.parseLong(value.trim(), radix);
+		}
+		catch (final NumberFormatException e) {
+			throw new InvalidNumberException(value, radix, e);
+		}
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(messages.get("common.error.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
+			throw new ValueOutOfRangeException(newValue, MIN_VALUE, MAX_VALUE);
 		}
 		return (short) newValue;
 	}

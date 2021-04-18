@@ -22,8 +22,6 @@ import lombok.extern.java.Log;
 @Setter
 public abstract class CyclesModEngine implements NumeralSystemProvider {
 
-	private static final String COMMON_ERROR_UNSUPPORTED_PROPERTY = "common.error.unsupported.property";
-
 	private static final Messages messages = CommonMessages.INSTANCE;
 
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
@@ -43,34 +41,25 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		return isNumeric(value, numeralSystem.getRadix());
 	}
 
-	protected boolean applyProperty(final String key, final String value, final boolean lenient) {
+	protected boolean applyProperty(final String key, final String value, final boolean lenient) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
 		boolean applied = false;
 		try {
-			if (value == null || value.trim().length() == 0 || !isNumeric(value.trim())) {
-				throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
-			}
-
-			// Settings
 			if (isSettingsProperty(key)) {
 				applied = applySettingProperty(key, value);
 			}
-
-			// Gearbox
 			else if (isGearboxProperty(key)) {
 				applied = applyGearboxProperty(key, value);
 			}
-
-			// Power
 			else if (isPowerProperty(key)) {
 				applied = applyPowerProperty(key, value);
 			}
-
 			else {
-				throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
+				throw new UnknownPropertyException(key);
 			}
 		}
-		catch (final InvalidPropertyException e) {
+		catch (final UnknownPropertyException | InvalidNumberException | ValueOutOfRangeException e) {
 			if (!lenient) {
+				//				throw new RuntimeException(e);
 				throw e;
 			}
 		}
@@ -89,11 +78,11 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		return StringUtils.substringAfter(key, ".").startsWith(Settings.PREFIX);
 	}
 
-	private boolean applyPowerProperty(final String key, final String value) {
+	private boolean applyPowerProperty(final String key, final String value) throws InvalidNumberException, ValueOutOfRangeException, UnknownPropertyException {
 		boolean applied = false;
-		final short newValue = Power.parse(key, value, numeralSystem.getRadix());
+		final short newValue = Power.parse(value, numeralSystem.getRadix());
 
-		final Bike bike = getBike(key, value);
+		final Bike bike = getBike(key);
 		final String suffix = StringUtils.substringAfter(key, Power.PREFIX + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getPower().getCurve().length) {
 			final int index = Integer.parseInt(suffix);
@@ -105,16 +94,16 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
+			throw new UnknownPropertyException(key);
 		}
 		return applied;
 	}
 
-	private boolean applyGearboxProperty(final String key, final String value) {
+	private boolean applyGearboxProperty(final String key, final String value) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
 		boolean applied = false;
-		final int newValue = Gearbox.parse(key, value, numeralSystem.getRadix());
+		final int newValue = Gearbox.parse(value, numeralSystem.getRadix());
 
-		final Bike bike = getBike(key, value);
+		final Bike bike = getBike(key);
 		final String suffix = StringUtils.substringAfter(key, Gearbox.PREFIX + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getGearbox().getRatios().length) {
 			final int index = Integer.parseInt(suffix);
@@ -126,16 +115,16 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
+			throw new UnknownPropertyException(key);
 		}
 		return applied;
 	}
 
-	private boolean applySettingProperty(final String key, final String value) {
+	private boolean applySettingProperty(final String key, final String value) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
 		boolean applied = false;
-		final int newValue = Settings.parse(key, value, numeralSystem.getRadix());
+		final int newValue = Settings.parse(value, numeralSystem.getRadix());
 
-		final Bike bike = getBike(key, value);
+		final Bike bike = getBike(key);
 		final String suffix = StringUtils.substringAfter(key, Settings.PREFIX + '.');
 		final Setting setting = Setting.forKey(suffix);
 		if (setting != null) {
@@ -147,16 +136,16 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 			}
 		}
 		else {
-			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
+			throw new UnknownPropertyException(key);
 		}
 		return applied;
 	}
 
-	private Bike getBike(final String key, final String value) {
+	private Bike getBike(final String key) throws UnknownPropertyException {
 		final int displacement = Integer.parseInt(StringUtils.substringBefore(key, "."));
 		final BikeType bikeType = BikeType.forDisplacement(displacement);
 		if (bikeType == null) {
-			throw new InvalidPropertyException(messages.get(COMMON_ERROR_UNSUPPORTED_PROPERTY, key, value));
+			throw new UnknownPropertyException(key);
 		}
 		return bikesInf.getBikeMap().get(bikeType);
 	}

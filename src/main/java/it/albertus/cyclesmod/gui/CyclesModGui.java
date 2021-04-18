@@ -19,8 +19,10 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
-import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
+import it.albertus.cyclesmod.common.engine.InvalidNumberException;
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
+import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
+import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
@@ -111,9 +113,16 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		shell.setRedraw(true);
 	}
 
-	public void updateModelValues(final boolean lenient) {
+	public void updateModelValues(final boolean lenient) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
 		for (final String key : tabs.getFormProperties().keySet()) {
-			applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
+			try {
+				applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
+			}
+			catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
+				if (!lenient) {
+					throw e;
+				}
+			}
 		}
 	}
 
@@ -162,7 +171,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			try {
 				updateModelValues(false);
 			}
-			catch (final InvalidPropertyException e) {
+			catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
 				log.log(Level.WARNING, e.toString(), e);
 				EnhancedErrorDialog.openError(shell, messages.get(GUI_MESSAGE_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
@@ -184,7 +193,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		try {
 			updateModelValues(false);
 		}
-		catch (final InvalidPropertyException e) {
+		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
 			log.log(Level.WARNING, e.toString(), e);
 			EnhancedErrorDialog.openError(shell, messages.get(GUI_MESSAGE_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
@@ -216,7 +225,12 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	@Override
 	public void setNumeralSystem(final NumeralSystem numeralSystem) {
-		updateModelValues(true);
+		try {
+			updateModelValues(true);
+		}
+		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
+			log.log(Level.INFO, e.getMessage(), e);
+		}
 		super.setNumeralSystem(numeralSystem);
 		tabs.updateFormValues();
 	}

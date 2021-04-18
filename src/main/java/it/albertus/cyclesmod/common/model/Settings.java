@@ -3,14 +3,11 @@ package it.albertus.cyclesmod.common.model;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
-import it.albertus.cyclesmod.common.resources.CommonMessages;
-import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.common.engine.InvalidNumberException;
+import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.util.ByteUtils;
-import lombok.NonNull;
 
 public class Settings implements ByteList {
 
@@ -19,8 +16,6 @@ public class Settings implements ByteList {
 	public static final int MAX_VALUE = 65535;
 
 	public static final String PREFIX = "settings";
-
-	private static final Messages messages = CommonMessages.INSTANCE;
 
 	private final Map<Setting, Integer> values = new EnumMap<>(Setting.class);
 
@@ -47,12 +42,25 @@ public class Settings implements ByteList {
 		return byteList;
 	}
 
-	public static int parse(final String key, @NonNull final String value, final int radix) {
-		final long newValue = Long.parseLong(value.trim(), radix);
+	public static int parse(final String value, final int radix) throws ValueOutOfRangeException, InvalidNumberException {
+		if (value == null) {
+			throw new InvalidNumberException(value, radix, new NullPointerException());
+		}
+		if (value.trim().isEmpty()) {
+			throw new InvalidNumberException(value, radix);
+		}
+		final long newValue;
+		try {
+			newValue = Long.parseLong(value.trim(), radix);
+		}
+		catch (final NumberFormatException e) {
+			throw new InvalidNumberException(value, radix, e);
+		}
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new InvalidPropertyException(messages.get("common.error.illegal.value", Integer.toString(MIN_VALUE, radix).toUpperCase(Locale.ROOT), Integer.toString(MAX_VALUE, radix).toUpperCase(Locale.ROOT), key, Long.toString(newValue, radix).toUpperCase(Locale.ROOT)));
+			throw new ValueOutOfRangeException(newValue, MIN_VALUE, MAX_VALUE);
 		}
 		return (int) newValue;
+
 	}
 
 	public Map<Setting, Integer> getValues() {
