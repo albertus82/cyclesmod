@@ -17,7 +17,7 @@ public class DefaultBikesTest {
 
 		final CRC32 crc = new CRC32();
 		crc.update(bytes);
-		Assert.assertEquals(DefaultBikes.CRC, crc.getValue());
+		Assert.assertEquals(DefaultBikes.CRC32, crc.getValue());
 	}
 
 }
