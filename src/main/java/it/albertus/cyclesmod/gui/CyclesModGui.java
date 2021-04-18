@@ -168,7 +168,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				return false;
 			}
 			try {
-				getBikesInf().write(Paths.get(bikesInfFileName), false);
+				getBikesInf().write(Paths.get(bikesInfFileName));
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
@@ -197,7 +197,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
-				getBikesInf().write(Paths.get(fileName), false);
+				getBikesInf().write(Paths.get(fileName));
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);

@@ -77,11 +77,6 @@ public class BikesCfg {
 		final String props = createProperties(new BikesInf());
 
 		// Salvataggio...
-		final Path directory = file.getParent();
-		if (directory != null && !directory.toFile().exists()) {
-			Files.createDirectories(directory);
-			log.log(Level.INFO, messages.get("common.message.directory.created"), directory.toFile().getCanonicalPath());
-		}
 		try (final Writer writer = Files.newBufferedWriter(file, CHARSET)) {
 			writer.write(props);
 		}

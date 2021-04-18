@@ -32,8 +32,7 @@ public class CyclesMod implements Callable<Integer> {
 		final String mode = System.getProperty(getClass().getName() + ".main.mode");
 		if (mode != null) {
 			if ("cli".equalsIgnoreCase(mode)) {
-				CyclesModCli.main(path);
-				return ExitCode.OK;
+				return new CyclesModCli().execute(path);
 			}
 			else if ("gui".equalsIgnoreCase(mode)) {
 				CyclesModGui.main(path);
@@ -43,7 +42,7 @@ public class CyclesMod implements Callable<Integer> {
 		}
 		else {
 			if (path != null && Files.isDirectory(path)) {
-				CyclesModCli.main(path);
+				return new CyclesModCli().execute(path);
 			}
 			else {
 				CyclesModGui.main(path);
