@@ -59,7 +59,7 @@ public class CyclesModCli extends CyclesModEngine {
 			}
 			catch (final IOException e) {
 				System.out.println(messages.get("console.message.error"));
-				System.err.println(messages.get("console.error.cannot.write.default.file", BikesCfg.FILE_NAME, e));
+				System.err.println(messages.get("console.error.cannot.create.default.file", BikesCfg.FILE_NAME, e));
 				return ExitCode.SOFTWARE;
 			}
 			System.out.println(messages.get("console.message.done"));
