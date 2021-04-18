@@ -11,7 +11,9 @@ import java.util.Arrays;
 
 import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
-import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
+import it.albertus.cyclesmod.common.engine.InvalidNumberException;
+import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
+import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
@@ -81,9 +83,19 @@ public class CyclesModCli extends CyclesModEngine {
 							changesCount++;
 						}
 					}
-					catch (final InvalidPropertyException e) {
+					catch (final UnknownPropertyException e) {
 						System.out.println(messages.get("console.message.error"));
-						System.err.println(e.getLocalizedMessage());
+						System.err.println(messages.get("console.error.unknown.property", key));
+						return ExitCode.SOFTWARE;
+					}
+					catch (final InvalidNumberException e) {
+						System.out.println(messages.get("console.message.error"));
+						System.err.println(messages.get("console.error.invalid.number", key, e.getValue()));
+						return ExitCode.SOFTWARE;
+					}
+					catch (final ValueOutOfRangeException e) {
+						System.out.println(messages.get("console.message.error"));
+						System.err.println(messages.get("console.error.value.out.of.range", key, e.getValue(), e.getMinValue(), e.getMaxValue()));
 						return ExitCode.SOFTWARE;
 					}
 				}
