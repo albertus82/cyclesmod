@@ -13,13 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.logging.Level;
 
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
-import lombok.extern.java.Log;
 
-@Log
 public class BikesCfg {
 
 	public static final String FILE_NAME = "BIKES.CFG";
@@ -51,11 +48,9 @@ public class BikesCfg {
 	 * @param bikesCfgFile the file to read
 	 */
 	public BikesCfg(final Path bikesCfgFile) throws IOException {
-		log.log(Level.FINE, messages.get("common.message.reading.file"), FILE_NAME);
 		try (final Reader reader = Files.newBufferedReader(bikesCfgFile, CHARSET)) {
 			populateProperties(reader);
 		}
-		log.log(Level.FINE, messages.get("common.message.file.read"), FILE_NAME);
 	}
 
 	private void populateProperties(final Reader reader) throws IOException {

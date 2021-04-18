@@ -112,9 +112,9 @@ public class BikesInf {
 		}
 	}
 
-	public static Path backup(@NonNull final Path existingFile) throws IOException {
+	public static Path backup(@NonNull final Path file) throws IOException {
 		int i = 0;
-		final String parent = existingFile.toFile().getParent();
+		final String parent = file.toFile().getParent();
 		final String prefix = parent != null ? parent + File.separator : "";
 		File backupFile;
 		do {
@@ -122,10 +122,10 @@ public class BikesInf {
 		}
 		while (backupFile.exists());
 
-		try (final InputStream fis = Files.newInputStream(existingFile); final OutputStream fos = Files.newOutputStream(backupFile.toPath()); final ZipOutputStream zos = new ZipOutputStream(fos)) {
+		try (final InputStream fis = Files.newInputStream(file); final OutputStream fos = Files.newOutputStream(backupFile.toPath()); final ZipOutputStream zos = new ZipOutputStream(fos)) {
 			zos.setLevel(Deflater.BEST_COMPRESSION);
-			zos.putNextEntry(new ZipEntry(existingFile.toFile().getName()));
-			IOUtils.copy(fis, zos, BikesInf.FILE_SIZE);
+			zos.putNextEntry(new ZipEntry(file.toFile().getName()));
+			IOUtils.copy(fis, zos, FILE_SIZE);
 			zos.closeEntry();
 			return backupFile.toPath();
 		}
