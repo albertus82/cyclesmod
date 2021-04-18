@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
+import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
@@ -75,8 +76,15 @@ public class CyclesModCli extends CyclesModEngine {
 				final BikesCfg bikesCfg = new BikesCfg(bikesCfgFile);
 				short changesCount = 0;
 				for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
-					if (applyProperty(key, bikesCfg.getProperties().getProperty(key), false)) {
-						changesCount++;
+					try {
+						if (applyProperty(key, bikesCfg.getProperties().getProperty(key), false)) {
+							changesCount++;
+						}
+					}
+					catch (final InvalidPropertyException e) {
+						System.out.println(messages.get("console.message.error"));
+						System.err.println(e.getLocalizedMessage());
+						return ExitCode.SOFTWARE;
 					}
 				}
 				System.out.println(messages.get("console.message.applying.customizations.done", changesCount));
