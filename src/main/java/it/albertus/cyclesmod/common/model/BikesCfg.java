@@ -17,7 +17,6 @@ import java.util.logging.Level;
 
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
-import it.albertus.util.NewLine;
 import lombok.extern.java.Log;
 
 @Log
@@ -89,7 +88,7 @@ public class BikesCfg {
 	}
 
 	private static String createProperties(final BikesInf bikesInf) {
-		final String lineSeparator = NewLine.SYSTEM_LINE_SEPARATOR;
+		final String lineSeparator = System.lineSeparator();
 		final StringBuilder props = new StringBuilder(messages.get("common.str.cfg.header"));
 
 		for (final Bike bike : bikesInf.getBikeMap().values()) {
