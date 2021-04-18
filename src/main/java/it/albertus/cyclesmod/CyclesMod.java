@@ -1,32 +1,36 @@
 package it.albertus.cyclesmod;
 
-import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.util.logging.Level;
 
 import it.albertus.cyclesmod.cli.CyclesModCli;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.java.Log;
 
+@Log
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CyclesMod {
 
 	public static void main(final String... args) {
-		final String mode = System.getProperty(CyclesMod.class.getName() + ".main.mode");
-		if (mode != null) {
-			if ("cli".equalsIgnoreCase(mode)) {
-				CyclesModCli.main(args);
-			}
-			else if ("gui".equalsIgnoreCase(mode)) {
-				CyclesModGui.main(args[0] != null ? Paths.get(args[0]) : null);
-			}
+		final String mode = System.getProperty("mode");
+		if ("cli".equalsIgnoreCase(mode)) {
+			CyclesModCli.main(args);
 		}
 		else {
-			if (args[0] != null && Files.isDirectory(Paths.get(args[0]))) {
-				CyclesModCli.main(args);
+			if (args.length > 0) {
+				try {
+					CyclesModGui.main(args[0] != null ? Paths.get(args[0]) : null);
+				}
+				catch (final InvalidPathException e) {
+					log.log(Level.FINE, "Invalid path provided: " + args[0], e);
+					CyclesModGui.main(null);
+				}
 			}
 			else {
-				CyclesModGui.main(args[0] != null ? Paths.get(args[0]) : null);
+				CyclesModGui.main(null);
 			}
 		}
 	}
