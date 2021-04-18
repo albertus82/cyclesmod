@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
 
@@ -52,7 +53,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 	public Integer call() {
 		try {
 			if (!Paths.get("").equals(path)) {
-				prepareWorkingDirectory();
+				path = prepareWorkingDirectory(path);
 			}
 			loadOriginalConfiguration();
 			final Path bikesCfgFile = Paths.get(path.toString(), BikesCfg.FILE_NAME);
@@ -81,7 +82,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 			if (Files.isDirectory(bikesInfFile)) {
 				System.out.println(messages.get("console.message.error"));
 				System.err.println(messages.get("console.error.cannot.open.file.directory", BikesInf.FILE_NAME));
-				throw new IOException();
+				throw new IOException(bikesInfFile + " is a directory");
 			}
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream(BikesInf.FILE_SIZE);
 			try (final InputStream is = Files.newInputStream(bikesInfFile)) {
@@ -112,13 +113,13 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 		if (Files.isDirectory(bikesCfgFile)) {
 			System.out.println(messages.get("console.message.error"));
 			System.err.println(messages.get("console.error.cannot.open.file.directory", BikesCfg.FILE_NAME));
-			throw new IOException();
+			throw new IOException(bikesCfgFile + "is a directory");
 		}
 		try {
-			final BikesCfg bikesCfg = new BikesCfg(bikesCfgFile);
+			final Properties properties = new BikesCfg(bikesCfgFile).getProperties();
 			short changesCount = 0;
-			for (final String name : bikesCfg.getProperties().stringPropertyNames()) {
-				final String value = bikesCfg.getProperties().getProperty(name);
+			for (final String name : properties.stringPropertyNames()) {
+				final String value = properties.getProperty(name);
 				if (applyCustomization(name, value)) {
 					changesCount++;
 				}
@@ -198,11 +199,14 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 		System.out.println(messages.get("console.message.done"));
 	}
 
-	private void prepareWorkingDirectory() throws IOException {
+	private static Path prepareWorkingDirectory(@NonNull Path path) throws IOException {
 		if (path.toFile().exists()) {
 			if (!Files.isDirectory(path)) {
 				System.err.println(messages.get("console.error.invalid.directory"));
-				throw new IOException();
+				throw new IOException(path + " is not a directory");
+			}
+			else {
+				return path;
 			}
 		}
 		else {
@@ -210,6 +214,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 			try {
 				path = Files.createDirectories(path);
 				System.out.println(messages.get("console.message.done"));
+				return path;
 			}
 			catch (final IOException e) {
 				System.out.println(messages.get("console.message.error"));

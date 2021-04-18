@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
+import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.model.Bike;
 import it.albertus.cyclesmod.common.model.BikeType;
@@ -232,7 +233,7 @@ public class Tabs implements Multilanguage {
 		enableTextListeners();
 	}
 
-	public void updateFormValues()   {
+	public void updateFormValues() {
 		final Map<String, Integer> properties = new BikesCfg(gui.getBikesInf()).getMap();
 
 		// Consistency check...
@@ -255,7 +256,7 @@ public class Tabs implements Multilanguage {
 		}
 	}
 
-	private void updateFields(final Map<String, Integer> properties)  {
+	private void updateFields(final Map<String, Integer> properties) {
 		for (final Entry<String, FormProperty> entry : formProperties.entrySet()) {
 			if (!properties.containsKey(entry.getKey())) {
 				throw new IllegalStateException(messages.get("gui.error.property.missing", entry.getKey()));
@@ -264,17 +265,17 @@ public class Tabs implements Multilanguage {
 
 			// Update field max length...
 			final int textLimit;
-			if (gui.isSettingsProperty(entry.getKey())) {
+			if (CyclesModEngine.isSettingsProperty(entry.getKey())) {
 				textLimit = Integer.toString(Settings.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
-			else if (gui.isGearboxProperty(entry.getKey())) {
+			else if (CyclesModEngine.isGearboxProperty(entry.getKey())) {
 				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
-			else if (gui.isPowerProperty(entry.getKey())) {
+			else if (CyclesModEngine.isPowerProperty(entry.getKey())) {
 				textLimit = Integer.toString(Power.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else {
-				throw new IllegalArgumentException(entry.getKey(),new UnknownPropertyException(entry.getKey()));
+				throw new IllegalArgumentException(entry.getKey(), new UnknownPropertyException(entry.getKey()));
 			}
 			if (field.getTextLimit() != textLimit) {
 				field.setTextLimit(textLimit);
