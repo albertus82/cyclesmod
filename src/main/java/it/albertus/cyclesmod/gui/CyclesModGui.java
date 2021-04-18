@@ -54,7 +54,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private String bikesInfFileName;
 
-	private CyclesModGui(final Display display, final Path fileToOpen) {
+	private CyclesModGui(final Display display) {
 		// Loading default properties...
 		setBikesInf(new BikesInf());
 		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
@@ -85,7 +85,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		Shell shell = null;
 		try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
 			final Display display = cd.getDevice();
-			final CyclesModGui gui = new CyclesModGui(display, fileToOpen);
+			final CyclesModGui gui = new CyclesModGui(display);
 			shell = gui.getShell();
 			shell.open();
 			// Loading custom properties...
