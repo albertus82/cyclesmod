@@ -127,9 +127,8 @@ public class BikesInf {
 			zos.putNextEntry(new ZipEntry(existingFile.toFile().getName()));
 			IOUtils.copy(fis, zos, BikesInf.FILE_SIZE);
 			zos.closeEntry();
-			//			log.log(Level.INFO, messages.get("common.message.old.file.backed.up"), new Serializable[] { BikesInf.FILE_NAME, backupFile });
+			return backupFile.toPath();
 		}
-		return backupFile.toPath();
 	}
 
 	/**
