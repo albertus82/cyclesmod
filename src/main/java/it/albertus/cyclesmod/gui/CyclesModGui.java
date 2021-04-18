@@ -76,11 +76,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		tabs.updateFormValues();
 
 		setLastPersistedProperties(defaultProperties);
-
-		// Loading custom properties...
-		if (fileToOpen != null) {
-			open(fileToOpen);
-		}
 	}
 
 	/* GUI entry point. */
@@ -90,8 +85,13 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		Shell shell = null;
 		try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
 			final Display display = cd.getDevice();
-			shell = new CyclesModGui(display, fileToOpen).getShell();
+			final CyclesModGui gui = new CyclesModGui(display, fileToOpen);
+			shell = gui.getShell();
 			shell.open();
+			// Loading custom properties...
+			if (fileToOpen != null) {
+				gui.open(fileToOpen);
+			}
 			while (!shell.isDisposed()) {
 				if (!display.isDisposed() && !display.readAndDispatch()) {
 					display.sleep();
