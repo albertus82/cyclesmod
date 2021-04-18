@@ -1,53 +1,33 @@
 package it.albertus.cyclesmod;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.concurrent.Callable;
+import java.nio.file.Paths;
 
 import it.albertus.cyclesmod.cli.CyclesModCli;
-import it.albertus.cyclesmod.cli.VersionProvider;
-import it.albertus.cyclesmod.cli.resources.Picocli;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import picocli.CommandLine;
-import picocli.CommandLine.Command;
-import picocli.CommandLine.ExitCode;
-import picocli.CommandLine.Parameters;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Command(versionProvider = VersionProvider.class, mixinStandardHelpOptions = true)
-public class CyclesMod implements Callable<Integer> {
-
-	@Parameters(arity = "0..1", descriptionKey = "parameter.path") private Path path;
+public class CyclesMod {
 
 	public static void main(final String... args) {
-		System.exit(new CommandLine(new CyclesMod()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setResourceBundle(ResourceBundle.getBundle(Picocli.class.getName().toLowerCase(Locale.ROOT))).execute(args));
-	}
-
-	@Override
-	public Integer call() {
-		final String mode = System.getProperty(getClass().getName() + ".main.mode");
+		final String mode = System.getProperty(CyclesMod.class.getName() + ".main.mode");
 		if (mode != null) {
 			if ("cli".equalsIgnoreCase(mode)) {
-				return new CyclesModCli().execute(path);
+				CyclesModCli.main(args);
 			}
 			else if ("gui".equalsIgnoreCase(mode)) {
-				CyclesModGui.main(path);
-				return ExitCode.OK;
+				CyclesModGui.main(args[0] != null ? Paths.get(args[0]) : null);
 			}
-			return ExitCode.USAGE;
 		}
 		else {
-			if (path != null && Files.isDirectory(path)) {
-				return new CyclesModCli().execute(path);
+			if (args[0] != null && Files.isDirectory(Paths.get(args[0]))) {
+				CyclesModCli.main(args);
 			}
 			else {
-				CyclesModGui.main(path);
+				CyclesModGui.main(args[0] != null ? Paths.get(args[0]) : null);
 			}
-			return ExitCode.OK;
 		}
 	}
 
