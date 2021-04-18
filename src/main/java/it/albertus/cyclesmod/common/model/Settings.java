@@ -8,7 +8,9 @@ import java.util.Map;
 import it.albertus.cyclesmod.common.engine.InvalidNumberException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.util.ByteUtils;
+import lombok.Getter;
 
+@Getter
 public class Settings implements ByteList {
 
 	public static final int LENGTH = 22;
@@ -61,10 +63,6 @@ public class Settings implements ByteList {
 		}
 		return (int) newValue;
 
-	}
-
-	public Map<Setting, Integer> getValues() {
-		return values;
 	}
 
 }

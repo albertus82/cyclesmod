@@ -8,8 +8,10 @@ import it.albertus.cyclesmod.common.engine.InvalidNumberException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
+import lombok.Getter;
 import lombok.NonNull;
 
+@Getter
 public class Power implements ByteList {
 
 	public static final int LENGTH = 106;
@@ -75,10 +77,6 @@ public class Power implements ByteList {
 			throw new ValueOutOfRangeException(newValue, MIN_VALUE, MAX_VALUE);
 		}
 		return (short) newValue;
-	}
-
-	public short[] getCurve() {
-		return curve;
 	}
 
 }
