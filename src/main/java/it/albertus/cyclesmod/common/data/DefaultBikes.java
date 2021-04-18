@@ -1,6 +1,8 @@
 package it.albertus.cyclesmod.common.data;
 
 import java.util.Base64;
+import java.util.zip.CRC32;
+import java.util.zip.Checksum;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -9,6 +11,7 @@ import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefaultBikes {
@@ -35,11 +38,17 @@ public class DefaultBikes {
 		finally {
 			inflater.end();
 		}
-		final long crc32 = BikesInf.computeCrc32(bytes);
+		final long crc32 = computeCrc32(bytes);
 		if (crc32 != CRC32) {
 			throw new VerifyError(messages.get("common.error.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC32), String.format("%08X", crc32)));
 		}
 		return bytes;
+	}
+
+	private static long computeCrc32(@NonNull final byte[] bytes) {
+		final Checksum crc = new CRC32();
+		crc.update(bytes, 0, bytes.length);
+		return crc.getValue();
 	}
 
 }

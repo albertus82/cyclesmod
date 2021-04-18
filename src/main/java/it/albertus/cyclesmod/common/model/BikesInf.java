@@ -25,7 +25,6 @@ import it.albertus.cyclesmod.common.data.DefaultBikes;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.ByteUtils;
-import it.albertus.util.CRC32OutputStream;
 import it.albertus.util.IOUtils;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -150,21 +149,6 @@ public class BikesInf {
 
 	public Map<BikeType, Bike> getBikeMap() {
 		return Collections.unmodifiableMap(bikeMap);
-	}
-
-	public static long computeCrc32(@NonNull final byte[] bytes) {
-		final Checksum crc = new CRC32();
-		crc.update(bytes, 0, bytes.length);
-		return crc.getValue();
-	}
-
-	public static long computeCrc32(@NonNull final Path path) throws IOException {
-		try (final CRC32OutputStream os = new CRC32OutputStream()) {
-			try (final InputStream is = Files.newInputStream(path)) {
-				IOUtils.copy(is, os, FILE_SIZE);
-			}
-			return os.getValue();
-		}
 	}
 
 }
