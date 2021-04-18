@@ -11,7 +11,6 @@ import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
-import it.albertus.util.logging.LoggingSupport;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
@@ -26,9 +25,6 @@ public class CyclesModCli extends CyclesModEngine {
 	@NonNull private final Path path;
 
 	public static void main(final Path path) {
-		if (LoggingSupport.getFormat() == null) {
-			LoggingSupport.setFormat("%5$s%6$s%n");
-		}
 		try {
 			new CyclesModCli(path).execute();
 		}
@@ -56,10 +52,11 @@ public class CyclesModCli extends CyclesModEngine {
 			BikesCfg.writeDefault(bikesCfgFile);
 			System.out.println(messages.get("console.message.done"));
 		}
-
-		System.out.print(messages.get("console.message.applying.customizations") + ' ');
-		final short changes = customize(bikesCfgFile);
-		System.out.println(messages.get("console.message.customizations.applied", changes));
+		else {
+			System.out.print(messages.get("console.message.applying.customizations") + ' ');
+			final short changes = customize(bikesCfgFile);
+			System.out.println(messages.get("console.message.customizations.applied", changes));
+		}
 
 		System.out.print(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME) + ' ');
 		final Path bikesInfFile = Paths.get(path.toString(), BikesInf.FILE_NAME);
