@@ -115,25 +115,26 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 			System.err.println(messages.get("console.error.cannot.open.file.directory", BikesCfg.FILE_NAME));
 			throw new IOException(bikesCfgFile + "is a directory");
 		}
+		final Properties properties;
 		try {
-			final Properties properties = new BikesCfg(bikesCfgFile).getProperties();
-			short changesCount = 0;
-			for (final String name : properties.stringPropertyNames()) {
-				final String value = properties.getProperty(name);
-				if (applyCustomization(name, value)) {
-					changesCount++;
-				}
-			}
-			System.out.println(messages.get("console.message.applying.customizations.done", changesCount));
+			properties = new BikesCfg(bikesCfgFile).getProperties();
 		}
 		catch (final IOException e) {
 			System.out.println(messages.get("console.message.error"));
 			System.err.println(messages.get("console.error.cannot.read.file", BikesCfg.FILE_NAME, e));
 			throw e;
 		}
+		short changesCount = 0;
+		for (final String name : properties.stringPropertyNames()) {
+			final String value = properties.getProperty(name);
+			if (applyProperty(name, value)) {
+				changesCount++;
+			}
+		}
+		System.out.println(messages.get("console.message.applying.customizations.done", changesCount));
 	}
 
-	private boolean applyCustomization(@NonNull final String name, final String value) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
+	private boolean applyProperty(@NonNull final String name, final String value) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
 		try {
 			return applyProperty(name, value, false);
 		}

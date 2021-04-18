@@ -9,8 +9,10 @@ import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.util.ByteUtils;
+import lombok.Getter;
 import lombok.NonNull;
 
+@Getter
 public class Gearbox implements ByteList {
 
 	public static final int LENGTH = 20;
@@ -63,10 +65,6 @@ public class Gearbox implements ByteList {
 			throw new ValueOutOfRangeException(newValue, MIN_VALUE, MAX_VALUE);
 		}
 		return (int) newValue;
-	}
-
-	public int[] getRatios() {
-		return ratios;
 	}
 
 }

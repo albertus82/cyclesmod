@@ -15,8 +15,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.zip.CRC32;
-import java.util.zip.Checksum;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -79,24 +77,19 @@ public class BikesInf {
 		}
 	}
 
-	public boolean write(@NonNull final Path file) throws IOException {
+	public boolean write(@NonNull final Path file) throws IOException { // TODO move into GUI
 		final byte[] bytes = toByteArray();
-		final Checksum crc = new CRC32();
-		crc.update(bytes, 0, FILE_SIZE);
-		log.log(Level.FINE, messages.get(crc.getValue() == DefaultBikes.CRC32 ? "common.message.configuration.not.changed" : "common.message.configuration.changed"), String.format("%08X", crc.getValue()));
-
 		if (file.toFile().exists() && !Files.isDirectory(file)) {
-			try (final ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-				try (final InputStream is = Files.newInputStream(file)) {
-					IOUtils.copy(is, os, FILE_SIZE);
-				}
-				if (Arrays.equals(os.toByteArray(), bytes)) {
-					return false;
-				}
-				else {
-					write(bytes, file);
-					return true;
-				}
+			final ByteArrayOutputStream os = new ByteArrayOutputStream();
+			try (final InputStream is = Files.newInputStream(file)) {
+				IOUtils.copy(is, os, FILE_SIZE);
+			}
+			if (Arrays.equals(os.toByteArray(), bytes)) {
+				return false;
+			}
+			else {
+				write(bytes, file);
+				return true;
 			}
 		}
 		else {
