@@ -10,4 +10,4 @@ while [ -h "$PRG" ]; do
   fi
 done
 PRGDIR=`dirname "$PRG"`
-java -Xms${console.vm.initialHeapSize}m -Xmx${console.vm.maxHeapSize}m -Dmode=cli -jar "$PRGDIR/${project.build.finalName}.${project.packaging}" "$@"
+java -Xms${console.vm.initialHeapSize}m -Xmx${console.vm.maxHeapSize}m -DC -jar "$PRGDIR/${project.build.finalName}.${project.packaging}" "$@"

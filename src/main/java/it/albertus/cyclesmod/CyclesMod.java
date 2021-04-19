@@ -15,8 +15,7 @@ import lombok.extern.java.Log;
 public class CyclesMod {
 
 	public static void main(final String... args) {
-		final String mode = System.getProperty("mode");
-		if ("cli".equalsIgnoreCase(mode)) {
+		if (System.getProperty("C") != null || System.getProperty("c") != null) {
 			CyclesModCli.main(args);
 		}
 		else {
