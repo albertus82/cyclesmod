@@ -31,8 +31,8 @@
 		<mac.build.finalName>${project.name}</mac.build.finalName>
 		<gui.vm.initialHeapSize>8</gui.vm.initialHeapSize>
 		<gui.vm.maxHeapSize>32</gui.vm.maxHeapSize>
-		<console.vm.initialHeapSize>4</console.vm.initialHeapSize>
-		<console.vm.maxHeapSize>16</console.vm.maxHeapSize>
+		<cli.vm.initialHeapSize>4</cli.vm.initialHeapSize>
+		<cli.vm.maxHeapSize>16</cli.vm.maxHeapSize>
 		<mainClass>it.albertus.cyclesmod.CyclesMod</mainClass>
 	</properties>
 
