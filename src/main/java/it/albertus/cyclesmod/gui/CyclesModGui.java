@@ -1,6 +1,7 @@
 package it.albertus.cyclesmod.gui;
 
 import java.io.File;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -40,7 +41,6 @@ import lombok.extern.java.Log;
 @Log
 public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
-	private static final String GUI_MESSAGE_WARNING = "gui.message.warning";
 	private static final String GUI_LABEL_WINDOW_TITLE = "gui.label.window.title";
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
@@ -79,7 +79,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	/* GUI entry point. */
-	public static void main(final Path fileToOpen) {
+	public static void main(final String... args) {
 		Display.setAppName(messages.get(GUI_LABEL_WINDOW_TITLE));
 		Display.setAppVersion(Version.getNumber());
 		Shell shell = null;
@@ -89,8 +89,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			shell = gui.getShell();
 			shell.open();
 			// Loading custom properties...
-			if (fileToOpen != null) {
-				gui.open(fileToOpen);
+			if (args != null && args.length > 0 && args[0] != null) {
+				gui.open(args[0]);
 			}
 			while (!shell.isDisposed()) {
 				if (!display.isDisposed() && !display.readAndDispatch()) {
@@ -100,8 +100,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		catch (final Exception e) {
 			final String message = e.toString();
-			log.log(Level.SEVERE, message, e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, messages.get(GUI_MESSAGE_WARNING), message, IStatus.ERROR, e, Images.getAppIconArray());
+			log.log(Level.SEVERE, "An unexpected error has occurred:", e);
+			EnhancedErrorDialog.openError(shell != null ? shell : null, messages.get(GUI_LABEL_WINDOW_TITLE), message, IStatus.ERROR, e, Images.getAppIconArray());
 		}
 	}
 
@@ -126,6 +126,19 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
+	private void open(@NonNull final String arg) {
+		try {
+			open(Paths.get(arg));
+		}
+		catch (final InvalidPathException e) {
+			log.log(Level.WARNING, "Invalid path provided:", e);
+			final MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
+			messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
+			messageBox.setMessage(messages.get("gui.error.path.invalid"));
+			messageBox.open();
+		}
+	}
+
 	public void open(@NonNull final Path file) {
 		try {
 			if (file.toString().toLowerCase(Locale.ROOT).endsWith(".inf")) {
@@ -147,15 +160,15 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 			}
 			else {
-				final MessageBox messageBox = new MessageBox(shell, SWT.ICON_ERROR);
-				messageBox.setText(messages.get(GUI_MESSAGE_WARNING));
+				final MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
+				messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
 				messageBox.setMessage(messages.get("gui.error.file.invalid"));
 				messageBox.open();
 			}
 		}
 		catch (final Exception e) {
-			log.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_MESSAGE_WARNING), messages.get("gui.error.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
+			log.log(Level.WARNING, "Cannot open file '" + file + "':", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
 		}
 	}
 
@@ -172,16 +185,16 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				updateModelValues(false);
 			}
 			catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-				log.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_MESSAGE_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
+				log.log(Level.WARNING, "Invalid property found:", e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			try {
 				getBikesInf().write(Paths.get(bikesInfFileName));
 			}
 			catch (final Exception e) {
-				log.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_MESSAGE_WARNING), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
+				log.log(Level.WARNING, "Cannot save file:", e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
@@ -194,8 +207,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			updateModelValues(false);
 		}
 		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-			log.log(Level.WARNING, e.toString(), e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_MESSAGE_WARNING), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
+			log.log(Level.WARNING, "Invalid property found:", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
@@ -209,8 +222,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				getBikesInf().write(Paths.get(fileName));
 			}
 			catch (final Exception e) {
-				log.log(Level.WARNING, e.toString(), e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_MESSAGE_WARNING), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
+				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			bikesInfFileName = fileName;
