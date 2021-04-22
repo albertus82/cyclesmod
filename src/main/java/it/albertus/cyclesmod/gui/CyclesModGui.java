@@ -1,7 +1,8 @@
 package it.albertus.cyclesmod.gui;
 
 import java.io.File;
-import java.nio.file.InvalidPathException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -14,11 +15,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cyclesmod.common.data.InvalidSizeException;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.InvalidNumberException;
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
@@ -114,6 +117,10 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	}
 
 	public void updateModelValues(final boolean lenient) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
+		final Control focused = shell.getDisplay().getFocusControl();
+		if (focused != null && !focused.isDisposed()) {
+			focused.notifyListeners(SWT.FocusOut, null); // force auto-correction for focused field
+		}
 		for (final String key : tabs.getFormProperties().keySet()) {
 			try {
 				applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
@@ -126,49 +133,57 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 	}
 
-	private void open(@NonNull final String arg) {
+	public void open(@NonNull final String path) {
 		try {
-			open(Paths.get(arg));
+			final Path file = Paths.get(path);
+			if (file.toString().toLowerCase(Locale.ROOT).endsWith(".inf")) {
+				openBikesInf(file);
+			}
+			else if (file.toString().toLowerCase(Locale.ROOT).endsWith(".cfg")) {
+				openBikesCfg(file);
+			}
+			else {
+				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
+			}
 		}
-		catch (final InvalidPathException e) {
-			log.log(Level.WARNING, "Invalid path provided:", e);
-			final MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-			messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
-			messageBox.setMessage(messages.get("gui.error.path.invalid"));
-			messageBox.open();
+		catch (final RuntimeException | IOException e) {
+			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 		}
 	}
 
-	public void open(@NonNull final Path file) {
+	private void openBikesCfg(@NonNull final Path file) throws IOException {
 		try {
-			if (file.toString().toLowerCase(Locale.ROOT).endsWith(".inf")) {
-				setBikesInf(new BikesInf(file));
-				tabs.updateFormValues();
-				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-				bikesInfFileName = file.toFile().getCanonicalPath();
-				shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE) + " - " + bikesInfFileName);
+			bikesInfFileName = null;
+			setBikesInf(new BikesInf());
+			final BikesCfg bikesCfg = new BikesCfg(file);
+			for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
+				applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
 			}
-			else if (file.toString().toLowerCase(Locale.ROOT).endsWith(".cfg")) {
-				bikesInfFileName = null;
-				setBikesInf(new BikesInf());
-
-				final BikesCfg bikesCfg = new BikesCfg(file);
-				for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
-					applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
-				}
-				tabs.updateFormValues();
-				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-			}
-			else {
-				final MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-				messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
-				messageBox.setMessage(messages.get("gui.error.file.invalid"));
-				messageBox.open();
-			}
+			tabs.updateFormValues();
+			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 		}
-		catch (final Exception e) {
-			log.log(Level.WARNING, "Cannot open file '" + file + "':", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.load"), IStatus.WARNING, e, Images.getAppIconArray());
+		catch (final UnknownPropertyException e) {
+			openMessageBox(messages.get("gui.error.file.open.unknown.property"), SWT.ICON_WARNING);
+		}
+		catch (final InvalidNumberException e) {
+			openMessageBox(messages.get("gui.error.file.open.invalid.number"), SWT.ICON_WARNING);
+		}
+		catch (final ValueOutOfRangeException e) {
+			openMessageBox(messages.get("gui.error.file.open.value.out.of.range"), SWT.ICON_WARNING);
+		}
+	}
+
+	private void openBikesInf(@NonNull final Path file) throws IOException {
+		try {
+			setBikesInf(new BikesInf(file));
+			tabs.updateFormValues();
+			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+			bikesInfFileName = file.toFile().getCanonicalPath();
+			shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE) + " - " + bikesInfFileName);
+		}
+		catch (final InvalidSizeException e) {
+			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
 		}
 	}
 
@@ -185,20 +200,20 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				updateModelValues(false);
 			}
 			catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-				log.log(Level.WARNING, "Invalid property found:", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
+				log.log(Level.WARNING, "Invalid property:", e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray()); // FIXME
 				return false;
 			}
 			try {
-				getBikesInf().write(Paths.get(bikesInfFileName));
+				Files.write(Paths.get(bikesInfFileName), getBikesInf().toByteArray());
+				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+				return true;
 			}
-			catch (final Exception e) {
+			catch (final IOException | RuntimeException e) {
 				log.log(Level.WARNING, "Cannot save file:", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
-			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-			return true;
 		}
 	}
 
@@ -207,8 +222,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			updateModelValues(false);
 		}
 		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-			log.log(Level.WARNING, "Invalid property found:", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray());
+			log.log(Level.WARNING, "Invalid property:", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray()); // FIXME
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
@@ -219,21 +234,28 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
-				getBikesInf().write(Paths.get(fileName));
+				Files.write(Paths.get(fileName), getBikesInf().toByteArray());
+				bikesInfFileName = fileName;
+				shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE) + " - " + bikesInfFileName);
+				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+				return true;
 			}
-			catch (final Exception e) {
+			catch (final Exception e) { // FIXME
 				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
-			bikesInfFileName = fileName;
-			shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE) + " - " + bikesInfFileName);
-			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
-			return true;
 		}
 		else {
 			return false;
 		}
+	}
+
+	private void openMessageBox(@NonNull final String message, final int style) {
+		final MessageBox messageBox = new MessageBox(shell, style);
+		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
+		messageBox.setMessage(message);
+		messageBox.open();
 	}
 
 	@Override

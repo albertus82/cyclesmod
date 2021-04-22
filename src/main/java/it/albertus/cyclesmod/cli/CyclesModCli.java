@@ -1,8 +1,10 @@
 package it.albertus.cyclesmod.cli;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,6 +13,9 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import it.albertus.cyclesmod.CyclesMod;
 import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
@@ -171,8 +176,21 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 	private void backupBikesInf(@NonNull final Path bikesInfFile) throws IOException {
 		System.out.print(messages.get("console.message.backup.file", BikesInf.FILE_NAME) + ' ');
 		try {
-			final Path backupFile = BikesInf.backup(bikesInfFile);
-			System.out.println(messages.get("console.message.backup.file.done", backupFile.getFileName()));
+			int i = 0;
+			final String parent = bikesInfFile.toFile().getParent();
+			final String prefix = parent != null ? parent + File.separator : "";
+			File backupFile;
+			do {
+				backupFile = new File(prefix + "BIKES" + String.format("%03d", i++) + ".ZIP");
+			}
+			while (backupFile.exists());
+			try (final OutputStream fos = Files.newOutputStream(backupFile.toPath()); final ZipOutputStream zos = new ZipOutputStream(fos)) {
+				zos.setLevel(Deflater.BEST_COMPRESSION);
+				zos.putNextEntry(new ZipEntry(bikesInfFile.toFile().getName()));
+				Files.copy(bikesInfFile, zos);
+				zos.closeEntry();
+			}
+			System.out.println(messages.get("console.message.backup.file.done", backupFile.toPath().getFileName()));
 		}
 		catch (final IOException e) {
 			System.out.println(messages.get("console.message.error"));
@@ -184,7 +202,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 	private void writeBikesInf(@NonNull final byte[] bytes, @NonNull final Path bikesInfFile) throws IOException {
 		System.out.print(messages.get("console.message.writing.new.file", BikesInf.FILE_NAME) + ' ');
 		try {
-			BikesInf.write(bytes, bikesInfFile);
+			Files.write(bikesInfFile, bytes);
 			System.out.println(messages.get("console.message.done"));
 		}
 		catch (final IOException e) {
