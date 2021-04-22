@@ -1,7 +1,5 @@
 package it.albertus.cyclesmod.gui.listener;
 
-import java.nio.file.Paths;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -29,7 +27,7 @@ public class OpenSelectionListener extends AskForSavingListener implements Selec
 			openDialog.setFilterExtensions(EXTENSIONS);
 			final String fileName = openDialog.open();
 			if (StringUtils.isNotBlank(fileName)) {
-				gui.open(Paths.get(fileName));
+				gui.open(fileName);
 			}
 		}
 	}

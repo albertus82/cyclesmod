@@ -29,7 +29,7 @@ public class DefaultBikes {
 		try {
 			final int size = inflater.inflate(bytes);
 			if (size != BikesInf.FILE_SIZE) {
-				throw new VerifyError(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, size));
+				throw new VerifyError(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, size), new InvalidSizeException(BikesInf.FILE_SIZE, size));
 			}
 		}
 		catch (final DataFormatException e) {
