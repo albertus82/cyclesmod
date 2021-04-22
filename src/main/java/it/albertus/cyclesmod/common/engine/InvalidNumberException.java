@@ -12,13 +12,13 @@ public class InvalidNumberException extends Exception {
 	private final int radix;
 
 	public InvalidNumberException(final String value, final int radix) {
-		super();
+		super("For input string: \"" + value + "\" (radix: " + radix + ")");
 		this.value = value;
 		this.radix = radix;
 	}
 
 	public InvalidNumberException(final String value, final int radix, @NonNull final Throwable cause) {
-		super(cause);
+		super("For input string: \"" + value + "\" (radix: " + radix + ")", cause);
 		this.value = value;
 		this.radix = radix;
 	}
