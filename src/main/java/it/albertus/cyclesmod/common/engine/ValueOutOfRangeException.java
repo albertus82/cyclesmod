@@ -14,7 +14,7 @@ public class ValueOutOfRangeException extends Exception {
 	private final Number maxValue;
 
 	public ValueOutOfRangeException(@NonNull final Number value, @NonNull final Number minValue, @NonNull final Number maxValue) {
-		super("Value out of range: " + value + " (valid range between " + minValue + " and " + maxValue + ")");
+		super("Value out of range: " + value + " (must be between " + minValue + " and " + maxValue + ")");
 		this.value = value;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
