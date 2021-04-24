@@ -22,6 +22,7 @@ import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
 import it.albertus.cyclesmod.cli.resources.Picocli;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.InvalidNumberException;
+import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.model.BikesCfg;
@@ -72,7 +73,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 			createBikesInf(bikesInfFile);
 			return ExitCode.OK;
 		}
-		catch (final UnknownPropertyException | InvalidNumberException | ValueOutOfRangeException | IOException | RuntimeException e) {
+		catch (final InvalidPropertyException | IOException | RuntimeException e) {
 			if (errors) {
 				e.printStackTrace();
 			}
@@ -113,7 +114,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 		}
 	}
 
-	private void applyCustomizations(@NonNull final Path bikesCfgFile) throws IOException, UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
+	private void applyCustomizations(@NonNull final Path bikesCfgFile) throws IOException, InvalidPropertyException {
 		System.out.print(messages.get("console.message.applying.customizations") + ' ');
 		if (Files.isDirectory(bikesCfgFile)) {
 			System.out.println(messages.get("console.message.error"));
@@ -139,7 +140,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 		System.out.println(messages.get("console.message.applying.customizations.done", changesCount));
 	}
 
-	private boolean applyProperty(@NonNull final String name, final String value) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
+	private boolean applyProperty(@NonNull final String name, final String value) throws InvalidPropertyException {
 		try {
 			return applyProperty(name, value, false);
 		}
