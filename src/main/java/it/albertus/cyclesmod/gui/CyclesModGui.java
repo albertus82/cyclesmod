@@ -57,7 +57,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private String bikesInfFileName;
 
-	private CyclesModGui(final Display display) {
+	private CyclesModGui(@NonNull final Display display) {
 		// Loading default properties...
 		setBikesInf(new BikesInf());
 		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
