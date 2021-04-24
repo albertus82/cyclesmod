@@ -102,10 +102,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				}
 			}
 		}
-		catch (final Exception e) {
-			final String message = e.toString();
+		catch (final RuntimeException | Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)
 			log.log(Level.SEVERE, "An unexpected error has occurred:", e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, messages.get(GUI_LABEL_WINDOW_TITLE), message, IStatus.ERROR, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell != null ? shell : null, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.unexpected"), IStatus.ERROR, e, Images.getAppIconArray());
 		}
 	}
 
