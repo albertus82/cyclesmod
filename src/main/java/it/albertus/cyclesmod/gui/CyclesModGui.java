@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 import it.albertus.cyclesmod.common.data.InvalidSizeException;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.InvalidNumberException;
+import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
@@ -36,7 +37,6 @@ import it.albertus.cyclesmod.gui.listener.CloseListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.jface.closeable.CloseableDevice;
-import it.albertus.util.ExceptionUtils;
 import it.albertus.util.Version;
 import lombok.Getter;
 import lombok.NonNull;
@@ -169,13 +169,13 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 		}
 		catch (final UnknownPropertyException e) {
-			openMessageBox(messages.get("gui.error.file.open.unknown.property"), SWT.ICON_WARNING);
+			openMessageBox(messages.get("gui.error.file.open.unknown.property", e.getPropertyName()), SWT.ICON_WARNING);
 		}
 		catch (final InvalidNumberException e) {
-			openMessageBox(messages.get("gui.error.file.open.invalid.number"), SWT.ICON_WARNING);
+			openMessageBox(messages.get("gui.error.file.open.invalid.number", e.getPropertyName(), e.getValue()), SWT.ICON_WARNING);
 		}
 		catch (final ValueOutOfRangeException e) {
-			openMessageBox(messages.get("gui.error.file.open.value.out.of.range"), SWT.ICON_WARNING);
+			openMessageBox(messages.get("gui.error.file.open.value.out.of.range", e.getPropertyName(), e.getValue(), e.getMinValue(), e.getMaxValue()), SWT.ICON_WARNING);
 		}
 	}
 
@@ -204,9 +204,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 			try {
 				updateModelValues(false);
 			}
-			catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-				log.log(Level.WARNING, "Invalid property:", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray()); // FIXME
+			catch (final InvalidPropertyException e) {
+				log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			try {
@@ -226,9 +226,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		try {
 			updateModelValues(false);
 		}
-		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-			log.log(Level.WARNING, "Invalid property:", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), ExceptionUtils.getUIMessage(e), IStatus.WARNING, e, Images.getAppIconArray()); // FIXME
+		catch (final InvalidPropertyException e) {
+			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
