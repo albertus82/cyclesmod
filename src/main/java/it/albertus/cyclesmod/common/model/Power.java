@@ -59,22 +59,22 @@ public class Power implements ByteList {
 		return (int) (rpm + (double) POINT_WIDTH_RPM / 2 - BASE_RPM) / POINT_WIDTH_RPM;
 	}
 
-	public static short parse(final String value, final int radix) throws InvalidNumberException, ValueOutOfRangeException {
+	public static short parse(@NonNull final String propertyName, final String value, final int radix) throws InvalidNumberException, ValueOutOfRangeException {
 		if (value == null) {
-			throw new InvalidNumberException(value, radix, new NullPointerException());
+			throw new InvalidNumberException(propertyName, value, radix, new NullPointerException());
 		}
 		if (value.trim().isEmpty()) {
-			throw new InvalidNumberException(value, radix);
+			throw new InvalidNumberException(propertyName, value, radix);
 		}
 		final long newValue;
 		try {
 			newValue = Long.parseLong(value.trim(), radix);
 		}
 		catch (final NumberFormatException e) {
-			throw new InvalidNumberException(value, radix, e);
+			throw new InvalidNumberException(propertyName, value, radix, e);
 		}
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new ValueOutOfRangeException(newValue, MIN_VALUE, MAX_VALUE);
+			throw new ValueOutOfRangeException(propertyName, newValue, MIN_VALUE, MAX_VALUE);
 		}
 		return (short) newValue;
 	}

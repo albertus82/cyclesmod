@@ -74,7 +74,7 @@ public class Tabs implements Multilanguage {
 		propertyVerifyListener = new PropertyVerifyListener(gui);
 		propertyFocusListener = new PropertyFocusListener(gui);
 		powerPropertyFocusListener = new PowerPropertyFocusListener(gui);
-		propertyKeyListener = new PropertyKeyListener(gui);
+		propertyKeyListener = new PropertyKeyListener(this);
 
 		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
 		for (final Bike bike : gui.getBikesInf().getBikeMap().values()) {

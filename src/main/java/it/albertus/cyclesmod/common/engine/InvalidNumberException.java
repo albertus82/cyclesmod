@@ -1,24 +1,23 @@
 package it.albertus.cyclesmod.common.engine;
 
 import lombok.Getter;
-import lombok.NonNull;
 
 @Getter
-public class InvalidNumberException extends Exception {
+public class InvalidNumberException extends InvalidPropertyException {
 
 	private static final long serialVersionUID = 3831930136276145792L;
 
 	private final String value;
 	private final int radix;
 
-	public InvalidNumberException(final String value, final int radix) {
-		super("For input string: \"" + value + "\" (radix: " + radix + ")");
+	public InvalidNumberException(final String propertyName, final String value, final int radix) {
+		super(propertyName, "For input string: \"" + value + "\" (radix: " + radix + ")");
 		this.value = value;
 		this.radix = radix;
 	}
 
-	public InvalidNumberException(final String value, final int radix, @NonNull final Throwable cause) {
-		super("For input string: \"" + value + "\" (radix: " + radix + ")", cause);
+	public InvalidNumberException(final String propertyName, final String value, final int radix, final Throwable cause) {
+		super(propertyName, "For input string: \"" + value + "\" (radix: " + radix + ")", cause);
 		this.value = value;
 		this.radix = radix;
 	}

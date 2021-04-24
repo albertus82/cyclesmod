@@ -145,17 +145,17 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 		}
 		catch (final UnknownPropertyException e) {
 			System.out.println(messages.get("console.message.error"));
-			System.err.println(messages.get("console.error.unknown.property", name));
+			System.err.println(messages.get("console.error.unknown.property", e.getPropertyName()));
 			throw e;
 		}
 		catch (final InvalidNumberException e) {
 			System.out.println(messages.get("console.message.error"));
-			System.err.println(messages.get("console.error.invalid.number", name, e.getValue()));
+			System.err.println(messages.get("console.error.invalid.number", e.getPropertyName(), e.getValue()));
 			throw e;
 		}
 		catch (final ValueOutOfRangeException e) {
 			System.out.println(messages.get("console.message.error"));
-			System.err.println(messages.get("console.error.value.out.of.range", name, e.getValue(), e.getMinValue(), e.getMaxValue()));
+			System.err.println(messages.get("console.error.value.out.of.range", e.getPropertyName(), e.getValue(), e.getMinValue(), e.getMaxValue()));
 			throw e;
 		}
 	}

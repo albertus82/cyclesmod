@@ -1,6 +1,5 @@
 package it.albertus.cyclesmod.gui.listener;
 
-import java.io.IOException;
 import java.util.logging.Level;
 
 import org.eclipse.swt.SWT;
@@ -23,7 +22,7 @@ import lombok.extern.java.Log;
 @Log
 @RequiredArgsConstructor
 public class ResetSingleSelectionListener extends SelectionAdapter {
-	
+
 	private static final Messages messages = GuiMessages.INSTANCE;
 
 	@NonNull private final CyclesModGui gui;
@@ -49,7 +48,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 		}
 	}
 
-	private void reset(final BikeType type) throws IOException {
+	private void reset(final BikeType type) {
 		try {
 			gui.updateModelValues(true);
 		}
