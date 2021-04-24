@@ -23,15 +23,14 @@ public class Power implements ByteList {
 	private static final Messages messages = CommonMessages.INSTANCE;
 
 	/**
-	 * 0-767: overlap con Gearbox '7' (0-255), '8' (256-511) e '9' (512-767). Il
-	 * range 0-767 RPM e' comunque inferiore al regime minimo, quindi di fatto
-	 * inutile.
+	 * 0-767: overlap with Gearbox '7' (0-255), '8' (256-511) e '9' (512-767).
+	 * However, the range 0-767 RPM is below the idle speed and therefore useless.
 	 */
 	public static final short BASE_RPM = 768;
 	public static final short POINT_WIDTH_RPM = 128;
 
 	/**
-	 * 42-147: curva di potenza (intervallo regime considerato: 768-14335 RPM).
+	 * 42-147: power curve (RPM range: 768-14335 RPM).
 	 */
 	private final short[] curve;
 
