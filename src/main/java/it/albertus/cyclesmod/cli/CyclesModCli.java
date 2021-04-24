@@ -72,7 +72,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 			createBikesInf(bikesInfFile);
 			return ExitCode.OK;
 		}
-		catch (final Exception e) {
+		catch (final UnknownPropertyException | InvalidNumberException | ValueOutOfRangeException | IOException | RuntimeException e) {
 			if (errors) {
 				e.printStackTrace();
 			}
