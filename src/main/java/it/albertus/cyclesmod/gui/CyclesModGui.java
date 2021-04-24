@@ -267,8 +267,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		try {
 			updateModelValues(true);
 		}
-		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-			log.log(Level.INFO, e.getMessage(), e);
+		catch (final InvalidPropertyException e) {
+			log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
 		super.setNumeralSystem(numeralSystem);
 		tabs.updateFormValues();
