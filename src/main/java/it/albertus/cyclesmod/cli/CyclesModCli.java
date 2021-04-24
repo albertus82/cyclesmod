@@ -40,15 +40,15 @@ import picocli.CommandLine.Parameters;
 
 @Command(versionProvider = VersionProvider.class, mixinStandardHelpOptions = true)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor(access = AccessLevel.PACKAGE) // test
 @SuppressWarnings("java:S106") // Replace this use of System.out or System.err by a logger. Standard outputs should not be used directly to log anything (java:S106)
 public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
+
+	private static final Messages messages = ConsoleMessages.INSTANCE;
 
 	@Parameters(arity = "0..1", descriptionKey = "parameter.path", defaultValue = "") private Path path;
 
 	@Option(names = { "-e", "--errors" }, descriptionKey = "option.errors") private boolean errors;
-
-	private static final Messages messages = ConsoleMessages.INSTANCE;
 
 	public static void main(final String... args) {
 		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setResourceBundle(ResourceBundle.getBundle(Picocli.class.getName().toLowerCase(Locale.ROOT))).execute(args));
