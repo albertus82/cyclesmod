@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Text;
@@ -20,31 +20,22 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class OpenPowerGraphDialogListener implements MouseListener, SelectionListener {
+public class OpenPowerGraphDialogListener extends MouseAdapter implements SelectionListener {
 
 	@NonNull private final CyclesModGui gui;
 	@NonNull private final BikeType bikeType;
 
 	@Override
 	public void mouseDoubleClick(final MouseEvent e) {
-		execute();
+		handleEvent();
 	}
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		execute();
+		handleEvent();
 	}
 
-	@Override
-	public void mouseDown(final MouseEvent e) {/* Ignore */}
-
-	@Override
-	public void mouseUp(final MouseEvent e) {/* Ignore */}
-
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
-
-	private void execute() {
+	private void handleEvent() {
 		final PowerGraphDialog powerGraphDialog = new PowerGraphDialog(gui.getShell());
 		final Map<Integer, Short> map = new TreeMap<>();
 		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties();
@@ -66,5 +57,8 @@ public class OpenPowerGraphDialogListener implements MouseListener, SelectionLis
 			}
 		}
 	}
+
+	@Override
+	public void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
 
 }

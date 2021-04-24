@@ -49,7 +49,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 
 	private boolean applyPowerProperty(final String key, final String value) throws InvalidNumberException, ValueOutOfRangeException, UnknownPropertyException {
 		boolean applied = false;
-		final short newValue = Power.parse(value, numeralSystem.getRadix());
+		final short newValue = Power.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key);
 		final String suffix = StringUtils.substringAfter(key, Power.PREFIX + '.');
@@ -69,7 +69,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 
 	private boolean applyGearboxProperty(final String key, final String value) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
 		boolean applied = false;
-		final int newValue = Gearbox.parse(value, numeralSystem.getRadix());
+		final int newValue = Gearbox.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key);
 		final String suffix = StringUtils.substringAfter(key, Gearbox.PREFIX + '.');
@@ -89,7 +89,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 
 	private boolean applySettingProperty(final String key, final String value) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
 		boolean applied = false;
-		final int newValue = Settings.parse(value, numeralSystem.getRadix());
+		final int newValue = Settings.parse(key, value, numeralSystem.getRadix());
 
 		final Bike bike = getBike(key);
 		final String suffix = StringUtils.substringAfter(key, Settings.PREFIX + '.');

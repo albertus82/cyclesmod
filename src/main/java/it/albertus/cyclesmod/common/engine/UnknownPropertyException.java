@@ -4,15 +4,12 @@ import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
-public class UnknownPropertyException extends Exception {
+public class UnknownPropertyException extends InvalidPropertyException {
 
 	private static final long serialVersionUID = 8358143057948555987L;
 
-	private final String name;
-
-	public UnknownPropertyException(@NonNull final String name) {
-		super("Unknown property name: " + name);
-		this.name = name;
+	public UnknownPropertyException(@NonNull final String propertyName) {
+		super(propertyName, "Unknown property name: " + propertyName);
 	}
 
 }

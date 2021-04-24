@@ -47,22 +47,22 @@ public class Gearbox implements ByteList {
 		return byteList;
 	}
 
-	public static int parse(final String value, final int radix) throws ValueOutOfRangeException, InvalidNumberException {
+	public static int parse(@NonNull final String propertyName, final String value, final int radix) throws ValueOutOfRangeException, InvalidNumberException {
 		if (value == null) {
-			throw new InvalidNumberException(value, radix, new NullPointerException());
+			throw new InvalidNumberException(propertyName, value, radix, new NullPointerException());
 		}
 		if (value.trim().isEmpty()) {
-			throw new InvalidNumberException(value, radix);
+			throw new InvalidNumberException(propertyName, value, radix);
 		}
 		final long newValue;
 		try {
 			newValue = Long.parseLong(value.trim(), radix);
 		}
 		catch (final NumberFormatException e) {
-			throw new InvalidNumberException(value, radix, e);
+			throw new InvalidNumberException(propertyName, value, radix, e);
 		}
 		if (newValue < MIN_VALUE || newValue > MAX_VALUE) {
-			throw new ValueOutOfRangeException(newValue, MIN_VALUE, MAX_VALUE);
+			throw new ValueOutOfRangeException(propertyName, newValue, MIN_VALUE, MAX_VALUE);
 		}
 		return (int) newValue;
 	}

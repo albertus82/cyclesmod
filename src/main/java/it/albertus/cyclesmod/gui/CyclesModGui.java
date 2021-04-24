@@ -3,6 +3,7 @@ package it.albertus.cyclesmod.gui;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -146,6 +147,10 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
 			}
 		}
+		catch (final InvalidPathException e) {
+			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
+		}
 		catch (final RuntimeException | IOException e) {
 			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
 			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
@@ -240,7 +245,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
 				return true;
 			}
-			catch (final Exception e) { // FIXME
+			catch (final IOException | RuntimeException e) {
 				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
 				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
