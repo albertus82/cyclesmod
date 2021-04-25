@@ -164,11 +164,15 @@ public class CyclesModGui implements IShellProvider {
 			bikesInfFileName = null;
 			engine.setBikesInf(new BikesInf());
 			final BikesCfg bikesCfg = new BikesCfg(file);
+			int count = 0;
 			for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
-				engine.applyProperty(key, bikesCfg.getProperties().getProperty(key));
+				if (engine.applyProperty(key, bikesCfg.getProperties().getProperty(key))) {
+					count++;
+				}
 			}
 			tabs.updateFormValues();
 			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
+			openMessageBox(messages.get("gui.message.file.open.customizations.applied", count), SWT.ICON_INFORMATION);
 		}
 		catch (final UnknownPropertyException e) {
 			openMessageBox(messages.get("gui.error.file.open.unknown.property", e.getPropertyName()), SWT.ICON_WARNING);
