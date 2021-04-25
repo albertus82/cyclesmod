@@ -5,9 +5,7 @@ import java.util.logging.Level;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 
-import it.albertus.cyclesmod.common.engine.InvalidNumberException;
-import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
-import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
+import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import lombok.NonNull;
@@ -24,8 +22,8 @@ public abstract class AskForSavingListener {
 		try {
 			gui.updateModelValues(true);
 		}
-		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-			log.log(Level.INFO, e.getMessage(), e);
+		catch (final InvalidPropertyException e) {
+			log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
 		if (!new BikesCfg(gui.getEngine().getBikesInf()).getMap().equals(gui.getLastPersistedProperties())) {
 			final MessageBox messageBox = new MessageBox(gui.getShell(), SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
