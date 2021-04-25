@@ -16,15 +16,6 @@ public class FormProperty {
 
 	@Getter
 	@RequiredArgsConstructor
-	public enum LabelDataKey {
-		KEY(String.class),
-		ARGUMENT(String.class);
-
-		private final Class<?> type;
-	}
-
-	@Getter
-	@RequiredArgsConstructor
 	public enum TextDataKey {
 		DEFAULT(Integer.class),
 		GRAPH(IPowerGraph.class),
