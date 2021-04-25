@@ -1,5 +1,6 @@
 package it.albertus.cyclesmod.gui;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -141,8 +142,8 @@ public class Tabs implements Multilanguage {
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
-				final int x = index;
-				final Label label = newLocalizedLabel(gearboxGroup, SWT.NULL, () -> messages.get("gui.label.gear", x != 0 ? String.valueOf(x) : "N"));
+				final Serializable gearName = index != 0 ? index : "N";
+				final Label label = newLocalizedLabel(gearboxGroup, SWT.NULL, () -> messages.get("gui.label.gear", gearName));
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
@@ -167,8 +168,8 @@ public class Tabs implements Multilanguage {
 			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
-				final int x = index;
-				final Label label = newLocalizedLabel(powerGroup, SWT.NULL, () -> messages.get("gui.label.rpm", String.valueOf(Power.getRpm(x))));
+				final int rpm = Power.getRpm(index);
+				final Label label = newLocalizedLabel(powerGroup, SWT.NULL, () -> messages.get("gui.label.rpm", rpm));
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				label.setToolTipText(key);
 				final Text text = new Text(powerGroup, SWT.BORDER);
@@ -196,7 +197,6 @@ public class Tabs implements Multilanguage {
 
 	@Override
 	public void updateLanguage() {
-		final long s = System.nanoTime();
 		localizedWidgets.resetAllTexts();
 		for (final Multilanguage canvas : powerCanvases.values()) {
 			canvas.updateLanguage();
@@ -215,7 +215,6 @@ public class Tabs implements Multilanguage {
 			formProperty.restore();
 		}
 		enableTextListeners();
-		System.out.println(System.nanoTime() - s);
 	}
 
 	public void updateFormValues() {
