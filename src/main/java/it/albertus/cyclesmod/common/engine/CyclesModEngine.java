@@ -13,7 +13,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class CyclesModEngine implements NumeralSystemProvider {
+public class CyclesModEngine implements NumeralSystemProvider {
 
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
 
@@ -23,7 +23,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		return isNumeric(value, numeralSystem.getRadix());
 	}
 
-	protected boolean applyProperty(final String propertyName, final String value, final boolean lenient) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
+	public boolean applyProperty(final String propertyName, final String value, final boolean lenient) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
 		boolean applied = false;
 		try {
 			if (isSettingsProperty(propertyName)) {

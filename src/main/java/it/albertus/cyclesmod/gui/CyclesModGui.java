@@ -43,25 +43,27 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
-public class CyclesModGui extends CyclesModEngine implements IShellProvider {
+public class CyclesModGui implements IShellProvider {
 
 	private static final String GUI_LABEL_WINDOW_TITLE = "gui.label.window.title";
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	private final Map<String, Integer> defaultProperties = new HashMap<>();
-	private final Map<String, Integer> lastPersistedProperties = new HashMap<>();
+	@Getter private final CyclesModEngine engine = new CyclesModEngine();
 
 	@Getter private final Shell shell;
 	@Getter private final MenuBar menuBar;
 	@Getter private final Tabs tabs;
 
+	private final Map<String, Integer> defaultProperties = new HashMap<>();
+	private final Map<String, Integer> lastPersistedProperties = new HashMap<>();
+
 	private String bikesInfFileName;
 
 	private CyclesModGui(@NonNull final Display display) {
 		// Loading default properties...
-		setBikesInf(new BikesInf());
-		defaultProperties.putAll(new BikesCfg(getBikesInf()).getMap());
+		engine.setBikesInf(new BikesInf());
+		defaultProperties.putAll(new BikesCfg(engine.getBikesInf()).getMap());
 
 		// Shell creation...
 		shell = new Shell(display);
@@ -123,7 +125,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		}
 		for (final String key : tabs.getFormProperties().keySet()) {
 			try {
-				applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
+				engine.applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
 			}
 			catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
 				if (!lenient) {
@@ -159,13 +161,13 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 	private void openBikesCfg(@NonNull final Path file) throws IOException {
 		try {
 			bikesInfFileName = null;
-			setBikesInf(new BikesInf());
+			engine.setBikesInf(new BikesInf());
 			final BikesCfg bikesCfg = new BikesCfg(file);
 			for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
-				applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
+				engine.applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
 			}
 			tabs.updateFormValues();
-			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 		}
 		catch (final UnknownPropertyException e) {
 			openMessageBox(messages.get("gui.error.file.open.unknown.property", e.getPropertyName()), SWT.ICON_WARNING);
@@ -180,9 +182,9 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 	private void openBikesInf(@NonNull final Path file) throws IOException {
 		try {
-			setBikesInf(new BikesInf(file));
+			engine.setBikesInf(new BikesInf(file));
 			tabs.updateFormValues();
-			setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 			bikesInfFileName = file.toFile().getCanonicalPath();
 			shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE) + " - " + bikesInfFileName);
 		}
@@ -209,8 +211,8 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 				return false;
 			}
 			try {
-				Files.write(Paths.get(bikesInfFileName), getBikesInf().toByteArray());
-				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+				Files.write(Paths.get(bikesInfFileName), engine.getBikesInf().toByteArray());
+				setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -238,10 +240,10 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
-				Files.write(Paths.get(fileName), getBikesInf().toByteArray());
+				Files.write(Paths.get(fileName), engine.getBikesInf().toByteArray());
 				bikesInfFileName = fileName;
 				shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE) + " - " + bikesInfFileName);
-				setLastPersistedProperties(new BikesCfg(getBikesInf()).getMap());
+				setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -262,7 +264,6 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		messageBox.open();
 	}
 
-	@Override
 	public void setNumeralSystem(final NumeralSystem numeralSystem) {
 		try {
 			updateModelValues(true);
@@ -270,7 +271,7 @@ public class CyclesModGui extends CyclesModEngine implements IShellProvider {
 		catch (final InvalidPropertyException e) {
 			log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
-		super.setNumeralSystem(numeralSystem);
+		engine.setNumeralSystem(numeralSystem);
 		tabs.updateFormValues();
 	}
 

@@ -43,13 +43,15 @@ import picocli.CommandLine.Parameters;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PACKAGE) // test
 @SuppressWarnings("java:S106") // Replace this use of System.out or System.err by a logger. Standard outputs should not be used directly to log anything (java:S106)
-public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
+public class CyclesModCli implements Callable<Integer> {
 
 	private static final Messages messages = ConsoleMessages.INSTANCE;
 
 	@Parameters(arity = "0..1", descriptionKey = "parameter.path", defaultValue = "") private Path path;
 
 	@Option(names = { "-e", "--errors" }, descriptionKey = "option.errors") private boolean errors;
+
+	private final CyclesModEngine engine = new CyclesModEngine();
 
 	public static void main(final String... args) {
 		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setResourceBundle(ResourceBundle.getBundle(Picocli.class.getName().toLowerCase(Locale.ROOT))).execute(args));
@@ -83,7 +85,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 
 	private void createBikesInf(@NonNull final Path bikesInfFile) throws IOException {
 		System.out.print(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME) + ' ');
-		final byte[] bytes = getBikesInf().toByteArray();
+		final byte[] bytes = engine.getBikesInf().toByteArray();
 		if (bikesInfFile.toFile().exists()) {
 			if (Files.isDirectory(bikesInfFile)) {
 				System.out.println(messages.get("console.message.error"));
@@ -142,7 +144,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 
 	private boolean applyProperty(@NonNull final String name, final String value) throws InvalidPropertyException {
 		try {
-			return applyProperty(name, value, false);
+			return engine.applyProperty(name, value, false);
 		}
 		catch (final UnknownPropertyException e) {
 			System.out.println(messages.get("console.message.error"));
@@ -215,7 +217,7 @@ public class CyclesModCli extends CyclesModEngine implements Callable<Integer> {
 
 	private void loadOriginalConfiguration() {
 		System.out.print(messages.get("console.message.reading.original.configuration") + ' ');
-		setBikesInf(new BikesInf());
+		engine.setBikesInf(new BikesInf());
 		System.out.println(messages.get("console.message.done"));
 	}
 

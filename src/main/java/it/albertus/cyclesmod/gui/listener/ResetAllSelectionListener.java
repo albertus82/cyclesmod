@@ -45,7 +45,7 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 	}
 
 	private void reset() {
-		gui.setBikesInf(new BikesInf());
+		gui.getEngine().setBikesInf(new BikesInf());
 		gui.getTabs().updateFormValues();
 	}
 

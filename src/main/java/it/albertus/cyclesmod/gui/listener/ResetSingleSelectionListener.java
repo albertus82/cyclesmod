@@ -55,7 +55,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
 			log.log(Level.INFO, e.getMessage(), e);
 		}
-		gui.getBikesInf().reset(type);
+		gui.getEngine().getBikesInf().reset(type);
 		gui.getTabs().updateFormValues();
 	}
 
