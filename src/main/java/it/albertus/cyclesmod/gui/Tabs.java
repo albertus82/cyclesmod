@@ -113,7 +113,7 @@ public class Tabs implements Multilanguage {
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				formProperties.put(key, new FormProperty(label, text));
+				formProperties.put(key, new FormProperty(text));
 			}
 
 			// Power graph
@@ -157,7 +157,7 @@ public class Tabs implements Multilanguage {
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				formProperties.put(key, new FormProperty(label, text));
+				formProperties.put(key, new FormProperty(text));
 			}
 
 			// Power
@@ -185,7 +185,7 @@ public class Tabs implements Multilanguage {
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(powerPropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				formProperties.put(key, new FormProperty(label, text));
+				formProperties.put(key, new FormProperty(text));
 			}
 			tabScrolledComposite.setContent(tabComposite);
 			tabScrolledComposite.setExpandVertical(true);

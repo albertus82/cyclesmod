@@ -1,11 +1,9 @@
 package it.albertus.cyclesmod.gui;
 
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
-import it.albertus.util.StringUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -42,14 +40,13 @@ public class FormProperty {
 		}
 	}
 
-	@Getter private final Label label;
 	@Getter private final Text text;
 
 	private TextBackup textBackup = null;
 
 	public String getValue() {
 		if (text != null) {
-			return StringUtils.trimToEmpty(text.getText());
+			return text.getText().trim();
 		}
 		else {
 			return "";
@@ -89,7 +86,7 @@ public class FormProperty {
 
 	@Override
 	public String toString() {
-		return "FormProperty [label=" + label + ", text=" + text + "]";
+		return "FormProperty [text=" + text + "]";
 	}
 
 }
