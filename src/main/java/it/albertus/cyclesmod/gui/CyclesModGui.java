@@ -49,7 +49,7 @@ public class CyclesModGui implements IShellProvider {
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	private final CyclesModEngine engine = new CyclesModEngine();
+	private final CyclesModEngine engine = new CyclesModEngine(new BikesInf());
 
 	@Getter private final Shell shell;
 	@Getter private final MenuBar menuBar;
@@ -61,8 +61,6 @@ public class CyclesModGui implements IShellProvider {
 	private String bikesInfFileName;
 
 	private CyclesModGui(@NonNull final Display display) {
-		// Loading default properties...
-		engine.setBikesInf(new BikesInf());
 		defaultProperties.putAll(new BikesCfg(engine.getBikesInf()).getMap());
 
 		// Shell creation...

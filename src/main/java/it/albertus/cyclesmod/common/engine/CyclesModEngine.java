@@ -9,15 +9,21 @@ import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
 import it.albertus.util.StringUtils;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class CyclesModEngine {
 
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
 
 	private BikesInf bikesInf;
+
+	public CyclesModEngine(final BikesInf bikesInf) {
+		this.bikesInf = bikesInf;
+	}
 
 	public boolean isNumeric(final String value) {
 		return isNumeric(value, numeralSystem.getRadix());
