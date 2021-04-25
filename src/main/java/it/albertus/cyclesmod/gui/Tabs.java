@@ -31,7 +31,6 @@ import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
 import it.albertus.cyclesmod.common.resources.Messages;
-import it.albertus.cyclesmod.gui.FormProperty.LabelDataKey;
 import it.albertus.cyclesmod.gui.FormProperty.TextDataKey;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.PowerPropertyFocusListener;
@@ -99,11 +98,8 @@ public class Tabs implements Multilanguage {
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey());
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
-				final Label label = new Label(settingsGroup, SWT.NULL);
+				final Label label = newLocalizedLabel(settingsGroup, SWT.NULL, "gui.label." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
-				final String labelTextKey = "gui.label." + setting.getKey();
-				label.setText(messages.get(labelTextKey));
-				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
@@ -145,13 +141,9 @@ public class Tabs implements Multilanguage {
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
-				final Label label = new Label(gearboxGroup, SWT.NULL);
+				final int x = index;
+				final Label label = newLocalizedLabel(gearboxGroup, SWT.NULL, () -> messages.get("gui.label.gear", x != 0 ? String.valueOf(x) : "N"));
 				GridDataFactory.swtDefaults().applyTo(label);
-				final String labelTextKey = "gui.label.gear";
-				final String labelTextArgument = index != 0 ? String.valueOf(index) : "N";
-				label.setText(messages.get(labelTextKey, labelTextArgument));
-				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
-				label.setData(LabelDataKey.ARGUMENT.toString(), labelTextArgument);
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
@@ -175,13 +167,9 @@ public class Tabs implements Multilanguage {
 			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
-				final Label label = new Label(powerGroup, SWT.NULL);
+				final int x = index;
+				final Label label = newLocalizedLabel(powerGroup, SWT.NULL, () -> messages.get("gui.label.rpm", String.valueOf(Power.getRpm(x))));
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
-				final String labelTextKey = "gui.label.rpm";
-				final String labelTextArgument = String.valueOf(Power.getRpm(index));
-				label.setText(messages.get(labelTextKey, labelTextArgument));
-				label.setData(LabelDataKey.KEY.toString(), labelTextKey);
-				label.setData(LabelDataKey.ARGUMENT.toString(), labelTextArgument);
 				label.setToolTipText(key);
 				final Text text = new Text(powerGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
@@ -208,6 +196,7 @@ public class Tabs implements Multilanguage {
 
 	@Override
 	public void updateLanguage() {
+		final long s = System.nanoTime();
 		localizedWidgets.resetAllTexts();
 		for (final Multilanguage canvas : powerCanvases.values()) {
 			canvas.updateLanguage();
@@ -216,11 +205,6 @@ public class Tabs implements Multilanguage {
 		// Update form fields...
 		disableTextListeners();
 		for (final FormProperty formProperty : formProperties.values()) {
-			final Label label = formProperty.getLabel();
-			final String updatedLabelText = messages.get((String) label.getData(LabelDataKey.KEY.toString()), label.getData(LabelDataKey.ARGUMENT.toString()));
-			if (!label.getText().equals(updatedLabelText)) {
-				label.setText(updatedLabelText);
-			}
 			formProperty.backup();
 			final Text text = formProperty.getText();
 			text.setVisible(false);
@@ -231,6 +215,7 @@ public class Tabs implements Multilanguage {
 			formProperty.restore();
 		}
 		enableTextListeners();
+		System.out.println(System.nanoTime() - s);
 	}
 
 	public void updateFormValues() {
@@ -322,6 +307,14 @@ public class Tabs implements Multilanguage {
 
 	private Group newLocalizedGroup(@NonNull final Composite parent, final int style, @NonNull final ISupplier<String> textSupplier) {
 		return localizedWidgets.putAndReturn(new Group(parent, style), textSupplier).getKey();
+	}
+
+	private Label newLocalizedLabel(@NonNull final Composite parent, final int style, @NonNull final String messageKey) {
+		return newLocalizedLabel(parent, style, () -> messages.get(messageKey));
+	}
+
+	private Label newLocalizedLabel(@NonNull final Composite parent, final int style, @NonNull final ISupplier<String> textSupplier) {
+		return localizedWidgets.putAndReturn(new Label(parent, style), textSupplier).getKey();
 	}
 
 }
