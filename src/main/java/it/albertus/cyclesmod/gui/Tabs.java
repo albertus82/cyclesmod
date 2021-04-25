@@ -266,13 +266,13 @@ public class Tabs implements Multilanguage {
 			// Update field max length...
 			final int textLimit;
 			if (CyclesModEngine.isSettingsProperty(entry.getKey())) {
-				textLimit = Integer.toString(Settings.MAX_VALUE, gui.getEngine().getNumeralSystem().getRadix()).length();
+				textLimit = Integer.toString(Settings.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else if (CyclesModEngine.isGearboxProperty(entry.getKey())) {
-				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getEngine().getNumeralSystem().getRadix()).length();
+				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else if (CyclesModEngine.isPowerProperty(entry.getKey())) {
-				textLimit = Integer.toString(Power.MAX_VALUE, gui.getEngine().getNumeralSystem().getRadix()).length();
+				textLimit = Integer.toString(Power.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else {
 				throw new IllegalArgumentException(entry.getKey(), new UnknownPropertyException(entry.getKey()));
@@ -282,13 +282,13 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Update field value...
-			final String text = Integer.toString(properties.get(entry.getKey()), gui.getEngine().getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT);
+			final String text = Integer.toString(properties.get(entry.getKey()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT);
 			if (!field.getText().equals(text)) {
 				field.setText(text);
 			}
 
 			// Update tooltip text...
-			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getEngine().getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}
