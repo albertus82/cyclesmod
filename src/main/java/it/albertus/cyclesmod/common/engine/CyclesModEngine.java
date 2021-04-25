@@ -13,7 +13,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CyclesModEngine implements NumeralSystemProvider {
+public class CyclesModEngine {
 
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
 

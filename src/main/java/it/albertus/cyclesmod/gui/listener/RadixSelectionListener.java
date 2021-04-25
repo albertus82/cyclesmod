@@ -18,7 +18,7 @@ public class RadixSelectionListener extends SelectionAdapter {
 	public void widgetSelected(@NonNull final SelectionEvent se) {
 		if (se.widget instanceof MenuItem) {
 			final MenuItem menuItem = (MenuItem) se.widget;
-			if (menuItem.getSelection() && !menuItem.getData().equals(gui.getEngine().getNumeralSystem()) && menuItem.getData() instanceof NumeralSystem) {
+			if (menuItem.getSelection() && !menuItem.getData().equals(gui.getNumeralSystem()) && menuItem.getData() instanceof NumeralSystem) {
 				gui.setNumeralSystem((NumeralSystem) menuItem.getData());
 			}
 		}

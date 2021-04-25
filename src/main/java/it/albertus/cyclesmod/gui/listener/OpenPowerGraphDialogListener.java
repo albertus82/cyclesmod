@@ -41,7 +41,7 @@ public class OpenPowerGraphDialogListener extends MouseAdapter implements Select
 		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties();
 		for (int i = 0; i < Power.LENGTH; i++) {
 			final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Power.PREFIX, i));
-			map.put(Power.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getEngine().getNumeralSystem().getRadix()));
+			map.put(Power.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
 		}
 
 		if (powerGraphDialog.open(map, bikeType, false) == SWT.OK) {
@@ -49,7 +49,7 @@ public class OpenPowerGraphDialogListener extends MouseAdapter implements Select
 				final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bikeType, Power.PREFIX, i));
 				final Text text = formProperty.getText();
 				final String oldValue = text.getText();
-				final String newValue = Long.toString(Math.max(Power.MIN_VALUE, Math.min(Power.MAX_VALUE, Math.round(powerGraphDialog.getPowerGraph().getPowerValue(i)))), gui.getEngine().getNumeralSystem().getRadix());
+				final String newValue = Long.toString(Math.max(Power.MIN_VALUE, Math.min(Power.MAX_VALUE, Math.round(powerGraphDialog.getPowerGraph().getPowerValue(i)))), gui.getNumeralSystem().getRadix());
 				if (!oldValue.equals(newValue)) {
 					text.setText(newValue);
 					text.notifyListeners(SWT.FocusOut, null);

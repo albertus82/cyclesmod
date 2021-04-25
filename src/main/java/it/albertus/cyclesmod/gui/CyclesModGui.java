@@ -264,6 +264,10 @@ public class CyclesModGui implements IShellProvider {
 		messageBox.open();
 	}
 
+	public NumeralSystem getNumeralSystem() {
+		return engine.getNumeralSystem();
+	}
+
 	public void setNumeralSystem(final NumeralSystem numeralSystem) {
 		try {
 			updateModelValues(true);

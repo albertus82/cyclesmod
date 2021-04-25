@@ -26,13 +26,13 @@ public class TextFormatter {
 		if (text != null) {
 			String textValue = text.getText().trim();
 			if (gui.getEngine().isNumeric(textValue)) {
-				final int actualValue = Integer.parseInt(textValue, gui.getEngine().getNumeralSystem().getRadix());
+				final int actualValue = Integer.parseInt(textValue, gui.getNumeralSystem().getRadix());
 				final Integer maxValue = (Integer) text.getData(TextDataKey.MAX.toString());
 				if (maxValue != null && actualValue > maxValue.intValue()) {
-					textValue = Integer.toString(maxValue, gui.getEngine().getNumeralSystem().getRadix());
+					textValue = Integer.toString(maxValue, gui.getNumeralSystem().getRadix());
 				}
 				else {
-					textValue = Integer.toString(Integer.parseInt(textValue, gui.getEngine().getNumeralSystem().getRadix()), gui.getEngine().getNumeralSystem().getRadix());
+					textValue = Integer.toString(Integer.parseInt(textValue, gui.getNumeralSystem().getRadix()), gui.getNumeralSystem().getRadix());
 				}
 			}
 			else {
@@ -47,7 +47,7 @@ public class TextFormatter {
 	public void updateFontStyle(final Text text) {
 		if (text != null && gui.getEngine().isNumeric(text.getText()) && text.getFont() != null && text.getFont().getFontData() != null && text.getFont().getFontData().length > 0 && text.getData(FormProperty.TextDataKey.DEFAULT.toString()) instanceof Integer) {
 			final Integer defaultValue = (Integer) text.getData(FormProperty.TextDataKey.DEFAULT.toString());
-			if (!defaultValue.equals(Integer.valueOf(text.getText(), gui.getEngine().getNumeralSystem().getRadix()))) {
+			if (!defaultValue.equals(Integer.valueOf(text.getText(), gui.getNumeralSystem().getRadix()))) {
 				if (text.getFont().getFontData()[0].getStyle() != SWT.BOLD) {
 					setBoldFontStyle(text);
 				}
