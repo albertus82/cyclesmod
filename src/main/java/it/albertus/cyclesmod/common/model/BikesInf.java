@@ -21,7 +21,7 @@ public class BikesInf {
 	public static final String FILE_NAME = "BIKES.INF";
 	public static final short FILE_SIZE = 444;
 
-	private final Map<BikeType, Bike> bikeMap = new EnumMap<>(BikeType.class);
+	private final Map<BikeType, Bike> bikes = new EnumMap<>(BikeType.class);
 
 	/** Creates a new instance based on the default configuration. */
 	public BikesInf() {
@@ -33,8 +33,8 @@ public class BikesInf {
 	 * 
 	 * @param bikesInfFile the file to read
 	 * 
-	 * @throws IOException          if an I/O error occurs
-	 * @throws InvalidSizeException
+	 * @throws IOException if an I/O error occurs
+	 * @throws InvalidSizeException if the size of provided file is not acceptable
 	 */
 	public BikesInf(@NonNull final Path bikesInfFile) throws InvalidSizeException, IOException {
 		final long fileSize = Files.readAttributes(bikesInfFile, BasicFileAttributes.class).size();
@@ -58,7 +58,7 @@ public class BikesInf {
 		}
 		for (final BikeType bikeType : bikeTypes) {
 			final int ordinal = bikeType.ordinal();
-			bikeMap.put(bikeType, new Bike(bikeType, Arrays.copyOfRange(bytes, Bike.LENGTH * ordinal, Bike.LENGTH * (ordinal + 1))));
+			bikes.put(bikeType, new Bike(bikeType, Arrays.copyOfRange(bytes, Bike.LENGTH * ordinal, Bike.LENGTH * (ordinal + 1))));
 		}
 	}
 
@@ -70,7 +70,7 @@ public class BikesInf {
 	 */
 	public byte[] toByteArray() {
 		final List<Byte> byteList = new ArrayList<>(FILE_SIZE);
-		for (final ByteList bike : bikeMap.values()) {
+		for (final ByteList bike : bikes.values()) {
 			byteList.addAll(bike.toByteList());
 		}
 		if (byteList.size() != FILE_SIZE) {
@@ -79,8 +79,8 @@ public class BikesInf {
 		return ByteUtils.toByteArray(byteList);
 	}
 
-	public Map<BikeType, Bike> getBikeMap() {
-		return Collections.unmodifiableMap(bikeMap);
+	public Map<BikeType, Bike> getBikes() {
+		return Collections.unmodifiableMap(bikes);
 	}
 
 }

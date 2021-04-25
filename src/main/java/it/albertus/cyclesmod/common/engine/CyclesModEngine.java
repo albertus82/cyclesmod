@@ -113,7 +113,7 @@ public abstract class CyclesModEngine implements NumeralSystemProvider {
 		if (bikeType == null) {
 			throw new UnknownPropertyException(propertyName);
 		}
-		return bikesInf.getBikeMap().get(bikeType);
+		return bikesInf.getBikes().get(bikeType);
 	}
 
 	public static boolean isNumeric(final String value, final int radix) {
