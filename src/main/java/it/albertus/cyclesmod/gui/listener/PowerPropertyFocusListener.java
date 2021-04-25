@@ -28,7 +28,7 @@ public class PowerPropertyFocusListener extends PropertyFocusListener {
 
 			// Update power graph...
 			final Text field = (Text) fe.widget;
-			if (gui.getEngine().isNumeric(field.getText().trim())) {
+			if (gui.isNumeric(field.getText().trim())) {
 				try {
 					final int index = (Integer) field.getData(FormProperty.TextDataKey.INDEX.toString());
 					final IPowerGraph graph = (IPowerGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());

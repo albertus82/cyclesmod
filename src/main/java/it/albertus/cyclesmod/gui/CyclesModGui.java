@@ -49,7 +49,7 @@ public class CyclesModGui implements IShellProvider {
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	@Getter private final CyclesModEngine engine = new CyclesModEngine();
+	private final CyclesModEngine engine = new CyclesModEngine();
 
 	@Getter private final Shell shell;
 	@Getter private final MenuBar menuBar;
@@ -293,6 +293,14 @@ public class CyclesModGui implements IShellProvider {
 
 	public Map<String, Integer> getDefaultProperties() {
 		return Collections.unmodifiableMap(defaultProperties);
+	}
+
+	public BikesInf getBikesInf() {
+		return engine.getBikesInf();
+	}
+
+	public boolean isNumeric(final String value) {
+		return engine.isNumeric(value);
 	}
 
 }

@@ -53,7 +53,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 		catch (final InvalidPropertyException e) {
 			log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
-		gui.getEngine().getBikesInf().reset(type);
+		gui.getBikesInf().reset(type);
 		gui.getTabs().updateFormValues();
 	}
 

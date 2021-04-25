@@ -77,7 +77,7 @@ public class Tabs implements Multilanguage {
 		propertyKeyListener = new PropertyKeyListener(this);
 
 		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
-		for (final Bike bike : gui.getEngine().getBikesInf().getBikes().values()) {
+		for (final Bike bike : gui.getBikesInf().getBikes().values()) {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
 			tabItem.setText(bike.getType().getDisplacement() + " cc");
 
@@ -234,7 +234,7 @@ public class Tabs implements Multilanguage {
 	}
 
 	public void updateFormValues() {
-		final Map<String, Integer> properties = new BikesCfg(gui.getEngine().getBikesInf()).getMap();
+		final Map<String, Integer> properties = new BikesCfg(gui.getBikesInf()).getMap();
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
@@ -247,7 +247,7 @@ public class Tabs implements Multilanguage {
 		enableTextListeners();
 
 		// Update power graphs...
-		for (final Bike bike : gui.getEngine().getBikesInf().getBikes().values()) {
+		for (final Bike bike : gui.getBikesInf().getBikes().values()) {
 			final IPowerGraph powerGraph = powerCanvases.get(bike.getType()).getPowerGraph();
 			for (short i = 0; i < bike.getPower().getCurve().length; i++) {
 				powerGraph.setPowerValue(i, bike.getPower().getCurve()[i]);

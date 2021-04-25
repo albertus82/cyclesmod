@@ -25,7 +25,7 @@ public class TextFormatter {
 	public void clean(final Text text) {
 		if (text != null) {
 			String textValue = text.getText().trim();
-			if (gui.getEngine().isNumeric(textValue)) {
+			if (gui.isNumeric(textValue)) {
 				final int actualValue = Integer.parseInt(textValue, gui.getNumeralSystem().getRadix());
 				final Integer maxValue = (Integer) text.getData(TextDataKey.MAX.toString());
 				if (maxValue != null && actualValue > maxValue.intValue()) {
@@ -45,7 +45,7 @@ public class TextFormatter {
 	}
 
 	public void updateFontStyle(final Text text) {
-		if (text != null && gui.getEngine().isNumeric(text.getText()) && text.getFont() != null && text.getFont().getFontData() != null && text.getFont().getFontData().length > 0 && text.getData(FormProperty.TextDataKey.DEFAULT.toString()) instanceof Integer) {
+		if (text != null && gui.isNumeric(text.getText()) && text.getFont() != null && text.getFont().getFontData() != null && text.getFont().getFontData().length > 0 && text.getData(FormProperty.TextDataKey.DEFAULT.toString()) instanceof Integer) {
 			final Integer defaultValue = (Integer) text.getData(FormProperty.TextDataKey.DEFAULT.toString());
 			if (!defaultValue.equals(Integer.valueOf(text.getText(), gui.getNumeralSystem().getRadix()))) {
 				if (text.getFont().getFontData()[0].getStyle() != SWT.BOLD) {

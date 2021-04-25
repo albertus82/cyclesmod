@@ -22,7 +22,7 @@ public class PropertyVerifyListener implements VerifyListener {
 	public void verifyText(@NonNull final VerifyEvent ve) {
 		if (enabled) {
 			ve.text = ve.text.trim();
-			if (!ve.text.isEmpty() && !gui.getEngine().isNumeric(ve.text)) {
+			if (!ve.text.isEmpty() && !gui.isNumeric(ve.text)) {
 				ve.doit = false;
 			}
 			else {
