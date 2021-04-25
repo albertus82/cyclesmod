@@ -7,7 +7,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
 
-import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
@@ -32,7 +31,8 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 		int choose = messageBox.open();
 		if (choose == SWT.YES) {
 			try {
-				reset();
+				gui.getBikesInf().reset();
+				gui.getTabs().updateFormValues();
 			}
 			catch (final Exception e) {
 				log.log(Level.WARNING, e.toString(), e);
@@ -42,11 +42,6 @@ public class ResetAllSelectionListener extends SelectionAdapter {
 				messageBox.open();
 			}
 		}
-	}
-
-	private void reset() {
-		gui.getEngine().setBikesInf(new BikesInf());
-		gui.getTabs().updateFormValues();
 	}
 
 }
