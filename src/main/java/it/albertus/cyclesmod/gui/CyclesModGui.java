@@ -125,11 +125,14 @@ public class CyclesModGui implements IShellProvider {
 		}
 		for (final String key : tabs.getFormProperties().keySet()) {
 			try {
-				engine.applyProperty(key, tabs.getFormProperties().get(key).getValue(), lenient);
+				engine.applyProperty(key, tabs.getFormProperties().get(key).getValue());
 			}
 			catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
 				if (!lenient) {
 					throw e;
+				}
+				else {
+					log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
 				}
 			}
 		}
@@ -164,7 +167,7 @@ public class CyclesModGui implements IShellProvider {
 			engine.setBikesInf(new BikesInf());
 			final BikesCfg bikesCfg = new BikesCfg(file);
 			for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
-				engine.applyProperty(key, bikesCfg.getProperties().getProperty(key), false);
+				engine.applyProperty(key, bikesCfg.getProperties().getProperty(key));
 			}
 			tabs.updateFormValues();
 			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());

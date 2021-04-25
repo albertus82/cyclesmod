@@ -7,9 +7,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MessageBox;
 
-import it.albertus.cyclesmod.common.engine.InvalidNumberException;
-import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
-import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
+import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.model.BikeType;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
@@ -52,8 +50,8 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 		try {
 			gui.updateModelValues(true);
 		}
-		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
-			log.log(Level.INFO, e.getMessage(), e);
+		catch (final InvalidPropertyException e) {
+			log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
 		gui.getEngine().getBikesInf().reset(type);
 		gui.getTabs().updateFormValues();

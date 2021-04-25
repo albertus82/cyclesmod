@@ -23,26 +23,19 @@ public class CyclesModEngine {
 		return isNumeric(value, numeralSystem.getRadix());
 	}
 
-	public boolean applyProperty(final String propertyName, final String value, final boolean lenient) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
+	public boolean applyProperty(final String propertyName, final String value) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
 		boolean applied = false;
-		try {
-			if (isSettingsProperty(propertyName)) {
-				applied = applySettingProperty(propertyName, value);
-			}
-			else if (isGearboxProperty(propertyName)) {
-				applied = applyGearboxProperty(propertyName, value);
-			}
-			else if (isPowerProperty(propertyName)) {
-				applied = applyPowerProperty(propertyName, value);
-			}
-			else {
-				throw new UnknownPropertyException(propertyName);
-			}
+		if (isSettingsProperty(propertyName)) {
+			applied = applySettingProperty(propertyName, value);
 		}
-		catch (final UnknownPropertyException | InvalidNumberException | ValueOutOfRangeException e) {
-			if (!lenient) {
-				throw e;
-			}
+		else if (isGearboxProperty(propertyName)) {
+			applied = applyGearboxProperty(propertyName, value);
+		}
+		else if (isPowerProperty(propertyName)) {
+			applied = applyPowerProperty(propertyName, value);
+		}
+		else {
+			throw new UnknownPropertyException(propertyName);
 		}
 		return applied;
 	}

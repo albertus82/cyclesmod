@@ -144,7 +144,7 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private boolean applyProperty(@NonNull final String name, final String value) throws InvalidPropertyException {
 		try {
-			return engine.applyProperty(name, value, false);
+			return engine.applyProperty(name, value);
 		}
 		catch (final UnknownPropertyException e) {
 			System.out.println(messages.get("console.message.error"));
