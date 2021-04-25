@@ -77,7 +77,7 @@ public class Tabs implements Multilanguage {
 		propertyKeyListener = new PropertyKeyListener(this);
 
 		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
-		for (final Bike bike : gui.getBikesInf().getBikes().values()) {
+		for (final Bike bike : gui.getEngine().getBikesInf().getBikes().values()) {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
 			tabItem.setText(bike.getType().getDisplacement() + " cc");
 
@@ -234,7 +234,7 @@ public class Tabs implements Multilanguage {
 	}
 
 	public void updateFormValues() {
-		final Map<String, Integer> properties = new BikesCfg(gui.getBikesInf()).getMap();
+		final Map<String, Integer> properties = new BikesCfg(gui.getEngine().getBikesInf()).getMap();
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {
@@ -247,7 +247,7 @@ public class Tabs implements Multilanguage {
 		enableTextListeners();
 
 		// Update power graphs...
-		for (final Bike bike : gui.getBikesInf().getBikes().values()) {
+		for (final Bike bike : gui.getEngine().getBikesInf().getBikes().values()) {
 			final IPowerGraph powerGraph = powerCanvases.get(bike.getType()).getPowerGraph();
 			for (short i = 0; i < bike.getPower().getCurve().length; i++) {
 				powerGraph.setPowerValue(i, bike.getPower().getCurve()[i]);
@@ -266,13 +266,13 @@ public class Tabs implements Multilanguage {
 			// Update field max length...
 			final int textLimit;
 			if (CyclesModEngine.isSettingsProperty(entry.getKey())) {
-				textLimit = Integer.toString(Settings.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+				textLimit = Integer.toString(Settings.MAX_VALUE, gui.getEngine().getNumeralSystem().getRadix()).length();
 			}
 			else if (CyclesModEngine.isGearboxProperty(entry.getKey())) {
-				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getEngine().getNumeralSystem().getRadix()).length();
 			}
 			else if (CyclesModEngine.isPowerProperty(entry.getKey())) {
-				textLimit = Integer.toString(Power.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
+				textLimit = Integer.toString(Power.MAX_VALUE, gui.getEngine().getNumeralSystem().getRadix()).length();
 			}
 			else {
 				throw new IllegalArgumentException(entry.getKey(), new UnknownPropertyException(entry.getKey()));
@@ -282,13 +282,13 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Update field value...
-			final String text = Integer.toString(properties.get(entry.getKey()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT);
+			final String text = Integer.toString(properties.get(entry.getKey()), gui.getEngine().getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT);
 			if (!field.getText().equals(text)) {
 				field.setText(text);
 			}
 
 			// Update tooltip text...
-			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getEngine().getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}

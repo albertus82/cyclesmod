@@ -22,11 +22,11 @@ public class PropertyVerifyListener implements VerifyListener {
 	public void verifyText(@NonNull final VerifyEvent ve) {
 		if (enabled) {
 			ve.text = ve.text.trim();
-			if (!ve.text.isEmpty() && !gui.isNumeric(ve.text)) {
+			if (!ve.text.isEmpty() && !gui.getEngine().isNumeric(ve.text)) {
 				ve.doit = false;
 			}
 			else {
-				if (gui.getNumeralSystem().getRadix() > 10 && gui.getNumeralSystem().getRadix() <= 36) {
+				if (gui.getEngine().getNumeralSystem().getRadix() > 10 && gui.getEngine().getNumeralSystem().getRadix() <= 36) {
 					ve.text = ve.text.toUpperCase(Locale.ROOT); // Hex letters case.
 				}
 			}

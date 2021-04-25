@@ -27,7 +27,7 @@ public abstract class AskForSavingListener {
 		catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
 			log.log(Level.INFO, e.getMessage(), e);
 		}
-		if (!new BikesCfg(gui.getBikesInf()).getMap().equals(gui.getLastPersistedProperties())) {
+		if (!new BikesCfg(gui.getEngine().getBikesInf()).getMap().equals(gui.getLastPersistedProperties())) {
 			final MessageBox messageBox = new MessageBox(gui.getShell(), SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
 			messageBox.setText(dialogTitle);
 			messageBox.setMessage(dialogMessage);

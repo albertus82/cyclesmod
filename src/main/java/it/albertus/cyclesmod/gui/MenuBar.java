@@ -161,7 +161,7 @@ public class MenuBar implements Multilanguage {
 			final MenuItem radixMenuItem = newLocalizedMenuItem(viewRadixSubMenu, SWT.RADIO, () -> messages.get("gui.label.menu.item.radix." + numeralSystem.getRadix()));
 			radixMenuItem.setData(numeralSystem);
 			radixMenuItem.addSelectionListener(radixSelectionListener);
-			if (numeralSystem.equals(gui.getNumeralSystem())) {
+			if (numeralSystem.equals(gui.getEngine().getNumeralSystem())) {
 				radixMenuItem.setSelection(true);
 			}
 		}
