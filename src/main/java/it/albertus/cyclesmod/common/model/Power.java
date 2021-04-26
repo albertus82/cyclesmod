@@ -60,7 +60,7 @@ public class Power implements ByteList {
 
 	public static short parse(@NonNull final String propertyName, final String value, final int radix) throws InvalidNumberException, ValueOutOfRangeException {
 		if (value == null) {
-			throw new InvalidNumberException(propertyName, value, radix, new NullPointerException());
+			throw new InvalidNumberException(propertyName, value, radix, new NullPointerException("value is null"));
 		}
 		if (value.trim().isEmpty()) {
 			throw new InvalidNumberException(propertyName, value, radix);

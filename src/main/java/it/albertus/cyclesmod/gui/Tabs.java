@@ -90,7 +90,7 @@ public class Tabs implements Multilanguage {
 			GridLayoutFactory.swtDefaults().numColumns(2).applyTo(tabComposite);
 
 			// Settings
-			final Group settingsGroup = newLocalizedGroup(tabComposite, SWT.NULL, "gui.label.settings");
+			final Group settingsGroup = newLocalizedGroup(tabComposite, SWT.NONE, "gui.label.settings");
 			// Posizionamento dell'elemento all'interno del contenitore...
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(settingsGroup);
 			// Definizione di come saranno disposti gli elementi contenuti...
@@ -99,7 +99,7 @@ public class Tabs implements Multilanguage {
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey());
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
-				final Label label = newLocalizedLabel(settingsGroup, SWT.NULL, "gui.label." + setting.getKey());
+				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
@@ -122,7 +122,7 @@ public class Tabs implements Multilanguage {
 			final IPowerGraph powerGraph = canvas.getPowerGraph();
 			powerGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
-				public void mousePressed(final MouseEvent me) {
+				public void mousePressed(@NonNull final MouseEvent me) {
 					if (me.button == 1) { // left button
 						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
 						if (formProperty != null) {
@@ -135,7 +135,7 @@ public class Tabs implements Multilanguage {
 			powerCanvases.put(bike.getType(), canvas);
 
 			// Gearbox
-			final Group gearboxGroup = newLocalizedGroup(tabComposite, SWT.NULL, "gui.label.gearbox");
+			final Group gearboxGroup = newLocalizedGroup(tabComposite, SWT.NONE, "gui.label.gearbox");
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(gearboxGroup);
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
 
@@ -143,7 +143,7 @@ public class Tabs implements Multilanguage {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Serializable gearName = index != 0 ? index : "N";
-				final Label label = newLocalizedLabel(gearboxGroup, SWT.NULL, () -> messages.get("gui.label.gear", gearName));
+				final Label label = newLocalizedLabel(gearboxGroup, SWT.NONE, () -> messages.get("gui.label.gear", gearName));
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
@@ -161,7 +161,7 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Power
-			final Group powerGroup = newLocalizedGroup(tabComposite, SWT.NULL, "gui.label.power");
+			final Group powerGroup = newLocalizedGroup(tabComposite, SWT.NONE, "gui.label.power");
 			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(powerGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
 
@@ -169,7 +169,7 @@ public class Tabs implements Multilanguage {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final int rpm = Power.getRpm(index);
-				final Label label = newLocalizedLabel(powerGroup, SWT.NULL, () -> messages.get("gui.label.rpm", rpm));
+				final Label label = newLocalizedLabel(powerGroup, SWT.NONE, () -> messages.get("gui.label.rpm", rpm));
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				label.setToolTipText(key);
 				final Text text = new Text(powerGroup, SWT.BORDER);
