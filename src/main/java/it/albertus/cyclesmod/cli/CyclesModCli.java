@@ -83,36 +83,47 @@ public class CyclesModCli implements Callable<Integer> {
 		}
 	}
 
-	private void createBikesInf(@NonNull final Path bikesInfFile) throws IOException {
-		System.out.print(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME) + ' ');
-		final byte[] bytes = engine.getBikesInf().toByteArray();
-		if (bikesInfFile.toFile().exists()) {
-			if (Files.isDirectory(bikesInfFile)) {
-				System.out.println(messages.get("console.message.error"));
-				System.err.println(messages.get("console.error.cannot.open.file.directory", BikesInf.FILE_NAME));
-				throw new IOException(bikesInfFile + " is a directory");
-			}
-			final ByteArrayOutputStream baos = new ByteArrayOutputStream(BikesInf.FILE_SIZE);
-			try (final InputStream is = Files.newInputStream(bikesInfFile)) {
-				IOUtils.copy(is, baos, BikesInf.FILE_SIZE);
-				System.out.println(messages.get("console.message.done"));
-			}
-			catch (final IOException e) {
-				System.out.println(messages.get("console.message.error"));
-				System.err.println(messages.get("console.error.cannot.read.file", BikesInf.FILE_NAME, e));
-				throw e;
-			}
-			if (!Arrays.equals(bytes, baos.toByteArray())) {
-				backupBikesInf(bikesInfFile);
-				writeBikesInf(bytes, bikesInfFile);
+	private static Path prepareWorkingDirectory(@NonNull Path path) throws IOException {
+		if (path.toFile().exists()) {
+			if (!Files.isDirectory(path)) {
+				System.err.println(messages.get("console.error.invalid.directory"));
+				throw new IOException(path + " is not a directory");
 			}
 			else {
-				System.out.println(messages.get("console.message.already.uptodate", BikesInf.FILE_NAME));
+				return path;
 			}
 		}
 		else {
+			System.out.print(messages.get("console.message.creating.working.directory") + ' ');
+			try {
+				path = Files.createDirectories(path);
+				System.out.println(messages.get("console.message.done"));
+				return path;
+			}
+			catch (final IOException e) {
+				System.out.println(messages.get("console.message.error"));
+				System.err.println(messages.get("console.error.creating.working.directory", e));
+				throw e;
+			}
+		}
+	}
+
+	private void loadOriginalConfiguration() {
+		System.out.print(messages.get("console.message.reading.original.configuration") + ' ');
+		engine.setBikesInf(new BikesInf());
+		System.out.println(messages.get("console.message.done"));
+	}
+
+	private void createBikesCfg(@NonNull final Path bikesCfgFile) throws IOException {
+		System.out.print(messages.get("console.message.creating.default.file", BikesCfg.FILE_NAME) + ' ');
+		try {
+			BikesCfg.writeDefault(bikesCfgFile);
 			System.out.println(messages.get("console.message.done"));
-			writeBikesInf(bytes, bikesInfFile);
+		}
+		catch (final IOException e) {
+			System.out.println(messages.get("console.message.error"));
+			System.err.println(messages.get("console.error.cannot.create.default.file", BikesCfg.FILE_NAME, e));
+			throw e;
 		}
 	}
 
@@ -163,16 +174,36 @@ public class CyclesModCli implements Callable<Integer> {
 		}
 	}
 
-	private void createBikesCfg(@NonNull final Path bikesCfgFile) throws IOException {
-		System.out.print(messages.get("console.message.creating.default.file", BikesCfg.FILE_NAME) + ' ');
-		try {
-			BikesCfg.writeDefault(bikesCfgFile);
-			System.out.println(messages.get("console.message.done"));
+	private void createBikesInf(@NonNull final Path bikesInfFile) throws IOException {
+		System.out.print(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME) + ' ');
+		final byte[] bytes = engine.getBikesInf().toByteArray();
+		if (bikesInfFile.toFile().exists()) {
+			if (Files.isDirectory(bikesInfFile)) {
+				System.out.println(messages.get("console.message.error"));
+				System.err.println(messages.get("console.error.cannot.open.file.directory", BikesInf.FILE_NAME));
+				throw new IOException(bikesInfFile + " is a directory");
+			}
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream(BikesInf.FILE_SIZE);
+			try (final InputStream is = Files.newInputStream(bikesInfFile)) {
+				IOUtils.copy(is, baos, BikesInf.FILE_SIZE);
+				System.out.println(messages.get("console.message.done"));
+			}
+			catch (final IOException e) {
+				System.out.println(messages.get("console.message.error"));
+				System.err.println(messages.get("console.error.cannot.read.file", BikesInf.FILE_NAME, e));
+				throw e;
+			}
+			if (!Arrays.equals(bytes, baos.toByteArray())) {
+				backupBikesInf(bikesInfFile);
+				writeBikesInf(bytes, bikesInfFile);
+			}
+			else {
+				System.out.println(messages.get("console.message.already.uptodate", BikesInf.FILE_NAME));
+			}
 		}
-		catch (final IOException e) {
-			System.out.println(messages.get("console.message.error"));
-			System.err.println(messages.get("console.error.cannot.create.default.file", BikesCfg.FILE_NAME, e));
-			throw e;
+		else {
+			System.out.println(messages.get("console.message.done"));
+			writeBikesInf(bytes, bikesInfFile);
 		}
 	}
 
@@ -212,37 +243,6 @@ public class CyclesModCli implements Callable<Integer> {
 			System.out.println(messages.get("console.message.error"));
 			System.err.println(messages.get("console.error.cannot.write.file", BikesInf.FILE_NAME, e));
 			throw e;
-		}
-	}
-
-	private void loadOriginalConfiguration() {
-		System.out.print(messages.get("console.message.reading.original.configuration") + ' ');
-		engine.setBikesInf(new BikesInf());
-		System.out.println(messages.get("console.message.done"));
-	}
-
-	private static Path prepareWorkingDirectory(@NonNull Path path) throws IOException {
-		if (path.toFile().exists()) {
-			if (!Files.isDirectory(path)) {
-				System.err.println(messages.get("console.error.invalid.directory"));
-				throw new IOException(path + " is not a directory");
-			}
-			else {
-				return path;
-			}
-		}
-		else {
-			System.out.print(messages.get("console.message.creating.working.directory") + ' ');
-			try {
-				path = Files.createDirectories(path);
-				System.out.println(messages.get("console.message.done"));
-				return path;
-			}
-			catch (final IOException e) {
-				System.out.println(messages.get("console.message.error"));
-				System.err.println(messages.get("console.error.creating.working.directory", e));
-				throw e;
-			}
 		}
 	}
 
