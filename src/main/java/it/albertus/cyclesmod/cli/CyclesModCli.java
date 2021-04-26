@@ -47,7 +47,10 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private static final Messages messages = ConsoleMessages.INSTANCE;
 
-	@Parameters(arity = "0..1", descriptionKey = "parameter.path", defaultValue = "") private Path path;
+	private static final String DONE = messages.get("console.message.done");
+	private static final String ERROR = messages.get("console.message.error");
+
+	@Parameters(descriptionKey = "parameter.path", defaultValue = "") private Path path;
 
 	@Option(names = { "-e", "--errors" }, descriptionKey = "option.errors") private boolean errors;
 
@@ -97,11 +100,11 @@ public class CyclesModCli implements Callable<Integer> {
 			System.out.print(messages.get("console.message.creating.working.directory") + ' ');
 			try {
 				path = Files.createDirectories(path);
-				System.out.println(messages.get("console.message.done"));
+				System.out.println(DONE);
 				return path;
 			}
 			catch (final IOException e) {
-				System.out.println(messages.get("console.message.error"));
+				System.out.println(ERROR);
 				System.err.println(messages.get("console.error.creating.working.directory", e));
 				throw e;
 			}
@@ -111,17 +114,17 @@ public class CyclesModCli implements Callable<Integer> {
 	private void loadOriginalConfiguration() {
 		System.out.print(messages.get("console.message.reading.original.configuration") + ' ');
 		engine.setBikesInf(new BikesInf());
-		System.out.println(messages.get("console.message.done"));
+		System.out.println(DONE);
 	}
 
 	private void createBikesCfg(@NonNull final Path bikesCfgFile) throws IOException {
 		System.out.print(messages.get("console.message.creating.default.file", BikesCfg.FILE_NAME) + ' ');
 		try {
 			BikesCfg.writeDefault(bikesCfgFile);
-			System.out.println(messages.get("console.message.done"));
+			System.out.println(DONE);
 		}
 		catch (final IOException e) {
-			System.out.println(messages.get("console.message.error"));
+			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.cannot.create.default.file", BikesCfg.FILE_NAME, e));
 			throw e;
 		}
@@ -130,7 +133,7 @@ public class CyclesModCli implements Callable<Integer> {
 	private void applyCustomizations(@NonNull final Path bikesCfgFile) throws IOException, InvalidPropertyException {
 		System.out.print(messages.get("console.message.applying.customizations") + ' ');
 		if (Files.isDirectory(bikesCfgFile)) {
-			System.out.println(messages.get("console.message.error"));
+			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.cannot.open.file.directory", BikesCfg.FILE_NAME));
 			throw new IOException(bikesCfgFile + "is a directory");
 		}
@@ -139,7 +142,7 @@ public class CyclesModCli implements Callable<Integer> {
 			properties = new BikesCfg(bikesCfgFile).getProperties();
 		}
 		catch (final IOException e) {
-			System.out.println(messages.get("console.message.error"));
+			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.cannot.read.file", BikesCfg.FILE_NAME, e));
 			throw e;
 		}
@@ -158,17 +161,17 @@ public class CyclesModCli implements Callable<Integer> {
 			return engine.applyProperty(name, value);
 		}
 		catch (final UnknownPropertyException e) {
-			System.out.println(messages.get("console.message.error"));
+			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.unknown.property", e.getPropertyName()));
 			throw e;
 		}
 		catch (final InvalidNumberException e) {
-			System.out.println(messages.get("console.message.error"));
+			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.invalid.number", e.getPropertyName(), e.getValue()));
 			throw e;
 		}
 		catch (final ValueOutOfRangeException e) {
-			System.out.println(messages.get("console.message.error"));
+			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.value.out.of.range", e.getPropertyName(), e.getValue(), e.getMinValue(), e.getMaxValue()));
 			throw e;
 		}
@@ -179,17 +182,17 @@ public class CyclesModCli implements Callable<Integer> {
 		final byte[] bytes = engine.getBikesInf().toByteArray();
 		if (bikesInfFile.toFile().exists()) {
 			if (Files.isDirectory(bikesInfFile)) {
-				System.out.println(messages.get("console.message.error"));
+				System.out.println(ERROR);
 				System.err.println(messages.get("console.error.cannot.open.file.directory", BikesInf.FILE_NAME));
 				throw new IOException(bikesInfFile + " is a directory");
 			}
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream(BikesInf.FILE_SIZE);
 			try (final InputStream is = Files.newInputStream(bikesInfFile)) {
 				IOUtils.copy(is, baos, BikesInf.FILE_SIZE);
-				System.out.println(messages.get("console.message.done"));
+				System.out.println(DONE);
 			}
 			catch (final IOException e) {
-				System.out.println(messages.get("console.message.error"));
+				System.out.println(ERROR);
 				System.err.println(messages.get("console.error.cannot.read.file", BikesInf.FILE_NAME, e));
 				throw e;
 			}
@@ -202,7 +205,7 @@ public class CyclesModCli implements Callable<Integer> {
 			}
 		}
 		else {
-			System.out.println(messages.get("console.message.done"));
+			System.out.println(DONE);
 			writeBikesInf(bytes, bikesInfFile);
 		}
 	}
@@ -227,7 +230,7 @@ public class CyclesModCli implements Callable<Integer> {
 			System.out.println(messages.get("console.message.backup.file.done", backupFile.toPath().getFileName()));
 		}
 		catch (final IOException e) {
-			System.out.println(messages.get("console.message.error"));
+			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.cannot.backup.file", BikesInf.FILE_NAME, e));
 			throw e;
 		}
@@ -237,10 +240,10 @@ public class CyclesModCli implements Callable<Integer> {
 		System.out.print(messages.get("console.message.writing.new.file", BikesInf.FILE_NAME) + ' ');
 		try {
 			Files.write(bikesInfFile, bytes);
-			System.out.println(messages.get("console.message.done"));
+			System.out.println(DONE);
 		}
 		catch (final IOException e) {
-			System.out.println(messages.get("console.message.error"));
+			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.cannot.write.file", BikesInf.FILE_NAME, e));
 			throw e;
 		}
