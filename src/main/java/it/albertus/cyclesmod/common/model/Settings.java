@@ -47,7 +47,7 @@ public class Settings implements ByteList {
 
 	public static int parse(@NonNull final String propertyName, final String value, final int radix) throws ValueOutOfRangeException, InvalidNumberException {
 		if (value == null) {
-			throw new InvalidNumberException(propertyName, value, radix, new NullPointerException());
+			throw new InvalidNumberException(propertyName, value, radix, new NullPointerException("value is null"));
 		}
 		if (value.trim().isEmpty()) {
 			throw new InvalidNumberException(propertyName, value, radix);
