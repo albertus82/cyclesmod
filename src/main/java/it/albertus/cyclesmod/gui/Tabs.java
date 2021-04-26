@@ -76,9 +76,9 @@ public class Tabs implements Multilanguage {
 		powerPropertyFocusListener = new PowerPropertyFocusListener(gui);
 		propertyKeyListener = new PropertyKeyListener(this);
 
-		tabFolder = new TabFolder(gui.getShell(), SWT.NULL);
+		tabFolder = new TabFolder(gui.getShell(), SWT.NONE);
 		for (final Bike bike : gui.getBikesInf().getBikes().values()) {
-			final TabItem tabItem = new TabItem(tabFolder, SWT.NULL);
+			final TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 			tabItem.setText(bike.getType().getDisplacement() + " cc");
 
 			// This outer composite is required for GTK!
