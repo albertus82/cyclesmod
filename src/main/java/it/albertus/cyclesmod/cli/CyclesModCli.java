@@ -19,7 +19,7 @@ import java.util.zip.ZipOutputStream;
 
 import it.albertus.cyclesmod.CyclesMod;
 import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
-import it.albertus.cyclesmod.cli.resources.Picocli;
+import it.albertus.cyclesmod.cli.resources.PicocliMessages;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.InvalidNumberException;
 import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
@@ -57,7 +57,7 @@ public class CyclesModCli implements Callable<Integer> {
 	private final CyclesModEngine engine = new CyclesModEngine();
 
 	public static void main(final String... args) {
-		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setResourceBundle(ResourceBundle.getBundle(Picocli.class.getName().toLowerCase(Locale.ROOT))).execute(args));
+		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setResourceBundle(ResourceBundle.getBundle(PicocliMessages.class.getName().toLowerCase(Locale.ROOT))).execute(args));
 	}
 
 	@Override
