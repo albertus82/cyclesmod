@@ -79,11 +79,11 @@ public class BikesCfg {
 
 	private static String createProperties(final BikesInf bikesInf) {
 		final String lineSeparator = System.lineSeparator();
-		final StringBuilder props = new StringBuilder(messages.get("common.str.cfg.header"));
+		final StringBuilder props = new StringBuilder(messages.get("common.string.bikes.cfg.header"));
 
 		for (final Bike bike : bikesInf.getBikes().values()) {
 			props.append(lineSeparator).append(lineSeparator);
-			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("common.str.cfg.begin") + "... ###");
+			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("common.string.bikes.cfg.begin") + "... ###");
 
 			// Settings
 			props.append(lineSeparator);
@@ -122,11 +122,11 @@ public class BikesCfg {
 				props.append(lineSeparator);
 			}
 
-			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("common.str.cfg.end") + ". ###");
+			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("common.string.bikes.cfg.end") + ". ###");
 		}
 
 		props.append(lineSeparator).append(lineSeparator);
-		props.append(messages.get("common.str.cfg.footer")).append(lineSeparator);
+		props.append(messages.get("common.string.bikes.cfg.footer")).append(lineSeparator);
 		return props.toString();
 	}
 
