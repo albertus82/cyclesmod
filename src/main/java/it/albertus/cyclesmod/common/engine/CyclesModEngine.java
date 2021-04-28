@@ -1,5 +1,8 @@
 package it.albertus.cyclesmod.common.engine;
 
+import java.util.Arrays;
+import java.util.logging.Level;
+
 import it.albertus.cyclesmod.common.model.Bike;
 import it.albertus.cyclesmod.common.model.BikeType;
 import it.albertus.cyclesmod.common.model.BikesInf;
@@ -11,7 +14,9 @@ import it.albertus.util.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.java.Log;
 
+@Log
 @Getter
 @Setter
 @NoArgsConstructor
@@ -121,6 +126,7 @@ public class CyclesModEngine {
 			return true;
 		}
 		catch (final NumberFormatException e) {
+			log.log(Level.FINEST, e, () -> Arrays.toString(new Object[] { value, radix }));
 			return false;
 		}
 	}
