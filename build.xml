@@ -81,11 +81,11 @@
 			</config>
 		</launch4j>
 		<launch4j bindir="${launch4j.bindir}">
-			<config outfile="${project.build.directory}/launch4j/${windows.console.exeFileName}" jarpath="${windows.build.finalName}.${project.packaging}" headertype="console" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir=".">
+			<config outfile="${project.build.directory}/launch4j/${windows.cli.exeFileName}" jarpath="${windows.build.finalName}.${project.packaging}" headertype="console" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir=".">
 				<jre minversion="${maven.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${cli.vm.initialHeapSize}" maxheapsize="${cli.vm.maxHeapSize}">
 					<opt>-DC</opt>
 				</jre>
-				<versionInfo fileversion="${project.version}.0" txtfileversion="${project.version}" filedescription="${project.name}" copyright="${launch4j.copyright}" productversion="${project.version}.0" txtproductversion="${project.version}" productname="${project.name}" internalname="${project.name}" originalfilename="${windows.console.exeFileName}" companyname="${launch4j.companyName}" />
+				<versionInfo fileversion="${project.version}.0" txtfileversion="${project.version}" filedescription="${project.name}" copyright="${launch4j.copyright}" productversion="${project.version}.0" txtproductversion="${project.version}" productname="${project.name}" internalname="${project.name}" originalfilename="${windows.cli.exeFileName}" companyname="${launch4j.companyName}" />
 			</config>
 		</launch4j>
 	</target>
