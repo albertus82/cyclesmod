@@ -131,7 +131,7 @@ public class CyclesModCli implements Callable<Integer> {
 	}
 
 	private void applyCustomizations(@NonNull final Path bikesCfgFile) throws IOException, InvalidPropertyException {
-		System.out.print(messages.get("console.message.applying.customizations") + ' ');
+		System.out.print(messages.get("console.message.applying.customizations", BikesCfg.FILE_NAME) + ' ');
 		if (Files.isDirectory(bikesCfgFile)) {
 			System.out.println(ERROR);
 			System.err.println(messages.get("console.error.cannot.open.file.directory", BikesCfg.FILE_NAME));
