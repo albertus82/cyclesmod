@@ -120,7 +120,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	public void updateModelValues(final boolean lenient) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
+	public void updateModelValues(final boolean lenient) throws InvalidPropertyException {
 		final Control focused = shell.getDisplay().getFocusControl();
 		if (focused != null && !focused.isDisposed()) {
 			focused.notifyListeners(SWT.FocusOut, null); // force auto-correction for focused field
@@ -129,12 +129,12 @@ public class CyclesModGui implements IShellProvider {
 			try {
 				engine.applyProperty(key, tabs.getFormProperties().get(key).getValue());
 			}
-			catch (final ValueOutOfRangeException | InvalidNumberException | UnknownPropertyException e) {
+			catch (final InvalidPropertyException e) {
 				if (!lenient) {
 					throw e;
 				}
 				else {
-					log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
+					log.log(Level.FINE, e, () -> "Invalid property \"" + e.getPropertyName() + "\":");
 				}
 			}
 		}
@@ -282,7 +282,7 @@ public class CyclesModGui implements IShellProvider {
 			updateModelValues(true);
 		}
 		catch (final InvalidPropertyException e) {
-			log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
+			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
 		engine.setNumeralSystem(numeralSystem);
 		tabs.updateFormValues();
