@@ -8,8 +8,8 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class PowerTextData extends GenericTextData {
 
-	public PowerTextData(final int defaultValue, final String key, final int size, final int maxValue, final int index, final IPowerGraph powerGraph) {
-		super(defaultValue, key, size, maxValue);
+	public PowerTextData(final String key, final int defaultValue, final int maxValue, final int index, final IPowerGraph powerGraph) {
+		super(key, defaultValue, maxValue);
 		this.index = index;
 		this.powerGraph = powerGraph;
 	}
