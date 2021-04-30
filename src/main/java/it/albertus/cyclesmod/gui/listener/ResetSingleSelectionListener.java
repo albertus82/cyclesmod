@@ -37,7 +37,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 				reset(type);
 			}
 			catch (final Exception e) {
-				log.log(Level.WARNING, e.toString(), e);
+				log.log(Level.WARNING, "Cannot reset bike " + type, e);
 				messageBox = new MessageBox(gui.getShell(), SWT.ICON_ERROR);
 				messageBox.setText(messages.get("gui.message.warning"));
 				messageBox.setMessage(messages.get("gui.error.reset", ExceptionUtils.getUIMessage(e)));
@@ -51,7 +51,7 @@ public class ResetSingleSelectionListener extends SelectionAdapter {
 			gui.updateModelValues(true);
 		}
 		catch (final InvalidPropertyException e) {
-			log.log(Level.FINE, "Invalid property \"" + e.getPropertyName() + "\":", e);
+			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
 		gui.getBikesInf().reset(type);
 		gui.getTabs().updateFormValues();
