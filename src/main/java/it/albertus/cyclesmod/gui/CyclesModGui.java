@@ -110,10 +110,14 @@ public class CyclesModGui implements IShellProvider {
 
 	public void setLanguage(final Language language) {
 		messages.setLanguage(language);
-		shell.setRedraw(false);
-		menuBar.updateLanguage();
-		tabs.updateLanguage();
-		shell.setRedraw(true);
+		shell.setCursor(shell.getDisplay().getSystemCursor(SWT.CURSOR_WAIT));
+		try {
+			menuBar.updateLanguage();
+			tabs.updateLanguage();
+		}
+		finally {
+			shell.setCursor(null);
+		}
 	}
 
 	public void updateModelValues(final boolean lenient) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {

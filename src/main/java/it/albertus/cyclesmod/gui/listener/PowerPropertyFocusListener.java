@@ -9,7 +9,7 @@ import it.albertus.cyclesmod.common.engine.InvalidNumberException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.gui.FormProperty;
+import it.albertus.cyclesmod.gui.model.PowerTextData;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -23,17 +23,18 @@ public class PowerPropertyFocusListener extends PropertyFocusListener {
 
 	@Override
 	public void focusLost(@NonNull final FocusEvent fe) {
-		if (isEnabled()) {
+		if (isEnabled() && fe.widget instanceof Text) {
 			super.focusLost(fe);
 
 			// Update power graph...
-			final Text field = (Text) fe.widget;
-			if (gui.isNumeric(field.getText().trim())) {
+			final Text text = (Text) fe.widget;
+			if (gui.isNumeric(text.getText().trim()) && text.getData() instanceof PowerTextData) {
+				final PowerTextData textData = (PowerTextData) text.getData();
 				try {
-					final int index = (Integer) field.getData(FormProperty.TextDataKey.INDEX.toString());
-					final IPowerGraph graph = (IPowerGraph) field.getData(FormProperty.TextDataKey.GRAPH.toString());
+					final int index = textData.getIndex();
+					final IPowerGraph graph = textData.getPowerGraph();
 
-					final short newValue = Power.parse(field.getData(FormProperty.TextDataKey.KEY.toString()).toString(), field.getText().trim(), gui.getNumeralSystem().getRadix());
+					final short newValue = Power.parse(textData.getKey(), text.getText().trim(), gui.getNumeralSystem().getRadix());
 					final short oldValue = (short) graph.getPowerValue(index);
 					if (oldValue != newValue) {
 						graph.setPowerValue(index, newValue);
