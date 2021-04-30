@@ -32,12 +32,13 @@ import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
 import it.albertus.cyclesmod.common.resources.Messages;
-import it.albertus.cyclesmod.gui.FormProperty.TextDataKey;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.PowerPropertyFocusListener;
 import it.albertus.cyclesmod.gui.listener.PropertyFocusListener;
 import it.albertus.cyclesmod.gui.listener.PropertyKeyListener;
 import it.albertus.cyclesmod.gui.listener.PropertyVerifyListener;
+import it.albertus.cyclesmod.gui.model.GenericTextData;
+import it.albertus.cyclesmod.gui.model.PowerTextData;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.simple.PowerGraphCanvas;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
@@ -104,11 +105,7 @@ public class Tabs implements Multilanguage {
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				final int textSize = Integer.toString(Settings.MAX_VALUE).length();
-				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
-				text.setData(TextDataKey.KEY.toString(), key);
-				text.setData(TextDataKey.SIZE.toString(), textSize);
-				text.setData(TextDataKey.MAX.toString(), Settings.MAX_VALUE);
+				text.setData(new GenericTextData(defaultValue, key, Integer.toString(Settings.MAX_VALUE).length(), Settings.MAX_VALUE));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
@@ -148,11 +145,7 @@ public class Tabs implements Multilanguage {
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				final int textSize = Integer.toString(Gearbox.MAX_VALUE).length();
-				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
-				text.setData(TextDataKey.KEY.toString(), key);
-				text.setData(TextDataKey.SIZE.toString(), textSize);
-				text.setData(TextDataKey.MAX.toString(), Gearbox.MAX_VALUE);
+				text.setData(new GenericTextData(defaultValue, key, Integer.toString(Gearbox.MAX_VALUE).length(), Gearbox.MAX_VALUE));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
@@ -174,13 +167,7 @@ public class Tabs implements Multilanguage {
 				label.setToolTipText(key);
 				final Text text = new Text(powerGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				final int textSize = Integer.toString(Power.MAX_VALUE).length();
-				text.setData(TextDataKey.DEFAULT.toString(), defaultValue);
-				text.setData(TextDataKey.KEY.toString(), key);
-				text.setData(TextDataKey.GRAPH.toString(), powerGraph);
-				text.setData(TextDataKey.INDEX.toString(), index);
-				text.setData(TextDataKey.SIZE.toString(), textSize);
-				text.setData(TextDataKey.MAX.toString(), Integer.valueOf(Power.MAX_VALUE));
+				text.setData(new PowerTextData(defaultValue, key, Integer.toString(Power.MAX_VALUE).length(), Power.MAX_VALUE, index, powerGraph));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(powerPropertyFocusListener);
@@ -213,6 +200,11 @@ public class Tabs implements Multilanguage {
 		gui.getShell().layout(true, true);
 		for (final FormProperty formProperty : formProperties.values()) {
 			formProperty.restore();
+			final Text text = formProperty.getText();
+			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString(((GenericTextData) text.getData()).getDefaultValue(), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			if (text.getToolTipText() == null || !text.getToolTipText().equals(toolTipText)) {
+				text.setToolTipText(toolTipText);
+			}
 		}
 		enableTextListeners();
 	}
@@ -272,7 +264,7 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Update tooltip text...
-			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString((Integer) field.getData(FormProperty.TextDataKey.DEFAULT.toString()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString(((GenericTextData) field.getData()).getDefaultValue(), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}

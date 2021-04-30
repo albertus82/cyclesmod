@@ -6,8 +6,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
-import it.albertus.cyclesmod.gui.FormProperty.TextDataKey;
+import it.albertus.cyclesmod.gui.model.GenericTextData;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class TextFormatter {
 
 	private static final String FONT_KEY = "it.albertus.jface.font.property";
@@ -15,20 +18,15 @@ public class TextFormatter {
 	private static final char SAMPLE_CHAR = '9';
 
 	private final CyclesModGui gui;
-	private final FontRegistry fontRegistry;
-
-	TextFormatter(final CyclesModGui gui) {
-		this.gui = gui;
-		this.fontRegistry = JFaceResources.getFontRegistry();
-	}
+	private final FontRegistry fontRegistry = JFaceResources.getFontRegistry();
 
 	public void clean(final Text text) {
 		if (text != null) {
 			String textValue = text.getText().trim();
-			if (gui.isNumeric(textValue)) {
+			if (gui.isNumeric(textValue) && text.getData() instanceof GenericTextData) {
 				final int actualValue = Integer.parseInt(textValue, gui.getNumeralSystem().getRadix());
-				final Integer maxValue = (Integer) text.getData(TextDataKey.MAX.toString());
-				if (maxValue != null && actualValue > maxValue.intValue()) {
+				final int maxValue = ((GenericTextData) text.getData()).getMaxValue();
+				if (actualValue > maxValue) {
 					textValue = Integer.toString(maxValue, gui.getNumeralSystem().getRadix());
 				}
 				else {
@@ -45,9 +43,9 @@ public class TextFormatter {
 	}
 
 	public void updateFontStyle(final Text text) {
-		if (text != null && gui.isNumeric(text.getText()) && text.getFont() != null && text.getFont().getFontData() != null && text.getFont().getFontData().length > 0 && text.getData(FormProperty.TextDataKey.DEFAULT.toString()) instanceof Integer) {
-			final Integer defaultValue = (Integer) text.getData(FormProperty.TextDataKey.DEFAULT.toString());
-			if (!defaultValue.equals(Integer.valueOf(text.getText(), gui.getNumeralSystem().getRadix()))) {
+		if (text != null && gui.isNumeric(text.getText()) && text.getFont() != null && text.getFont().getFontData() != null && text.getFont().getFontData().length > 0 && text.getData() instanceof GenericTextData) {
+			final int defaultValue = ((GenericTextData) text.getData()).getDefaultValue();
+			if (defaultValue != Integer.parseInt(text.getText(), gui.getNumeralSystem().getRadix())) {
 				if (text.getFont().getFontData()[0].getStyle() != SWT.BOLD) {
 					setBoldFontStyle(text);
 				}
@@ -62,8 +60,8 @@ public class TextFormatter {
 
 	/** Consente la determinazione automatica della larghezza del campo. */
 	public void setSampleNumber(final Text text) {
-		if (text != null && text.getData(TextDataKey.SIZE.toString()) instanceof Integer) {
-			final int size = (Integer) text.getData(TextDataKey.SIZE.toString());
+		if (text != null && text.getData() instanceof GenericTextData) {
+			final int size = ((GenericTextData) text.getData()).getSize();
 			final char[] sample = new char[size];
 			for (int i = 0; i < size; i++) {
 				sample[i] = SAMPLE_CHAR;
