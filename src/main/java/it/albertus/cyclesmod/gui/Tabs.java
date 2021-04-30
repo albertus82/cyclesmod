@@ -105,7 +105,7 @@ public class Tabs implements Multilanguage {
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				text.setData(new GenericTextData(defaultValue, key, Integer.toString(Settings.MAX_VALUE).length(), Settings.MAX_VALUE));
+				text.setData(new GenericTextData(key, defaultValue, Settings.MAX_VALUE));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
@@ -145,7 +145,7 @@ public class Tabs implements Multilanguage {
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				text.setData(new GenericTextData(defaultValue, key, Integer.toString(Gearbox.MAX_VALUE).length(), Gearbox.MAX_VALUE));
+				text.setData(new GenericTextData(key, defaultValue, Gearbox.MAX_VALUE));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
@@ -167,7 +167,7 @@ public class Tabs implements Multilanguage {
 				label.setToolTipText(key);
 				final Text text = new Text(powerGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				text.setData(new PowerTextData(defaultValue, key, Integer.toString(Power.MAX_VALUE).length(), Power.MAX_VALUE, index, powerGraph));
+				text.setData(new PowerTextData(key, defaultValue, Power.MAX_VALUE, index, powerGraph));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(powerPropertyFocusListener);
