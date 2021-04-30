@@ -38,7 +38,7 @@ Download the [latest release](https://github.com/albertus82/cyclesmod/releases/l
 The main application window has three tabs, one for each motorcycle category: 125, 250 and 500 cc. Each tab is divided into three groups:
 
 * General **Settings**
-* **Greabox**
+* **Gearbox**
 * Engine **Power**
 
 There is also a graph of the power/torque curve that is generated in real time from the engine power values present in the relevant group.
