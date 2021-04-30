@@ -6,8 +6,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-import it.albertus.cyclesmod.gui.FormProperty;
 import it.albertus.cyclesmod.gui.Tabs;
+import it.albertus.cyclesmod.gui.model.FormProperty;
 import it.albertus.jface.SwtUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

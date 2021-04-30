@@ -5,8 +5,8 @@ import java.util.function.Supplier;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-import it.albertus.cyclesmod.gui.FormProperty;
 import it.albertus.cyclesmod.gui.Tabs;
+import it.albertus.cyclesmod.gui.model.FormProperty;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

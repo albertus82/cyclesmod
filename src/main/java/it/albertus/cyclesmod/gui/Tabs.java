@@ -37,6 +37,7 @@ import it.albertus.cyclesmod.gui.listener.PowerPropertyFocusListener;
 import it.albertus.cyclesmod.gui.listener.PropertyFocusListener;
 import it.albertus.cyclesmod.gui.listener.PropertyKeyListener;
 import it.albertus.cyclesmod.gui.listener.PropertyVerifyListener;
+import it.albertus.cyclesmod.gui.model.FormProperty;
 import it.albertus.cyclesmod.gui.model.GenericTextData;
 import it.albertus.cyclesmod.gui.model.PowerTextData;
 import it.albertus.cyclesmod.gui.powergraph.IPowerGraph;

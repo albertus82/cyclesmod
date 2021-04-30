@@ -2,10 +2,9 @@ package it.albertus.cyclesmod.gui.listener;
 
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.events.TypedEvent;
-import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.gui.FormProperty;
+import it.albertus.cyclesmod.gui.model.FormProperty;
 import it.albertus.jface.SwtUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +20,9 @@ public class EditMenuListener implements ArmMenuListener {
 
 	@Override
 	public void menuArmed(final TypedEvent e) {
-		final MenuItem cutMenuItem = gui.getMenuBar().getEditCutMenuItem();
-		cutMenuItem.setEnabled(canCut());
-
-		final MenuItem copyMenuItem = gui.getMenuBar().getEditCopyMenuItem();
-		copyMenuItem.setEnabled(canCopy());
-
-		final MenuItem pasteMenuItem = gui.getMenuBar().getEditPasteMenuItem();
-		pasteMenuItem.setEnabled(canPaste());
+		gui.getMenuBar().getEditCutMenuItem().setEnabled(canCut());
+		gui.getMenuBar().getEditCopyMenuItem().setEnabled(canCopy());
+		gui.getMenuBar().getEditPasteMenuItem().setEnabled(canPaste());
 	}
 
 	private boolean canCut() {

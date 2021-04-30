@@ -14,7 +14,7 @@ import it.albertus.cyclesmod.common.model.BikeType;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.gui.CyclesModGui;
-import it.albertus.cyclesmod.gui.FormProperty;
+import it.albertus.cyclesmod.gui.model.FormProperty;
 import it.albertus.cyclesmod.gui.powergraph.dialog.PowerGraphDialog;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

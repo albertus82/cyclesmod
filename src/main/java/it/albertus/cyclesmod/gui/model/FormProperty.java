@@ -1,15 +1,13 @@
-package it.albertus.cyclesmod.gui;
+package it.albertus.cyclesmod.gui.model;
 
 import org.eclipse.swt.widgets.Text;
 
-import it.albertus.cyclesmod.gui.model.TextBackup;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+@RequiredArgsConstructor
 @ToString(onlyExplicitlyIncluded = true)
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class FormProperty {
 
 	@Getter @ToString.Include private final Text text;
@@ -26,7 +24,7 @@ public class FormProperty {
 
 	public void restore() {
 		if (textBackup == null) {
-			throw new IllegalStateException("Call backup method first!");
+			throw new IllegalStateException("Call backup method first");
 		}
 		if (!this.text.getText().equals(textBackup.getText())) {
 			this.text.setText(textBackup.getText());
