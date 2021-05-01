@@ -55,17 +55,7 @@ public class BikesCfg {
 
 	private void populateProperties(final Reader reader) throws IOException {
 		properties.load(reader);
-		final Map<String, String> deprecatedEntries = new HashMap<>();
-		final String deprecatedPrefix = "torque";
-		for (final String key : properties.stringPropertyNames()) {
-			if (key.contains(deprecatedPrefix)) {
-				deprecatedEntries.put(key, properties.getProperty(key));
-			}
-		}
-		for (final Entry<String, String> entry : deprecatedEntries.entrySet()) {
-			properties.remove(entry.getKey());
-			properties.setProperty(entry.getKey().replace(deprecatedPrefix, Power.PREFIX), entry.getValue());
-		}
+		manageDeprecatedProperties();
 	}
 
 	public static void writeDefault(final Path file) throws IOException {
@@ -83,16 +73,16 @@ public class BikesCfg {
 
 		for (final Bike bike : bikesInf.getBikes().values()) {
 			props.append(lineSeparator).append(lineSeparator);
-			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("common.string.bikes.cfg.begin") + "... ###");
+			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.begin")).append("... ###");
 
 			// Settings
 			props.append(lineSeparator);
 			props.append("# ").append(Settings.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
-			for (final Setting setting : bike.getSettings().getValues().keySet()) {
-				props.append(buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey()));
+			for (final Entry<Setting, Integer> entry : bike.getSettings().getValues().entrySet()) {
+				props.append(buildPropertyKey(bike.getType(), Settings.PREFIX, entry.getKey().getKey()));
 				props.append('=');
-				props.append(bike.getSettings().getValues().get(setting).intValue());
+				props.append(entry.getValue().intValue());
 				props.append(lineSeparator);
 			}
 
@@ -113,7 +103,7 @@ public class BikesCfg {
 			props.append(lineSeparator);
 			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
 				if (index > 0 && index % 8 == 0) {
-					props.append("# " + Power.getRpm(index) + " RPM");
+					props.append("# ").append(Power.getRpm(index)).append(" RPM");
 					props.append(lineSeparator);
 				}
 				props.append(buildPropertyKey(bike.getType(), Power.PREFIX, index));
@@ -122,7 +112,7 @@ public class BikesCfg {
 				props.append(lineSeparator);
 			}
 
-			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - " + messages.get("common.string.bikes.cfg.end") + ". ###");
+			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.end")).append(". ###");
 		}
 
 		props.append(lineSeparator).append(lineSeparator);
@@ -148,6 +138,22 @@ public class BikesCfg {
 			map.put(key, Integer.valueOf(properties.getProperty(key), RADIX));
 		}
 		return map;
+	}
+
+	/** @deprecated torque -> power */
+	@Deprecated
+	private void manageDeprecatedProperties() {
+		final Map<String, String> deprecatedEntries = new HashMap<>();
+		final String deprecatedPrefix = "torque";
+		for (final String key : properties.stringPropertyNames()) {
+			if (key.contains(deprecatedPrefix)) {
+				deprecatedEntries.put(key, properties.getProperty(key));
+			}
+		}
+		for (final Entry<String, String> entry : deprecatedEntries.entrySet()) {
+			properties.remove(entry.getKey());
+			properties.setProperty(entry.getKey().replace(deprecatedPrefix, Power.PREFIX), entry.getValue());
+		}
 	}
 
 }
