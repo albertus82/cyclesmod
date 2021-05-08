@@ -82,7 +82,7 @@ Each bike has eight general settings that determine the following characteristic
 * **Overrev grace period**: grace period during which the engine does not fail despite running at a higher speed than the *RPM redline*; the value is expressed in a linear unit of measurement of time which varies according to the difficulty level. Valid value range: `0`-`32767`. The following list can be useful to determine the value based on the desired tolerance in seconds, depending on the difficulty level:
 
    * Level 1/5 (Beg.): The engine never fails unless `0` is set.
-   * Level 2/5: 1 sec. = `50` (automatic transmission is still active).
+   * Level 2/5: 1 sec. = `50` (automatic gearbox is still active).
    * Level 3/5: 1 sec. = `80`.
    * Level 4/5: 1 sec. = `120`.
    * Level 5/5 (Pro): 1 sec. = `160`.
