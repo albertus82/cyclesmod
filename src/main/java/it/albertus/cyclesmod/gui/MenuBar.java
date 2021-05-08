@@ -99,6 +99,27 @@ public class MenuBar implements Multilanguage {
 			}
 		});
 
+		new MenuItem(fileMenu, SWT.SEPARATOR);
+
+		final MenuItem fileExportSubMenuItem = newLocalizedMenuItem(fileMenu, SWT.CASCADE, "gui.label.menu.item.export");
+
+		final Menu fileExportSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		fileExportSubMenuItem.setMenu(fileExportSubMenu);
+
+		newLocalizedMenuItem(fileExportSubMenu, SWT.PUSH, "gui.label.menu.item.export.single").addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.exportSingle(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+			}
+		});
+
+		newLocalizedMenuItem(fileExportSubMenu, SWT.PUSH, "gui.label.menu.item.export.all").addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.exportAll();
+			}
+		});
+
 		if (!cocoaMenuCreated) {
 			new MenuItem(fileMenu, SWT.SEPARATOR);
 

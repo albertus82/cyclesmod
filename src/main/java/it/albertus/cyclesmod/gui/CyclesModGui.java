@@ -2,6 +2,7 @@ package it.albertus.cyclesmod.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -29,6 +30,8 @@ import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
+import it.albertus.cyclesmod.common.model.Bike;
+import it.albertus.cyclesmod.common.model.BikeType;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
@@ -202,6 +205,72 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
+	public boolean exportSingle(final BikeType bikeType) {
+		try {
+			updateModelValues(false);
+		}
+		catch (final InvalidPropertyException e) {
+			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
+		}
+		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
+		final String ext = BikesCfg.FILE_NAME.substring(1 + BikesCfg.FILE_NAME.lastIndexOf('.'));
+		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
+		saveDialog.setFileName(BikesCfg.FILE_NAME.substring(0, BikesCfg.FILE_NAME.lastIndexOf('.')) + bikeType.getDisplacement() + "." + ext);
+		saveDialog.setOverwrite(true);
+		final String fileName = saveDialog.open();
+
+		if (fileName != null && !fileName.trim().isEmpty()) {
+			final String str = BikesCfg.createProperties(engine.getBikesInf().getBikes().get(bikeType));
+			try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), BikesCfg.CHARSET)) {
+				writer.write(str);
+				return true;
+			}
+			catch (final IOException | RuntimeException e) {
+				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean exportAll() {
+		try {
+			updateModelValues(false);
+		}
+		catch (final InvalidPropertyException e) {
+			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
+		}
+		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
+		final String ext = BikesCfg.FILE_NAME.substring(1 + BikesCfg.FILE_NAME.lastIndexOf('.'));
+		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
+		saveDialog.setFileName(BikesCfg.FILE_NAME);
+		saveDialog.setOverwrite(true);
+		final String fileName = saveDialog.open();
+
+		if (fileName != null && !fileName.trim().isEmpty()) {
+			final String str = BikesCfg.createProperties(engine.getBikesInf().getBikes().values().toArray(new Bike[0]));
+			try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), BikesCfg.CHARSET)) {
+				writer.write(str);
+				return true;
+			}
+			catch (final IOException | RuntimeException e) {
+				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
 	public boolean save() {
 		if (bikesInfFileName == null) {
 			return saveAs();
@@ -242,7 +311,8 @@ public class CyclesModGui implements IShellProvider {
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
-		saveDialog.setFilterExtensions(new String[] { "*.INF;*.inf" });
+		final String ext = BikesInf.FILE_NAME.substring(1 + BikesInf.FILE_NAME.lastIndexOf('.'));
+		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
 		saveDialog.setFileName(BikesInf.FILE_NAME);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
