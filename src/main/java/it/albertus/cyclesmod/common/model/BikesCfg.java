@@ -20,9 +20,9 @@ import it.albertus.cyclesmod.common.resources.Messages;
 public class BikesCfg {
 
 	public static final String FILE_NAME = "BIKES.CFG";
+	public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
 
 	private static final int RADIX = 10;
-	private static final Charset CHARSET = StandardCharsets.ISO_8859_1;
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
@@ -34,7 +34,7 @@ public class BikesCfg {
 	 * @param bikesInf the configuration to map
 	 */
 	public BikesCfg(final BikesInf bikesInf) {
-		try (final StringReader reader = new StringReader(createProperties(bikesInf))) {
+		try (final StringReader reader = new StringReader(createProperties(bikesInf.getBikes().values().toArray(new Bike[0])))) {
 			populateProperties(reader);
 		}
 		catch (final IOException e) {
@@ -59,7 +59,7 @@ public class BikesCfg {
 	}
 
 	public static void writeDefault(final Path file) throws IOException {
-		final String props = createProperties(new BikesInf());
+		final String props = createProperties(new BikesInf().getBikes().values().toArray(new Bike[0]));
 
 		// Salvataggio...
 		try (final Writer writer = Files.newBufferedWriter(file, CHARSET)) {
@@ -67,11 +67,11 @@ public class BikesCfg {
 		}
 	}
 
-	private static String createProperties(final BikesInf bikesInf) {
+	public static String createProperties(final Bike... bikes) {
 		final String lineSeparator = System.lineSeparator();
 		final StringBuilder props = new StringBuilder(messages.get("common.string.bikes.cfg.header"));
 
-		for (final Bike bike : bikesInf.getBikes().values()) {
+		for (final Bike bike : bikes) {
 			props.append(lineSeparator).append(lineSeparator);
 			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.begin")).append("... ###");
 
