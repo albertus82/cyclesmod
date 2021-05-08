@@ -8,7 +8,11 @@ CyclesMod
 
 **The Cycles - International Grand Prix Racing** is a motorcycle simulation video game. Dating back to 1989, it was distributed for the most popular platforms of the time, from the Commodore 64 to the IBM PC (DOS), and is now easily available as *Abandonware*.
 
-The game cannot be executed natively on modern operating systems, but runs greatly in [**DOSBox**](https://www.dosbox.com).
+The game cannot be executed natively on modern operating systems, but runs greatly in [**DOSBox**](https://www.dosbox.com):
+
+|Splash screen                  |Game                         |
+|-------------------------------|-----------------------------|
+|![Splash](https://git.io/J3HrG)|![Game](https://git.io/J3Hrc)|
 
 **CyclesMod** is a *mod* for the DOS version of this game, which allows you to **change the configurations of the bikes**, which are usually not accessible to the user:
 
