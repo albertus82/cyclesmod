@@ -10,7 +10,7 @@ public enum Setting { // The order matters.
 	GEARS_COUNT(0, "gearsCount"), // 0-1: numero di marce del cambio (solo lsB).
 	RPM_REDLINE(1, "rpmRedline"), // 2-3: regime redline, min 8500 (stessa scala del regime limitatore, il motore si rompe quando regime >= regime red mark per piu' di qualche secondo; valori <8500 sono considerati =8500).
 	RPM_LIMIT(2, "rpmLimit"), // 4-5: regime limitatore, max 14335 (il contagiri si blocca ma la moto conserva le prestazioni di accelerazione a quel regime, quindi la potenza a quel regime deve essere azzerata se si vuole interrompere l'accelerazione della moto).
-	OVERSPEED_GRACE_PERIOD(3, "overspeedGracePeriod"), // 6-7: periodo di grazia su red mark (valore alto: il motore si rompe dopo piu' tempo. Per valori msB >=0x80 si rompe subito).
+	OVERREV_TOLERANCE(3, "overrevTolerance"), // 6-7: periodo di grazia su red mark (valore alto: il motore si rompe dopo piu' tempo. Per valori msB >=0x80 si rompe subito).
 	GRIP(4, "grip"), // 8-9: soglia di slittamento in sterzata (valore alto: slitta meno).
 	UNKNOWN_1(5, "unknown1"), // 10-11: ?
 	BRAKING_SPEED(6, "brakingSpeed"), // 12-13: velocita' di frenata.
