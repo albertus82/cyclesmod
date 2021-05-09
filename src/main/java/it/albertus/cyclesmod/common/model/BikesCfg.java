@@ -145,30 +145,19 @@ public class BikesCfg {
 		return map;
 	}
 
-	/** @deprecated torque -> power */
-	@Deprecated
 	private void manageDeprecatedProperties() {
-		final Map<String, String> deprecatedEntries = new HashMap<>();
-
 		final Map<String, String> replacements = new HashMap<>();
 		replacements.put(".torque.", '.' + Power.PREFIX + '.');
 		replacements.put(".overspeedGracePeriod", '.' + Setting.OVERREV_TOLERANCE.getKey());
 
 		for (final String key : properties.stringPropertyNames()) {
-			if (replacements.keySet().stream().map(k -> k.toLowerCase(Locale.ROOT)).anyMatch(deprecatedKeyPart -> key.toLowerCase(Locale.ROOT).contains(deprecatedKeyPart))) {
-				deprecatedEntries.put(key, properties.getProperty(key));
-			}
-		}
-		for (final Entry<String, String> deprecatedEntry : deprecatedEntries.entrySet()) {
-			properties.remove(deprecatedEntry.getKey());
-			String newKey = deprecatedEntry.getKey();
-			for (final Entry<String, String> e : replacements.entrySet()) {
-				if (newKey.toLowerCase(Locale.ROOT).contains(e.getKey().toLowerCase(Locale.ROOT))) {
-					log.log(Level.INFO, "{0} -> {1}", new String[] { e.getKey(), e.getValue() });
-					newKey = newKey.replaceAll("(?i)" + Pattern.quote(e.getKey()), e.getValue());
+			for (final Entry<String, String> replacement : replacements.entrySet()) {
+				if (key.toLowerCase(Locale.ROOT).contains(replacement.getKey().toLowerCase(Locale.ROOT))) {
+					log.log(Level.INFO, "{0} -> {1}", new String[] { replacement.getKey(), replacement.getValue() });
+					properties.setProperty(key.replaceAll("(?i)" + Pattern.quote(replacement.getKey()), replacement.getValue()), properties.remove(key).toString());
+					break;
 				}
 			}
-			properties.setProperty(newKey, deprecatedEntry.getValue());
 		}
 	}
 
