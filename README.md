@@ -77,7 +77,7 @@ Each bike has eight general settings that determine the following characteristic
 
 * **RPM redline**: engine speed beyond which, after a variable time determined by the *Overrev grace period* setting and the difficulty level chosen, the engine breaks down. At difficulty levels 1 and 2 (the lowest), this value also determines the upshift speed. Valid value range: `8500`-`32767` RPM.
 
-* **RPM limit**: maximum speed that the engine can reach (limiter). Valid value range: `768`-`14335` RPM. Note that, once the limit is reached, the motorcycle continues to accelerate with the engine power set for the limit RPM, therefore, to effectively limit the speed to a certain value, it is necessary to set to zero the power values ​​around this RPM limit.
+* **RPM limit**: maximum speed that the engine can reach (limiter). Valid value range: `768`-`14335` RPM. Note that, once the limit is reached, the motorcycle continues to accelerate with the engine power set for the limit RPM, therefore, to effectively limit the speed to a certain value, it is necessary to set to zero the power values around this RPM limit.
 
 * **Overrev grace period**: grace period during which the engine does not fail despite running at a higher speed than the *RPM redline*; the value is expressed in a linear unit of measurement of time which varies according to the difficulty level. Valid value range: `0`-`32767`. The following list can be useful to determine the value based on the desired tolerance in seconds, depending on the difficulty level:
 
