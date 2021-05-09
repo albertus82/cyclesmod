@@ -205,7 +205,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	public boolean exportSingle(final BikeType bikeType) {
+	public boolean export(@NonNull final BikeType bikeType) {
 		try {
 			updateModelValues(false);
 		}
@@ -214,7 +214,7 @@ public class CyclesModGui implements IShellProvider {
 			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
-		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
+		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 		final String ext = BikesCfg.FILE_NAME.substring(1 + BikesCfg.FILE_NAME.lastIndexOf('.'));
 		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
 		saveDialog.setFileName(BikesCfg.FILE_NAME.substring(0, BikesCfg.FILE_NAME.lastIndexOf('.')) + bikeType.getDisplacement() + "." + ext);
@@ -247,7 +247,7 @@ public class CyclesModGui implements IShellProvider {
 			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
-		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
+		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 		final String ext = BikesCfg.FILE_NAME.substring(1 + BikesCfg.FILE_NAME.lastIndexOf('.'));
 		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
 		saveDialog.setFileName(BikesCfg.FILE_NAME);
@@ -269,6 +269,54 @@ public class CyclesModGui implements IShellProvider {
 		else {
 			return false;
 		}
+	}
+
+	public boolean reset(@NonNull final BikeType type) {
+		final MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText(messages.get("gui.message.warning"));
+		messageBox.setMessage(messages.get("gui.message.reset.overwrite.single", type.getDisplacement()));
+		int choose = messageBox.open();
+		if (choose == SWT.YES) {
+			try {
+				resetSingle(type);
+				return true;
+			}
+			catch (final RuntimeException e) {
+				log.log(Level.WARNING, "Cannot reset bike " + type + ':', e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
+			}
+		}
+		return false;
+	}
+
+	private void resetSingle(@NonNull final BikeType type) {
+		try {
+			updateModelValues(true);
+		}
+		catch (final InvalidPropertyException e) {
+			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
+		}
+		engine.getBikesInf().reset(type);
+		tabs.updateFormValues();
+	}
+
+	public boolean resetAll() {
+		final MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText(messages.get("gui.message.warning"));
+		messageBox.setMessage(messages.get("gui.message.reset.overwrite.all"));
+		int choose = messageBox.open();
+		if (choose == SWT.YES) {
+			try {
+				engine.getBikesInf().reset();
+				tabs.updateFormValues();
+				return true;
+			}
+			catch (final RuntimeException e) {
+				log.log(Level.WARNING, "Cannot reset bikes:", e);
+				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
+			}
+		}
+		return false;
 	}
 
 	public boolean save() {
@@ -310,7 +358,7 @@ public class CyclesModGui implements IShellProvider {
 			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
-		final FileDialog saveDialog = new FileDialog(getShell(), SWT.SAVE);
+		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 		final String ext = BikesInf.FILE_NAME.substring(1 + BikesInf.FILE_NAME.lastIndexOf('.'));
 		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
 		saveDialog.setFileName(BikesInf.FILE_NAME);
