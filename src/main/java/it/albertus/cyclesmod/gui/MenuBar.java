@@ -24,8 +24,6 @@ import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.OpenSelectionListener;
 import it.albertus.cyclesmod.gui.listener.PasteSelectionListener;
 import it.albertus.cyclesmod.gui.listener.RadixSelectionListener;
-import it.albertus.cyclesmod.gui.listener.ResetAllSelectionListener;
-import it.albertus.cyclesmod.gui.listener.ResetSingleSelectionListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.Multilanguage;
 import it.albertus.jface.SwtUtils;
@@ -109,7 +107,7 @@ public class MenuBar implements Multilanguage {
 		newLocalizedMenuItem(fileExportSubMenu, SWT.PUSH, "gui.label.menu.item.export.single").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.exportSingle(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+				gui.export(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 
@@ -164,9 +162,19 @@ public class MenuBar implements Multilanguage {
 		final Menu editResetSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editResetSubMenuItem.setMenu(editResetSubMenu);
 
-		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.reset.single").addSelectionListener(new ResetSingleSelectionListener(gui));
+		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.reset.single").addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.reset(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+			}
+		});
 
-		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.reset.all").addSelectionListener(new ResetAllSelectionListener(gui));
+		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.reset.all").addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.resetAll();
+			}
+		});
 
 		// View
 		final Menu viewMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
