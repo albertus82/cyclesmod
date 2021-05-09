@@ -10,13 +10,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
+import lombok.extern.java.Log;
 
+@Log
 public class BikesCfg {
 
 	public static final String FILE_NAME = "BIKES.CFG";
@@ -144,15 +149,26 @@ public class BikesCfg {
 	@Deprecated
 	private void manageDeprecatedProperties() {
 		final Map<String, String> deprecatedEntries = new HashMap<>();
-		final String deprecatedPrefix = "torque";
+
+		final Map<String, String> replacements = new HashMap<>();
+		replacements.put(".torque.", '.' + Power.PREFIX + '.');
+		replacements.put(".overspeedGracePeriod", '.' + Setting.OVERREV_TOLERANCE.getKey());
+
 		for (final String key : properties.stringPropertyNames()) {
-			if (key.contains(deprecatedPrefix)) {
+			if (replacements.keySet().stream().map(k -> k.toLowerCase(Locale.ROOT)).anyMatch(deprecatedKeyPart -> key.toLowerCase(Locale.ROOT).contains(deprecatedKeyPart))) {
 				deprecatedEntries.put(key, properties.getProperty(key));
 			}
 		}
-		for (final Entry<String, String> entry : deprecatedEntries.entrySet()) {
-			properties.remove(entry.getKey());
-			properties.setProperty(entry.getKey().replace(deprecatedPrefix, Power.PREFIX), entry.getValue());
+		for (final Entry<String, String> deprecatedEntry : deprecatedEntries.entrySet()) {
+			properties.remove(deprecatedEntry.getKey());
+			String newKey = deprecatedEntry.getKey();
+			for (final Entry<String, String> e : replacements.entrySet()) {
+				if (newKey.toLowerCase(Locale.ROOT).contains(e.getKey().toLowerCase(Locale.ROOT))) {
+					log.log(Level.INFO, "{0} -> {1}", new String[] { e.getKey(), e.getValue() });
+					newKey = newKey.replaceAll("(?i)" + Pattern.quote(e.getKey()), e.getValue());
+				}
+			}
+			properties.setProperty(newKey, deprecatedEntry.getValue());
 		}
 	}
 
