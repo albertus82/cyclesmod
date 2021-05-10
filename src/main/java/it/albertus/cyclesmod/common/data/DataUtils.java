@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class Loader {
+class DataUtils {
 
-	static byte[] load(@NonNull final String deflatedBase64, final int expectedSize, final long expectedCrc32) throws DataFormatException, InvalidSizeException, InvalidChecksumException {
+	static byte[] inflate(@NonNull final String deflatedBase64, final int expectedSize, final long expectedCrc32) throws DataFormatException, InvalidSizeException, InvalidChecksumException {
 		final Inflater inflater = new Inflater();
 		inflater.setInput(Base64.getDecoder().decode(deflatedBase64));
 		final byte[] bytes = new byte[expectedSize];

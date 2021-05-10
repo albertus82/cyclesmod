@@ -13,13 +13,13 @@ public class DefaultBikes {
 
 	private static final long CRC32 = 0x28A33682L;
 
-	private static final String DEFLATE_BASE64 = "eNpjY1ihv8GsiPEdEwQmAaGMKgMDwwaGmQytDMUMqQyRkpQAGTCQhwBFZWUVZKAIA5L8rAxwgO6mMiAEu2kBQwfQRYkMYQx+qpQALSjQ1QcBIxNzBDCCAn1dDWUZEX4uVribLAxBbuJh5mEGuakLCJVUgBKTGGoYMhkiGfwYXPRJBI7IwBsLCIAAJBE3R3NdZRGoqwArb09n";
+	private static final String DEFLATED_BASE64 = "eNpjY1ihv8GsiPEdEwQmAaGMKgMDwwaGmQytDMUMqQyRkpQAGTCQhwBFZWUVZKAIA5L8rAxwgO6mMiAEu2kBQwfQRYkMYQx+qpQALSjQ1QcBIxNzBDCCAn1dDWUZEX4uVribLAxBbuJh5mEGuakLCJVUgBKTGGoYMhkiGfwYXPRJBI7IwBsLCIAAJBE3R3NdZRGoqwArb09n";
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
 	public static byte[] getByteArray() {
 		try {
-			return Loader.load(DEFLATE_BASE64, BikesInf.FILE_SIZE, CRC32);
+			return DataUtils.inflate(DEFLATED_BASE64, BikesInf.FILE_SIZE, CRC32);
 		}
 		catch (final DataFormatException e) {
 			throw new VerifyError(messages.get("common.error.original.file.corrupted", BikesInf.FILE_NAME), e);
