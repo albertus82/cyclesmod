@@ -273,7 +273,7 @@ public class CyclesModGui implements IShellProvider {
 
 	public boolean reset(@NonNull final BikeType type) {
 		final MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText(messages.get("gui.message.warning"));
+		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
 		messageBox.setMessage(messages.get("gui.message.reset.overwrite.single", type.getDisplacement()));
 		int choose = messageBox.open();
 		if (choose == SWT.YES) {
@@ -302,7 +302,7 @@ public class CyclesModGui implements IShellProvider {
 
 	public boolean resetAll() {
 		final MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText(messages.get("gui.message.warning"));
+		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
 		messageBox.setMessage(messages.get("gui.message.reset.overwrite.all"));
 		int choose = messageBox.open();
 		if (choose == SWT.YES) {
