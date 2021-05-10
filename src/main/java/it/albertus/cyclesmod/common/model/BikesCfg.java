@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
 
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
@@ -31,15 +33,24 @@ public class BikesCfg {
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
-	private final Properties properties = new Properties();
+	@Getter private final Properties properties = new Properties();
 
 	/**
-	 * Creates a new instance mapping the provided configuration.
+	 * Creates a new instance containing the provided configuration.
 	 * 
 	 * @param bikesInf the configuration to map
 	 */
-	public BikesCfg(final BikesInf bikesInf) {
-		try (final StringReader reader = new StringReader(createProperties(bikesInf.getBikes().values().toArray(new Bike[0])))) {
+	public BikesCfg(@NonNull final BikesInf bikesInf) {
+		this(bikesInf.getBikes().values().toArray(new Bike[0]));
+	}
+
+	/**
+	 * Creates a new instance containing the provided bike configurations.
+	 * 
+	 * @param bikes the bike configurations to map
+	 */
+	public BikesCfg(final Bike... bikes) {
+		try (final StringReader reader = new StringReader(createProperties(bikes))) {
 			populateProperties(reader);
 		}
 		catch (final IOException e) {
@@ -52,18 +63,18 @@ public class BikesCfg {
 	 * 
 	 * @param bikesCfgFile the file to read
 	 */
-	public BikesCfg(final Path bikesCfgFile) throws IOException {
+	public BikesCfg(@NonNull final Path bikesCfgFile) throws IOException {
 		try (final Reader reader = Files.newBufferedReader(bikesCfgFile, CHARSET)) {
 			populateProperties(reader);
 		}
 	}
 
-	private void populateProperties(final Reader reader) throws IOException {
+	private void populateProperties(@NonNull final Reader reader) throws IOException {
 		properties.load(reader);
 		manageDeprecatedProperties();
 	}
 
-	public static void writeDefault(final Path file) throws IOException {
+	public static void writeDefault(@NonNull final Path file) throws IOException {
 		final String props = createProperties(new BikesInf().getBikes().values().toArray(new Bike[0]));
 
 		// Salvataggio...
@@ -131,10 +142,6 @@ public class BikesCfg {
 
 	public static String buildPropertyKey(final BikeType bikeType, final String prefix, final int suffix) {
 		return buildPropertyKey(bikeType, prefix, Integer.toString(suffix));
-	}
-
-	public Properties getProperties() {
-		return properties;
 	}
 
 	public Map<String, Integer> getMap() {
