@@ -137,7 +137,7 @@ public class BikesCfg {
 	}
 
 	public static String buildPropertyKey(final BikeType bikeType, final String prefix, final String suffix) {
-		return Integer.toString(bikeType.getDisplacement()) + '.' + prefix + '.' + suffix;
+		return bikeType.getDisplacement() + "." + prefix + "." + suffix;
 	}
 
 	public static String buildPropertyKey(final BikeType bikeType, final String prefix, final int suffix) {
