@@ -220,20 +220,17 @@ public class CyclesModGui implements IShellProvider {
 		saveDialog.setFileName(BikesCfg.FILE_NAME.substring(0, BikesCfg.FILE_NAME.lastIndexOf('.')) + bikeType.getDisplacement() + "." + ext);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
-
-		if (fileName != null && !fileName.trim().isEmpty()) {
-			final String str = BikesCfg.createProperties(engine.getBikesInf().getBikes().get(bikeType));
-			try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), BikesCfg.CHARSET)) {
-				writer.write(str);
-				return true;
-			}
-			catch (final IOException | RuntimeException e) {
-				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
-				return false;
-			}
+		if (fileName == null || fileName.trim().isEmpty()) {
+			return false;
 		}
-		else {
+		final String str = BikesCfg.createProperties(engine.getBikesInf().getBikes().get(bikeType));
+		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), BikesCfg.CHARSET)) {
+			writer.write(str);
+			return true;
+		}
+		catch (final IOException | RuntimeException e) {
+			log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -253,20 +250,17 @@ public class CyclesModGui implements IShellProvider {
 		saveDialog.setFileName(BikesCfg.FILE_NAME);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
-
-		if (fileName != null && !fileName.trim().isEmpty()) {
-			final String str = BikesCfg.createProperties(engine.getBikesInf().getBikes().values().toArray(new Bike[0]));
-			try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), BikesCfg.CHARSET)) {
-				writer.write(str);
-				return true;
-			}
-			catch (final IOException | RuntimeException e) {
-				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
-				return false;
-			}
+		if (fileName == null || fileName.trim().isEmpty()) {
+			return false;
 		}
-		else {
+		final String str = BikesCfg.createProperties(engine.getBikesInf().getBikes().values().toArray(new Bike[0]));
+		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), BikesCfg.CHARSET)) {
+			writer.write(str);
+			return true;
+		}
+		catch (final IOException | RuntimeException e) {
+			log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
