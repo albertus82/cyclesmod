@@ -99,22 +99,27 @@ public class MenuBar implements Multilanguage {
 
 		new MenuItem(fileMenu, SWT.SEPARATOR);
 
-		final MenuItem fileExportSubMenuItem = newLocalizedMenuItem(fileMenu, SWT.CASCADE, "gui.label.menu.item.export");
+		final MenuItem fileExportAsSubMenuItem = newLocalizedMenuItem(fileMenu, SWT.CASCADE, "gui.label.menu.item.export.as");
 
-		final Menu fileExportSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		fileExportSubMenuItem.setMenu(fileExportSubMenu);
+		final Menu fileExportAsSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		fileExportAsSubMenuItem.setMenu(fileExportAsSubMenu);
 
-		newLocalizedMenuItem(fileExportSubMenu, SWT.PUSH, "gui.label.menu.item.export.single").addSelectionListener(new SelectionAdapter() {
+		final MenuItem fileExportAsCfgSubMenuItem = newLocalizedMenuItem(fileExportAsSubMenu, SWT.CASCADE, "gui.label.menu.item.export.as.cfg");
+
+		final Menu fileExportAsCfgSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		fileExportAsCfgSubMenuItem.setMenu(fileExportAsCfgSubMenu);
+
+		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, "gui.label.menu.item.bike.single").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.export(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+				gui.exportAsCfg(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 
-		newLocalizedMenuItem(fileExportSubMenu, SWT.PUSH, "gui.label.menu.item.export.all").addSelectionListener(new SelectionAdapter() {
+		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, "gui.label.menu.item.bike.all").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.exportAll();
+				gui.exportAllAsCfg();
 			}
 		});
 
@@ -162,14 +167,14 @@ public class MenuBar implements Multilanguage {
 		final Menu editResetSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editResetSubMenuItem.setMenu(editResetSubMenu);
 
-		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.reset.single").addSelectionListener(new SelectionAdapter() {
+		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.bike.single").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				gui.reset(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 
-		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.reset.all").addSelectionListener(new SelectionAdapter() {
+		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.bike.all").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				gui.resetAll();
