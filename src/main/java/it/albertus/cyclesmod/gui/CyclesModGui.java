@@ -275,18 +275,18 @@ public class CyclesModGui implements IShellProvider {
 		final MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
 		messageBox.setMessage(messages.get("gui.message.reset.overwrite.single", type.getDisplacement()));
-		int choose = messageBox.open();
-		if (choose == SWT.YES) {
-			try {
-				resetSingle(type);
-				return true;
-			}
-			catch (final RuntimeException e) {
-				log.log(Level.WARNING, "Cannot reset bike " + type + ':', e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
-			}
+		if (messageBox.open() != SWT.YES) {
+			return false;
 		}
-		return false;
+		try {
+			resetSingle(type);
+			return true;
+		}
+		catch (final RuntimeException e) {
+			log.log(Level.WARNING, "Cannot reset bike " + type + ':', e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
+		}
 	}
 
 	private void resetSingle(@NonNull final BikeType type) {
@@ -304,19 +304,19 @@ public class CyclesModGui implements IShellProvider {
 		final MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
 		messageBox.setMessage(messages.get("gui.message.reset.overwrite.all"));
-		int choose = messageBox.open();
-		if (choose == SWT.YES) {
-			try {
-				engine.getBikesInf().reset();
-				tabs.updateFormValues();
-				return true;
-			}
-			catch (final RuntimeException e) {
-				log.log(Level.WARNING, "Cannot reset bikes:", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
-			}
+		if (messageBox.open() != SWT.YES) {
+			return false;
 		}
-		return false;
+		try {
+			engine.getBikesInf().reset();
+			tabs.updateFormValues();
+			return true;
+		}
+		catch (final RuntimeException e) {
+			log.log(Level.WARNING, "Cannot reset bikes:", e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
+		}
 	}
 
 	public boolean save() {
