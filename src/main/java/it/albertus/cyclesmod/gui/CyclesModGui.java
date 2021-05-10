@@ -205,7 +205,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	public boolean export(@NonNull final BikeType bikeType) {
+	public boolean exportAsCfg(@NonNull final BikeType bikeType) {
 		try {
 			updateModelValues(false);
 		}
@@ -238,7 +238,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	public boolean exportAll() {
+	public boolean exportAllAsCfg() {
 		try {
 			updateModelValues(false);
 		}
