@@ -81,7 +81,7 @@ public class Tabs implements Multilanguage {
 		tabFolder = new TabFolder(gui.getShell(), SWT.NONE);
 		for (final Bike bike : gui.getBikesInf().getBikes().values()) {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-			tabItem.setText(bike.getType().getDisplacement() + " cc");
+			tabItem.setText("&" + bike.getType().getDisplacement() + " cc");
 
 			// This outer composite is required for GTK!
 			final Composite outerComposite = new Composite(tabFolder, SWT.NONE);
