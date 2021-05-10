@@ -16,20 +16,21 @@ import lombok.NonNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefaultBikes {
 
-	public static final int CRC32 = 0x28A33682;
+	private static final long CRC32 = 0x28A33682L;
 
 	private static final String DEFLATE_BASE64 = "eNpjY1ihv8GsiPEdEwQmAaGMKgMDwwaGmQytDMUMqQyRkpQAGTCQhwBFZWUVZKAIA5L8rAxwgO6mMiAEu2kBQwfQRYkMYQx+qpQALSjQ1QcBIxNzBDCCAn1dDWUZEX4uVribLAxBbuJh5mEGuakLCJVUgBKTGGoYMhkiGfwYXPRJBI7IwBsLCIAAJBE3R3NdZRGoqwArb09n";
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
 	public static byte[] getByteArray() {
+		final short expectedSize = BikesInf.FILE_SIZE;
 		final Inflater inflater = new Inflater();
 		inflater.setInput(Base64.getDecoder().decode(DEFLATE_BASE64));
-		final byte[] bytes = new byte[BikesInf.FILE_SIZE];
+		final byte[] bytes = new byte[expectedSize];
 		try {
-			final int size = inflater.inflate(bytes);
-			if (size != BikesInf.FILE_SIZE) {
-				throw new VerifyError(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, BikesInf.FILE_SIZE, size), new InvalidSizeException(BikesInf.FILE_SIZE, size));
+			final int actualSize = inflater.inflate(bytes);
+			if (actualSize != expectedSize) {
+				throw new VerifyError(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, expectedSize, actualSize), new InvalidSizeException(expectedSize, actualSize));
 			}
 		}
 		catch (final DataFormatException e) {

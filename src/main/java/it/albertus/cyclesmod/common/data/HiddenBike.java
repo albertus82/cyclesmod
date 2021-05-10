@@ -23,7 +23,7 @@ public class HiddenBike {
 	private static final Messages messages = CommonMessages.INSTANCE;
 
 	public static byte[] getByteArray() {
-		final int expectedSize = BikesInf.FILE_SIZE / 3;
+		final short expectedSize = BikesInf.FILE_SIZE / 3;
 		final Inflater inflater = new Inflater();
 		inflater.setInput(Base64.getDecoder().decode(DEFLATE_BASE64));
 		final byte[] bytes = new byte[expectedSize];
