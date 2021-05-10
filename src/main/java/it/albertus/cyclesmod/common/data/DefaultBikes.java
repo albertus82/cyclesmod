@@ -1,17 +1,12 @@
 package it.albertus.cyclesmod.common.data;
 
-import java.util.Base64;
-import java.util.zip.CRC32;
-import java.util.zip.Checksum;
 import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
 
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefaultBikes {
@@ -23,33 +18,18 @@ public class DefaultBikes {
 	private static final Messages messages = CommonMessages.INSTANCE;
 
 	public static byte[] getByteArray() {
-		final short expectedSize = BikesInf.FILE_SIZE;
-		final Inflater inflater = new Inflater();
-		inflater.setInput(Base64.getDecoder().decode(DEFLATE_BASE64));
-		final byte[] bytes = new byte[expectedSize];
 		try {
-			final int actualSize = inflater.inflate(bytes);
-			if (actualSize != expectedSize) {
-				throw new VerifyError(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, expectedSize, actualSize), new InvalidSizeException(expectedSize, actualSize));
-			}
+			return Loader.load(DEFLATE_BASE64, BikesInf.FILE_SIZE, CRC32);
 		}
 		catch (final DataFormatException e) {
 			throw new VerifyError(messages.get("common.error.original.file.corrupted", BikesInf.FILE_NAME), e);
 		}
-		finally {
-			inflater.end();
+		catch (final InvalidSizeException e) {
+			throw new VerifyError(messages.get("common.error.original.file.corrupted.size", BikesInf.FILE_NAME, e.getExpected(), e.getActual()), e);
 		}
-		final long crc32 = computeCrc32(bytes);
-		if (crc32 != CRC32) {
-			throw new VerifyError(messages.get("common.error.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", CRC32), String.format("%08X", crc32)));
+		catch (final InvalidChecksumException e) {
+			throw new VerifyError(messages.get("common.error.original.file.corrupted.crc", BikesInf.FILE_NAME, String.format("%08X", e.getExpected()), String.format("%08X", e.getActual())), e);
 		}
-		return bytes;
-	}
-
-	private static long computeCrc32(@NonNull final byte[] bytes) {
-		final Checksum crc = new CRC32();
-		crc.update(bytes, 0, bytes.length);
-		return crc.getValue();
 	}
 
 }
