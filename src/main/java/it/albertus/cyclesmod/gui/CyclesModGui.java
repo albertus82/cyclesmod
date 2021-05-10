@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 
 import org.eclipse.core.runtime.IStatus;
@@ -23,6 +24,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cyclesmod.common.data.HiddenBike;
 import it.albertus.cyclesmod.common.data.InvalidSizeException;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.InvalidNumberException;
@@ -265,40 +267,34 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	public boolean reset(@NonNull final BikeType type) {
-		final MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
-		messageBox.setMessage(messages.get("gui.message.reset.overwrite.single", type.getDisplacement()));
-		if (messageBox.open() != SWT.YES) {
+	public boolean reset(@NonNull final BikeType bikeType) {
+		if (openMessageBox(messages.get("gui.message.reset.overwrite.single", bikeType.getDisplacement()), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
 			return false;
 		}
 		try {
-			resetSingle(type);
+			resetSingle(bikeType);
 			return true;
 		}
 		catch (final RuntimeException e) {
-			log.log(Level.WARNING, "Cannot reset bike " + type + ':', e);
+			log.log(Level.WARNING, "Cannot reset bike " + bikeType + ':', e);
 			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
 
-	private void resetSingle(@NonNull final BikeType type) {
+	private void resetSingle(@NonNull final BikeType bikeType) {
 		try {
 			updateModelValues(true);
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
-		engine.getBikesInf().reset(type);
+		engine.getBikesInf().reset(bikeType);
 		tabs.updateFormValues();
 	}
 
 	public boolean resetAll() {
-		final MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
-		messageBox.setMessage(messages.get("gui.message.reset.overwrite.all"));
-		if (messageBox.open() != SWT.YES) {
+		if (openMessageBox(messages.get("gui.message.reset.overwrite.all"), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
 			return false;
 		}
 		try {
@@ -378,11 +374,30 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	private void openMessageBox(@NonNull final String message, final int style) {
+	public boolean loadHiddenCfg(@NonNull final BikeType type) {
+		if (openMessageBox(messages.get("gui.message.hiddenCfg.overwrite", type.getDisplacement()), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
+			return false;
+		}
+		try {
+			final Properties properties = new BikesCfg(new Bike(type, HiddenBike.getByteArray())).getProperties();
+			for (final String key : properties.stringPropertyNames()) {
+				engine.applyProperty(key, properties.getProperty(key));
+			}
+			tabs.updateFormValues();
+			return true;
+		}
+		catch (final InvalidPropertyException | RuntimeException e) {
+			log.log(Level.WARNING, "Cannot load hidden configuration into bike " + type + ':', e);
+			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.hiddenCfg"), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
+		}
+	}
+
+	private int openMessageBox(@NonNull final String message, final int style) {
 		final MessageBox messageBox = new MessageBox(shell, style);
 		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
 		messageBox.setMessage(message);
-		messageBox.open();
+		return messageBox.open();
 	}
 
 	public NumeralSystem getNumeralSystem() {
