@@ -20,7 +20,6 @@ import it.albertus.cyclesmod.gui.listener.CopySelectionListener;
 import it.albertus.cyclesmod.gui.listener.CutSelectionListener;
 import it.albertus.cyclesmod.gui.listener.EditMenuListener;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
-import it.albertus.cyclesmod.gui.listener.OpenSelectionListener;
 import it.albertus.cyclesmod.gui.listener.PasteSelectionListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.Multilanguage;
@@ -76,7 +75,12 @@ public class MenuBar implements Multilanguage {
 		newLocalizedMenuItem(bar, SWT.CASCADE, "gui.label.menu.header.file").setMenu(fileMenu);
 
 		final MenuItem fileOpenMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.open") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
-		fileOpenMenuItem.addSelectionListener(new OpenSelectionListener(gui));
+		fileOpenMenuItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.open();
+			}
+		});
 		fileOpenMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_OPEN);
 
 		final MenuItem fileSaveMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.save") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));

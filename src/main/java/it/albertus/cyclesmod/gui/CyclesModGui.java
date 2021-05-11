@@ -146,15 +146,16 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean open() {
+		if (!askForSaving(messages.get("gui.label.window.title"), messages.get("gui.message.confirm.open.message"))) {
+			return false;
+		}
 		final FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
 		openDialog.setFilterExtensions(new String[] { "*.INF;*.inf;*.CFG;*.cfg" });
 		final String fileName = openDialog.open();
-		if (fileName != null && !fileName.trim().isEmpty()) {
-			return open(fileName);
-		}
-		else {
+		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
+		return open(fileName);
 	}
 
 	private boolean open(@NonNull final String path) {
@@ -428,6 +429,34 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			if (!title.equals(shell.getText())) {
 				shell.setText(title);
 			}
+		}
+	}
+
+	public boolean askForSaving(@NonNull final String title, @NonNull final String message) {
+		try {
+			updateModelValues(true);
+		}
+		catch (final InvalidPropertyException e) {
+			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
+		}
+		if (isConfigurationChanged()) {
+			final MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
+			messageBox.setText(title);
+			messageBox.setMessage(message);
+			final int selectedButton = messageBox.open();
+			switch (selectedButton) {
+			case SWT.YES:
+				return save();
+			case SWT.NO:
+				return true;
+			case SWT.CANCEL:
+				return false;
+			default:
+				throw new IllegalStateException("Invalid button code: " + selectedButton);
+			}
+		}
+		else {
+			return true;
 		}
 	}
 

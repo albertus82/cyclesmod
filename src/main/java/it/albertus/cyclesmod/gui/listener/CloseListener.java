@@ -2,8 +2,8 @@ package it.albertus.cyclesmod.gui.listener;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -11,17 +11,17 @@ import org.eclipse.swt.widgets.Listener;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
+import lombok.RequiredArgsConstructor;
 
-public class CloseListener extends AskForSavingListener implements ShellListener, SelectionListener, Listener {
+@RequiredArgsConstructor
+public class CloseListener extends ShellAdapter implements SelectionListener, Listener {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	public CloseListener(final CyclesModGui gui) {
-		super(gui);
-	}
+	private final CyclesModGui gui;
 
 	private boolean canClose() {
-		return askForSaving(messages.get("gui.message.confirm.close.text"), messages.get("gui.message.confirm.close.message"));
+		return gui.askForSaving(messages.get("gui.message.confirm.close.text"), messages.get("gui.message.confirm.close.message"));
 	}
 
 	private void disposeShellAndDisplay() {
@@ -67,17 +67,5 @@ public class CloseListener extends AskForSavingListener implements ShellListener
 
 	@Override
 	public void widgetDefaultSelected(final SelectionEvent event) {/* Ignore */}
-
-	@Override
-	public void shellActivated(final ShellEvent event) {/* Ignore */}
-
-	@Override
-	public void shellDeactivated(final ShellEvent event) {/* Ignore */}
-
-	@Override
-	public void shellDeiconified(final ShellEvent event) {/* Ignore */}
-
-	@Override
-	public void shellIconified(final ShellEvent event) {/* Ignore */}
 
 }
