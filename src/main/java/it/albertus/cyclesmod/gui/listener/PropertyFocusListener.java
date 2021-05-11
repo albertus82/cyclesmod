@@ -18,6 +18,8 @@ public class PropertyFocusListener implements FocusListener {
 
 	@Getter @Setter private boolean enabled = true;
 
+	private String before;
+
 	@Override
 	public void focusLost(@NonNull final FocusEvent fe) {
 		if (enabled && fe.widget instanceof Text) {
@@ -25,6 +27,9 @@ public class PropertyFocusListener implements FocusListener {
 			final TextFormatter textFormatter = gui.getTabs().getTextFormatter();
 			textFormatter.clean(text);
 			textFormatter.updateFontStyle(text);
+			if (before != null && !text.getText().equals(before)) {
+				gui.setCurrentFileModificationStatus(true);
+			}
 		}
 	}
 
@@ -32,8 +37,13 @@ public class PropertyFocusListener implements FocusListener {
 	public void focusGained(@NonNull final FocusEvent fe) {
 		if (enabled && fe.widget instanceof Text) {
 			final Text text = (Text) fe.widget;
+			before = text.getText();
 			text.selectAll();
 		}
+	}
+
+	public void reset() {
+		before = null;
 	}
 
 }
