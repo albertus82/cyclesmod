@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Listener;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.CyclesModGui;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class CloseListener extends ShellAdapter implements SelectionListener, Li
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	private final CyclesModGui gui;
+	@NonNull private final CyclesModGui gui;
 
 	private boolean canClose() {
 		return gui.askForSaving(messages.get("gui.message.confirm.close.text"), messages.get("gui.message.confirm.close.message"));
