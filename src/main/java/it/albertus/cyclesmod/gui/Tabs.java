@@ -231,6 +231,8 @@ public class Tabs implements Multilanguage {
 			}
 			powerGraph.refresh();
 		}
+
+		propertyFocusListener.reset();
 	}
 
 	private void updateFields(final Map<String, Integer> properties) {

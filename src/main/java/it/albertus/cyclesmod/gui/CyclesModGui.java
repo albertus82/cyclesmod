@@ -61,7 +61,7 @@ public class CyclesModGui implements IShellProvider {
 	@Getter private final Map<String, Integer> defaultProperties = Collections.unmodifiableMap(new BikesCfg(engine.getBikesInf()).getMap());
 	private final Map<String, Integer> lastPersistedProperties = new HashMap<>(defaultProperties);
 
-	private String bikesInfFileName;
+	private String currentFileName;
 
 	private CyclesModGui(@NonNull final Display display) {
 		// Shell creation...
@@ -164,7 +164,7 @@ public class CyclesModGui implements IShellProvider {
 
 	private void openBikesCfg(@NonNull final Path file) throws IOException {
 		try {
-			bikesInfFileName = null;
+			currentFileName = null;
 			engine.setBikesInf(new BikesInf());
 			final BikesCfg bikesCfg = new BikesCfg(file);
 			int count = 0;
@@ -193,8 +193,8 @@ public class CyclesModGui implements IShellProvider {
 			engine.setBikesInf(new BikesInf(file));
 			tabs.updateFormValues();
 			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
-			bikesInfFileName = file.toFile().getCanonicalPath();
-			shell.setText(getWindowTitle() + " - " + bikesInfFileName);
+			currentFileName = file.toFile().getCanonicalPath();
+			setCurrentFileModificationStatus(false);
 		}
 		catch (final InvalidSizeException e) {
 			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
@@ -267,6 +267,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		try {
 			resetSingle(bikeType);
+			setCurrentFileModificationStatus(isConfigurationChanged());
 			return true;
 		}
 		catch (final RuntimeException e) {
@@ -294,6 +295,7 @@ public class CyclesModGui implements IShellProvider {
 		try {
 			engine.getBikesInf().reset();
 			tabs.updateFormValues();
+			setCurrentFileModificationStatus(isConfigurationChanged());
 			return true;
 		}
 		catch (final RuntimeException e) {
@@ -304,11 +306,11 @@ public class CyclesModGui implements IShellProvider {
 	}
 
 	public boolean save() {
-		if (bikesInfFileName == null) {
+		if (currentFileName == null) {
 			return saveAs();
 		}
 		else {
-			final File bikesInfFile = new File(bikesInfFileName);
+			final File bikesInfFile = new File(currentFileName);
 			if (bikesInfFile.exists() && !bikesInfFile.canWrite()) {
 				return saveAs();
 			}
@@ -321,8 +323,9 @@ public class CyclesModGui implements IShellProvider {
 				return false;
 			}
 			try {
-				Files.write(Paths.get(bikesInfFileName), engine.getBikesInf().toByteArray());
+				Files.write(Paths.get(currentFileName), engine.getBikesInf().toByteArray());
 				setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
+				setCurrentFileModificationStatus(false);
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -352,8 +355,8 @@ public class CyclesModGui implements IShellProvider {
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
 				Files.write(Paths.get(fileName), engine.getBikesInf().toByteArray());
-				bikesInfFileName = fileName;
-				shell.setText(getWindowTitle() + " - " + bikesInfFileName);
+				currentFileName = fileName;
+				setCurrentFileModificationStatus(false);
 				setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 				return true;
 			}
@@ -378,12 +381,26 @@ public class CyclesModGui implements IShellProvider {
 				engine.applyProperty(key, properties.getProperty(key));
 			}
 			tabs.updateFormValues();
+			setCurrentFileModificationStatus(isConfigurationChanged());
 			return true;
 		}
 		catch (final InvalidPropertyException | RuntimeException e) {
 			log.log(Level.WARNING, "Cannot load hidden configuration into bike " + type + ':', e);
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.hiddenCfg"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
+		}
+	}
+
+	private boolean isConfigurationChanged() {
+		return !new BikesCfg(engine.getBikesInf()).getMap().equals(getLastPersistedProperties());
+	}
+
+	public void setCurrentFileModificationStatus(final boolean modified) {
+		if (currentFileName != null && shell != null && !shell.isDisposed()) {
+			final String title = getWindowTitle() + " - " + (modified ? "*" : "") + currentFileName;
+			if (!title.equals(shell.getText())) {
+				shell.setText(title);
+			}
 		}
 	}
 
