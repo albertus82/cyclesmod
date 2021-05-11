@@ -58,14 +58,12 @@ public class CyclesModGui implements IShellProvider {
 	@Getter private final MenuBar menuBar;
 	@Getter private final Tabs tabs;
 
-	private final Map<String, Integer> defaultProperties = new HashMap<>();
-	private final Map<String, Integer> lastPersistedProperties = new HashMap<>();
+	@Getter private final Map<String, Integer> defaultProperties = Collections.unmodifiableMap(new BikesCfg(engine.getBikesInf()).getMap());
+	private final Map<String, Integer> lastPersistedProperties = new HashMap<>(defaultProperties);
 
 	private String bikesInfFileName;
 
 	private CyclesModGui(@NonNull final Display display) {
-		defaultProperties.putAll(new BikesCfg(engine.getBikesInf()).getMap());
-
 		// Shell creation...
 		shell = new Shell(display);
 		shell.setImages(Images.getAppIconArray());
@@ -81,8 +79,6 @@ public class CyclesModGui implements IShellProvider {
 		shell.pack();
 
 		tabs.updateFormValues();
-
-		setLastPersistedProperties(defaultProperties);
 	}
 
 	/* GUI entry point. */
@@ -420,10 +416,6 @@ public class CyclesModGui implements IShellProvider {
 	private void setLastPersistedProperties(final Map<String, Integer> lastPersistedProperties) {
 		this.lastPersistedProperties.clear();
 		this.lastPersistedProperties.putAll(lastPersistedProperties);
-	}
-
-	public Map<String, Integer> getDefaultProperties() {
-		return Collections.unmodifiableMap(defaultProperties);
 	}
 
 	public BikesInf getBikesInf() {
