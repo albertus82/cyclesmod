@@ -32,7 +32,7 @@ public class CloseListener extends AskForSavingListener implements ShellListener
 		}
 	}
 
-	/* OS X Menu */
+	/* macOS Menu */
 	@Override
 	public void handleEvent(final Event event) {
 		if (canClose()) {
