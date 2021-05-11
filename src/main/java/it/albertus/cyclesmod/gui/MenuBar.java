@@ -170,7 +170,7 @@ public class MenuBar implements Multilanguage {
 		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.bike.single").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.reset(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+				gui.resetSingle(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 

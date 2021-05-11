@@ -139,30 +139,45 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	public void open(@NonNull final String path) {
+	public boolean open() {
+		final FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
+		openDialog.setFilterExtensions(new String[] { "*.INF;*.inf;*.CFG;*.cfg" });
+		final String fileName = openDialog.open();
+		if (fileName != null && !fileName.trim().isEmpty()) {
+			return open(fileName);
+		}
+		else {
+			return false;
+		}
+	}
+
+	private boolean open(@NonNull final String path) {
 		try {
 			final Path file = Paths.get(path);
-			if (file.toString().toLowerCase(Locale.ROOT).endsWith(".inf")) {
-				openBikesInf(file);
+			if (file.toString().toUpperCase(Locale.ROOT).endsWith(".INF")) {
+				return openBikesInf(file);
 			}
-			else if (file.toString().toLowerCase(Locale.ROOT).endsWith(".cfg")) {
-				openBikesCfg(file);
+			else if (file.toString().toUpperCase(Locale.ROOT).endsWith(".CFG")) {
+				return openBikesCfg(file);
 			}
 			else {
 				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
+				return false;
 			}
 		}
 		catch (final InvalidPathException e) {
 			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
 		}
 		catch (final RuntimeException | IOException e) {
 			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
 		}
 	}
 
-	private void openBikesCfg(@NonNull final Path file) throws IOException {
+	private boolean openBikesCfg(@NonNull final Path file) throws IOException {
 		try {
 			currentFileName = null;
 			engine.setBikesInf(new BikesInf());
@@ -176,28 +191,34 @@ public class CyclesModGui implements IShellProvider {
 			tabs.updateFormValues();
 			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 			openMessageBox(messages.get("gui.message.file.open.customizations.applied", count), SWT.ICON_INFORMATION);
+			return true;
 		}
 		catch (final UnknownPropertyException e) {
 			openMessageBox(messages.get("gui.error.file.open.unknown.property", e.getPropertyName()), SWT.ICON_WARNING);
+			return false;
 		}
 		catch (final InvalidNumberException e) {
 			openMessageBox(messages.get("gui.error.file.open.invalid.number", e.getPropertyName(), e.getValue()), SWT.ICON_WARNING);
+			return false;
 		}
 		catch (final ValueOutOfRangeException e) {
 			openMessageBox(messages.get("gui.error.file.open.value.out.of.range", e.getPropertyName(), e.getValue(), e.getMinValue(), e.getMaxValue()), SWT.ICON_WARNING);
+			return false;
 		}
 	}
 
-	private void openBikesInf(@NonNull final Path file) throws IOException {
+	private boolean openBikesInf(@NonNull final Path file) throws IOException {
 		try {
 			engine.setBikesInf(new BikesInf(file));
 			tabs.updateFormValues();
 			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 			currentFileName = file.toFile().getCanonicalPath();
 			setCurrentFileModificationStatus(false);
+			return true;
 		}
 		catch (final InvalidSizeException e) {
 			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
+			return false;
 		}
 	}
 
@@ -261,12 +282,12 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	public boolean reset(@NonNull final BikeType bikeType) {
+	public boolean resetSingle(@NonNull final BikeType bikeType) {
 		if (openMessageBox(messages.get("gui.message.reset.overwrite.single", bikeType.getDisplacement()), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
 			return false;
 		}
 		try {
-			resetSingle(bikeType);
+			doResetSingle(bikeType);
 			setCurrentFileModificationStatus(isConfigurationChanged());
 			return true;
 		}
@@ -277,7 +298,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 	}
 
-	private void resetSingle(@NonNull final BikeType bikeType) {
+	private void doResetSingle(@NonNull final BikeType bikeType) {
 		try {
 			updateModelValues(true);
 		}
