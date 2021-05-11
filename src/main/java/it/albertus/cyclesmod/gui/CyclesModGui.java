@@ -50,8 +50,6 @@ import lombok.extern.java.Log;
 @Log
 public class CyclesModGui implements IShellProvider {
 
-	private static final String GUI_LABEL_WINDOW_TITLE = "gui.label.window.title";
-
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
 	private final CyclesModEngine engine = new CyclesModEngine(new BikesInf());
@@ -71,7 +69,7 @@ public class CyclesModGui implements IShellProvider {
 		// Shell creation...
 		shell = new Shell(display);
 		shell.setImages(Images.getAppIconArray());
-		shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
+		shell.setText(getWindowTitle());
 		shell.setLayout(new FillLayout());
 		shell.addShellListener(new CloseListener(this));
 
@@ -89,7 +87,7 @@ public class CyclesModGui implements IShellProvider {
 
 	/* GUI entry point. */
 	public static void main(final String... args) {
-		Display.setAppName(messages.get(GUI_LABEL_WINDOW_TITLE));
+		Display.setAppName(getWindowTitle());
 		Display.setAppVersion(Version.getNumber());
 		Shell shell = null;
 		try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
@@ -109,7 +107,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final RuntimeException | Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)
 			log.log(Level.SEVERE, "An unexpected error has occurred:", e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.unexpected"), IStatus.ERROR, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell != null ? shell : null, getWindowTitle(), messages.get("gui.error.unexpected"), IStatus.ERROR, e, Images.getAppIconArray());
 		}
 	}
 
@@ -160,11 +158,11 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final InvalidPathException e) {
 			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
 		}
 		catch (final RuntimeException | IOException e) {
 			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 		}
 	}
 
@@ -200,7 +198,7 @@ public class CyclesModGui implements IShellProvider {
 			tabs.updateFormValues();
 			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 			bikesInfFileName = file.toFile().getCanonicalPath();
-			shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE) + " - " + bikesInfFileName);
+			shell.setText(getWindowTitle() + " - " + bikesInfFileName);
 		}
 		catch (final InvalidSizeException e) {
 			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
@@ -213,7 +211,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
@@ -232,7 +230,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final IOException | RuntimeException e) {
 			log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -243,7 +241,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
@@ -262,7 +260,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final IOException | RuntimeException e) {
 			log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -277,7 +275,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final RuntimeException e) {
 			log.log(Level.WARNING, "Cannot reset bike " + bikeType + ':', e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -304,7 +302,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final RuntimeException e) {
 			log.log(Level.WARNING, "Cannot reset bikes:", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -323,7 +321,7 @@ public class CyclesModGui implements IShellProvider {
 			}
 			catch (final InvalidPropertyException e) {
 				log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 			try {
@@ -333,7 +331,7 @@ public class CyclesModGui implements IShellProvider {
 			}
 			catch (final IOException | RuntimeException e) {
 				log.log(Level.WARNING, "Cannot save file:", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 		}
@@ -345,7 +343,7 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
@@ -359,13 +357,13 @@ public class CyclesModGui implements IShellProvider {
 			try {
 				Files.write(Paths.get(fileName), engine.getBikesInf().toByteArray());
 				bikesInfFileName = fileName;
-				shell.setText(messages.get(GUI_LABEL_WINDOW_TITLE) + " - " + bikesInfFileName);
+				shell.setText(getWindowTitle() + " - " + bikesInfFileName);
 				setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
 				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-				EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 		}
@@ -388,14 +386,14 @@ public class CyclesModGui implements IShellProvider {
 		}
 		catch (final InvalidPropertyException | RuntimeException e) {
 			log.log(Level.WARNING, "Cannot load hidden configuration into bike " + type + ':', e);
-			EnhancedErrorDialog.openError(shell, messages.get(GUI_LABEL_WINDOW_TITLE), messages.get("gui.error.hiddenCfg"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.hiddenCfg"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
 
 	private int openMessageBox(@NonNull final String message, final int style) {
 		final MessageBox messageBox = new MessageBox(shell, style);
-		messageBox.setText(messages.get(GUI_LABEL_WINDOW_TITLE));
+		messageBox.setText(getWindowTitle());
 		messageBox.setMessage(message);
 		return messageBox.open();
 	}
@@ -434,6 +432,10 @@ public class CyclesModGui implements IShellProvider {
 
 	public boolean isNumeric(final String value) {
 		return engine.isNumeric(value);
+	}
+
+	private static String getWindowTitle() {
+		return messages.get("gui.label.window.title");
 	}
 
 }
