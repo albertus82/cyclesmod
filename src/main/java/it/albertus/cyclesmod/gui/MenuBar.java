@@ -19,11 +19,9 @@ import it.albertus.cyclesmod.gui.listener.CloseListener;
 import it.albertus.cyclesmod.gui.listener.CopySelectionListener;
 import it.albertus.cyclesmod.gui.listener.CutSelectionListener;
 import it.albertus.cyclesmod.gui.listener.EditMenuListener;
-import it.albertus.cyclesmod.gui.listener.LanguageSelectionListener;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.OpenSelectionListener;
 import it.albertus.cyclesmod.gui.listener.PasteSelectionListener;
-import it.albertus.cyclesmod.gui.listener.RadixSelectionListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.Multilanguage;
 import it.albertus.jface.SwtUtils;
@@ -189,12 +187,14 @@ public class MenuBar implements Multilanguage {
 		final Menu viewRadixSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewRadixSubMenuItem.setMenu(viewRadixSubMenu);
 
-		final RadixSelectionListener radixSelectionListener = new RadixSelectionListener(gui);
-
 		for (final NumeralSystem numeralSystem : NumeralSystem.values()) {
 			final MenuItem radixMenuItem = newLocalizedMenuItem(viewRadixSubMenu, SWT.RADIO, () -> messages.get("gui.label.menu.item.radix." + numeralSystem.getRadix()));
-			radixMenuItem.setData(numeralSystem);
-			radixMenuItem.addSelectionListener(radixSelectionListener);
+			radixMenuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					gui.setNumeralSystem(numeralSystem);
+				}
+			});
 			if (numeralSystem.equals(gui.getNumeralSystem())) {
 				radixMenuItem.setSelection(true);
 			}
@@ -206,13 +206,15 @@ public class MenuBar implements Multilanguage {
 		final Menu viewLanguageSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		viewLanguageSubMenuItem.setMenu(viewLanguageSubMenu);
 
-		final LanguageSelectionListener languageSelectionListener = new LanguageSelectionListener(gui);
-
 		for (final Language language : Language.values()) {
 			final MenuItem languageMenuItem = new MenuItem(viewLanguageSubMenu, SWT.RADIO);
 			languageMenuItem.setText(language.getLocale().getDisplayLanguage(language.getLocale()));
-			languageMenuItem.setData(language);
-			languageMenuItem.addSelectionListener(languageSelectionListener);
+			languageMenuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					gui.setLanguage(language);
+				}
+			});
 			if (language.equals(messages.getLanguage())) {
 				languageMenuItem.setSelection(true);
 			}

@@ -41,6 +41,7 @@ import it.albertus.cyclesmod.common.resources.Language;
 import it.albertus.cyclesmod.gui.listener.CloseListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.EnhancedErrorDialog;
+import it.albertus.jface.Multilanguage;
 import it.albertus.jface.closeable.CloseableDevice;
 import it.albertus.util.Version;
 import lombok.Getter;
@@ -48,7 +49,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
-public class CyclesModGui implements IShellProvider {
+public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
@@ -109,6 +110,11 @@ public class CyclesModGui implements IShellProvider {
 
 	public void setLanguage(final Language language) {
 		messages.setLanguage(language);
+		updateLanguage();
+	}
+
+	@Override
+	public void updateLanguage() {
 		shell.setCursor(shell.getDisplay().getSystemCursor(SWT.CURSOR_WAIT));
 		try {
 			menuBar.updateLanguage();
