@@ -21,7 +21,7 @@ public class HiddenBike {
 		try {
 			return DataUtils.inflate(DEFLATED_BASE64, BikesInf.FILE_SIZE / 3, CRC32);
 		}
-		catch (final DataFormatException e) {
+		catch (final IllegalArgumentException | DataFormatException e) {
 			throw new VerifyError(messages.get("common.error.hidden.cfg.corrupted"), e);
 		}
 		catch (final InvalidSizeException e) {

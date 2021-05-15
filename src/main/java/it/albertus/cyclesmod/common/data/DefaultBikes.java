@@ -21,7 +21,7 @@ public class DefaultBikes {
 		try {
 			return DataUtils.inflate(DEFLATED_BASE64, BikesInf.FILE_SIZE, CRC32);
 		}
-		catch (final DataFormatException e) {
+		catch (final IllegalArgumentException | DataFormatException e) {
 			throw new VerifyError(messages.get("common.error.original.file.corrupted", BikesInf.FILE_NAME), e);
 		}
 		catch (final InvalidSizeException e) {
