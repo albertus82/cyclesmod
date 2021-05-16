@@ -14,7 +14,7 @@ The game cannot be executed natively on modern operating systems, but runs great
 |-------------------------------|-----------------------------|
 |![Splash](https://git.io/J3HrG)|![Game](https://git.io/J3Hrc)|
 
-**CyclesMod** is a *mod* for the DOS version of this game, which allows you to **change the configurations of the bikes**, which are usually not accessible to the user:
+**CyclesMod** is a *mod* for the DOS version of this game, which allows you to **change the configurations of the bikes**, which are normally not modifiable by the player:
 
 ![Screenshot](https://user-images.githubusercontent.com/8672431/118394943-0a33ce80-b648-11eb-86cc-3e4a65ac4ac4.png)
 
