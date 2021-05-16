@@ -8,32 +8,55 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import it.albertus.cyclesmod.BaseTest;
+import lombok.extern.java.Log;
 
+@Log
 public class CyclesModCliTest extends BaseTest {
 
 	private static final String BIKES_INF_FILENAME = "BIKES.INF";
 	private static final String BIKES_CFG_FILENAME = "BIKES.CFG";
 	private static final int BIKES_INF_SIZE_BYTES = 444;
 
+	private static Path outputDir;
+
+	@BeforeClass
+	public static void beforeAll() throws IOException {
+		outputDir = Paths.get(projectProperties.getProperty("project.build.directory"), "test-output-tmp");
+		log.log(Level.INFO, "Creating directory ''{0}''...", outputDir);
+		Files.createDirectories(outputDir);
+		log.log(Level.INFO, "Created directory ''{0}''.", outputDir);
+	}
+
+	@AfterClass
+	public static void afterAll() {
+		log.log(Level.INFO, "Deleting directory ''{0}''...", outputDir);
+		try {
+			FileUtils.deleteDirectory(outputDir.toFile());
+			log.log(Level.INFO, "Deleted directory ''{0}''.", outputDir);
+		}
+		catch (final IOException e) {
+			log.log(Level.WARNING, e, () -> "Cannot delete directory '" + outputDir + "':");
+		}
+	}
+
 	@Before
 	public void before() throws IOException {
-		final Path outputDir = Paths.get(projectProperties.getProperty("project.build.directory"), "test-output");
-		if (!Files.deleteIfExists(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
-			Files.createDirectories(outputDir);
-		}
+		Files.deleteIfExists(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME));
 	}
 
 	@Test
 	public void test() throws IOException {
-		final Path outputDir = Paths.get(projectProperties.getProperty("project.build.directory"), "test-output");
-
 		// Check default
 		new CyclesModCli(outputDir, true).call();
 		final Properties expected = new Properties();
