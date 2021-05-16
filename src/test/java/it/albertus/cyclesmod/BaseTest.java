@@ -11,7 +11,7 @@ public abstract class BaseTest {
 	protected static final Properties projectProperties = new Properties();
 
 	@BeforeClass
-	public static void beforeAll() throws IOException {
+	public static void _beforeAll() throws IOException {
 		try (final InputStream is = BaseTest.class.getResourceAsStream("/project.properties")) {
 			projectProperties.load(is);
 		}
