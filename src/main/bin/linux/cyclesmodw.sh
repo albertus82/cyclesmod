@@ -10,4 +10,4 @@ while [ -h "$PRG" ]; do
   fi
 done
 PRGDIR=`dirname "$PRG"`
-java -Xms${gui.vm.initialHeapSize}m -Xmx${gui.vm.maxHeapSize}m -DG -DSWT_GTK3=0 -jar "$PRGDIR/${project.build.finalName}.${project.packaging}" "$1"
+java -Xms${gui.vm.initialHeapSize}m -Xmx${gui.vm.maxHeapSize}m -DG -DSWT_GTK3=0 -jar "$PRGDIR/${project.build.finalName}.${project.packaging}" $1
