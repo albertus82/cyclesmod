@@ -105,7 +105,9 @@ public class Tabs implements Multilanguage {
 				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(key);
-				label.setEnabled(setting.isActive());
+				if (!setting.isActive()) {
+					label.setEnabled(false);
+				}
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				text.setData(new GenericTextData(key, defaultValue, Settings.MAX_VALUE));
