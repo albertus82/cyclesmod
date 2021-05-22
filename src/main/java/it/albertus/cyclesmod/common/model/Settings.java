@@ -22,17 +22,17 @@ public class Settings implements ByteList {
 
 	private final Map<Setting, Integer> values = new EnumMap<>(Setting.class);
 
-	public Settings(int gearsCount, int rpmRedline, int rpmLimit, int overrevTolerance, int grip, int unknown1, int brakingSpeed, int unknown2, int spinThreshold, int unknown3, int rpmDownshift) {
+	public Settings(int gearsCount, int rpmRedline, int rpmLimit, int overrevTolerance, int grip, int grip0, int brakingSpeed, int brakingSpeed0, int spinThreshold, int spinThreshold0, int rpmDownshift) {
 		values.put(Setting.GEARS_COUNT, gearsCount);
 		values.put(Setting.RPM_REDLINE, rpmRedline);
 		values.put(Setting.RPM_LIMIT, rpmLimit);
 		values.put(Setting.OVERREV_TOLERANCE, overrevTolerance);
 		values.put(Setting.GRIP, grip);
-		values.put(Setting.UNKNOWN_1, unknown1);
+		values.put(Setting.GRIP_0, grip0);
 		values.put(Setting.BRAKING_SPEED, brakingSpeed);
-		values.put(Setting.UNKNOWN_2, unknown2);
+		values.put(Setting.BRAKING_SPEED_0, brakingSpeed0);
 		values.put(Setting.SPIN_THRESHOLD, spinThreshold);
-		values.put(Setting.UNKNOWN_3, unknown3);
+		values.put(Setting.SPIN_THRESHOLD_0, spinThreshold0);
 		values.put(Setting.RPM_DOWNSHIFT, rpmDownshift);
 	}
 

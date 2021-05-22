@@ -75,7 +75,7 @@ Each bike has eight general settings that determine the following characteristic
 
 * **Gears count**: the number of gears of the gearbox. Valid value range: `0`-`9`.
 
-* **RPM redline**: engine speed beyond which, after a variable time determined by the *Overrev grace period* setting and the difficulty level chosen, the engine breaks down. At difficulty levels 1 and 2 (the lowest), this value also determines the upshift speed. Valid value range: `8500`-`32767` RPM.
+* **RPM redline**: engine speed beyond which, after a variable time determined by the *Overrev grace period* setting and the difficulty level chosen, the engine breaks down. At difficulty levels 1 and 2 (the lowest), this value also determines the upshift speed. Valid value range: `8500`-`32767` RPM (values less than `8500` are considered equal to `8500`).
 
 * **RPM limit**: maximum speed that the engine can reach (limiter). Valid value range: `768`-`14335` RPM. Note that, once the limit is reached, the motorcycle continues to accelerate with the engine power set for the limit RPM, therefore, to effectively limit the speed to a certain value, it is necessary to set to zero the power values around this RPM limit.
 
@@ -87,13 +87,13 @@ Each bike has eight general settings that determine the following characteristic
    * Level 4/5: 1 sec. = `120`.
    * Level 5/5 (Pro): 1 sec. = `160`.
 
-* **Grip**: bike's slip threshold, which determines the speed with which it is possible to take curves. Valid values between `0` (the bike skids immediately and does not turn at all) and `65535` (the bike never skids).
+* **Grip**: skid threshold, which determines the speed with which it is possible to take curves. Valid values between `0` (the bike skids immediately and does not turn at all) and `65535` (the bike never skids).
 
 * **Braking speed**: determines the stopping time of the motorcycle. Valid values between `0` (the bike does not brake, on the contrary, friction and aerodynamic resistance are eliminated) and `65535` (the bike stops instantly on brake).
 
-* **Spin threshold**: ease with which the bike spins while skidding around a corner. Valid values between `0` (the bike spins at the first hint of skidding) and `65535` (the bike never spins).
+* **Spin threshold**: ease with which the bike spins while skidding around a corner. Valid values between `0` (the bike spins at the first hint of skidding) and `32767` (the bike never spins).
 
-* **RPM downshift**: significant only for the lower difficulty levels that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
+* **RPM downshift**: significant only for difficulty levels 1 and 2 that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
 
 > There are also three values of unknown meaning, probably irrelevant, which can in any case be modified for experimental purposes.
 
