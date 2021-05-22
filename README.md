@@ -95,7 +95,7 @@ Each bike has eight general settings that determine the following characteristic
 
 * **RPM downshift**: significant only for difficulty levels 1 and 2 that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
 
-> There are also three values of unknown meaning, probably irrelevant, which can in any case be modified for experimental purposes.
+> There are also three unused values related with a pit stop feature that was never implemented in this game, but that was present in its ancestor: [Grand Prix Circuit](https://en.wikipedia.org/wiki/Grand_Prix_Circuit_(video_game)).
 
 ### Gearbox
 

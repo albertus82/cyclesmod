@@ -32,6 +32,7 @@ import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.listener.LabelMouseListener;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.PowerPropertyFocusListener;
 import it.albertus.cyclesmod.gui.listener.PropertyFocusListener;
@@ -104,6 +105,7 @@ public class Tabs implements Multilanguage {
 				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(key);
+				label.setEnabled(setting.isActive());
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				text.setData(new GenericTextData(key, defaultValue, Settings.MAX_VALUE));
@@ -112,6 +114,7 @@ public class Tabs implements Multilanguage {
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(text));
+				label.addMouseListener(new LabelMouseListener(text));
 			}
 
 			// Power graph
@@ -152,6 +155,7 @@ public class Tabs implements Multilanguage {
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(text));
+				label.addMouseListener(new LabelMouseListener(text));
 			}
 
 			// Power
@@ -174,6 +178,7 @@ public class Tabs implements Multilanguage {
 				text.addFocusListener(powerPropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				formProperties.put(key, new FormProperty(text));
+				label.addMouseListener(new LabelMouseListener(text));
 			}
 			tabScrolledComposite.setContent(tabComposite);
 			tabScrolledComposite.setExpandVertical(true);
