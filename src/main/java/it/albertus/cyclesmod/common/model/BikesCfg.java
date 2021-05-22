@@ -162,7 +162,7 @@ public class BikesCfg {
 		for (final String key : properties.stringPropertyNames()) {
 			for (final Entry<String, String> replacement : replacements.entrySet()) {
 				if (key.toLowerCase(Locale.ROOT).contains(replacement.getKey().toLowerCase(Locale.ROOT))) {
-					log.log(Level.INFO, "{0} -> {1}", new String[] { replacement.getKey(), replacement.getValue() });
+					log.log(Level.FINE, "{0} -> {1}", new String[] { replacement.getKey(), replacement.getValue() });
 					properties.setProperty(key.replaceAll("(?i)" + Pattern.quote(replacement.getKey()), replacement.getValue()), properties.remove(key).toString());
 					break;
 				}
