@@ -101,7 +101,7 @@ public class Tabs implements Multilanguage {
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey());
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
-				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label." + setting.getKey());
+				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(key);
 				final Text text = new Text(settingsGroup, SWT.BORDER);
@@ -141,7 +141,7 @@ public class Tabs implements Multilanguage {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Serializable gearName = index != 0 ? index : "N";
-				final Label label = newLocalizedLabel(gearboxGroup, SWT.NONE, () -> messages.get("gui.label.gear", gearName));
+				final Label label = newLocalizedLabel(gearboxGroup, SWT.NONE, () -> messages.get("gui.label.gearbox.gear", gearName));
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(key);
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
@@ -163,7 +163,7 @@ public class Tabs implements Multilanguage {
 				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final int rpm = Power.getRpm(index);
-				final Label label = newLocalizedLabel(powerGroup, SWT.NONE, () -> messages.get("gui.label.rpm", rpm));
+				final Label label = newLocalizedLabel(powerGroup, SWT.NONE, () -> messages.get("gui.label.power.rpm", rpm));
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				label.setToolTipText(key);
 				final Text text = new Text(powerGroup, SWT.BORDER);
