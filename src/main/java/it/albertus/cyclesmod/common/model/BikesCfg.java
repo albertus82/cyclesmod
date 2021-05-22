@@ -155,7 +155,9 @@ public class BikesCfg {
 	private void manageDeprecatedProperties() {
 		final Map<String, String> replacements = new HashMap<>();
 		replacements.put(".torque.", '.' + Power.PREFIX + '.');
-		replacements.put(".overspeedGracePeriod", '.' + Setting.OVERREV_TOLERANCE.getKey());
+		replacements.put(".unknown1", '.' + Setting.GRIP_0.getKey());
+		replacements.put(".unknown2", '.' + Setting.BRAKING_SPEED_0.getKey());
+		replacements.put(".unknown3", '.' + Setting.SPIN_THRESHOLD_0.getKey());
 
 		for (final String key : properties.stringPropertyNames()) {
 			for (final Entry<String, String> replacement : replacements.entrySet()) {
