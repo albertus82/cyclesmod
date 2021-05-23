@@ -1,9 +1,7 @@
 package it.albertus.cyclesmod.cli;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,7 +26,6 @@ import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
-import it.albertus.util.IOUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -179,34 +176,41 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private void createBikesInf(@NonNull final Path bikesInfFile) throws IOException {
 		System.out.print(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME) + ' ');
-		final byte[] bytes = engine.getBikesInf().toByteArray();
+		final byte[] currentBytes = engine.getBikesInf().toByteArray();
 		if (bikesInfFile.toFile().exists()) {
 			if (Files.isDirectory(bikesInfFile)) {
 				System.out.println(ERROR);
 				System.err.println(messages.get("console.error.cannot.open.file.directory", BikesInf.FILE_NAME));
 				throw new IOException(bikesInfFile + " is a directory");
 			}
-			final ByteArrayOutputStream baos = new ByteArrayOutputStream(BikesInf.FILE_SIZE);
-			try (final InputStream is = Files.newInputStream(bikesInfFile)) {
-				IOUtils.copy(is, baos, BikesInf.FILE_SIZE);
-				System.out.println(DONE);
-			}
-			catch (final IOException e) {
-				System.out.println(ERROR);
-				System.err.println(messages.get("console.error.cannot.read.file", BikesInf.FILE_NAME, e));
-				throw e;
-			}
-			if (!Arrays.equals(bytes, baos.toByteArray())) {
-				backupBikesInf(bikesInfFile);
-				writeBikesInf(bytes, bikesInfFile);
+			if (bikesInfFile.toFile().length() == BikesInf.FILE_SIZE) {
+				final byte[] existingBytes;
+				try {
+					existingBytes = Files.readAllBytes(bikesInfFile);
+					System.out.println(DONE);
+				}
+				catch (final IOException e) {
+					System.out.println(ERROR);
+					System.err.println(messages.get("console.error.cannot.read.file", BikesInf.FILE_NAME, e));
+					throw e;
+				}
+				if (!Arrays.equals(currentBytes, existingBytes)) {
+					backupBikesInf(bikesInfFile);
+					writeBikesInf(currentBytes, bikesInfFile);
+				}
+				else {
+					System.out.println(messages.get("console.message.already.uptodate", BikesInf.FILE_NAME));
+				}
 			}
 			else {
-				System.out.println(messages.get("console.message.already.uptodate", BikesInf.FILE_NAME));
+				System.out.println(DONE);
+				backupBikesInf(bikesInfFile);
+				writeBikesInf(currentBytes, bikesInfFile);
 			}
 		}
 		else {
 			System.out.println(DONE);
-			writeBikesInf(bytes, bikesInfFile);
+			writeBikesInf(currentBytes, bikesInfFile);
 		}
 	}
 
