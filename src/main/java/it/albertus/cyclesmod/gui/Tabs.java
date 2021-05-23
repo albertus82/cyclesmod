@@ -118,6 +118,14 @@ public class Tabs implements Multilanguage {
 				formProperties.put(key, new FormProperty(text));
 				label.addMouseListener(new LabelMouseListener(text));
 			}
+			for (final Setting setting : bike.getSettings().getValues().keySet()) {
+				if (!setting.isActive()) {
+					final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings.unused");
+					GridDataFactory.swtDefaults().span(2, 1).align(SWT.END, SWT.CENTER).applyTo(label);
+					label.setEnabled(false);
+					break;
+				}
+			}
 
 			// Power graph
 			final PowerGraphCanvas canvas = new PowerGraphCanvas(tabComposite, bike);
