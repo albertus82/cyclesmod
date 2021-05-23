@@ -49,7 +49,7 @@ There is also a graph of the power/torque curve that is generated in real time f
 
 Each group has several fields with descriptive labels. Customized values are shown in bold typeface to highlight the fact that the value is different from the default one. Anyhow the default value of a field is always available as tooltip, just move the mouse over the field and wait for the suggestion to appear.
 
-When *CyclesMod* is executed without arguments, all the fields are preloaded with the default values for all motorcycles.
+When *CyclesMod* is launched without arguments, all the fields are preloaded with the default values for all motorcycles.
 
 Through the menu bar it is possible to:
 
