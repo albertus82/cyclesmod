@@ -13,8 +13,10 @@ public class LabelMouseListener extends MouseAdapter {
 	@NonNull private final Text text;
 
 	@Override
-	public void mouseDown(final MouseEvent e) {
-		text.setFocus();
+	public void mouseDown(@NonNull final MouseEvent e) {
+		if (1 == e.button) {
+			text.setFocus();
+		}
 	}
 
 }
