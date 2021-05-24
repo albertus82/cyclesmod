@@ -43,7 +43,7 @@ The main application window has three tabs, one for each motorcycle category: 12
 
 * General **Settings**
 * **Gearbox**
-* Engine **Power**
+* **Power** curve
 
 There is also a graph of the power/torque curve that is generated in real time from the engine power values present in the relevant group.
 
@@ -101,7 +101,7 @@ Each bike has eight general settings that determine the following characteristic
 
 Gear ratios can be configured for each individual gear. Higher values correspond to shorter ratios. The permitted values are between `0` and `65535` for gears 1 to 9, while for *N* (neutral) gear the value is irrelevant.
 
-### Engine power
+### Power curve
 
 The engine power curve is constructed from the values present in this group. Each value represents the engine power in *hp* at a given engine speed indicated on the label associated with the field containing the value. Allowed values are between `0` and `255` hp. The resulting curve is graphically represented in its frame. 
 
