@@ -6,13 +6,9 @@ CyclesMod
 [![Build status](https://ci.appveyor.com/api/projects/status/github/albertus82/cyclesmod?branch=master&svg=true)](https://ci.appveyor.com/project/albertus82/cyclesmod)
 [![Known Vulnerabilities](https://snyk.io/test/github/albertus82/cyclesmod/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/albertus82/cyclesmod?targetFile=pom.xml)
 
-**The Cycles - International Grand Prix Racing** is a motorcycle simulation video game. Dating back to 1989, it was distributed for the most popular platforms of the time, from the Commodore 64 to the IBM PC (DOS), and is now easily available as *Abandonware*.
+[**The Cycles - International Grand Prix Racing**](https://www.mobygames.com/game/cycles-international-grand-prix-racing) is a motorcycle simulation video game. Dating back to 1989, it was distributed for the most popular platforms of the time, from the Commodore 64 to the IBM PC (DOS), and is now easily available as *Abandonware*.
 
 The game cannot be executed natively on modern operating systems, but runs greatly in [**DOSBox**](https://www.dosbox.com):
-
-|Splash screen                  |Game                         |
-|-------------------------------|-----------------------------|
-|![Splash](https://git.io/J3HrG)|![Game](https://git.io/J3Hrc)|
 
 **CyclesMod** is a *mod* for the DOS version of this game, which allows you to **change the configurations of the bikes**, which are normally not modifiable by the player:
 
@@ -95,7 +91,7 @@ Each bike has eight general settings that determine the following characteristic
 
 * **RPM downshift**: significant only for difficulty levels 1 and 2 that involve automatic transmission; it determines the speed below which the automatic transmission engages a lower gear, if available. Valid values between `0` (never downshifts) and `32767` RPM (downshifts continuously, in fact it makes shifting impossible).
 
-> There are also three unused values related to a *pit stop* feature that was never implemented in this game, but that was present in its ancestor: [Grand Prix Circuit](https://en.wikipedia.org/wiki/Grand_Prix_Circuit_(video_game)).
+> There are also three unused values related to a *pit stop* feature that was never implemented in this game, but that was present in its ancestor: [Grand Prix Circuit](https://www.mobygames.com/game/grand-prix-circuit).
 
 ### Gearbox
 
