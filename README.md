@@ -10,7 +10,7 @@ CyclesMod
 
 Dating back to 1989, it was distributed for the most popular platforms of the time, from the Commodore 64 to the IBM PC (DOS), and is now easily available as *Abandonware*. 
 
-Nowadays it cannot be executed natively on modern operating systems, but runs greatly in [**DOSBox**](https://www.dosbox.com).
+Nowadays it cannot be executed natively on modern operating systems, but runs [greatly](https://www.dosbox.com/comp_list.php?showID=348) in [**DOSBox**](https://www.dosbox.com).
 
 **CyclesMod** is a *mod* for the DOS version of this game, which allows you to **change the configurations of the bikes**, which are normally not modifiable by the player:
 
