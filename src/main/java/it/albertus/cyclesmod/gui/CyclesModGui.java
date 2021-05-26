@@ -161,6 +161,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean open(@NonNull final String path) {
 		try {
 			final Path file = Paths.get(path);
+			if (!file.toFile().exists() || Files.isDirectory(file)) {
+				openMessageBox(messages.get("gui.error.file.open.not.found"), SWT.ICON_WARNING);
+				return false;
+			}
 			if (file.toString().toUpperCase(Locale.ROOT).endsWith(".INF")) {
 				return openBikesInf(file);
 			}
