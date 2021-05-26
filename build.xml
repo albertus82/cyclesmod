@@ -107,6 +107,7 @@
 			AppSupportURL=${innoSetup.AppSupportURL}
 			AppUpdatesURL=${innoSetup.AppUpdatesURL}
 			AppMutex=${mainClass}
+			TimeStampsInUTC=yes
 			PrivilegesRequired=lowest
 			PrivilegesRequiredOverridesAllowed=dialog
 			DefaultDirName={autopf32}\${project.name}
@@ -160,6 +161,7 @@
 			AppSupportURL=${innoSetup.AppSupportURL}
 			AppUpdatesURL=${innoSetup.AppUpdatesURL}
 			AppMutex=${mainClass}
+			TimeStampsInUTC=yes
 			PrivilegesRequired=lowest
 			PrivilegesRequiredOverridesAllowed=dialog
 			DefaultDirName={autopf64}\${project.name}
