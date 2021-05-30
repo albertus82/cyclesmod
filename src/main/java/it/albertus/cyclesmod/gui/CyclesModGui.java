@@ -204,13 +204,6 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	private void setMode(final Mode mode) {
-		this.mode = mode;
-		if (!Mode.GPC.equals(mode)) {
-			gpcExeBytes = null;
-		}
-	}
-
 	private boolean openBikesCfg(@NonNull final Path file) throws IOException {
 		try {
 			currentFileName = null;
@@ -619,6 +612,13 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	public boolean isNumeric(final String value) {
 		return engine.isNumeric(value);
+	}
+
+	private void setMode(final Mode mode) {
+		this.mode = mode;
+		if (!Mode.GPC.equals(mode)) {
+			gpcExeBytes = null;
+		}
 	}
 
 	private static String getWindowTitle() {
