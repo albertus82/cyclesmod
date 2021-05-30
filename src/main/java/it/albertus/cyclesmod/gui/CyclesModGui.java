@@ -173,9 +173,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				return false;
 			}
 			if (file.toString().toUpperCase(Locale.ROOT).endsWith(".INF")) {
+				setMode(Mode.CYCLES);
 				return openBikesInf(file);
 			}
 			else if (file.toString().toUpperCase(Locale.ROOT).endsWith(".CFG")) {
+				setMode(Mode.CYCLES);
 				return openBikesCfg(file);
 			}
 			else if (file.toString().toUpperCase(Locale.ROOT).endsWith(".EXE")) {
