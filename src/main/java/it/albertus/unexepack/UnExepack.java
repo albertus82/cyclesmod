@@ -317,6 +317,11 @@ public class UnExepack implements Callable<Integer> {
 		final DosHeader dh = new DosHeader(Arrays.copyOf(packedExec, DosHeader.SIZE));
 		log.log(Level.INFO, "DOS header: {0}", dh);
 
+		final int exeLen = decodeExeLen(dh.eCblp, dh.eCp);
+		if (exeLen < packedExec.length) {
+			log.log(Level.WARNING, "EXE file size is {0,number,#}; ignoring {1,number,#} trailing bytes", new Integer[] { exeLen, packedExec.length - exeLen });
+		}
+
 		final int exepackOffset = (dh.eCparhdr + dh.eCs) * 16;
 		final ExepackHeader eh = new ExepackHeader(Arrays.copyOfRange(packedExec, exepackOffset, exepackOffset + ExepackHeader.SIZE));
 		log.log(Level.INFO, () -> String.format("Exepack header @ 0x%X: %s", exepackOffset, eh));
@@ -364,6 +369,21 @@ public class UnExepack implements Callable<Integer> {
 				return i;
 		}
 		return -1;
+	}
+
+	private static int decodeExeLen(final int eCblp, final int eCp) {
+		if (eCblp == 0) {
+			return eCp * 512;
+		}
+		else if (eCp == 0) {
+			return -1;
+		}
+		else if (eCblp >= 1 && eCblp <= 511) {
+			return (eCp - 1) * 512 + eCblp;
+		}
+		else {
+			return -1;
+		}
 	}
 
 }
