@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
+import it.albertus.cyclesmod.common.data.DefaultCars;
 import it.albertus.cyclesmod.common.data.HiddenBike;
 import it.albertus.cyclesmod.common.data.InvalidSizeException;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
@@ -43,6 +44,9 @@ import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.jface.Multilanguage;
 import it.albertus.jface.closeable.CloseableDevice;
+import it.albertus.unexepack.InvalidDosHeaderException;
+import it.albertus.unexepack.InvalidExepackHeaderException;
+import it.albertus.unexepack.UnExepack;
 import it.albertus.util.Version;
 import lombok.Getter;
 import lombok.NonNull;
@@ -62,7 +66,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@Getter private final Map<String, Integer> defaultProperties = Collections.unmodifiableMap(new BikesCfg(engine.getBikesInf()).getMap());
 	private final Map<String, Integer> lastPersistedProperties = new HashMap<>(defaultProperties);
 
+	@Getter private Mode mode = Mode.CYCLES;
+
 	private String currentFileName;
+	private byte[] gpcExe;
 
 	private CyclesModGui(@NonNull final Display display) {
 		// Shell creation...
@@ -150,7 +157,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		final FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
-		openDialog.setFilterExtensions(new String[] { "*.INF;*.inf;*.CFG;*.cfg" });
+		openDialog.setFilterExtensions(new String[] { "*.INF;*.inf;*.CFG;*.cfg;*.EXE;*.exe" });
 		final String fileName = openDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
@@ -171,6 +178,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			else if (file.toString().toUpperCase(Locale.ROOT).endsWith(".CFG")) {
 				return openBikesCfg(file);
 			}
+			else if (file.toString().toUpperCase(Locale.ROOT).endsWith(".EXE")) {
+				setMode(Mode.GPC);
+				return openGpcExe(file);
+			}
 			else {
 				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
 				return false;
@@ -186,6 +197,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
+	}
+
+	private void setMode(Mode mode) {
+		this.mode = mode;
 	}
 
 	private boolean openBikesCfg(@NonNull final Path file) throws IOException {
@@ -232,6 +247,41 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidSizeException e) {
 			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
+			return false;
+		}
+	}
+
+	private boolean openGpcExe(@NonNull final Path file) throws IOException {
+		if (Files.size(file) > 0x30000) {
+			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
+			return false;
+		}
+		try {
+			final byte[] exec = Files.readAllBytes(file);
+			byte[] unpacked;
+			try {
+				unpacked = UnExepack.unpack(exec);
+			}
+			catch (final InvalidExepackHeaderException e) {
+				unpacked = exec;
+			}
+			if (UnExepack.memmem(unpacked, DefaultCars.getByteArray()) == -1) {
+				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING); // FIXME
+				return false;
+			}
+			if (!file.toFile().setReadOnly()) {
+				log.warning("set readonly failed");
+			}
+			gpcExe = unpacked;
+			engine.setBikesInf(new BikesInf(DefaultCars.getByteArray()));
+			tabs.updateFormValues();
+			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
+			currentFileName = file.toFile().getCanonicalPath();
+			setCurrentFileModificationStatus(false);
+			return true;
+		}
+		catch (final InvalidDosHeaderException e) {
+			openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING); // FIXME
 			return false;
 		}
 	}
@@ -341,7 +391,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean save() {
-		if (currentFileName == null) {
+		if (currentFileName == null || Mode.GPC.equals(mode)) {
 			return saveAs();
 		}
 		else {
@@ -380,6 +430,15 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
+		if (gpcExe == null) {
+			return saveAsInf();
+		}
+		else {
+			return saveAsExe();
+		}
+	}
+
+	private boolean saveAsInf() {
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 		final String ext = BikesInf.FILE_NAME.substring(1 + BikesInf.FILE_NAME.lastIndexOf('.'));
 		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
@@ -390,6 +449,44 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
 				Files.write(Paths.get(fileName), engine.getBikesInf().toByteArray());
+				currentFileName = fileName;
+				setCurrentFileModificationStatus(false);
+				setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
+				return true;
+			}
+			catch (final IOException | RuntimeException e) {
+				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
+				EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
+	private boolean saveAsExe() {
+		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
+		saveDialog.setFilterExtensions(new String[] { "*.EXE;*.exe" });
+		final int indexOfDot = currentFileName.lastIndexOf(File.separatorChar);
+		final String name = currentFileName.substring(indexOfDot == -1 ? 0 : indexOfDot, currentFileName.lastIndexOf('.'));
+		final String ext = currentFileName.substring(currentFileName.lastIndexOf('.') + 1);
+		saveDialog.setFileName(name + 'X' + '.' + ext);
+		saveDialog.setOverwrite(true);
+		final String fileName = saveDialog.open();
+		if (fileName != null && !fileName.trim().isEmpty()) {
+			final String fn = fileName.toUpperCase(Locale.ROOT);
+			if (fn.endsWith("GPCGA.EXE") || fn.endsWith("GPEGA.EXE") || fn.endsWith("GPTDY.EXE")) {
+				openMessageBox("Cannot overwrite original EXE game files.", SWT.ICON_WARNING);
+				return false;
+			}
+			try {
+				int off = UnExepack.memmem(gpcExe, DefaultCars.getByteArray());
+				byte[] a = new byte[gpcExe.length];
+				System.arraycopy(gpcExe, 0, a, 0, off);
+				System.arraycopy(engine.getBikesInf().toByteArray(), 0, a, off, BikesInf.FILE_SIZE);
+				System.arraycopy(gpcExe, off + BikesInf.FILE_SIZE, a, off + BikesInf.FILE_SIZE, gpcExe.length - off - BikesInf.FILE_SIZE);
+				Files.write(Paths.get(fileName), a);
 				currentFileName = fileName;
 				setCurrentFileModificationStatus(false);
 				setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());

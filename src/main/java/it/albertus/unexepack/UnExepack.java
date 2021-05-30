@@ -372,7 +372,7 @@ public class UnExepack implements Callable<Integer> {
 		return ExitCode.OK;
 	}
 
-	private static int memmem(@NonNull final byte[] haystack, @NonNull final byte[] needle) {
+	public static int memmem(@NonNull final byte[] haystack, @NonNull final byte[] needle) {
 		for (int i = 0; i < haystack.length - needle.length + 1; ++i) {
 			boolean found = true;
 			for (int j = 0; j < needle.length; ++j) {
