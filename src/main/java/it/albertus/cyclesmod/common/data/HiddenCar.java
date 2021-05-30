@@ -9,11 +9,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class HiddenBike {
+public class HiddenCar {
 
-	private static final long CRC32 = Integer.toUnsignedLong(0xEF30BAE6);
+	private static final long CRC32 = Integer.toUnsignedLong(0x25C5E02D);
 
-	private static final String DEFLATED_BASE64 = "eNpjY5DQ22DGr57GnMb8jukd0ynmU8zvpBkYGDoYihiiGDwYnBjsNFCBkY0bduCNDYRCQVQ8DKQgAIgbExMVGgBWamOkzM8KtBoAC/woBQ==";
+	private static final String DEFLATED_BASE64 = "eNpjZVDR4TFIYTjAfIA5jSONQ4xZjJlNgoGBoYkhlcGPwZbBmIFBAwaMbNywAW9sIBQKouJhIAUBQNyYmKjQALBSmDkMUAAAoWokhw==";
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 

@@ -1,9 +1,14 @@
 package it.albertus.cyclesmod.common.data;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 import lombok.AccessLevel;
@@ -37,6 +42,24 @@ class DataUtils {
 		final Checksum crc = new CRC32();
 		crc.update(bytes, 0, bytes.length);
 		return crc.getValue();
+	}
+
+	static String deflateToBase64(@NonNull final Path path) throws IOException {
+		final long inputSize = Files.size(path);
+		if (inputSize > 0x200000) { // 2 MiB
+			throw new IllegalArgumentException("Input file is too large");
+		}
+		final byte[] output = new byte[(int) inputSize];
+		final Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
+		try {
+			deflater.setInput(Files.readAllBytes(path));
+			deflater.finish();
+			int compressedDataLength = deflater.deflate(output);
+			return Base64.getEncoder().encodeToString(Arrays.copyOf(output, compressedDataLength));
+		}
+		finally {
+			deflater.end();
+		}
 	}
 
 }
