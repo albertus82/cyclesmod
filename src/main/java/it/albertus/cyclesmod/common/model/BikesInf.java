@@ -48,6 +48,10 @@ public class BikesInf {
 		parse(bytes);
 	}
 
+	public BikesInf(@NonNull final byte[] bytes, BikeType... bikeTypes) {
+		parse(bytes, bikeTypes);
+	}
+
 	public void reset(final BikeType... bikeTypes) {
 		parse(DefaultBikes.getByteArray(), bikeTypes);
 	}
