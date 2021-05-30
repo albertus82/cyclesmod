@@ -371,7 +371,7 @@ public class UnExepack implements Callable<Integer> {
 		return -1;
 	}
 
-	private static int decodeExeLen(final int eCblp, final int eCp) {
+	static int decodeExeLen(final int eCblp, final int eCp) {
 		if (eCblp == 0) {
 			return eCp * 512;
 		}
