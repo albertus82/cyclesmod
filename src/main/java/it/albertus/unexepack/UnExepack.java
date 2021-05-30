@@ -33,7 +33,7 @@ public class UnExepack implements Callable<Integer> {
 	private static final int EXEPACK_SIGNATURE = 0x4252;
 
 	private static final ByteOrder BYTE_ORDER = ByteOrder.LITTLE_ENDIAN;
-	private static final int MAX_INPUT_FILE_SIZE = 0x200000; // 2 MiB
+	private static final int MAX_INPUT_FILE_SIZE = 0x800000; // 8 MiB, based on the info available at https://w4kfu.github.io/unEXEPACK/files/exepack_list.html
 	private static final String LOGGING_FORMAT_PROPERTY = "java.util.logging.SimpleFormatter.format";
 
 	@Value
