@@ -5,6 +5,7 @@
 .classpath
 interpolated-pom.xml
 lombok.config
+unpacked
 hs_err_pid*.log
 junit*.properties
 /*.[cC][fF][gG]
