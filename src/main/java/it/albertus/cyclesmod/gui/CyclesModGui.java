@@ -194,11 +194,14 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			engine.setBikesInf(new BikesInf());
 			final BikesCfg bikesCfg = new BikesCfg(file);
 			int count = 0;
+			final NumeralSystem backup = engine.getNumeralSystem();
+			engine.setNumeralSystem(NumeralSystem.DEFAULT);
 			for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
 				if (engine.applyProperty(key, bikesCfg.getProperties().getProperty(key))) {
 					count++;
 				}
 			}
+			engine.setNumeralSystem(backup);
 			tabs.updateFormValues();
 			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
 			openMessageBox(messages.get("gui.message.file.open.customizations.applied", count), SWT.ICON_INFORMATION);
@@ -408,10 +411,13 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		try {
+			final NumeralSystem backup = engine.getNumeralSystem();
+			engine.setNumeralSystem(NumeralSystem.DEFAULT);
 			final Properties properties = new BikesCfg(new Bike(type, HiddenBike.getByteArray())).getProperties();
 			for (final String key : properties.stringPropertyNames()) {
 				engine.applyProperty(key, properties.getProperty(key));
 			}
+			engine.setNumeralSystem(backup);
 			tabs.updateFormValues();
 			setCurrentFileModificationStatus(isConfigurationChanged());
 			return true;
