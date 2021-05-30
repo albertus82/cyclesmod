@@ -340,7 +340,7 @@ public class UnExepack implements Callable<Integer> {
 
 	public static void main(final String... args) {
 		if (System.getProperty(LOGGING_FORMAT_PROPERTY) == null) {
-			System.setProperty(LOGGING_FORMAT_PROPERTY, "%5$s%6$s%n");
+			System.setProperty(LOGGING_FORMAT_PROPERTY, "%4$s: %5$s%6$s%n");
 		}
 		System.exit(new CommandLine(new UnExepack()).setCommandName(UnExepack.class.getSimpleName().toLowerCase(Locale.ROOT)).execute(args));
 	}
