@@ -347,7 +347,7 @@ public class UnExepack implements Callable<Integer> {
 
 	@Override
 	public Integer call() throws IOException {
-		if (!inputFile.toFile().exists() || inputFile.toFile().isDirectory()) {
+		if (!inputFile.toFile().exists() || Files.isDirectory(inputFile)) {
 			log.severe("The input file does not exist.");
 			return ExitCode.SOFTWARE;
 		}
