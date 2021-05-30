@@ -9,11 +9,11 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class DefaultBikes {
+public class DefaultCars {
 
-	private static final long CRC32 = Integer.toUnsignedLong(0x28A33682);
+	private static final long CRC32 = Integer.toUnsignedLong(0x8B31837B);
 
-	private static final String DEFLATED_BASE64 = "eNpjY1ihv8GsiPEdEwQmAaGMKgMDwwaGmQytDMUMqQyRkpQAGTCQhwBFZWUVZKAIA5L8rAxwgO6mMiAEu2kBQwfQRYkMYQx+qpQALSjQ1QcBIxNzBDCCAn1dDWUZEX4uVribLAxBbuJh5mEGuakLCJVUgBKTGGoYMhkiGfwYXPRJBI7IwBsLCIAAJBE3R3NdZRGoqwArb09n";
+	private static final String DEFLATED_BASE64 = "eNpjZTDQeqCXwnCA+QBzGkcaBxMzEzObBAMDQxNDKoMfgy2DMQODBgwY2bhhA97YQCgURMXDQAoCgLgxMVGhAWClMHMYoICN4Y3OFYMKBgVmBWY+Nj62C0wXmHxkgRK9DHkMUQxeIFfB3aRhjgps4MARCKAme3j5+QUgAMxlKZmZeRVNPU0VFcVgUFCQl5OZEhWA1U0dOg/0poHddI3tGts7pncQN/Ux5DNEg91kRI6bgoJCQsIioqKiYoAAFkQFQLfk5WUCQXpKUjwsmDDcBAA7dXI/";
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
