@@ -57,9 +57,9 @@ public class UnExepack implements Callable<Integer> {
 		int eLfarlc;
 		int eOvno;
 
-		private DosHeader(@NonNull final byte[] bytes) {
+		private DosHeader(@NonNull final byte[] bytes) throws InvalidDosHeaderException {
 			if (bytes.length != SIZE) {
-				throw new IllegalArgumentException("Invalid byte array size");
+				throw new IllegalArgumentException("Invalid byte array size; expected: " + SIZE + " but was: " + bytes.length);
 			}
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			buf.order(BYTE_ORDER);
@@ -78,7 +78,7 @@ public class UnExepack implements Callable<Integer> {
 			eLfarlc = Short.toUnsignedInt(buf.getShort(24));
 			eOvno = Short.toUnsignedInt(buf.getShort(26));
 			if (!test()) {
-				throw new IllegalArgumentException("This is not a valid MS-DOS executable");
+				throw new InvalidDosHeaderException(bytes);
 			}
 		}
 
@@ -142,9 +142,9 @@ public class UnExepack implements Callable<Integer> {
 		int skipLen;
 		int signature;
 
-		private ExepackHeader(@NonNull final byte[] bytes) {
+		private ExepackHeader(@NonNull final byte[] bytes) throws InvalidExepackHeaderException {
 			if (bytes.length != SIZE) {
-				throw new IllegalArgumentException("Invalid byte array size");
+				throw new IllegalArgumentException("Invalid byte array size; expected: " + SIZE + " but was: " + bytes.length);
 			}
 			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			buf.order(BYTE_ORDER);
@@ -158,7 +158,7 @@ public class UnExepack implements Callable<Integer> {
 			final int word8 = Short.toUnsignedInt(buf.getShort(14));
 			final int word9 = Short.toUnsignedInt(buf.getShort(16));
 			if ((word9 != EXEPACK_SIGNATURE && word8 != EXEPACK_SIGNATURE) || exepackSize == 0x00) {
-				throw new IllegalArgumentException("This is not a valid EXEPACK executable");
+				throw new InvalidExepackHeaderException(bytes);
 			}
 			if (word8 == EXEPACK_SIGNATURE && word9 != EXEPACK_SIGNATURE) {
 				this.skipLen = 1;
@@ -313,7 +313,7 @@ public class UnExepack implements Callable<Integer> {
 		return writeExe(dhead, unpackedData, reloc, paddingLength);
 	}
 
-	public static byte[] unpack(@NonNull final byte[] packedExec) {
+	public static byte[] unpack(@NonNull final byte[] packedExec) throws InvalidDosHeaderException, InvalidExepackHeaderException {
 		final DosHeader dh = new DosHeader(Arrays.copyOf(packedExec, DosHeader.SIZE));
 		log.log(Level.INFO, "DOS header: {0}", dh);
 
@@ -347,11 +347,27 @@ public class UnExepack implements Callable<Integer> {
 
 	@Override
 	public Integer call() throws IOException {
+		if (!inputFile.toFile().exists() || inputFile.toFile().isDirectory()) {
+			log.severe("The input file does not exist.");
+			return ExitCode.SOFTWARE;
+		}
 		if (Files.size(inputFile) > MAX_INPUT_FILE_SIZE) {
-			throw new IOException("Input file is too large");
+			log.severe("The input file is too large.");
+			return ExitCode.SOFTWARE;
 		}
 		final byte[] packedExec = Files.readAllBytes(inputFile);
-		final byte[] unpackedExec = unpack(packedExec);
+		final byte[] unpackedExec;
+		try {
+			unpackedExec = unpack(packedExec);
+		}
+		catch (final InvalidDosHeaderException e) {
+			log.severe("The input file is not a valid MS-DOS executable.");
+			return ExitCode.SOFTWARE;
+		}
+		catch (final InvalidExepackHeaderException e) {
+			log.severe("The input file is not a valid EXEPACK executable.");
+			return ExitCode.SOFTWARE;
+		}
 		Files.write(outputFile, unpackedExec);
 		return ExitCode.OK;
 	}
