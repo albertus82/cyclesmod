@@ -1,5 +1,6 @@
 package it.albertus.cyclesmod.gui.model;
 
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import lombok.Getter;
@@ -10,6 +11,7 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 public class FormProperty {
 
+	@Getter @ToString.Include private final Label label;
 	@Getter @ToString.Include private final Text text;
 
 	private TextBackup textBackup;

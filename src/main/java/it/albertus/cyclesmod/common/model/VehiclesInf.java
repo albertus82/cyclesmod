@@ -73,7 +73,7 @@ public class VehiclesInf {
 		}
 		for (final VehicleType vehicleType : vehicleTypes) {
 			final int index = vehicleType.getIndex();
-			vehicles.put(vehicleType, new Vehicle(vehicleType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * (index - 1), Vehicle.LENGTH * index)));
+			vehicles.put(vehicleType, new Vehicle(vehicleType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * index, Vehicle.LENGTH * (index + 1))));
 		}
 	}
 

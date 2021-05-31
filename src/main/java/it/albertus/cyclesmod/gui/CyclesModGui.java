@@ -687,21 +687,20 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private void setMode(final Mode mode) {
-		this.mode = mode;
-		switch (mode) {
-		case CYCLES:
-			gpcOriginalExeBytes = null;
-			// Set cycles defaults
-			// Set cycles labels
-			// Set cycles reset & hidden listeners
-			break;
-		case GPC:
-			// Set gpc defaults
-			// Set gpc labels
-			// Set gpc reset & hidden listeners
-			break;
-		default:
-			throw new IllegalArgumentException("Unknown mode: " + mode);
+		if (!this.mode.equals(mode)) {
+			this.mode = mode;
+			tabs.updateTabItemsText();
+			switch (mode) {
+			case CYCLES:
+				gpcOriginalExeBytes = null;
+				// Set cycles labels
+				break;
+			case GPC:
+				// Set gpc labels
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown mode: " + mode);
+			}
 		}
 	}
 

@@ -87,7 +87,6 @@ public class Tabs implements Multilanguage {
 		tabFolder = new TabFolder(gui.getShell(), SWT.NONE);
 		for (final Vehicle vehicle : gui.getVehiclesInf().getVehicles().values()) {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-			tabItem.setText("&" + vehicle.getType().getDisplacement() + " cc");
 
 			// This outer composite is required for GTK!
 			final Composite outerComposite = new Composite(tabFolder, SWT.NONE);
@@ -126,7 +125,7 @@ public class Tabs implements Multilanguage {
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				final FormProperty formProperty = new FormProperty(text);
+				final FormProperty formProperty = new FormProperty(label, text);
 				for (final Game game : Game.values()) {
 					formProperties.get(game).put(keyMap.get(game), formProperty);
 				}
@@ -184,7 +183,7 @@ public class Tabs implements Multilanguage {
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				final FormProperty formProperty = new FormProperty(text);
+				final FormProperty formProperty = new FormProperty(label, text);
 				for (final Game game : Game.values()) {
 					formProperties.get(game).put(keyMap.get(game), formProperty);
 				}
@@ -216,7 +215,7 @@ public class Tabs implements Multilanguage {
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(powerPropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				final FormProperty formProperty = new FormProperty(text);
+				final FormProperty formProperty = new FormProperty(label, text);
 				for (final Game game : Game.values()) {
 					formProperties.get(game).put(keyMap.get(game), formProperty);
 				}
@@ -227,6 +226,13 @@ public class Tabs implements Multilanguage {
 			tabScrolledComposite.setExpandHorizontal(true);
 			tabScrolledComposite.setMinSize(tabComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			tabItem.setControl(outerComposite);
+		}
+		updateTabItemsText();
+	}
+
+	public void updateTabItemsText() {
+		for (final VehicleType vehicleType : VehicleType.values()) {
+			tabFolder.getItem(vehicleType.getIndex()).setText(messages.get("gui.label.tabs." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT) + "." + vehicleType.getIndex()));
 		}
 	}
 
@@ -287,7 +293,8 @@ public class Tabs implements Multilanguage {
 			if (!properties.containsKey(entry.getKey())) {
 				throw new IllegalStateException(messages.get("gui.error.property.missing", entry.getKey()));
 			}
-			final Text field = entry.getValue().getText();
+			final Label label = entry.getValue().getLabel();
+			final Text text = entry.getValue().getText();
 
 			// Update field max length...
 			final int textLimit;
@@ -303,24 +310,30 @@ public class Tabs implements Multilanguage {
 			else {
 				throw new IllegalArgumentException(entry.getKey(), new UnknownPropertyException(entry.getKey()));
 			}
-			if (field.getTextLimit() != textLimit) {
-				field.setTextLimit(textLimit);
+			if (text.getTextLimit() != textLimit) {
+				text.setTextLimit(textLimit);
 			}
 
-			// Update field value...
-			final String text = Integer.toString(properties.get(entry.getKey()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT);
-			if (!field.getText().equals(text)) {
-				field.setText(text);
+			// Update label tooltip...
+			final String labelToolTip = entry.getKey();
+			if (label.getToolTipText() == null || !label.getToolTipText().equals(labelToolTip)) {
+				label.setToolTipText(labelToolTip);
 			}
 
-			// Update tooltip text...
-			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString(((GenericTextData) field.getData()).getDefaultValueMap().get(gui.getMode().getGame()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
-			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
-				field.setToolTipText(toolTipText);
+			// Update text value...
+			final String textValue = Integer.toString(properties.get(entry.getKey()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT);
+			if (!text.getText().equals(textValue)) {
+				text.setText(textValue);
+			}
+
+			// Update text tooltip...
+			final String textToolTip = messages.get("gui.message.tooltip.default", Integer.toString(((GenericTextData) text.getData()).getDefaultValueMap().get(gui.getMode().getGame()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			if (text.getToolTipText() == null || !text.getToolTipText().equals(textToolTip)) {
+				text.setToolTipText(textToolTip);
 			}
 
 			// Update font style...
-			textFormatter.updateFontStyle(field);
+			textFormatter.updateFontStyle(text);
 		}
 	}
 
