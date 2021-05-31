@@ -212,9 +212,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean importCfg() {
-		final FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
-		openDialog.setFilterExtensions(new String[] { "*.CFG;*.cfg" });
-		final String fileName = openDialog.open();
+		final FileDialog importDialog = new FileDialog(shell, SWT.OPEN);
+		importDialog.setText(messages.get("gui.label.dialog.import.title"));
+		importDialog.setFilterExtensions(new String[] { "*.CFG;*.cfg" });
+		final String fileName = importDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
@@ -355,13 +356,14 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
-		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
+		final FileDialog exportDialog = new FileDialog(shell, SWT.SAVE);
+		exportDialog.setText(messages.get("gui.label.dialog.export.title"));
 		final String proposedFileName = VehiclesCfg.getFileName(mode.getGame(), vehicleType);
 		final String fileExtension = proposedFileName.substring(1 + proposedFileName.lastIndexOf('.'));
-		saveDialog.setFilterExtensions(new String[] { "*." + fileExtension.toUpperCase(Locale.ROOT) + ";*." + fileExtension.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(proposedFileName);
-		saveDialog.setOverwrite(true);
-		final String fileName = saveDialog.open();
+		exportDialog.setFilterExtensions(new String[] { "*." + fileExtension.toUpperCase(Locale.ROOT) + ";*." + fileExtension.toLowerCase(Locale.ROOT) });
+		exportDialog.setFileName(proposedFileName);
+		exportDialog.setOverwrite(true);
+		final String fileName = exportDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
@@ -386,13 +388,14 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
-		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
+		final FileDialog exportDialog = new FileDialog(shell, SWT.SAVE);
+		exportDialog.setText(messages.get("gui.label.dialog.export.title"));
 		final String proposedFileName = VehiclesCfg.getFileName(mode.getGame());
 		final String fileExtension = proposedFileName.substring(1 + proposedFileName.lastIndexOf('.'));
-		saveDialog.setFilterExtensions(new String[] { "*." + fileExtension.toUpperCase(Locale.ROOT) + ";*." + fileExtension.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(proposedFileName);
-		saveDialog.setOverwrite(true);
-		final String fileName = saveDialog.open();
+		exportDialog.setFilterExtensions(new String[] { "*." + fileExtension.toUpperCase(Locale.ROOT) + ";*." + fileExtension.toLowerCase(Locale.ROOT) });
+		exportDialog.setFileName(proposedFileName);
+		exportDialog.setOverwrite(true);
+		final String fileName = exportDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
