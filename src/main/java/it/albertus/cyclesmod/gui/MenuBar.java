@@ -114,6 +114,13 @@ public class MenuBar implements Multilanguage {
 			}
 		});
 
+		newLocalizedMenuItem(fileImportSubMenu, SWT.PUSH, "gui.label.menu.item.import.hiddenCfg").addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.loadHiddenCfg(VehicleType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+			}
+		});
+
 		final MenuItem fileExportAsSubMenuItem = newLocalizedMenuItem(fileMenu, SWT.CASCADE, "gui.label.menu.item.export");
 
 		final Menu fileExportAsSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
@@ -236,18 +243,6 @@ public class MenuBar implements Multilanguage {
 				languageMenuItem.setSelection(true);
 			}
 		}
-
-		// Special
-		final Menu specialMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		newLocalizedMenuItem(bar, SWT.CASCADE, "gui.label.menu.header.special").setMenu(specialMenu);
-
-		final MenuItem specialHiddenCfgMenuItem = newLocalizedMenuItem(specialMenu, SWT.PUSH, "gui.label.menu.item.hiddenCfg");
-		specialHiddenCfgMenuItem.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				gui.loadHiddenCfg(VehicleType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
-			}
-		});
 
 		// Help
 		final Menu helpMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
