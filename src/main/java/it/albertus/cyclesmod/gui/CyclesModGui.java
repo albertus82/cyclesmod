@@ -167,7 +167,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean open() {
-		if (!askForSaving(messages.get("gui.label.window.title"), messages.get("gui.message.confirm.open.message"))) {
+		if (!askForSavingAndExport()) {
 			return false;
 		}
 		final FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
@@ -265,6 +265,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			if (count > 0) {
 				setCurrentFileModificationStatus(true);
 			}
+			setLastExportedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 			openMessageBox(messages.get("gui.message.file.open.customizations.applied", count), SWT.ICON_INFORMATION);
 			return true;
 		}
@@ -342,7 +343,9 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private void updateGuiStatusAfterOpening(final Path file) throws IOException {
 		tabs.updateFormValues();
-		setLastSavedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
+		final Map<String, Integer> properties = new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap();
+		setLastSavedProperties(properties);
+		setLastExportedProperties(properties);
 		currentFileName = file.toFile().getCanonicalPath();
 		setCurrentFileModificationStatus(false);
 	}
@@ -402,6 +405,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		final String str = VehiclesCfg.createProperties(mode.getGame(), engine.getVehiclesInf().getVehicles().values().toArray(new Vehicle[0]));
 		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), VehiclesCfg.CHARSET)) {
 			writer.write(str);
+			setLastExportedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 			return true;
 		}
 		catch (final IOException | RuntimeException e) {
@@ -417,7 +421,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		try {
 			doResetSingle(vehicleType);
-			setCurrentFileModificationStatus(isConfigurationChanged());
+			setCurrentFileModificationStatus(isNotSaved());
 			return true;
 		}
 		catch (final RuntimeException e) {
@@ -445,7 +449,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		try {
 			engine.getVehiclesInf().reset(mode.getGame());
 			tabs.updateFormValues();
-			setCurrentFileModificationStatus(isConfigurationChanged());
+			setCurrentFileModificationStatus(isNotSaved());
 			return true;
 		}
 		catch (final RuntimeException e) {
@@ -601,7 +605,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 			engine.setNumeralSystem(backup);
 			tabs.updateFormValues();
-			setCurrentFileModificationStatus(isConfigurationChanged());
+			setCurrentFileModificationStatus(isNotSaved());
 			return true;
 		}
 		catch (final InvalidPropertyException | RuntimeException e) {
@@ -611,8 +615,12 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	private boolean isConfigurationChanged() {
+	private boolean isNotSaved() {
 		return !new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap().equals(lastSavedProperties);
+	}
+
+	private boolean isNotExported() {
+		return !new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap().equals(lastExportedProperties);
 	}
 
 	public void setCurrentFileModificationStatus(final boolean modified) {
@@ -624,27 +632,49 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	public boolean askForSaving(@NonNull final String title, @NonNull final String message) {
+	public boolean askForSavingAndExport() {
 		try {
 			updateModelValues(true);
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
-		if (isConfigurationChanged()) {
+		return askForSaving() && askForExport();
+	}
+
+	private boolean askForSaving() {
+		if (isNotSaved()) {
 			final MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
-			messageBox.setText(title);
-			messageBox.setMessage(message);
+			messageBox.setText(getWindowTitle());
+			messageBox.setMessage(messages.get("gui.message.confirm.save.changes"));
 			final int selectedButton = messageBox.open();
 			switch (selectedButton) {
 			case SWT.YES:
 				return save();
 			case SWT.NO:
 				return true;
-			case SWT.CANCEL:
-				return false;
 			default:
-				throw new IllegalStateException("Invalid button code: " + selectedButton);
+				return false;
+			}
+		}
+		else {
+			return true;
+		}
+	}
+
+	private boolean askForExport() {
+		if (Mode.GPC.equals(mode) && isNotExported()) {
+			final MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
+			messageBox.setText(getWindowTitle());
+			messageBox.setMessage(messages.get("gui.message.confirm.export.changes"));
+			final int selectedButton = messageBox.open();
+			switch (selectedButton) {
+			case SWT.YES:
+				return exportCfgAll();
+			case SWT.NO:
+				return true;
+			default:
+				return false;
 			}
 		}
 		else {
