@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cyclesmod.common.data.DefaultCars;
 import it.albertus.cyclesmod.common.data.HiddenBike;
+import it.albertus.cyclesmod.common.data.HiddenCar;
 import it.albertus.cyclesmod.common.data.InvalidSizeException;
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.InvalidNumberException;
@@ -61,7 +62,9 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	private final CyclesModEngine engine = new CyclesModEngine(new VehiclesInf());
+	private Mode mode = Mode.DEFAULT;
+
+	private final CyclesModEngine engine = new CyclesModEngine(new VehiclesInf(mode.getGame()));
 
 	@Getter private final Shell shell;
 	@Getter private final MenuBar menuBar;
@@ -70,7 +73,6 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@Getter private final Map<String, Integer> defaultProperties = Collections.unmodifiableMap(new VehiclesCfg(engine.getVehiclesInf()).getMap());
 	private final Map<String, Integer> lastPersistedProperties = new HashMap<>(defaultProperties);
 
-	private Mode mode = Mode.DEFAULT;
 	private String currentFileName;
 	private byte[] gpcOriginalExeBytes;
 
@@ -420,7 +422,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
-		engine.getVehiclesInf().reset(vehicleType);
+		engine.getVehiclesInf().reset(mode.getGame(), vehicleType);
 		tabs.updateFormValues();
 	}
 
@@ -429,7 +431,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		try {
-			engine.getVehiclesInf().reset();
+			engine.getVehiclesInf().reset(mode.getGame());
 			tabs.updateFormValues();
 			setCurrentFileModificationStatus(isConfigurationChanged());
 			return true;
@@ -570,7 +572,18 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		try {
 			final NumeralSystem backup = engine.getNumeralSystem();
 			engine.setNumeralSystem(NumeralSystem.DEFAULT);
-			final Properties properties = new VehiclesCfg(new Vehicle(type, HiddenBike.getByteArray())).getProperties();
+			final byte[] byteArray;
+			switch (mode) {
+			case CYCLES:
+				byteArray = HiddenBike.getByteArray();
+				break;
+			case GPC:
+				byteArray = HiddenCar.getByteArray();
+				break;
+			default:
+				throw new IllegalStateException("Unknown mode: " + mode);
+			}
+			final Properties properties = new VehiclesCfg(new Vehicle(type, byteArray)).getProperties();
 			for (final String key : properties.stringPropertyNames()) {
 				engine.applyProperty(key, properties.getProperty(key));
 			}
