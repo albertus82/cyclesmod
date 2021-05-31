@@ -101,12 +101,24 @@ public class MenuBar implements Multilanguage {
 
 		new MenuItem(fileMenu, SWT.SEPARATOR);
 
-		final MenuItem fileExportAsSubMenuItem = newLocalizedMenuItem(fileMenu, SWT.CASCADE, "gui.label.menu.item.export.as");
+		final MenuItem fileImportSubMenuItem = newLocalizedMenuItem(fileMenu, SWT.CASCADE, "gui.label.menu.item.import");
+
+		final Menu fileImportSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		fileImportSubMenuItem.setMenu(fileImportSubMenu);
+
+		newLocalizedMenuItem(fileImportSubMenu, SWT.CASCADE, "gui.label.menu.item.import.cfg").addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.importCfg();
+			}
+		});
+
+		final MenuItem fileExportAsSubMenuItem = newLocalizedMenuItem(fileMenu, SWT.CASCADE, "gui.label.menu.item.export");
 
 		final Menu fileExportAsSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		fileExportAsSubMenuItem.setMenu(fileExportAsSubMenu);
 
-		final MenuItem fileExportAsCfgSubMenuItem = newLocalizedMenuItem(fileExportAsSubMenu, SWT.CASCADE, "gui.label.menu.item.export.as.cfg");
+		final MenuItem fileExportAsCfgSubMenuItem = newLocalizedMenuItem(fileExportAsSubMenu, SWT.CASCADE, "gui.label.menu.item.export.cfg");
 
 		final Menu fileExportAsCfgSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		fileExportAsCfgSubMenuItem.setMenu(fileExportAsCfgSubMenu);
@@ -114,14 +126,14 @@ public class MenuBar implements Multilanguage {
 		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, "gui.label.menu.item.bike.single").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.exportAsCfg(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+				gui.exportCfgSingle(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 
 		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, "gui.label.menu.item.bike.all").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.exportAllAsCfg();
+				gui.exportCfgAll();
 			}
 		});
 

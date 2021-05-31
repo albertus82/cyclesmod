@@ -1,6 +1,5 @@
 package it.albertus.cyclesmod.gui;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
@@ -72,7 +71,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private Mode mode = Mode.CYCLES;
 
 	private String currentFileName;
-	private byte[] gpcExeBytes;
+	private byte[] gpcOriginalExeBytes;
 
 	private CyclesModGui(@NonNull final Display display) {
 		// Shell creation...
@@ -160,7 +159,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		final FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
-		openDialog.setFilterExtensions(new String[] { "*.INF;*.inf;*.CFG;*.cfg;*.EXE;*.exe" });
+		openDialog.setFilterExtensions(new String[] { "*.INF;*.inf;*.EXE;*.exe" });
 		final String fileName = openDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
@@ -177,15 +176,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 			if (file.toString().toUpperCase(Locale.ROOT).endsWith(".INF")) {
 				setMode(Mode.CYCLES);
-				return openBikesInf(file);
-			}
-			else if (file.toString().toUpperCase(Locale.ROOT).endsWith(".CFG")) {
-				setMode(Mode.CYCLES);
-				return openBikesCfg(file);
+				return openInf(file);
 			}
 			else if (file.toString().toUpperCase(Locale.ROOT).endsWith(".EXE")) {
 				setMode(Mode.GPC);
-				return openGpcExe(file);
+				return openExe(file);
 			}
 			else {
 				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
@@ -204,10 +199,45 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	private boolean openBikesCfg(@NonNull final Path file) throws IOException {
+	public boolean importCfg() {
+		final FileDialog openDialog = new FileDialog(shell, SWT.OPEN);
+		openDialog.setFilterExtensions(new String[] { "*.CFG;*.cfg" });
+		final String fileName = openDialog.open();
+		if (fileName == null || fileName.trim().isEmpty()) {
+			return false;
+		}
+		return importCfg(fileName);
+	}
+
+	private boolean importCfg(@NonNull final String path) {
 		try {
-			currentFileName = null;
-			engine.setBikesInf(new BikesInf());
+			final Path file = Paths.get(path);
+			if (!file.toFile().exists() || Files.isDirectory(file)) {
+				openMessageBox(messages.get("gui.error.file.open.not.found"), SWT.ICON_WARNING);
+				return false;
+			}
+			if (file.toString().toUpperCase(Locale.ROOT).endsWith(".CFG")) {
+				return importCfg(file);
+			}
+			else {
+				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
+				return false;
+			}
+		}
+		catch (final InvalidPathException e) {
+			log.log(Level.WARNING, "Cannot import file '" + path + "':", e);
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
+		}
+		catch (final RuntimeException | IOException e) {
+			log.log(Level.WARNING, "Cannot import file '" + path + "':", e);
+			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			return false;
+		}
+	}
+
+	private boolean importCfg(@NonNull final Path file) throws IOException {
+		try {
 			final BikesCfg bikesCfg = new BikesCfg(file);
 			int count = 0;
 			final NumeralSystem backup = engine.getNumeralSystem();
@@ -219,7 +249,9 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 			engine.setNumeralSystem(backup);
 			tabs.updateFormValues();
-			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
+			if (count > 0) {
+				setCurrentFileModificationStatus(true);
+			}
 			openMessageBox(messages.get("gui.message.file.open.customizations.applied", count), SWT.ICON_INFORMATION);
 			return true;
 		}
@@ -237,13 +269,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	private boolean openBikesInf(@NonNull final Path file) throws IOException {
+	private boolean openInf(@NonNull final Path file) throws IOException {
 		try {
 			engine.setBikesInf(new BikesInf(file));
-			tabs.updateFormValues();
-			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
-			currentFileName = file.toFile().getCanonicalPath();
-			setCurrentFileModificationStatus(false);
+			updateGuiStatusAfterOpening(file);
 			return true;
 		}
 		catch (final InvalidSizeException e) {
@@ -252,42 +281,54 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	private boolean openGpcExe(@NonNull final Path file) throws IOException {
+	private boolean openExe(@NonNull final Path file) throws IOException {
 		if (Files.size(file) > 0x30000) {
 			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
 			return false;
 		}
 		try {
-			final byte[] exec = Files.readAllBytes(file);
-			byte[] unpacked;
-			try {
-				unpacked = UnExepack.unpack(exec);
-			}
-			catch (final InvalidExepackHeaderException e) {
-				unpacked = exec;
-			}
-			if (UnExepack.memmem(unpacked, DefaultCars.getByteArray()) == -1) {
-				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING); // FIXME
+			final byte[] unpackedExec = unpackExec(file);
+			if (UnExepack.memmem(unpackedExec, DefaultCars.getByteArray()) == -1) {
+				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
 				return false;
 			}
 			if (!file.toFile().setReadOnly()) {
-				log.warning("set readonly failed");
+				log.log(Level.INFO, "Cannot set read only flag for file: {0}.", file);
 			}
-			gpcExeBytes = unpacked;
+			gpcOriginalExeBytes = unpackedExec;
 			engine.setBikesInf(new BikesInf(DefaultCars.getByteArray()));
-			tabs.updateFormValues();
-			setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
-			currentFileName = file.toFile().getCanonicalPath();
-			setCurrentFileModificationStatus(false);
+			updateGuiStatusAfterOpening(file);
 			return true;
 		}
 		catch (final InvalidDosHeaderException e) {
-			openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING); // FIXME
+			openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
 			return false;
 		}
 	}
 
-	public boolean exportAsCfg(@NonNull final BikeType bikeType) {
+	private static byte[] unpackExec(@NonNull final Path file) throws IOException, InvalidDosHeaderException {
+		final byte[] originalExec = Files.readAllBytes(file);
+		try {
+			return UnExepack.unpack(originalExec);
+		}
+		catch (final InvalidExepackHeaderException e) {
+			log.log(Level.FINE, "File '" + file + "' may be already unpacked:", e);
+			return originalExec;
+		}
+		catch (final RuntimeException e) {
+			log.log(Level.WARNING, "Cannot unpack '" + file + "':", e);
+			return originalExec;
+		}
+	}
+
+	private void updateGuiStatusAfterOpening(final Path file) throws IOException {
+		tabs.updateFormValues();
+		setLastPersistedProperties(new BikesCfg(engine.getBikesInf()).getMap());
+		currentFileName = file.toFile().getCanonicalPath();
+		setCurrentFileModificationStatus(false);
+	}
+
+	public boolean exportCfgSingle(@NonNull final BikeType bikeType) {
 		try {
 			updateModelValues(false);
 		}
@@ -317,7 +358,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	public boolean exportAllAsCfg() {
+	public boolean exportCfgAll() {
 		try {
 			updateModelValues(false);
 		}
@@ -410,11 +451,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		try {
 			final byte[] bytes;
 			if (Mode.GPC.equals(mode)) { // EXE
-				final int offset = UnExepack.memmem(gpcExeBytes, DefaultCars.getByteArray());
-				bytes = new byte[gpcExeBytes.length];
-				System.arraycopy(gpcExeBytes, 0, bytes, 0, offset);
+				final int offset = UnExepack.memmem(gpcOriginalExeBytes, DefaultCars.getByteArray());
+				bytes = new byte[gpcOriginalExeBytes.length];
+				System.arraycopy(gpcOriginalExeBytes, 0, bytes, 0, offset);
 				System.arraycopy(engine.getBikesInf().toByteArray(), 0, bytes, offset, BikesInf.FILE_SIZE);
-				System.arraycopy(gpcExeBytes, offset + BikesInf.FILE_SIZE, bytes, offset + BikesInf.FILE_SIZE, gpcExeBytes.length - offset - BikesInf.FILE_SIZE);
+				System.arraycopy(gpcOriginalExeBytes, offset + BikesInf.FILE_SIZE, bytes, offset + BikesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - BikesInf.FILE_SIZE);
 			}
 			else { // INF
 				bytes = engine.getBikesInf().toByteArray();
@@ -477,10 +518,6 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean saveAsExe() {
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 		saveDialog.setFilterExtensions(new String[] { "*.EXE;*.exe" });
-		final int indexOfDot = currentFileName.lastIndexOf(File.separatorChar);
-		final String name = currentFileName.substring(indexOfDot == -1 ? 0 : indexOfDot, currentFileName.lastIndexOf('.'));
-		final String ext = currentFileName.substring(currentFileName.lastIndexOf('.') + 1);
-		saveDialog.setFileName(name + 'X' + '.' + ext);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 		if (fileName != null && !fileName.trim().isEmpty()) {
@@ -489,11 +526,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				return false;
 			}
 			try {
-				final int offset = UnExepack.memmem(gpcExeBytes, DefaultCars.getByteArray());
-				final byte[] newExe = new byte[gpcExeBytes.length];
-				System.arraycopy(gpcExeBytes, 0, newExe, 0, offset);
+				final int offset = UnExepack.memmem(gpcOriginalExeBytes, DefaultCars.getByteArray());
+				final byte[] newExe = new byte[gpcOriginalExeBytes.length];
+				System.arraycopy(gpcOriginalExeBytes, 0, newExe, 0, offset);
 				System.arraycopy(engine.getBikesInf().toByteArray(), 0, newExe, offset, BikesInf.FILE_SIZE);
-				System.arraycopy(gpcExeBytes, offset + BikesInf.FILE_SIZE, newExe, offset + BikesInf.FILE_SIZE, gpcExeBytes.length - offset - BikesInf.FILE_SIZE);
+				System.arraycopy(gpcOriginalExeBytes, offset + BikesInf.FILE_SIZE, newExe, offset + BikesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - BikesInf.FILE_SIZE);
 				Files.write(Paths.get(fileName), newExe);
 				currentFileName = fileName;
 				setCurrentFileModificationStatus(false);
@@ -616,8 +653,20 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private void setMode(final Mode mode) {
 		this.mode = mode;
-		if (!Mode.GPC.equals(mode)) {
-			gpcExeBytes = null;
+		switch (mode) {
+		case CYCLES:
+			gpcOriginalExeBytes = null;
+			// Set cycles defaults
+			// Set cycles labels
+			// Set cycles reset & hidden listeners
+			break;
+		case GPC:
+			// Set gpc defaults
+			// Set gpc labels
+			// Set gpc reset & hidden listeners
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown mode: " + mode);
 		}
 	}
 

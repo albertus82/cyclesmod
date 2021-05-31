@@ -319,7 +319,7 @@ public class UnExepack implements Callable<Integer> {
 
 		final int exeLen = decodeExeLen(dh.eCblp, dh.eCp);
 		if (exeLen < packedExec.length) {
-			log.log(Level.WARNING, "EXE file size is {0,number,#}; ignoring {1,number,#} trailing bytes", new Integer[] { exeLen, packedExec.length - exeLen });
+			log.log(Level.WARNING, "EXE file size is {0,number,#}; ignoring {1,number,#} trailing bytes.", new Integer[] { exeLen, packedExec.length - exeLen });
 		}
 
 		final int exepackOffset = (dh.eCparhdr + dh.eCs) * 16;
