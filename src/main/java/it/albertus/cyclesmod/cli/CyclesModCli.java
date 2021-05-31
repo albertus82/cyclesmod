@@ -110,7 +110,7 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private void loadOriginalConfiguration() {
 		System.out.print(messages.get("console.message.reading.original.configuration") + ' ');
-		engine.setBikesInf(new BikesInf());
+		engine.setVehiclesInf(new BikesInf());
 		System.out.println(DONE);
 	}
 
@@ -176,7 +176,7 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private void createBikesInf(@NonNull final Path bikesInfFile) throws IOException {
 		System.out.print(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME) + ' ');
-		final byte[] currentBytes = engine.getBikesInf().toByteArray();
+		final byte[] currentBytes = engine.getVehiclesInf().toByteArray();
 		if (bikesInfFile.toFile().exists()) {
 			if (Files.isDirectory(bikesInfFile)) {
 				System.out.println(ERROR);

@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import it.albertus.cyclesmod.common.model.BikeType;
+import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.Images;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphProvider;
@@ -48,7 +48,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		super(parent, style);
 	}
 
-	public int open(final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
+	public int open(final Map<Integer, Short> map, final VehicleType bikeType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
 		shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", bikeType.getDisplacement()));
 		shell.setImages(Images.getAppIconArray());
@@ -77,12 +77,12 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		return shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 	}
 
-	private void createContents(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
+	private void createContents(final Shell shell, final Map<Integer, Short> map, final VehicleType bikeType, final boolean torqueVisible) {
 		createGraph(shell, map, bikeType, torqueVisible);
 		createButtonBox(shell);
 	}
 
-	private void createGraph(final Shell shell, final Map<Integer, Short> map, final BikeType bikeType, final boolean torqueVisible) {
+	private void createGraph(final Shell shell, final Map<Integer, Short> map, final VehicleType bikeType, final boolean torqueVisible) {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);

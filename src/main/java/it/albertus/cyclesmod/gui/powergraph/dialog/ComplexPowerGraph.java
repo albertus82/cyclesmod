@@ -19,7 +19,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Shell;
 
-import it.albertus.cyclesmod.common.model.BikeType;
+import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
@@ -41,11 +41,11 @@ public class ComplexPowerGraph extends PowerGraph {
 	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private final Shell shell;
-	private final BikeType bikeType;
+	private final VehicleType bikeType;
 
 	@Getter private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-	public ComplexPowerGraph(final Map<Integer, Short> map, final BikeType bikeType, final Shell shell) {
+	public ComplexPowerGraph(final Map<Integer, Short> map, final VehicleType bikeType, final Shell shell) {
 		super(map, bikeType);
 		this.shell = shell;
 		this.bikeType = bikeType;

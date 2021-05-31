@@ -5,16 +5,17 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum BikeType {
+public enum VehicleType {
 
-	CLASS_125(125),
-	CLASS_250(250),
-	CLASS_500(500);
+	FERRARI_125("Ferrari", 125),
+	MCLAREN_250("McLaren", 250),
+	WILLIAMS_500("Williams", 500);
 
+	private final String team;
 	private final int displacement;
 
-	public static BikeType forDisplacement(final int displacement) {
-		for (final BikeType bikeType : values()) {
+	public static VehicleType forDisplacement(final int displacement) {
+		for (final VehicleType bikeType : values()) {
 			if (bikeType.displacement == displacement) {
 				return bikeType;
 			}

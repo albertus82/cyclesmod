@@ -24,8 +24,8 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
-import it.albertus.cyclesmod.common.model.Bike;
-import it.albertus.cyclesmod.common.model.BikeType;
+import it.albertus.cyclesmod.common.model.Vehicle;
+import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.model.BikesCfg;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
@@ -62,7 +62,7 @@ public class Tabs implements Multilanguage {
 
 	private final Map<String, FormProperty> formProperties = new HashMap<>();
 
-	private final Map<BikeType, PowerGraphCanvas> powerCanvases = new EnumMap<>(BikeType.class);
+	private final Map<VehicleType, PowerGraphCanvas> powerCanvases = new EnumMap<>(VehicleType.class);
 
 	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
 
@@ -80,7 +80,7 @@ public class Tabs implements Multilanguage {
 		propertyKeyListener = new PropertyKeyListener(this);
 
 		tabFolder = new TabFolder(gui.getShell(), SWT.NONE);
-		for (final Bike bike : gui.getBikesInf().getBikes().values()) {
+		for (final Vehicle bike : gui.getBikesInf().getVehicles().values()) {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 			tabItem.setText("&" + bike.getType().getDisplacement() + " cc");
 
@@ -239,7 +239,7 @@ public class Tabs implements Multilanguage {
 		enableTextListeners();
 
 		// Update power graphs...
-		for (final Bike bike : gui.getBikesInf().getBikes().values()) {
+		for (final Vehicle bike : gui.getBikesInf().getVehicles().values()) {
 			final IPowerGraph powerGraph = powerCanvases.get(bike.getType()).getPowerGraph();
 			for (short i = 0; i < bike.getPower().getCurve().length; i++) {
 				powerGraph.setPowerValue(i, bike.getPower().getCurve()[i]);

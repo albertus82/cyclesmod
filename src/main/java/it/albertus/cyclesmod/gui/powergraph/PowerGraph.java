@@ -17,8 +17,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
-import it.albertus.cyclesmod.common.model.Bike;
-import it.albertus.cyclesmod.common.model.BikeType;
+import it.albertus.cyclesmod.common.model.Vehicle;
+import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
@@ -43,7 +43,7 @@ public class PowerGraph implements IPowerGraph {
 	private final double[] xDataArray = new double[Power.LENGTH];
 	private boolean torqueVisible;
 
-	public PowerGraph(final Bike bike) {
+	public PowerGraph(final Vehicle bike) {
 		for (int i = 0; i < Power.LENGTH; i++) {
 			xDataArray[i] = (double) Power.getRpm(i) / RPM_DIVISOR;
 			powerValues[i] = bike.getPower().getCurve()[i];
@@ -52,7 +52,7 @@ public class PowerGraph implements IPowerGraph {
 		init(bike.getType());
 	}
 
-	public PowerGraph(final Map<Integer, Short> map, final BikeType bikeType) {
+	public PowerGraph(final Map<Integer, Short> map, final VehicleType bikeType) {
 		if (map.size() != Power.LENGTH) {
 			throw new IllegalArgumentException("map size must be " + Power.LENGTH);
 		}
@@ -67,7 +67,7 @@ public class PowerGraph implements IPowerGraph {
 		init(bikeType);
 	}
 
-	protected void init(final BikeType bikeType) {
+	protected void init(final VehicleType bikeType) {
 		powerDataProvider.setBufferSize(xDataArray.length);
 		powerDataProvider.setCurrentXDataArray(xDataArray);
 		powerDataProvider.setCurrentYDataArray(powerValues);
@@ -94,14 +94,14 @@ public class PowerGraph implements IPowerGraph {
 		torqueTrace.setTraceColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
 	}
 
-	private static Color getColor(final BikeType bikeType) {
+	private static Color getColor(final VehicleType bikeType) {
 		final Display display = Display.getCurrent();
 		switch (bikeType) {
-		case CLASS_125:
+		case FERRARI_125:
 			return display.getSystemColor(SWT.COLOR_RED);
-		case CLASS_250:
+		case MCLAREN_250:
 			return display.getSystemColor(SWT.COLOR_BLUE);
-		case CLASS_500:
+		case WILLIAMS_500:
 			return display.getSystemColor(SWT.COLOR_BLACK);
 		default:
 			throw new IllegalArgumentException("Unknown bike type: " + bikeType);

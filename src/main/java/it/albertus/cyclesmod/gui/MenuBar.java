@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
-import it.albertus.cyclesmod.common.model.BikeType;
+import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
 import it.albertus.cyclesmod.common.resources.Language;
 import it.albertus.cyclesmod.gui.listener.AboutListener;
@@ -126,7 +126,7 @@ public class MenuBar implements Multilanguage {
 		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, "gui.label.menu.item.bike.single").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.exportCfgSingle(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+				gui.exportCfgSingle(VehicleType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 
@@ -170,7 +170,7 @@ public class MenuBar implements Multilanguage {
 		final Menu editPowerSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editPowerSubMenuItem.setMenu(editPowerSubMenu);
 
-		for (final BikeType bikeType : BikeType.values()) {
+		for (final VehicleType bikeType : VehicleType.values()) {
 			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.power.curve.bike", bikeType.getDisplacement())).addSelectionListener(new OpenPowerGraphDialogListener(gui, bikeType));
 		}
 
@@ -184,7 +184,7 @@ public class MenuBar implements Multilanguage {
 		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.bike.single").addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.resetSingle(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+				gui.resetSingle(VehicleType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 
@@ -244,7 +244,7 @@ public class MenuBar implements Multilanguage {
 		specialHiddenCfgMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				gui.loadHiddenCfg(BikeType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
+				gui.loadHiddenCfg(VehicleType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 

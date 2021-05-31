@@ -21,7 +21,7 @@ public class BikesInf {
 	public static final String FILE_NAME = "BIKES.INF";
 	public static final short FILE_SIZE = 444;
 
-	private final Map<BikeType, Bike> bikes = new EnumMap<>(BikeType.class);
+	private final Map<VehicleType, Vehicle> vehicles = new EnumMap<>(VehicleType.class);
 
 	/** Creates a new instance based on the default configuration. */
 	public BikesInf() {
@@ -48,21 +48,21 @@ public class BikesInf {
 		parse(bytes);
 	}
 
-	public BikesInf(@NonNull final byte[] bytes, BikeType... bikeTypes) {
+	public BikesInf(@NonNull final byte[] bytes, VehicleType... bikeTypes) {
 		parse(bytes, bikeTypes);
 	}
 
-	public void reset(final BikeType... bikeTypes) {
+	public void reset(final VehicleType... bikeTypes) {
 		parse(DefaultBikes.getByteArray(), bikeTypes);
 	}
 
-	private void parse(@NonNull final byte[] bytes, BikeType... bikeTypes) {
+	private void parse(@NonNull final byte[] bytes, VehicleType... bikeTypes) {
 		if (bikeTypes == null || bikeTypes.length == 0) {
-			bikeTypes = BikeType.values();
+			bikeTypes = VehicleType.values();
 		}
-		for (final BikeType bikeType : bikeTypes) {
+		for (final VehicleType bikeType : bikeTypes) {
 			final int ordinal = bikeType.ordinal();
-			bikes.put(bikeType, new Bike(bikeType, Arrays.copyOfRange(bytes, Bike.LENGTH * ordinal, Bike.LENGTH * (ordinal + 1))));
+			vehicles.put(bikeType, new Vehicle(bikeType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * ordinal, Vehicle.LENGTH * (ordinal + 1))));
 		}
 	}
 
@@ -74,7 +74,7 @@ public class BikesInf {
 	 */
 	public byte[] toByteArray() {
 		final List<Byte> byteList = new ArrayList<>(FILE_SIZE);
-		for (final ByteList bike : bikes.values()) {
+		for (final ByteList bike : vehicles.values()) {
 			byteList.addAll(bike.toByteList());
 		}
 		if (byteList.size() != FILE_SIZE) {
@@ -83,8 +83,8 @@ public class BikesInf {
 		return ByteUtils.toByteArray(byteList);
 	}
 
-	public Map<BikeType, Bike> getBikes() {
-		return Collections.unmodifiableMap(bikes);
+	public Map<VehicleType, Vehicle> getVehicles() {
+		return Collections.unmodifiableMap(vehicles);
 	}
 
 }

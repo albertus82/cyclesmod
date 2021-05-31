@@ -41,7 +41,7 @@ public class BikesCfg {
 	 * @param bikesInf the configuration to map
 	 */
 	public BikesCfg(@NonNull final BikesInf bikesInf) {
-		this(bikesInf.getBikes().values().toArray(new Bike[0]));
+		this(bikesInf.getVehicles().values().toArray(new Vehicle[0]));
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class BikesCfg {
 	 * 
 	 * @param bikes the bike configurations to map
 	 */
-	public BikesCfg(final Bike... bikes) {
+	public BikesCfg(final Vehicle... bikes) {
 		try (final StringReader reader = new StringReader(createProperties(bikes))) {
 			populateProperties(reader);
 		}
@@ -75,7 +75,7 @@ public class BikesCfg {
 	}
 
 	public static void writeDefault(@NonNull final Path file) throws IOException {
-		final String props = createProperties(new BikesInf().getBikes().values().toArray(new Bike[0]));
+		final String props = createProperties(new BikesInf().getVehicles().values().toArray(new Vehicle[0]));
 
 		// Salvataggio...
 		try (final Writer writer = Files.newBufferedWriter(file, CHARSET)) {
@@ -83,11 +83,11 @@ public class BikesCfg {
 		}
 	}
 
-	public static String createProperties(final Bike... bikes) {
+	public static String createProperties(final Vehicle... bikes) {
 		final String lineSeparator = System.lineSeparator();
 		final StringBuilder props = new StringBuilder(messages.get("common.string.bikes.cfg.header"));
 
-		for (final Bike bike : bikes) {
+		for (final Vehicle bike : bikes) {
 			props.append(lineSeparator).append(lineSeparator);
 			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.begin")).append("... ###");
 
@@ -136,11 +136,11 @@ public class BikesCfg {
 		return props.toString();
 	}
 
-	public static String buildPropertyKey(final BikeType bikeType, final String prefix, final String suffix) {
+	public static String buildPropertyKey(final VehicleType bikeType, final String prefix, final String suffix) {
 		return bikeType.getDisplacement() + "." + prefix + "." + suffix;
 	}
 
-	public static String buildPropertyKey(final BikeType bikeType, final String prefix, final int suffix) {
+	public static String buildPropertyKey(final VehicleType bikeType, final String prefix, final int suffix) {
 		return buildPropertyKey(bikeType, prefix, Integer.toString(suffix));
 	}
 
