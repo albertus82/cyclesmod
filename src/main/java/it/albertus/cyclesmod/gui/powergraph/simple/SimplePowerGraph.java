@@ -6,7 +6,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace.PointStyle;
 import org.eclipse.swt.widgets.Display;
 
-import it.albertus.cyclesmod.common.model.Bike;
+import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
@@ -21,7 +21,7 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	public SimplePowerGraph(final Bike bike) {
+	public SimplePowerGraph(final Vehicle bike) {
 		super(bike);
 
 		final Axis abscissae = getAbscissae();

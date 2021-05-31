@@ -3,13 +3,13 @@ package it.albertus.cyclesmod.common.engine;
 import java.util.Arrays;
 import java.util.logging.Level;
 
-import it.albertus.cyclesmod.common.model.Bike;
-import it.albertus.cyclesmod.common.model.BikeType;
 import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
+import it.albertus.cyclesmod.common.model.Vehicle;
+import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.util.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,10 +24,10 @@ public class CyclesModEngine {
 
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
 
-	private BikesInf bikesInf;
+	private BikesInf vehiclesInf;
 
 	public CyclesModEngine(final BikesInf bikesInf) {
-		this.bikesInf = bikesInf;
+		this.vehiclesInf = bikesInf;
 	}
 
 	public boolean isNumeric(final String value) {
@@ -55,7 +55,7 @@ public class CyclesModEngine {
 		boolean applied = false;
 		final short newValue = Power.parse(propertyName, value, numeralSystem.getRadix());
 
-		final Bike bike = getBike(propertyName);
+		final Vehicle bike = getVehicle(propertyName);
 		final String suffix = StringUtils.substringAfter(propertyName, Power.PREFIX + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getPower().getCurve().length) {
 			final int index = Integer.parseInt(suffix);
@@ -75,13 +75,13 @@ public class CyclesModEngine {
 		boolean applied = false;
 		final int newValue = Gearbox.parse(propertyName, value, numeralSystem.getRadix());
 
-		final Bike bike = getBike(propertyName);
+		final Vehicle vehicle = getVehicle(propertyName);
 		final String suffix = StringUtils.substringAfter(propertyName, Gearbox.PREFIX + '.');
-		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getGearbox().getRatios().length) {
+		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < vehicle.getGearbox().getRatios().length) {
 			final int index = Integer.parseInt(suffix);
-			final int defaultValue = bike.getGearbox().getRatios()[index];
+			final int defaultValue = vehicle.getGearbox().getRatios()[index];
 			if (defaultValue != newValue) {
-				bike.getGearbox().getRatios()[index] = newValue;
+				vehicle.getGearbox().getRatios()[index] = newValue;
 				applied = true;
 			}
 		}
@@ -95,13 +95,13 @@ public class CyclesModEngine {
 		boolean applied = false;
 		final int newValue = Settings.parse(propertyName, value, numeralSystem.getRadix());
 
-		final Bike bike = getBike(propertyName);
+		final Vehicle vehicle = getVehicle(propertyName);
 		final String suffix = StringUtils.substringAfter(propertyName, Settings.PREFIX + '.');
 		final Setting setting = Setting.forKey(suffix);
 		if (setting != null) {
-			final int defaultValue = bike.getSettings().getValues().get(setting);
+			final int defaultValue = vehicle.getSettings().getValues().get(setting);
 			if (newValue != defaultValue) {
-				bike.getSettings().getValues().put(setting, newValue);
+				vehicle.getSettings().getValues().put(setting, newValue);
 				applied = true;
 			}
 		}
@@ -111,13 +111,13 @@ public class CyclesModEngine {
 		return applied;
 	}
 
-	private Bike getBike(final String propertyName) throws UnknownPropertyException {
+	private Vehicle getVehicle(final String propertyName) throws UnknownPropertyException {
 		final int displacement = Integer.parseInt(StringUtils.substringBefore(propertyName, "."));
-		final BikeType bikeType = BikeType.forDisplacement(displacement);
-		if (bikeType == null) {
+		final VehicleType type = VehicleType.forDisplacement(displacement);
+		if (type == null) {
 			throw new UnknownPropertyException(propertyName);
 		}
-		return bikesInf.getBikes().get(bikeType);
+		return vehiclesInf.getVehicles().get(type);
 	}
 
 	public static boolean isNumeric(final String value, final int radix) {

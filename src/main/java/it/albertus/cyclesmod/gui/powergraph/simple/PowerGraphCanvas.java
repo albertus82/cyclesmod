@@ -8,7 +8,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-import it.albertus.cyclesmod.common.model.Bike;
+import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphProvider;
 import it.albertus.jface.Multilanguage;
 import lombok.Getter;
@@ -19,7 +19,7 @@ public class PowerGraphCanvas extends Canvas implements PowerGraphProvider, Mult
 
 	private final Collection<Multilanguage> multilanguages = new ArrayList<>();
 
-	public PowerGraphCanvas(final Composite parent, final Bike bike) {
+	public PowerGraphCanvas(final Composite parent, final Vehicle bike) {
 		super(parent, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(this);
