@@ -21,11 +21,13 @@ import org.eclipse.swt.widgets.Shell;
 
 import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.Mode;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.UpdateTitleListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
@@ -41,13 +43,15 @@ public class ComplexPowerGraph extends PowerGraph {
 	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private final Shell shell;
+	private final Mode mode;
 	private final VehicleType vehicleType;
 
 	@Getter private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-	public ComplexPowerGraph(final Map<Integer, Short> map, final VehicleType vehicleType, final Shell shell) {
+	public ComplexPowerGraph(@NonNull final Map<Integer, Short> map, @NonNull final Mode mode, @NonNull final VehicleType vehicleType, @NonNull final Shell shell) {
 		super(map, vehicleType);
 		this.shell = shell;
+		this.mode = mode;
 		this.vehicleType = vehicleType;
 
 		final Axis abscissae = getAbscissae();
@@ -149,10 +153,10 @@ public class ComplexPowerGraph extends PowerGraph {
 		super.toggleTorqueVisibility(visibility);
 		if (shell != null && !shell.isDisposed()) {
 			if (visibility) {
-				shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDisplacement()));
+				shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDescription(mode.getGame())));
 			}
 			else {
-				shell.setText(messages.get("gui.label.graph.dialog.title.power", vehicleType.getDisplacement()));
+				shell.setText(messages.get("gui.label.graph.dialog.title.power", vehicleType.getDescription(mode.getGame())));
 			}
 		}
 	}
