@@ -68,8 +68,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@Getter private final Map<String, Integer> defaultProperties = Collections.unmodifiableMap(new BikesCfg(engine.getBikesInf()).getMap());
 	private final Map<String, Integer> lastPersistedProperties = new HashMap<>(defaultProperties);
 
-	private Mode mode = Mode.CYCLES;
-
+	private Mode mode = Mode.DEFAULT;
 	private String currentFileName;
 	private byte[] gpcOriginalExeBytes;
 
