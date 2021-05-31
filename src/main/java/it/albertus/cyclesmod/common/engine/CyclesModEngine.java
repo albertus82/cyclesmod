@@ -3,13 +3,13 @@ package it.albertus.cyclesmod.common.engine;
 import java.util.Arrays;
 import java.util.logging.Level;
 
-import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
 import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.model.VehicleType;
+import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.util.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -112,8 +112,11 @@ public class CyclesModEngine {
 	}
 
 	private Vehicle getVehicle(final String propertyName) throws UnknownPropertyException {
-		final int displacement = Integer.parseInt(StringUtils.substringBefore(propertyName, "."));
-		final VehicleType type = VehicleType.forDisplacement(displacement);
+		final String prefix = StringUtils.substringBefore(propertyName, ".");
+		VehicleType type = VehicleType.forTeam(prefix);
+		if (type == null && isNumeric(prefix, NumeralSystem.DECIMAL.getRadix())) {
+			type = VehicleType.forDisplacement(Integer.parseInt(prefix));
+		}
 		if (type == null) {
 			throw new UnknownPropertyException(propertyName);
 		}
