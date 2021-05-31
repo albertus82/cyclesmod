@@ -84,11 +84,11 @@ public class VehiclesCfg {
 
 	public static String createProperties(@NonNull final Game game, final Vehicle... vehicles) {
 		final String lineSeparator = System.lineSeparator();
-		final StringBuilder props = new StringBuilder(messages.get("common.string.bikes.cfg.header"));
+		final StringBuilder props = new StringBuilder(messages.get("common.string.vehicles.cfg.header." + game.toString().toLowerCase(Locale.ROOT)));
 
 		for (final Vehicle vehicle : vehicles) {
 			props.append(lineSeparator).append(lineSeparator);
-			props.append("### ").append(vehicle.getType().getDescription(game)).append(" - ").append(messages.get("common.string.bikes.cfg.begin")).append("... ###");
+			props.append(messages.get("common.string.vehicles.cfg.begin", vehicle.getType().getDescription(game)));
 
 			// Settings
 			props.append(lineSeparator);
@@ -127,11 +127,11 @@ public class VehiclesCfg {
 				props.append(lineSeparator);
 			}
 
-			props.append("### ").append(vehicle.getType().getDescription(game)).append(" - ").append(messages.get("common.string.bikes.cfg.end")).append(". ###");
+			props.append(messages.get("common.string.vehicles.cfg.end", vehicle.getType().getDescription(game)));
 		}
 
 		props.append(lineSeparator).append(lineSeparator);
-		props.append(messages.get("common.string.bikes.cfg.footer")).append(lineSeparator);
+		props.append(messages.get("common.string.vehicles.cfg.footer")).append(lineSeparator);
 		return props.toString();
 	}
 
