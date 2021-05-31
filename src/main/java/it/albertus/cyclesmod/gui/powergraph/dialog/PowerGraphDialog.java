@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.Images;
+import it.albertus.cyclesmod.gui.Mode;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphProvider;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.RedoListener;
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.SaveSnapshotListener;
@@ -30,6 +31,7 @@ import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomMouseWheelListen
 import it.albertus.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.SwtUtils;
+import lombok.NonNull;
 
 public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
@@ -37,20 +39,19 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
+	private final Mode mode;
+
 	private int returnCode = SWT.CANCEL;
 	private ComplexPowerGraph powerGraph;
 
-	public PowerGraphDialog(final Shell parent) {
-		this(parent, SWT.SHEET | SWT.RESIZE | SWT.MAX);
+	public PowerGraphDialog(@NonNull final Shell parent, @NonNull final Mode mode) {
+		super(parent, SWT.SHEET | SWT.RESIZE | SWT.MAX);
+		this.mode = mode;
 	}
 
-	private PowerGraphDialog(final Shell parent, final int style) {
-		super(parent, style);
-	}
-
-	public int open(final Map<Integer, Short> map, final VehicleType vehicleType, final boolean torqueVisible) {
+	public int open(@NonNull final Map<Integer, Short> map, @NonNull final VehicleType vehicleType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
-		shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDisplacement()));
+		shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDescription(mode.getGame())));
 		shell.setImages(Images.getAppIconArray());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
 		createContents(shell, map, vehicleType, torqueVisible);
@@ -86,7 +87,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		powerGraph = new ComplexPowerGraph(map, vehicleType, shell);
+		powerGraph = new ComplexPowerGraph(map, mode, vehicleType, shell);
 		final ComplexPowerGraphContextMenu menu = new ComplexPowerGraphContextMenu(canvas, powerGraph);
 		if (torqueVisible) {
 			powerGraph.toggleTorqueVisibility(true);
