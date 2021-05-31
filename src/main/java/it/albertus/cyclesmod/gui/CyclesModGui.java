@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -36,6 +37,7 @@ import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
+import it.albertus.cyclesmod.common.model.Game;
 import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.model.VehiclesCfg;
@@ -62,7 +64,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	private Mode mode = Mode.DEFAULT;
+	@Getter private Mode mode = Mode.DEFAULT;
 
 	private final CyclesModEngine engine = new CyclesModEngine(new VehiclesInf(mode.getGame()));
 
@@ -70,13 +72,18 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@Getter private final MenuBar menuBar;
 	@Getter private final Tabs tabs;
 
-	@Getter private final Map<String, Integer> defaultProperties = Collections.unmodifiableMap(new VehiclesCfg(engine.getVehiclesInf()).getMap());
-	private final Map<String, Integer> lastPersistedProperties = new HashMap<>(defaultProperties);
+	@Getter private final Map<Game, Map<String, Integer>> defaultProperties = new EnumMap<>(Game.class);
+	private final Map<String, Integer> lastPersistedProperties;
 
 	private String currentFileName;
 	private byte[] gpcOriginalExeBytes;
 
 	private CyclesModGui(@NonNull final Display display) {
+		for (final Game game : Game.values()) {
+			defaultProperties.put(game, Collections.unmodifiableMap(new VehiclesCfg(new VehiclesInf(game)).getMap()));
+		}
+		lastPersistedProperties = new HashMap<>(defaultProperties.get(mode.getGame()));
+
 		// Shell creation...
 		shell = new Shell(display);
 		shell.setImages(Images.getAppIconArray());

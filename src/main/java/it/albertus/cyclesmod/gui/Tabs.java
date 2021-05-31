@@ -101,7 +101,7 @@ public class Tabs implements Multilanguage {
 
 			for (final Setting setting : vehicle.getSettings().getValues().keySet()) {
 				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Settings.PREFIX, setting.getKey());
-				final Integer defaultValue = gui.getDefaultProperties().get(key);
+				final Integer defaultValue = gui.getDefaultProperties().get(gui.getMode().getGame()).get(key);
 				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(key);
@@ -152,7 +152,7 @@ public class Tabs implements Multilanguage {
 
 			for (int index = 0; index < vehicle.getGearbox().getRatios().length; index++) {
 				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Gearbox.PREFIX, index);
-				final Integer defaultValue = gui.getDefaultProperties().get(key);
+				final Integer defaultValue = gui.getDefaultProperties().get(gui.getMode().getGame()).get(key);
 				final Serializable gearName = index != 0 ? index : "N";
 				final Label label = newLocalizedLabel(gearboxGroup, SWT.NONE, () -> messages.get("gui.label.gearbox.gear", gearName));
 				GridDataFactory.swtDefaults().applyTo(label);
@@ -175,7 +175,7 @@ public class Tabs implements Multilanguage {
 
 			for (int index = 0; index < vehicle.getPower().getCurve().length; index++) {
 				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Power.PREFIX, index);
-				final Integer defaultValue = gui.getDefaultProperties().get(key);
+				final Integer defaultValue = gui.getDefaultProperties().get(gui.getMode().getGame()).get(key);
 				final int rpm = Power.getRpm(index);
 				final Label label = newLocalizedLabel(powerGroup, SWT.NONE, () -> messages.get("gui.label.power.rpm", rpm));
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
