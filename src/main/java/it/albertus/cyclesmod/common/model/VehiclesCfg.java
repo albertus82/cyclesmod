@@ -73,8 +73,8 @@ public class VehiclesCfg {
 		manageDeprecatedProperties();
 	}
 
-	public static void writeDefault(@NonNull final Path destCfgFile) throws IOException {
-		final String props = createProperties(new VehiclesInf().getVehicles().values().toArray(new Vehicle[0]));
+	public static void writeDefault(@NonNull final Game game, @NonNull final Path destCfgFile) throws IOException {
+		final String props = createProperties(new VehiclesInf(game).getVehicles().values().toArray(new Vehicle[0]));
 
 		// Salvataggio...
 		try (final Writer writer = Files.newBufferedWriter(destCfgFile, CHARSET)) {

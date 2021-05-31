@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.albertus.cyclesmod.common.data.DefaultBikes;
+import it.albertus.cyclesmod.common.data.DefaultCars;
 import it.albertus.cyclesmod.common.data.InvalidSizeException;
 import it.albertus.util.ByteUtils;
 import lombok.NonNull;
@@ -23,8 +24,8 @@ public class VehiclesInf {
 	private final Map<VehicleType, Vehicle> vehicles = new EnumMap<>(VehicleType.class);
 
 	/** Creates a new instance based on the default configuration. */
-	public VehiclesInf() {
-		parse(DefaultBikes.getByteArray());
+	public VehiclesInf(@NonNull final Game game) {
+		reset(game);
 	}
 
 	/**
@@ -51,8 +52,19 @@ public class VehiclesInf {
 		parse(bytes, vehicleTypes);
 	}
 
-	public void reset(final VehicleType... vehicleTypes) {
-		parse(DefaultBikes.getByteArray(), vehicleTypes);
+	public void reset(@NonNull final Game game, final VehicleType... vehicleTypes) {
+		final byte[] bytes;
+		switch (game) {
+		case CYCLES:
+			bytes = DefaultBikes.getByteArray();
+			break;
+		case GPC:
+			bytes = DefaultCars.getByteArray();
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown game: " + game);
+		}
+		parse(bytes, vehicleTypes);
 	}
 
 	private void parse(@NonNull final byte[] bytes, VehicleType... vehicleTypes) {
@@ -60,8 +72,8 @@ public class VehiclesInf {
 			vehicleTypes = VehicleType.values();
 		}
 		for (final VehicleType vehicleType : vehicleTypes) {
-			final int ordinal = vehicleType.getIndex();
-			vehicles.put(vehicleType, new Vehicle(vehicleType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * (ordinal - 1), Vehicle.LENGTH * ordinal)));
+			final int index = vehicleType.getIndex();
+			vehicles.put(vehicleType, new Vehicle(vehicleType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * (index - 1), Vehicle.LENGTH * index)));
 		}
 	}
 

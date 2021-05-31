@@ -113,14 +113,14 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private void loadOriginalConfiguration() {
 		System.out.print(messages.get("console.message.reading.original.configuration") + ' ');
-		engine.setVehiclesInf(new VehiclesInf());
+		engine.setVehiclesInf(new VehiclesInf(GAME));
 		System.out.println(DONE);
 	}
 
 	private void createBikesCfg(@NonNull final Path bikesCfgFile) throws IOException {
 		System.out.print(messages.get("console.message.creating.default.file", VehiclesCfg.getFileName(GAME)) + ' ');
 		try {
-			VehiclesCfg.writeDefault(bikesCfgFile);
+			VehiclesCfg.writeDefault(GAME, bikesCfgFile);
 			System.out.println(DONE);
 		}
 		catch (final IOException e) {
