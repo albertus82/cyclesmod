@@ -34,7 +34,7 @@ public class PowerPropertyFocusListener extends PropertyFocusListener {
 					final int index = textData.getIndex();
 					final IPowerGraph graph = textData.getPowerGraph();
 
-					final short newValue = Power.parse(textData.getKey(), text.getText().trim(), gui.getNumeralSystem().getRadix());
+					final short newValue = Power.parse(textData.getKeyMap().get(gui.getMode().getGame()), text.getText().trim(), gui.getNumeralSystem().getRadix());
 					final short oldValue = (short) graph.getPowerValue(index);
 					if (oldValue != newValue) {
 						graph.setPowerValue(index, newValue);

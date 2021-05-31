@@ -39,8 +39,8 @@ public class VehiclesCfg {
 	 * 
 	 * @param vehiclesInf the configuration to map
 	 */
-	public VehiclesCfg(@NonNull final VehiclesInf vehiclesInf) {
-		this(vehiclesInf.getVehicles().values().toArray(new Vehicle[0]));
+	public VehiclesCfg(@NonNull final Game game, @NonNull final VehiclesInf vehiclesInf) {
+		this(game, vehiclesInf.getVehicles().values().toArray(new Vehicle[0]));
 	}
 
 	/**
@@ -48,8 +48,8 @@ public class VehiclesCfg {
 	 * 
 	 * @param vehicles the vehicle configurations to map
 	 */
-	public VehiclesCfg(final Vehicle... vehicles) {
-		try (final StringReader reader = new StringReader(createProperties(vehicles))) {
+	public VehiclesCfg(@NonNull final Game game, final Vehicle... vehicles) {
+		try (final StringReader reader = new StringReader(createProperties(game, vehicles))) {
 			populateProperties(reader);
 		}
 		catch (final IOException e) {
@@ -74,7 +74,7 @@ public class VehiclesCfg {
 	}
 
 	public static void writeDefault(@NonNull final Game game, @NonNull final Path destCfgFile) throws IOException {
-		final String props = createProperties(new VehiclesInf(game).getVehicles().values().toArray(new Vehicle[0]));
+		final String props = createProperties(game, new VehiclesInf(game).getVehicles().values().toArray(new Vehicle[0]));
 
 		// Salvataggio...
 		try (final Writer writer = Files.newBufferedWriter(destCfgFile, CHARSET)) {
@@ -82,20 +82,20 @@ public class VehiclesCfg {
 		}
 	}
 
-	public static String createProperties(final Vehicle... vehicles) {
+	public static String createProperties(@NonNull final Game game, final Vehicle... vehicles) {
 		final String lineSeparator = System.lineSeparator();
 		final StringBuilder props = new StringBuilder(messages.get("common.string.bikes.cfg.header"));
 
 		for (final Vehicle vehicle : vehicles) {
 			props.append(lineSeparator).append(lineSeparator);
-			props.append("### ").append(vehicle.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.begin")).append("... ###");
+			props.append("### ").append(vehicle.getType().getDescription(game)).append(" - ").append(messages.get("common.string.bikes.cfg.begin")).append("... ###");
 
 			// Settings
 			props.append(lineSeparator);
 			props.append("# ").append(Settings.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
 			for (final Entry<Setting, Integer> entry : vehicle.getSettings().getValues().entrySet()) {
-				props.append(buildPropertyKey(vehicle.getType(), Settings.PREFIX, entry.getKey().getKey()));
+				props.append(buildPropertyKey(game, vehicle.getType(), Settings.PREFIX, entry.getKey().getKey()));
 				props.append('=');
 				props.append(entry.getValue().intValue());
 				props.append(lineSeparator);
@@ -106,7 +106,7 @@ public class VehiclesCfg {
 			props.append("# ").append(Gearbox.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
 			for (int index = 0; index < vehicle.getGearbox().getRatios().length; index++) {
-				props.append(buildPropertyKey(vehicle.getType(), Gearbox.PREFIX, index));
+				props.append(buildPropertyKey(game, vehicle.getType(), Gearbox.PREFIX, index));
 				props.append('=');
 				props.append(vehicle.getGearbox().getRatios()[index]);
 				props.append(lineSeparator);
@@ -121,13 +121,13 @@ public class VehiclesCfg {
 					props.append("# ").append(Power.getRpm(index)).append(" RPM");
 					props.append(lineSeparator);
 				}
-				props.append(buildPropertyKey(vehicle.getType(), Power.PREFIX, index));
+				props.append(buildPropertyKey(game, vehicle.getType(), Power.PREFIX, index));
 				props.append('=');
 				props.append(vehicle.getPower().getCurve()[index]);
 				props.append(lineSeparator);
 			}
 
-			props.append("### ").append(vehicle.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.end")).append(". ###");
+			props.append("### ").append(vehicle.getType().getDescription(game)).append(" - ").append(messages.get("common.string.bikes.cfg.end")).append(". ###");
 		}
 
 		props.append(lineSeparator).append(lineSeparator);
@@ -135,12 +135,12 @@ public class VehiclesCfg {
 		return props.toString();
 	}
 
-	public static String buildPropertyKey(final VehicleType vehicleType, final String prefix, final String suffix) {
-		return vehicleType.getDisplacement() + "." + prefix + "." + suffix;
+	public static String buildPropertyKey(@NonNull final Game game, @NonNull final VehicleType vehicleType, @NonNull final String prefix, @NonNull final String suffix) {
+		return vehicleType.getKey(game) + "." + prefix + "." + suffix;
 	}
 
-	public static String buildPropertyKey(final VehicleType vehicleType, final String prefix, final int suffix) {
-		return buildPropertyKey(vehicleType, prefix, Integer.toString(suffix));
+	public static String buildPropertyKey(@NonNull final Game game, final VehicleType vehicleType, final String prefix, final int suffix) {
+		return buildPropertyKey(game, vehicleType, prefix, Integer.toString(suffix));
 	}
 
 	public Map<String, Integer> getMap() {
