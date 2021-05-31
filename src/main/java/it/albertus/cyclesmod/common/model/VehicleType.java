@@ -17,7 +17,7 @@ public enum VehicleType {
 	private final int displacement;
 
 	/** @return the language-independent description of this vehicle type. */
-	public String getDescription(final Game game) {
+	public String getDescription(@NonNull final Game game) {
 		switch (game) {
 		case CYCLES:
 			return displacement + " cc";
