@@ -35,8 +35,8 @@ import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
 import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.model.VehicleType;
-import it.albertus.cyclesmod.common.model.BikesCfg;
-import it.albertus.cyclesmod.common.model.BikesInf;
+import it.albertus.cyclesmod.common.model.VehiclesCfg;
+import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
 import it.albertus.cyclesmod.common.resources.Language;
 import it.albertus.cyclesmod.gui.listener.CloseListener;
@@ -59,13 +59,13 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	private final CyclesModEngine engine = new CyclesModEngine(new BikesInf());
+	private final CyclesModEngine engine = new CyclesModEngine(new VehiclesInf());
 
 	@Getter private final Shell shell;
 	@Getter private final MenuBar menuBar;
 	@Getter private final Tabs tabs;
 
-	@Getter private final Map<String, Integer> defaultProperties = Collections.unmodifiableMap(new BikesCfg(engine.getVehiclesInf()).getMap());
+	@Getter private final Map<String, Integer> defaultProperties = Collections.unmodifiableMap(new VehiclesCfg(engine.getVehiclesInf()).getMap());
 	private final Map<String, Integer> lastPersistedProperties = new HashMap<>(defaultProperties);
 
 	private Mode mode = Mode.DEFAULT;
@@ -237,7 +237,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private boolean importCfg(@NonNull final Path file) throws IOException {
 		try {
-			final BikesCfg bikesCfg = new BikesCfg(file);
+			final VehiclesCfg bikesCfg = new VehiclesCfg(file);
 			int count = 0;
 			final NumeralSystem backup = engine.getNumeralSystem();
 			engine.setNumeralSystem(NumeralSystem.DEFAULT);
@@ -270,7 +270,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private boolean openInf(@NonNull final Path file) throws IOException {
 		try {
-			engine.setVehiclesInf(new BikesInf(file));
+			engine.setVehiclesInf(new VehiclesInf(file));
 			updateGuiStatusAfterOpening(file);
 			return true;
 		}
@@ -295,7 +295,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				log.log(Level.INFO, "Cannot set read only flag for file: {0}.", file);
 			}
 			gpcOriginalExeBytes = unpackedExec;
-			engine.setVehiclesInf(new BikesInf(DefaultCars.getByteArray()));
+			engine.setVehiclesInf(new VehiclesInf(DefaultCars.getByteArray()));
 			updateGuiStatusAfterOpening(file);
 			return true;
 		}
@@ -322,7 +322,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private void updateGuiStatusAfterOpening(final Path file) throws IOException {
 		tabs.updateFormValues();
-		setLastPersistedProperties(new BikesCfg(engine.getVehiclesInf()).getMap());
+		setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
 		currentFileName = file.toFile().getCanonicalPath();
 		setCurrentFileModificationStatus(false);
 	}
@@ -337,16 +337,16 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-		final String ext = BikesCfg.FILE_NAME.substring(1 + BikesCfg.FILE_NAME.lastIndexOf('.'));
+		final String ext = VehiclesCfg.FILE_NAME.substring(1 + VehiclesCfg.FILE_NAME.lastIndexOf('.'));
 		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(BikesCfg.FILE_NAME.substring(0, BikesCfg.FILE_NAME.lastIndexOf('.')) + bikeType.getDisplacement() + "." + ext);
+		saveDialog.setFileName(VehiclesCfg.FILE_NAME.substring(0, VehiclesCfg.FILE_NAME.lastIndexOf('.')) + bikeType.getDisplacement() + "." + ext);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
-		final String str = BikesCfg.createProperties(engine.getVehiclesInf().getVehicles().get(bikeType));
-		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), BikesCfg.CHARSET)) {
+		final String str = VehiclesCfg.createProperties(engine.getVehiclesInf().getVehicles().get(bikeType));
+		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), VehiclesCfg.CHARSET)) {
 			writer.write(str);
 			return true;
 		}
@@ -367,16 +367,16 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-		final String ext = BikesCfg.FILE_NAME.substring(1 + BikesCfg.FILE_NAME.lastIndexOf('.'));
+		final String ext = VehiclesCfg.FILE_NAME.substring(1 + VehiclesCfg.FILE_NAME.lastIndexOf('.'));
 		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(BikesCfg.FILE_NAME);
+		saveDialog.setFileName(VehiclesCfg.FILE_NAME);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
-		final String str = BikesCfg.createProperties(engine.getVehiclesInf().getVehicles().values().toArray(new Vehicle[0]));
-		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), BikesCfg.CHARSET)) {
+		final String str = VehiclesCfg.createProperties(engine.getVehiclesInf().getVehicles().values().toArray(new Vehicle[0]));
+		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), VehiclesCfg.CHARSET)) {
 			writer.write(str);
 			return true;
 		}
@@ -453,14 +453,14 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				final int offset = UnExepack.memmem(gpcOriginalExeBytes, DefaultCars.getByteArray());
 				bytes = new byte[gpcOriginalExeBytes.length];
 				System.arraycopy(gpcOriginalExeBytes, 0, bytes, 0, offset);
-				System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, BikesInf.FILE_SIZE);
-				System.arraycopy(gpcOriginalExeBytes, offset + BikesInf.FILE_SIZE, bytes, offset + BikesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - BikesInf.FILE_SIZE);
+				System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, VehiclesInf.FILE_SIZE);
+				System.arraycopy(gpcOriginalExeBytes, offset + VehiclesInf.FILE_SIZE, bytes, offset + VehiclesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - VehiclesInf.FILE_SIZE);
 			}
 			else { // INF
 				bytes = engine.getVehiclesInf().toByteArray();
 			}
 			Files.write(destFile, bytes);
-			setLastPersistedProperties(new BikesCfg(engine.getVehiclesInf()).getMap());
+			setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
 			setCurrentFileModificationStatus(false);
 			return true;
 		}
@@ -490,9 +490,9 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private boolean saveAsInf() {
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-		final String ext = BikesInf.FILE_NAME.substring(1 + BikesInf.FILE_NAME.lastIndexOf('.'));
+		final String ext = VehiclesInf.FILE_NAME.substring(1 + VehiclesInf.FILE_NAME.lastIndexOf('.'));
 		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(BikesInf.FILE_NAME);
+		saveDialog.setFileName(VehiclesInf.FILE_NAME);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 		if (fileName != null && !fileName.trim().isEmpty()) {
@@ -500,7 +500,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				Files.write(Paths.get(fileName), engine.getVehiclesInf().toByteArray());
 				currentFileName = fileName;
 				setCurrentFileModificationStatus(false);
-				setLastPersistedProperties(new BikesCfg(engine.getVehiclesInf()).getMap());
+				setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -528,12 +528,12 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				final int offset = UnExepack.memmem(gpcOriginalExeBytes, DefaultCars.getByteArray());
 				final byte[] newExe = new byte[gpcOriginalExeBytes.length];
 				System.arraycopy(gpcOriginalExeBytes, 0, newExe, 0, offset);
-				System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, newExe, offset, BikesInf.FILE_SIZE);
-				System.arraycopy(gpcOriginalExeBytes, offset + BikesInf.FILE_SIZE, newExe, offset + BikesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - BikesInf.FILE_SIZE);
+				System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, newExe, offset, VehiclesInf.FILE_SIZE);
+				System.arraycopy(gpcOriginalExeBytes, offset + VehiclesInf.FILE_SIZE, newExe, offset + VehiclesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - VehiclesInf.FILE_SIZE);
 				Files.write(Paths.get(fileName), newExe);
 				currentFileName = fileName;
 				setCurrentFileModificationStatus(false);
-				setLastPersistedProperties(new BikesCfg(engine.getVehiclesInf()).getMap());
+				setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -554,7 +554,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		try {
 			final NumeralSystem backup = engine.getNumeralSystem();
 			engine.setNumeralSystem(NumeralSystem.DEFAULT);
-			final Properties properties = new BikesCfg(new Vehicle(type, HiddenBike.getByteArray())).getProperties();
+			final Properties properties = new VehiclesCfg(new Vehicle(type, HiddenBike.getByteArray())).getProperties();
 			for (final String key : properties.stringPropertyNames()) {
 				engine.applyProperty(key, properties.getProperty(key));
 			}
@@ -571,7 +571,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private boolean isConfigurationChanged() {
-		return !new BikesCfg(engine.getVehiclesInf()).getMap().equals(getLastPersistedProperties());
+		return !new VehiclesCfg(engine.getVehiclesInf()).getMap().equals(getLastPersistedProperties());
 	}
 
 	public void setCurrentFileModificationStatus(final boolean modified) {
@@ -642,7 +642,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		this.lastPersistedProperties.putAll(lastPersistedProperties);
 	}
 
-	public BikesInf getBikesInf() {
+	public VehiclesInf getBikesInf() {
 		return engine.getVehiclesInf();
 	}
 

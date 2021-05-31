@@ -26,7 +26,7 @@ import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.model.VehicleType;
-import it.albertus.cyclesmod.common.model.BikesCfg;
+import it.albertus.cyclesmod.common.model.VehiclesCfg;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
@@ -100,7 +100,7 @@ public class Tabs implements Multilanguage {
 			GridLayoutFactory.swtDefaults().numColumns(6).applyTo(settingsGroup);
 
 			for (final Setting setting : bike.getSettings().getValues().keySet()) {
-				final String key = BikesCfg.buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey());
+				final String key = VehiclesCfg.buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey());
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
@@ -135,7 +135,7 @@ public class Tabs implements Multilanguage {
 				@Override
 				public void mousePressed(@NonNull final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final FormProperty formProperty = formProperties.get(BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
+						final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
 						}
@@ -151,7 +151,7 @@ public class Tabs implements Multilanguage {
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
 
 			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
-				final String key = BikesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
+				final String key = VehiclesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Serializable gearName = index != 0 ? index : "N";
 				final Label label = newLocalizedLabel(gearboxGroup, SWT.NONE, () -> messages.get("gui.label.gearbox.gear", gearName));
@@ -174,7 +174,7 @@ public class Tabs implements Multilanguage {
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
 
 			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
-				final String key = BikesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
+				final String key = VehiclesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final int rpm = Power.getRpm(index);
 				final Label label = newLocalizedLabel(powerGroup, SWT.NONE, () -> messages.get("gui.label.power.rpm", rpm));
@@ -226,7 +226,7 @@ public class Tabs implements Multilanguage {
 	}
 
 	public void updateFormValues() {
-		final Map<String, Integer> properties = new BikesCfg(gui.getBikesInf()).getMap();
+		final Map<String, Integer> properties = new VehiclesCfg(gui.getBikesInf()).getMap();
 
 		// Consistency check...
 		if (properties.size() != formProperties.size()) {

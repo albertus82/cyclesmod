@@ -24,7 +24,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
-public class BikesCfg {
+public class VehiclesCfg {
 
 	public static final String FILE_NAME = "BIKES.CFG";
 	public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
@@ -38,19 +38,19 @@ public class BikesCfg {
 	/**
 	 * Creates a new instance containing the provided configuration.
 	 * 
-	 * @param bikesInf the configuration to map
+	 * @param inf the configuration to map
 	 */
-	public BikesCfg(@NonNull final BikesInf bikesInf) {
-		this(bikesInf.getVehicles().values().toArray(new Vehicle[0]));
+	public VehiclesCfg(@NonNull final VehiclesInf inf) {
+		this(inf.getVehicles().values().toArray(new Vehicle[0]));
 	}
 
 	/**
-	 * Creates a new instance containing the provided bike configurations.
+	 * Creates a new instance containing the provided vehicle configurations.
 	 * 
-	 * @param bikes the bike configurations to map
+	 * @param vehicles the vehicle configurations to map
 	 */
-	public BikesCfg(final Vehicle... bikes) {
-		try (final StringReader reader = new StringReader(createProperties(bikes))) {
+	public VehiclesCfg(final Vehicle... vehicles) {
+		try (final StringReader reader = new StringReader(createProperties(vehicles))) {
 			populateProperties(reader);
 		}
 		catch (final IOException e) {
@@ -61,10 +61,10 @@ public class BikesCfg {
 	/**
 	 * Creates a new instance reading the values from the provided CFG file.
 	 * 
-	 * @param bikesCfgFile the file to read
+	 * @param cfgFile the file to read
 	 */
-	public BikesCfg(@NonNull final Path bikesCfgFile) throws IOException {
-		try (final Reader reader = Files.newBufferedReader(bikesCfgFile, CHARSET)) {
+	public VehiclesCfg(@NonNull final Path cfgFile) throws IOException {
+		try (final Reader reader = Files.newBufferedReader(cfgFile, CHARSET)) {
 			populateProperties(reader);
 		}
 	}
@@ -75,7 +75,7 @@ public class BikesCfg {
 	}
 
 	public static void writeDefault(@NonNull final Path file) throws IOException {
-		final String props = createProperties(new BikesInf().getVehicles().values().toArray(new Vehicle[0]));
+		final String props = createProperties(new VehiclesInf().getVehicles().values().toArray(new Vehicle[0]));
 
 		// Salvataggio...
 		try (final Writer writer = Files.newBufferedWriter(file, CHARSET)) {
@@ -83,20 +83,20 @@ public class BikesCfg {
 		}
 	}
 
-	public static String createProperties(final Vehicle... bikes) {
+	public static String createProperties(final Vehicle... vehicles) {
 		final String lineSeparator = System.lineSeparator();
 		final StringBuilder props = new StringBuilder(messages.get("common.string.bikes.cfg.header"));
 
-		for (final Vehicle bike : bikes) {
+		for (final Vehicle vehicle : vehicles) {
 			props.append(lineSeparator).append(lineSeparator);
-			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.begin")).append("... ###");
+			props.append("### ").append(vehicle.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.begin")).append("... ###");
 
 			// Settings
 			props.append(lineSeparator);
 			props.append("# ").append(Settings.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
-			for (final Entry<Setting, Integer> entry : bike.getSettings().getValues().entrySet()) {
-				props.append(buildPropertyKey(bike.getType(), Settings.PREFIX, entry.getKey().getKey()));
+			for (final Entry<Setting, Integer> entry : vehicle.getSettings().getValues().entrySet()) {
+				props.append(buildPropertyKey(vehicle.getType(), Settings.PREFIX, entry.getKey().getKey()));
 				props.append('=');
 				props.append(entry.getValue().intValue());
 				props.append(lineSeparator);
@@ -106,10 +106,10 @@ public class BikesCfg {
 			props.append(lineSeparator);
 			props.append("# ").append(Gearbox.class.getSimpleName()).append(" #");
 			props.append(lineSeparator);
-			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
-				props.append(buildPropertyKey(bike.getType(), Gearbox.PREFIX, index));
+			for (int index = 0; index < vehicle.getGearbox().getRatios().length; index++) {
+				props.append(buildPropertyKey(vehicle.getType(), Gearbox.PREFIX, index));
 				props.append('=');
-				props.append(bike.getGearbox().getRatios()[index]);
+				props.append(vehicle.getGearbox().getRatios()[index]);
 				props.append(lineSeparator);
 			}
 
@@ -117,18 +117,18 @@ public class BikesCfg {
 			props.append(lineSeparator);
 			props.append("# ").append(Power.class.getSimpleName()).append(" (").append(Power.getRpm(0)).append('-').append(Power.getRpm(Power.LENGTH) - 1).append(" RPM) #");
 			props.append(lineSeparator);
-			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
+			for (int index = 0; index < vehicle.getPower().getCurve().length; index++) {
 				if (index > 0 && index % 8 == 0) {
 					props.append("# ").append(Power.getRpm(index)).append(" RPM");
 					props.append(lineSeparator);
 				}
-				props.append(buildPropertyKey(bike.getType(), Power.PREFIX, index));
+				props.append(buildPropertyKey(vehicle.getType(), Power.PREFIX, index));
 				props.append('=');
-				props.append(bike.getPower().getCurve()[index]);
+				props.append(vehicle.getPower().getCurve()[index]);
 				props.append(lineSeparator);
 			}
 
-			props.append("### ").append(bike.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.end")).append(". ###");
+			props.append("### ").append(vehicle.getType().getDisplacement()).append(" cc - ").append(messages.get("common.string.bikes.cfg.end")).append(". ###");
 		}
 
 		props.append(lineSeparator).append(lineSeparator);
@@ -136,12 +136,12 @@ public class BikesCfg {
 		return props.toString();
 	}
 
-	public static String buildPropertyKey(final VehicleType bikeType, final String prefix, final String suffix) {
-		return bikeType.getDisplacement() + "." + prefix + "." + suffix;
+	public static String buildPropertyKey(final VehicleType vehicleType, final String prefix, final String suffix) {
+		return vehicleType.getDisplacement() + "." + prefix + "." + suffix;
 	}
 
-	public static String buildPropertyKey(final VehicleType bikeType, final String prefix, final int suffix) {
-		return buildPropertyKey(bikeType, prefix, Integer.toString(suffix));
+	public static String buildPropertyKey(final VehicleType vehicleType, final String prefix, final int suffix) {
+		return buildPropertyKey(vehicleType, prefix, Integer.toString(suffix));
 	}
 
 	public Map<String, Integer> getMap() {

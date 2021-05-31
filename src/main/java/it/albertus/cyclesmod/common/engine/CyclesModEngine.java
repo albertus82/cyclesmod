@@ -3,7 +3,7 @@ package it.albertus.cyclesmod.common.engine;
 import java.util.Arrays;
 import java.util.logging.Level;
 
-import it.albertus.cyclesmod.common.model.BikesInf;
+import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
@@ -24,9 +24,9 @@ public class CyclesModEngine {
 
 	private NumeralSystem numeralSystem = NumeralSystem.DEFAULT;
 
-	private BikesInf vehiclesInf;
+	private VehiclesInf vehiclesInf;
 
-	public CyclesModEngine(final BikesInf bikesInf) {
+	public CyclesModEngine(final VehiclesInf bikesInf) {
 		this.vehiclesInf = bikesInf;
 	}
 
