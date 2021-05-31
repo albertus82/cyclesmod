@@ -16,6 +16,18 @@ public enum VehicleType {
 	@NonNull private final String team;
 	private final int displacement;
 
+	/** @return the language-independent description of this vehicle type. */
+	public String getDescription(final Game game) {
+		switch (game) {
+		case CYCLES:
+			return displacement + " cc";
+		case GPC:
+			return team;
+		default:
+			throw new IllegalArgumentException("Unknown game: " + game);
+		}
+	}
+
 	public static VehicleType get(final int index) {
 		for (final VehicleType vehicleType : values()) {
 			if (vehicleType.index == index) {
