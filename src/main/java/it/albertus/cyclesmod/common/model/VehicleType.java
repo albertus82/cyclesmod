@@ -1,6 +1,7 @@
 package it.albertus.cyclesmod.common.model;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @Getter
@@ -12,7 +13,7 @@ public enum VehicleType {
 	WILLIAMS_500(3, "Williams", 500);
 
 	private final int index;
-	private final String team;
+	@NonNull private final String team;
 	private final int displacement;
 
 	public static VehicleType get(final int index) {
@@ -27,6 +28,15 @@ public enum VehicleType {
 	public static VehicleType forDisplacement(final int displacement) {
 		for (final VehicleType vehicleType : values()) {
 			if (vehicleType.displacement == displacement) {
+				return vehicleType;
+			}
+		}
+		return null;
+	}
+
+	public static VehicleType forTeam(final String team) {
+		for (final VehicleType vehicleType : values()) {
+			if (vehicleType.team.equalsIgnoreCase(team)) {
 				return vehicleType;
 			}
 		}
