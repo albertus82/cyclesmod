@@ -16,7 +16,7 @@ import it.albertus.cyclesmod.common.data.InvalidSizeException;
 import it.albertus.util.ByteUtils;
 import lombok.NonNull;
 
-public class Inf {
+public class BikesInf {
 
 	public static final String FILE_NAME = "BIKES.INF";
 	public static final short FILE_SIZE = 444;
@@ -24,7 +24,7 @@ public class Inf {
 	private final Map<BikeType, Bike> bikes = new EnumMap<>(BikeType.class);
 
 	/** Creates a new instance based on the default configuration. */
-	public Inf() {
+	public BikesInf() {
 		parse(DefaultBikes.getByteArray());
 	}
 
@@ -36,7 +36,7 @@ public class Inf {
 	 * @throws IOException if an I/O error occurs
 	 * @throws InvalidSizeException if the size of provided file is not acceptable
 	 */
-	public Inf(@NonNull final Path bikesInfFile) throws InvalidSizeException, IOException {
+	public BikesInf(@NonNull final Path bikesInfFile) throws InvalidSizeException, IOException {
 		final long fileSize = Files.readAttributes(bikesInfFile, BasicFileAttributes.class).size();
 		if (fileSize != FILE_SIZE) {
 			throw new InvalidSizeException(FILE_SIZE, fileSize);
@@ -48,7 +48,7 @@ public class Inf {
 		parse(bytes);
 	}
 
-	public Inf(@NonNull final byte[] bytes, BikeType... bikeTypes) {
+	public BikesInf(@NonNull final byte[] bytes, BikeType... bikeTypes) {
 		parse(bytes, bikeTypes);
 	}
 

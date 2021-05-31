@@ -24,7 +24,7 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
-public class Cfg {
+public class BikesCfg {
 
 	public static final String FILE_NAME = "BIKES.CFG";
 	public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
@@ -40,7 +40,7 @@ public class Cfg {
 	 * 
 	 * @param bikesInf the configuration to map
 	 */
-	public Cfg(@NonNull final Inf bikesInf) {
+	public BikesCfg(@NonNull final BikesInf bikesInf) {
 		this(bikesInf.getBikes().values().toArray(new Bike[0]));
 	}
 
@@ -49,7 +49,7 @@ public class Cfg {
 	 * 
 	 * @param bikes the bike configurations to map
 	 */
-	public Cfg(final Bike... bikes) {
+	public BikesCfg(final Bike... bikes) {
 		try (final StringReader reader = new StringReader(createProperties(bikes))) {
 			populateProperties(reader);
 		}
@@ -63,7 +63,7 @@ public class Cfg {
 	 * 
 	 * @param bikesCfgFile the file to read
 	 */
-	public Cfg(@NonNull final Path bikesCfgFile) throws IOException {
+	public BikesCfg(@NonNull final Path bikesCfgFile) throws IOException {
 		try (final Reader reader = Files.newBufferedReader(bikesCfgFile, CHARSET)) {
 			populateProperties(reader);
 		}
@@ -75,7 +75,7 @@ public class Cfg {
 	}
 
 	public static void writeDefault(@NonNull final Path file) throws IOException {
-		final String props = createProperties(new Inf().getBikes().values().toArray(new Bike[0]));
+		final String props = createProperties(new BikesInf().getBikes().values().toArray(new Bike[0]));
 
 		// Salvataggio...
 		try (final Writer writer = Files.newBufferedWriter(file, CHARSET)) {

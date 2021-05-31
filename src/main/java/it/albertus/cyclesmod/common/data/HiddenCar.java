@@ -2,7 +2,7 @@ package it.albertus.cyclesmod.common.data;
 
 import java.util.zip.DataFormatException;
 
-import it.albertus.cyclesmod.common.model.Inf;
+import it.albertus.cyclesmod.common.model.BikesInf;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
 import lombok.AccessLevel;
@@ -19,7 +19,7 @@ public class HiddenCar {
 
 	public static byte[] getByteArray() {
 		try {
-			return DataUtils.inflate(DEFLATED_BASE64, Inf.FILE_SIZE / 3, CRC32);
+			return DataUtils.inflate(DEFLATED_BASE64, BikesInf.FILE_SIZE / 3, CRC32);
 		}
 		catch (final IllegalArgumentException | DataFormatException e) {
 			throw new VerifyError(messages.get("common.error.hidden.cfg.corrupted"), e);
