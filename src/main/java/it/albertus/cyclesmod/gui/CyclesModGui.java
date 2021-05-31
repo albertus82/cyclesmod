@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 
+import javax.naming.SizeLimitExceededException;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
@@ -281,10 +283,6 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private boolean openExe(@NonNull final Path file) throws IOException {
-		if (Files.size(file) > 0x30000) {
-			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
-			return false;
-		}
 		try {
 			final byte[] unpackedExec = unpackExec(file);
 			if (UnExepack.memmem(unpackedExec, DefaultCars.getByteArray()) == -1) {
@@ -299,13 +297,23 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			updateGuiStatusAfterOpening(file);
 			return true;
 		}
+		catch (final SizeLimitExceededException e) {
+			log.log(Level.FINE, "File '" + file + "' is too large:", e);
+			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
+			return false;
+		}
 		catch (final InvalidDosHeaderException e) {
+			log.log(Level.FINE, "File '" + file + "' is not a valid MS-DOS executable:", e);
 			openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
 			return false;
 		}
 	}
 
-	private static byte[] unpackExec(@NonNull final Path file) throws IOException, InvalidDosHeaderException {
+	private static byte[] unpackExec(@NonNull final Path file) throws IOException, SizeLimitExceededException, InvalidDosHeaderException {
+		final int sizeLimit = 0x30000; // 192 KiB, no GPC executable seems to be larger than 105 KiB, even unpacked. 
+		if (Files.size(file) > sizeLimit) {
+			throw new SizeLimitExceededException("The input file size exceeds the limit of " + sizeLimit + " bytes");
+		}
 		final byte[] originalExec = Files.readAllBytes(file);
 		try {
 			return UnExepack.unpack(originalExec);
@@ -337,9 +345,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-		final String ext = VehiclesCfg.FILE_NAME.substring(1 + VehiclesCfg.FILE_NAME.lastIndexOf('.'));
-		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(VehiclesCfg.FILE_NAME.substring(0, VehiclesCfg.FILE_NAME.lastIndexOf('.')) + vehicleType.getDisplacement() + "." + ext);
+		final String proposedFileName = VehiclesCfg.getFileName(mode.getGame(), vehicleType);
+		final String fileExtension = proposedFileName.substring(1 + proposedFileName.lastIndexOf('.'));
+		saveDialog.setFilterExtensions(new String[] { "*." + fileExtension.toUpperCase(Locale.ROOT) + ";*." + fileExtension.toLowerCase(Locale.ROOT) });
+		saveDialog.setFileName(proposedFileName);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
@@ -367,9 +376,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-		final String ext = VehiclesCfg.FILE_NAME.substring(1 + VehiclesCfg.FILE_NAME.lastIndexOf('.'));
-		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(VehiclesCfg.FILE_NAME);
+		final String proposedFileName = VehiclesCfg.getFileName(mode.getGame());
+		final String fileExtension = proposedFileName.substring(1 + proposedFileName.lastIndexOf('.'));
+		saveDialog.setFilterExtensions(new String[] { "*." + fileExtension.toUpperCase(Locale.ROOT) + ";*." + fileExtension.toLowerCase(Locale.ROOT) });
+		saveDialog.setFileName(proposedFileName);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
@@ -432,7 +442,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean save() {
-		if (currentFileName == null || Arrays.stream(RESERVED_FILE_NAMES).anyMatch(n -> currentFileName.toUpperCase(Locale.ROOT).endsWith(n.toUpperCase(Locale.ROOT)))) {
+		if (currentFileName == null || Arrays.stream(RESERVED_FILE_NAMES).anyMatch(reservedFileName -> reservedFileName.equalsIgnoreCase(Paths.get(currentFileName).getFileName().toString()))) {
 			return saveAs();
 		}
 		final Path destFile = Paths.get(currentFileName);
@@ -456,8 +466,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, VehiclesInf.FILE_SIZE);
 				System.arraycopy(gpcOriginalExeBytes, offset + VehiclesInf.FILE_SIZE, bytes, offset + VehiclesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - VehiclesInf.FILE_SIZE);
 			}
-			else { // INF
+			else if (Mode.CYCLES.equals(mode)) { // INF
 				bytes = engine.getVehiclesInf().toByteArray();
+			}
+			else {
+				throw new IllegalStateException("Unknown mode: " + mode);
 			}
 			Files.write(destFile, bytes);
 			setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
@@ -480,19 +493,22 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
-		if (Mode.GPC.equals(mode)) {
-			return saveAsExe();
-		}
-		else {
+		switch (mode) {
+		case CYCLES:
 			return saveAsInf();
+		case GPC:
+			return saveAsExe();
+		default:
+			throw new IllegalStateException("Unknown mode: " + mode);
 		}
 	}
 
 	private boolean saveAsInf() {
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
-		final String ext = VehiclesInf.FILE_NAME.substring(1 + VehiclesInf.FILE_NAME.lastIndexOf('.'));
-		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(VehiclesInf.FILE_NAME);
+		final String proposedFileName = VehiclesInf.getFileName(mode.getGame());
+		final String fileExtension = proposedFileName.substring(1 + proposedFileName.lastIndexOf('.'));
+		saveDialog.setFilterExtensions(new String[] { "*." + fileExtension.toUpperCase(Locale.ROOT) + ";*." + fileExtension.toLowerCase(Locale.ROOT) });
+		saveDialog.setFileName(proposedFileName);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 		if (fileName != null && !fileName.trim().isEmpty()) {
@@ -518,9 +534,9 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 		saveDialog.setFilterExtensions(new String[] { "*.EXE;*.exe" });
 		saveDialog.setOverwrite(true);
-		final String fileName = saveDialog.open();
-		if (fileName != null && !fileName.trim().isEmpty()) {
-			if (Arrays.stream(RESERVED_FILE_NAMES).anyMatch(n -> fileName.toUpperCase(Locale.ROOT).endsWith(n.toUpperCase(Locale.ROOT)))) {
+		final String userChoosenFileName = saveDialog.open();
+		if (userChoosenFileName != null && !userChoosenFileName.trim().isEmpty()) {
+			if (Arrays.stream(RESERVED_FILE_NAMES).anyMatch(reservedFileName -> reservedFileName.equalsIgnoreCase(Paths.get(userChoosenFileName).getFileName().toString()))) {
 				openMessageBox("Cannot overwrite original EXE game files.", SWT.ICON_WARNING);
 				return false;
 			}
@@ -530,14 +546,14 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				System.arraycopy(gpcOriginalExeBytes, 0, newExe, 0, offset);
 				System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, newExe, offset, VehiclesInf.FILE_SIZE);
 				System.arraycopy(gpcOriginalExeBytes, offset + VehiclesInf.FILE_SIZE, newExe, offset + VehiclesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - VehiclesInf.FILE_SIZE);
-				Files.write(Paths.get(fileName), newExe);
-				currentFileName = fileName;
+				Files.write(Paths.get(userChoosenFileName), newExe);
+				currentFileName = userChoosenFileName;
 				setCurrentFileModificationStatus(false);
 				setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
-				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
+				log.log(Level.WARNING, "Cannot save file as '" + userChoosenFileName + "':", e);
 				EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}

@@ -18,7 +18,6 @@ import lombok.NonNull;
 
 public class VehiclesInf {
 
-	public static final String FILE_NAME = "BIKES.INF";
 	public static final short FILE_SIZE = 444;
 
 	private final Map<VehicleType, Vehicle> vehicles = new EnumMap<>(VehicleType.class);
@@ -61,8 +60,8 @@ public class VehiclesInf {
 			vehicleTypes = VehicleType.values();
 		}
 		for (final VehicleType vehicleType : vehicleTypes) {
-			final int ordinal = vehicleType.ordinal();
-			vehicles.put(vehicleType, new Vehicle(vehicleType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * ordinal, Vehicle.LENGTH * (ordinal + 1))));
+			final int ordinal = vehicleType.getIndex();
+			vehicles.put(vehicleType, new Vehicle(vehicleType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * (ordinal - 1), Vehicle.LENGTH * ordinal)));
 		}
 	}
 
@@ -85,6 +84,17 @@ public class VehiclesInf {
 
 	public Map<VehicleType, Vehicle> getVehicles() {
 		return Collections.unmodifiableMap(vehicles);
+	}
+
+	public static String getFileName(@NonNull final Game game) {
+		switch (game) {
+		case CYCLES:
+			return "BIKES.INF";
+		case GPC:
+			return "CARS.INF";
+		default:
+			throw new IllegalArgumentException("Unknown game: " + game);
+		}
 	}
 
 }
