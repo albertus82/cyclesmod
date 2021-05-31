@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -60,6 +62,8 @@ public class Tabs implements Multilanguage {
 	@Getter private final TextFormatter textFormatter;
 
 	@Getter private final TabFolder tabFolder;
+
+	private final Set<Label> noteLabels = new HashSet<>();
 
 	private final Map<Game, Map<String, FormProperty>> formProperties = new EnumMap<>(Game.class);
 
@@ -131,14 +135,10 @@ public class Tabs implements Multilanguage {
 				}
 				label.addMouseListener(new LabelMouseListener(text));
 			}
-			for (final Setting setting : vehicle.getSettings().getValues().keySet()) {
-				if (!setting.isActive()) {
-					final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings.unused");
-					GridDataFactory.swtDefaults().span(2, 1).align(SWT.END, SWT.CENTER).applyTo(label);
-					label.setEnabled(false);
-					break;
-				}
-			}
+			final Label noteLabel = newLocalizedLabel(settingsGroup, SWT.NONE, () -> messages.get("gui.label.settings.note." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT)));
+			GridDataFactory.swtDefaults().span(2, 1).align(SWT.END, SWT.CENTER).applyTo(noteLabel);
+			noteLabel.setEnabled(Mode.GPC.equals(gui.getMode()));
+			noteLabels.add(noteLabel);
 
 			// Power graph
 			final PowerGraphCanvas canvas = new PowerGraphCanvas(tabComposite, vehicle);
@@ -233,6 +233,34 @@ public class Tabs implements Multilanguage {
 	public void updateTabItemsText() {
 		for (final VehicleType vehicleType : VehicleType.values()) {
 			tabFolder.getItem(vehicleType.getIndex()).setText(messages.get("gui.label.tabs." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT) + "." + vehicleType.getIndex()));
+		}
+	}
+
+	public void updateModeSpecificLabels() { // FIXME TBC
+		switch (gui.getMode()) {
+		case CYCLES:
+			for (final Entry<String, FormProperty> e : formProperties.get(gui.getMode().getGame()).entrySet()) {
+				final Setting setting = Setting.forKey(e.getKey().substring(1 + e.getKey().lastIndexOf('.')));
+				if (setting != null) {
+					e.getValue().getLabel().setEnabled(setting.isActive());
+				}
+			}
+			break;
+		case GPC:
+			for (final Entry<String, FormProperty> e : formProperties.get(gui.getMode().getGame()).entrySet()) {
+				final Setting setting = Setting.forKey(e.getKey().substring(1 + e.getKey().lastIndexOf('.')));
+				if (setting != null) {
+					e.getValue().getLabel().setEnabled(true);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		for (final Label noteLabel : noteLabels) {
+			noteLabel.setEnabled(Mode.GPC.equals(gui.getMode()));
+			noteLabel.setText(messages.get("gui.label.settings.note." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT)));
+			noteLabel.requestLayout();
 		}
 	}
 
