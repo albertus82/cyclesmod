@@ -26,8 +26,8 @@ public class CyclesModEngine {
 
 	private VehiclesInf vehiclesInf;
 
-	public CyclesModEngine(final VehiclesInf bikesInf) {
-		this.vehiclesInf = bikesInf;
+	public CyclesModEngine(final VehiclesInf vehiclesInf) {
+		this.vehiclesInf = vehiclesInf;
 	}
 
 	public boolean isNumeric(final String value) {
@@ -55,13 +55,13 @@ public class CyclesModEngine {
 		boolean applied = false;
 		final short newValue = Power.parse(propertyName, value, numeralSystem.getRadix());
 
-		final Vehicle bike = getVehicle(propertyName);
+		final Vehicle vehicle = getVehicle(propertyName);
 		final String suffix = StringUtils.substringAfter(propertyName, Power.PREFIX + '.');
-		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < bike.getPower().getCurve().length) {
+		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < vehicle.getPower().getCurve().length) {
 			final int index = Integer.parseInt(suffix);
-			final short defaultValue = bike.getPower().getCurve()[index];
+			final short defaultValue = vehicle.getPower().getCurve()[index];
 			if (defaultValue != newValue) {
-				bike.getPower().getCurve()[index] = newValue;
+				vehicle.getPower().getCurve()[index] = newValue;
 				applied = true;
 			}
 		}

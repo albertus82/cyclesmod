@@ -17,9 +17,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
+import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.model.VehicleType;
-import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 
@@ -43,16 +43,16 @@ public class PowerGraph implements IPowerGraph {
 	private final double[] xDataArray = new double[Power.LENGTH];
 	private boolean torqueVisible;
 
-	public PowerGraph(final Vehicle bike) {
+	public PowerGraph(final Vehicle vehicle) {
 		for (int i = 0; i < Power.LENGTH; i++) {
 			xDataArray[i] = (double) Power.getRpm(i) / RPM_DIVISOR;
-			powerValues[i] = bike.getPower().getCurve()[i];
+			powerValues[i] = vehicle.getPower().getCurve()[i];
 			torqueValues[i] = hpToNm(powerValues[i], Power.getRpm(i));
 		}
-		init(bike.getType());
+		init(vehicle.getType());
 	}
 
-	public PowerGraph(final Map<Integer, Short> map, final VehicleType bikeType) {
+	public PowerGraph(final Map<Integer, Short> map, final VehicleType vehicleType) {
 		if (map.size() != Power.LENGTH) {
 			throw new IllegalArgumentException("map size must be " + Power.LENGTH);
 		}
@@ -64,10 +64,10 @@ public class PowerGraph implements IPowerGraph {
 			torqueValues[i] = hpToNm(powerValues[i], Power.getRpm(i));
 			i++;
 		}
-		init(bikeType);
+		init(vehicleType);
 	}
 
-	protected void init(final VehicleType bikeType) {
+	protected void init(final VehicleType vehicleType) {
 		powerDataProvider.setBufferSize(xDataArray.length);
 		powerDataProvider.setCurrentXDataArray(xDataArray);
 		powerDataProvider.setCurrentYDataArray(powerValues);
@@ -90,13 +90,13 @@ public class PowerGraph implements IPowerGraph {
 		toggleTorqueVisibility(true);
 		xyGraph.setShowLegend(false);
 
-		powerTrace.setTraceColor(getColor(bikeType));
+		powerTrace.setTraceColor(getColor(vehicleType));
 		torqueTrace.setTraceColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
 	}
 
-	private static Color getColor(final VehicleType bikeType) {
+	private static Color getColor(final VehicleType vehicleType) {
 		final Display display = Display.getCurrent();
-		switch (bikeType) {
+		switch (vehicleType) {
 		case FERRARI_125:
 			return display.getSystemColor(SWT.COLOR_RED);
 		case MCLAREN_250:
@@ -104,7 +104,7 @@ public class PowerGraph implements IPowerGraph {
 		case WILLIAMS_500:
 			return display.getSystemColor(SWT.COLOR_BLACK);
 		default:
-			throw new IllegalArgumentException("Unknown bike type: " + bikeType);
+			throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
 		}
 	}
 

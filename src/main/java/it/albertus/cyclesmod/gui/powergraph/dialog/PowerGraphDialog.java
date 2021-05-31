@@ -48,12 +48,12 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		super(parent, style);
 	}
 
-	public int open(final Map<Integer, Short> map, final VehicleType bikeType, final boolean torqueVisible) {
+	public int open(final Map<Integer, Short> map, final VehicleType vehicleType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
-		shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+		shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDisplacement()));
 		shell.setImages(Images.getAppIconArray());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
-		createContents(shell, map, bikeType, torqueVisible);
+		createContents(shell, map, vehicleType, torqueVisible);
 		final Point minimumSize = getMinimumSize(shell);
 		shell.setSize(getSize(shell));
 		shell.setMinimumSize(minimumSize);
@@ -77,16 +77,16 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		return shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 	}
 
-	private void createContents(final Shell shell, final Map<Integer, Short> map, final VehicleType bikeType, final boolean torqueVisible) {
-		createGraph(shell, map, bikeType, torqueVisible);
+	private void createContents(final Shell shell, final Map<Integer, Short> map, final VehicleType vehicleType, final boolean torqueVisible) {
+		createGraph(shell, map, vehicleType, torqueVisible);
 		createButtonBox(shell);
 	}
 
-	private void createGraph(final Shell shell, final Map<Integer, Short> map, final VehicleType bikeType, final boolean torqueVisible) {
+	private void createGraph(final Shell shell, final Map<Integer, Short> map, final VehicleType vehicleType, final boolean torqueVisible) {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		powerGraph = new ComplexPowerGraph(map, bikeType, shell);
+		powerGraph = new ComplexPowerGraph(map, vehicleType, shell);
 		final ComplexPowerGraphContextMenu menu = new ComplexPowerGraphContextMenu(canvas, powerGraph);
 		if (torqueVisible) {
 			powerGraph.toggleTorqueVisibility(true);

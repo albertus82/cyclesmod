@@ -19,11 +19,11 @@ public class PowerGraphCanvas extends Canvas implements PowerGraphProvider, Mult
 
 	private final Collection<Multilanguage> multilanguages = new ArrayList<>();
 
-	public PowerGraphCanvas(final Composite parent, final Vehicle bike) {
+	public PowerGraphCanvas(final Composite parent, final Vehicle vehicle) {
 		super(parent, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(this);
-		powerGraph = new SimplePowerGraph(bike);
+		powerGraph = new SimplePowerGraph(vehicle);
 		multilanguages.add(powerGraph);
 		lws.setContents(powerGraph.getXyGraph());
 

@@ -31,38 +31,38 @@ public class VehiclesInf {
 	/**
 	 * Creates a new instance based on the provided INF file.
 	 * 
-	 * @param bikesInfFile the file to read
+	 * @param infFile the file to read
 	 * 
 	 * @throws IOException if an I/O error occurs
 	 * @throws InvalidSizeException if the size of provided file is not acceptable
 	 */
-	public VehiclesInf(@NonNull final Path bikesInfFile) throws InvalidSizeException, IOException {
-		final long fileSize = Files.readAttributes(bikesInfFile, BasicFileAttributes.class).size();
+	public VehiclesInf(@NonNull final Path infFile) throws InvalidSizeException, IOException {
+		final long fileSize = Files.readAttributes(infFile, BasicFileAttributes.class).size();
 		if (fileSize != FILE_SIZE) {
 			throw new InvalidSizeException(FILE_SIZE, fileSize);
 		}
-		final byte[] bytes = Files.readAllBytes(bikesInfFile);
+		final byte[] bytes = Files.readAllBytes(infFile);
 		if (bytes.length != FILE_SIZE) {
 			throw new InvalidSizeException(FILE_SIZE, bytes.length);
 		}
 		parse(bytes);
 	}
 
-	public VehiclesInf(@NonNull final byte[] bytes, VehicleType... bikeTypes) {
-		parse(bytes, bikeTypes);
+	public VehiclesInf(@NonNull final byte[] bytes, VehicleType... vehicleTypes) {
+		parse(bytes, vehicleTypes);
 	}
 
-	public void reset(final VehicleType... bikeTypes) {
-		parse(DefaultBikes.getByteArray(), bikeTypes);
+	public void reset(final VehicleType... vehicleTypes) {
+		parse(DefaultBikes.getByteArray(), vehicleTypes);
 	}
 
-	private void parse(@NonNull final byte[] bytes, VehicleType... bikeTypes) {
-		if (bikeTypes == null || bikeTypes.length == 0) {
-			bikeTypes = VehicleType.values();
+	private void parse(@NonNull final byte[] bytes, VehicleType... vehicleTypes) {
+		if (vehicleTypes == null || vehicleTypes.length == 0) {
+			vehicleTypes = VehicleType.values();
 		}
-		for (final VehicleType bikeType : bikeTypes) {
-			final int ordinal = bikeType.ordinal();
-			vehicles.put(bikeType, new Vehicle(bikeType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * ordinal, Vehicle.LENGTH * (ordinal + 1))));
+		for (final VehicleType vehicleType : vehicleTypes) {
+			final int ordinal = vehicleType.ordinal();
+			vehicles.put(vehicleType, new Vehicle(vehicleType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * ordinal, Vehicle.LENGTH * (ordinal + 1))));
 		}
 	}
 
@@ -74,8 +74,8 @@ public class VehiclesInf {
 	 */
 	public byte[] toByteArray() {
 		final List<Byte> byteList = new ArrayList<>(FILE_SIZE);
-		for (final ByteList bike : vehicles.values()) {
-			byteList.addAll(bike.toByteList());
+		for (final ByteList vehicle : vehicles.values()) {
+			byteList.addAll(vehicle.toByteList());
 		}
 		if (byteList.size() != FILE_SIZE) {
 			throw new IllegalStateException(new InvalidSizeException(FILE_SIZE, byteList.size()));
