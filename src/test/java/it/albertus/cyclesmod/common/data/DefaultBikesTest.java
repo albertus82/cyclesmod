@@ -6,14 +6,14 @@ import java.util.zip.CRC32;
 import org.junit.Assert;
 import org.junit.Test;
 
-import it.albertus.cyclesmod.common.model.BikesInf;
+import it.albertus.cyclesmod.common.model.Inf;
 
 public class DefaultBikesTest {
 
 	@Test
 	public void test() throws IOException {
 		final byte[] bytes = DefaultBikes.getByteArray();
-		Assert.assertEquals(BikesInf.FILE_SIZE, bytes.length);
+		Assert.assertEquals(Inf.FILE_SIZE, bytes.length);
 
 		final CRC32 crc = new CRC32();
 		crc.update(bytes);
