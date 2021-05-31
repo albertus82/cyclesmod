@@ -187,11 +187,9 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				return false;
 			}
 			if (file.toString().toUpperCase(Locale.ROOT).endsWith(".INF")) {
-				setMode(Mode.CYCLES);
 				return openInf(file);
 			}
 			else if (file.toString().toUpperCase(Locale.ROOT).endsWith(".EXE")) {
-				setMode(Mode.GPC);
 				return openExe(file);
 			}
 			else {
@@ -286,6 +284,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean openInf(@NonNull final Path file) throws IOException {
 		try {
 			engine.setVehiclesInf(new VehiclesInf(file));
+			setMode(Mode.CYCLES);
 			updateGuiStatusAfterOpening(file);
 			return true;
 		}
@@ -307,6 +306,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 			gpcOriginalExeBytes = unpackedExec;
 			engine.setVehiclesInf(new VehiclesInf(DefaultCars.getByteArray()));
+			setMode(Mode.GPC);
 			updateGuiStatusAfterOpening(file);
 			return true;
 		}
@@ -726,6 +726,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (!this.mode.equals(mode)) {
 			this.mode = mode;
 			tabs.updateTabItemsText();
+			tabs.updateModeSpecificLabels();
 			menuBar.updateLanguage();
 			switch (mode) {
 			case CYCLES:
