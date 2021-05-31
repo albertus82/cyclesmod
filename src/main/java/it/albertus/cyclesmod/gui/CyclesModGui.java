@@ -693,6 +693,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (!this.mode.equals(mode)) {
 			this.mode = mode;
 			tabs.updateTabItemsText();
+			menuBar.updateLanguage();
 			switch (mode) {
 			case CYCLES:
 				gpcOriginalExeBytes = null;

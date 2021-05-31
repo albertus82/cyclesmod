@@ -123,14 +123,14 @@ public class MenuBar implements Multilanguage {
 		final Menu fileExportAsCfgSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		fileExportAsCfgSubMenuItem.setMenu(fileExportAsCfgSubMenu);
 
-		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, "gui.label.menu.item.bike.single").addSelectionListener(new SelectionAdapter() {
+		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item." + (Mode.CYCLES.equals(gui.getMode()) ? "bike" : "car") + ".single")).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				gui.exportCfgSingle(VehicleType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 
-		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, "gui.label.menu.item.bike.all").addSelectionListener(new SelectionAdapter() {
+		newLocalizedMenuItem(fileExportAsCfgSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item." + (Mode.CYCLES.equals(gui.getMode()) ? "bike" : "car") + ".all")).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				gui.exportCfgAll();
@@ -171,7 +171,7 @@ public class MenuBar implements Multilanguage {
 		editPowerSubMenuItem.setMenu(editPowerSubMenu);
 
 		for (final VehicleType vehicleType : VehicleType.values()) {
-			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.power.curve.bike", vehicleType.getDisplacement())).addSelectionListener(new OpenPowerGraphDialogListener(gui, vehicleType));
+			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.power.curve.vehicle", vehicleType.getDescription(gui.getMode().getGame()))).addSelectionListener(new OpenPowerGraphDialogListener(gui, vehicleType));
 		}
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
@@ -181,14 +181,14 @@ public class MenuBar implements Multilanguage {
 		final Menu editResetSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editResetSubMenuItem.setMenu(editResetSubMenu);
 
-		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.bike.single").addSelectionListener(new SelectionAdapter() {
+		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item." + (Mode.CYCLES.equals(gui.getMode()) ? "bike" : "car") + ".single")).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				gui.resetSingle(VehicleType.values()[gui.getTabs().getTabFolder().getSelectionIndex()]);
 			}
 		});
 
-		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, "gui.label.menu.item.bike.all").addSelectionListener(new SelectionAdapter() {
+		newLocalizedMenuItem(editResetSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item." + (Mode.CYCLES.equals(gui.getMode()) ? "bike" : "car") + ".all")).addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				gui.resetAll();
