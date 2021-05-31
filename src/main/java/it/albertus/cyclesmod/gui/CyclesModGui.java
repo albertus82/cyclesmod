@@ -237,12 +237,12 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private boolean importCfg(@NonNull final Path file) throws IOException {
 		try {
-			final VehiclesCfg bikesCfg = new VehiclesCfg(file);
+			final VehiclesCfg vehiclesCfg = new VehiclesCfg(file);
 			int count = 0;
 			final NumeralSystem backup = engine.getNumeralSystem();
 			engine.setNumeralSystem(NumeralSystem.DEFAULT);
-			for (final String key : bikesCfg.getProperties().stringPropertyNames()) {
-				if (engine.applyProperty(key, bikesCfg.getProperties().getProperty(key))) {
+			for (final String key : vehiclesCfg.getProperties().stringPropertyNames()) {
+				if (engine.applyProperty(key, vehiclesCfg.getProperties().getProperty(key))) {
 					count++;
 				}
 			}
@@ -327,7 +327,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		setCurrentFileModificationStatus(false);
 	}
 
-	public boolean exportCfgSingle(@NonNull final VehicleType bikeType) {
+	public boolean exportCfgSingle(@NonNull final VehicleType vehicleType) {
 		try {
 			updateModelValues(false);
 		}
@@ -339,13 +339,13 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		final FileDialog saveDialog = new FileDialog(shell, SWT.SAVE);
 		final String ext = VehiclesCfg.FILE_NAME.substring(1 + VehiclesCfg.FILE_NAME.lastIndexOf('.'));
 		saveDialog.setFilterExtensions(new String[] { "*." + ext.toUpperCase(Locale.ROOT) + ";*." + ext.toLowerCase(Locale.ROOT) });
-		saveDialog.setFileName(VehiclesCfg.FILE_NAME.substring(0, VehiclesCfg.FILE_NAME.lastIndexOf('.')) + bikeType.getDisplacement() + "." + ext);
+		saveDialog.setFileName(VehiclesCfg.FILE_NAME.substring(0, VehiclesCfg.FILE_NAME.lastIndexOf('.')) + vehicleType.getDisplacement() + "." + ext);
 		saveDialog.setOverwrite(true);
 		final String fileName = saveDialog.open();
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
-		final String str = VehiclesCfg.createProperties(engine.getVehiclesInf().getVehicles().get(bikeType));
+		final String str = VehiclesCfg.createProperties(engine.getVehiclesInf().getVehicles().get(vehicleType));
 		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), VehiclesCfg.CHARSET)) {
 			writer.write(str);
 			return true;
@@ -387,30 +387,30 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	public boolean resetSingle(@NonNull final VehicleType bikeType) {
-		if (openMessageBox(messages.get("gui.message.reset.overwrite.single", bikeType.getDisplacement()), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
+	public boolean resetSingle(@NonNull final VehicleType vehicleType) {
+		if (openMessageBox(messages.get("gui.message.reset.overwrite.single", vehicleType.getDisplacement()), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
 			return false;
 		}
 		try {
-			doResetSingle(bikeType);
+			doResetSingle(vehicleType);
 			setCurrentFileModificationStatus(isConfigurationChanged());
 			return true;
 		}
 		catch (final RuntimeException e) {
-			log.log(Level.WARNING, "Cannot reset bike " + bikeType + ':', e);
+			log.log(Level.WARNING, "Cannot reset vehicle " + vehicleType + ':', e);
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
 
-	private void doResetSingle(@NonNull final VehicleType bikeType) {
+	private void doResetSingle(@NonNull final VehicleType vehicleType) {
 		try {
 			updateModelValues(true);
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
-		engine.getVehiclesInf().reset(bikeType);
+		engine.getVehiclesInf().reset(vehicleType);
 		tabs.updateFormValues();
 	}
 
@@ -425,7 +425,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return true;
 		}
 		catch (final RuntimeException e) {
-			log.log(Level.WARNING, "Cannot reset bikes:", e);
+			log.log(Level.WARNING, "Cannot reset vehicles:", e);
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
@@ -564,7 +564,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return true;
 		}
 		catch (final InvalidPropertyException | RuntimeException e) {
-			log.log(Level.WARNING, "Cannot load hidden configuration into bike " + type + ':', e);
+			log.log(Level.WARNING, "Cannot load hidden configuration into vehicle " + type + ':', e);
 			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.hiddenCfg"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}

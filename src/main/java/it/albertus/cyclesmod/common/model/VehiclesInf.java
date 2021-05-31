@@ -31,17 +31,17 @@ public class VehiclesInf {
 	/**
 	 * Creates a new instance based on the provided INF file.
 	 * 
-	 * @param infFile the file to read
+	 * @param sourceInfFile the file to read
 	 * 
 	 * @throws IOException if an I/O error occurs
 	 * @throws InvalidSizeException if the size of provided file is not acceptable
 	 */
-	public VehiclesInf(@NonNull final Path infFile) throws InvalidSizeException, IOException {
-		final long fileSize = Files.readAttributes(infFile, BasicFileAttributes.class).size();
+	public VehiclesInf(@NonNull final Path sourceInfFile) throws InvalidSizeException, IOException {
+		final long fileSize = Files.readAttributes(sourceInfFile, BasicFileAttributes.class).size();
 		if (fileSize != FILE_SIZE) {
 			throw new InvalidSizeException(FILE_SIZE, fileSize);
 		}
-		final byte[] bytes = Files.readAllBytes(infFile);
+		final byte[] bytes = Files.readAllBytes(sourceInfFile);
 		if (bytes.length != FILE_SIZE) {
 			throw new InvalidSizeException(FILE_SIZE, bytes.length);
 		}
