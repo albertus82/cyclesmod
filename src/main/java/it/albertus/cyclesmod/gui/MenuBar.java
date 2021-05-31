@@ -170,8 +170,8 @@ public class MenuBar implements Multilanguage {
 		final Menu editPowerSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
 		editPowerSubMenuItem.setMenu(editPowerSubMenu);
 
-		for (final VehicleType bikeType : VehicleType.values()) {
-			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.power.curve.bike", bikeType.getDisplacement())).addSelectionListener(new OpenPowerGraphDialogListener(gui, bikeType));
+		for (final VehicleType vehicleType : VehicleType.values()) {
+			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.power.curve.bike", vehicleType.getDisplacement())).addSelectionListener(new OpenPowerGraphDialogListener(gui, vehicleType));
 		}
 
 		new MenuItem(editMenu, SWT.SEPARATOR);

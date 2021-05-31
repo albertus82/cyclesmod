@@ -24,13 +24,13 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
-import it.albertus.cyclesmod.common.model.Vehicle;
-import it.albertus.cyclesmod.common.model.VehicleType;
-import it.albertus.cyclesmod.common.model.VehiclesCfg;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
 import it.albertus.cyclesmod.common.model.Settings;
+import it.albertus.cyclesmod.common.model.Vehicle;
+import it.albertus.cyclesmod.common.model.VehicleType;
+import it.albertus.cyclesmod.common.model.VehiclesCfg;
 import it.albertus.cyclesmod.common.resources.Messages;
 import it.albertus.cyclesmod.gui.listener.LabelMouseListener;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
@@ -80,9 +80,9 @@ public class Tabs implements Multilanguage {
 		propertyKeyListener = new PropertyKeyListener(this);
 
 		tabFolder = new TabFolder(gui.getShell(), SWT.NONE);
-		for (final Vehicle bike : gui.getVehiclesInf().getVehicles().values()) {
+		for (final Vehicle vehicle : gui.getVehiclesInf().getVehicles().values()) {
 			final TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-			tabItem.setText("&" + bike.getType().getDisplacement() + " cc");
+			tabItem.setText("&" + vehicle.getType().getDisplacement() + " cc");
 
 			// This outer composite is required for GTK!
 			final Composite outerComposite = new Composite(tabFolder, SWT.NONE);
@@ -99,8 +99,8 @@ public class Tabs implements Multilanguage {
 			// Definizione di come saranno disposti gli elementi contenuti...
 			GridLayoutFactory.swtDefaults().numColumns(6).applyTo(settingsGroup);
 
-			for (final Setting setting : bike.getSettings().getValues().keySet()) {
-				final String key = VehiclesCfg.buildPropertyKey(bike.getType(), Settings.PREFIX, setting.getKey());
+			for (final Setting setting : vehicle.getSettings().getValues().keySet()) {
+				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Settings.PREFIX, setting.getKey());
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
@@ -118,7 +118,7 @@ public class Tabs implements Multilanguage {
 				formProperties.put(key, new FormProperty(text));
 				label.addMouseListener(new LabelMouseListener(text));
 			}
-			for (final Setting setting : bike.getSettings().getValues().keySet()) {
+			for (final Setting setting : vehicle.getSettings().getValues().keySet()) {
 				if (!setting.isActive()) {
 					final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings.unused");
 					GridDataFactory.swtDefaults().span(2, 1).align(SWT.END, SWT.CENTER).applyTo(label);
@@ -128,14 +128,14 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Power graph
-			final PowerGraphCanvas canvas = new PowerGraphCanvas(tabComposite, bike);
-			canvas.addMouseListener(new OpenPowerGraphDialogListener(gui, bike.getType()));
+			final PowerGraphCanvas canvas = new PowerGraphCanvas(tabComposite, vehicle);
+			canvas.addMouseListener(new OpenPowerGraphDialogListener(gui, vehicle.getType()));
 			final IPowerGraph powerGraph = canvas.getPowerGraph();
 			powerGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(@NonNull final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
+						final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(vehicle.getType(), Power.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
 						}
@@ -143,15 +143,15 @@ public class Tabs implements Multilanguage {
 				}
 			});
 			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(canvas);
-			powerCanvases.put(bike.getType(), canvas);
+			powerCanvases.put(vehicle.getType(), canvas);
 
 			// Gearbox
 			final Group gearboxGroup = newLocalizedGroup(tabComposite, SWT.NONE, "gui.label.gearbox");
 			GridDataFactory.fillDefaults().grab(false, true).applyTo(gearboxGroup);
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
 
-			for (int index = 0; index < bike.getGearbox().getRatios().length; index++) {
-				final String key = VehiclesCfg.buildPropertyKey(bike.getType(), Gearbox.PREFIX, index);
+			for (int index = 0; index < vehicle.getGearbox().getRatios().length; index++) {
+				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Gearbox.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final Serializable gearName = index != 0 ? index : "N";
 				final Label label = newLocalizedLabel(gearboxGroup, SWT.NONE, () -> messages.get("gui.label.gearbox.gear", gearName));
@@ -173,8 +173,8 @@ public class Tabs implements Multilanguage {
 			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(powerGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
 
-			for (int index = 0; index < bike.getPower().getCurve().length; index++) {
-				final String key = VehiclesCfg.buildPropertyKey(bike.getType(), Power.PREFIX, index);
+			for (int index = 0; index < vehicle.getPower().getCurve().length; index++) {
+				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Power.PREFIX, index);
 				final Integer defaultValue = gui.getDefaultProperties().get(key);
 				final int rpm = Power.getRpm(index);
 				final Label label = newLocalizedLabel(powerGroup, SWT.NONE, () -> messages.get("gui.label.power.rpm", rpm));
@@ -239,10 +239,10 @@ public class Tabs implements Multilanguage {
 		enableTextListeners();
 
 		// Update power graphs...
-		for (final Vehicle bike : gui.getVehiclesInf().getVehicles().values()) {
-			final IPowerGraph powerGraph = powerCanvases.get(bike.getType()).getPowerGraph();
-			for (short i = 0; i < bike.getPower().getCurve().length; i++) {
-				powerGraph.setPowerValue(i, bike.getPower().getCurve()[i]);
+		for (final Vehicle vehicle : gui.getVehiclesInf().getVehicles().values()) {
+			final IPowerGraph powerGraph = powerCanvases.get(vehicle.getType()).getPowerGraph();
+			for (short i = 0; i < vehicle.getPower().getCurve().length; i++) {
+				powerGraph.setPowerValue(i, vehicle.getPower().getCurve()[i]);
 			}
 			powerGraph.refresh();
 		}

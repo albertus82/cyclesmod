@@ -38,10 +38,10 @@ public class VehiclesCfg {
 	/**
 	 * Creates a new instance containing the provided configuration.
 	 * 
-	 * @param inf the configuration to map
+	 * @param vehiclesInf the configuration to map
 	 */
-	public VehiclesCfg(@NonNull final VehiclesInf inf) {
-		this(inf.getVehicles().values().toArray(new Vehicle[0]));
+	public VehiclesCfg(@NonNull final VehiclesInf vehiclesInf) {
+		this(vehiclesInf.getVehicles().values().toArray(new Vehicle[0]));
 	}
 
 	/**
@@ -61,10 +61,10 @@ public class VehiclesCfg {
 	/**
 	 * Creates a new instance reading the values from the provided CFG file.
 	 * 
-	 * @param cfgFile the file to read
+	 * @param sourceCfgFile the file to read
 	 */
-	public VehiclesCfg(@NonNull final Path cfgFile) throws IOException {
-		try (final Reader reader = Files.newBufferedReader(cfgFile, CHARSET)) {
+	public VehiclesCfg(@NonNull final Path sourceCfgFile) throws IOException {
+		try (final Reader reader = Files.newBufferedReader(sourceCfgFile, CHARSET)) {
 			populateProperties(reader);
 		}
 	}
@@ -74,11 +74,11 @@ public class VehiclesCfg {
 		manageDeprecatedProperties();
 	}
 
-	public static void writeDefault(@NonNull final Path file) throws IOException {
+	public static void writeDefault(@NonNull final Path destCfgFile) throws IOException {
 		final String props = createProperties(new VehiclesInf().getVehicles().values().toArray(new Vehicle[0]));
 
 		// Salvataggio...
-		try (final Writer writer = Files.newBufferedWriter(file, CHARSET)) {
+		try (final Writer writer = Files.newBufferedWriter(destCfgFile, CHARSET)) {
 			writer.write(props);
 		}
 	}
