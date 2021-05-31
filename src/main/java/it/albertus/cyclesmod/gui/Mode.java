@@ -5,4 +5,6 @@ public enum Mode {
 	CYCLES,
 	GPC;
 
+	public static final Mode DEFAULT = CYCLES;
+
 }
