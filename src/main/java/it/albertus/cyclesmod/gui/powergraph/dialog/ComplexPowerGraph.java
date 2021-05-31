@@ -41,14 +41,14 @@ public class ComplexPowerGraph extends PowerGraph {
 	private static final Messages messages = GuiMessages.INSTANCE;
 
 	private final Shell shell;
-	private final VehicleType bikeType;
+	private final VehicleType vehicleType;
 
 	@Getter private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-	public ComplexPowerGraph(final Map<Integer, Short> map, final VehicleType bikeType, final Shell shell) {
-		super(map, bikeType);
+	public ComplexPowerGraph(final Map<Integer, Short> map, final VehicleType vehicleType, final Shell shell) {
+		super(map, vehicleType);
 		this.shell = shell;
-		this.bikeType = bikeType;
+		this.vehicleType = vehicleType;
 
 		final Axis abscissae = getAbscissae();
 		abscissae.setAutoScale(DEFAULT_AUTOSCALE);
@@ -149,10 +149,10 @@ public class ComplexPowerGraph extends PowerGraph {
 		super.toggleTorqueVisibility(visibility);
 		if (shell != null && !shell.isDisposed()) {
 			if (visibility) {
-				shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", bikeType.getDisplacement()));
+				shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDisplacement()));
 			}
 			else {
-				shell.setText(messages.get("gui.label.graph.dialog.title.power", bikeType.getDisplacement()));
+				shell.setText(messages.get("gui.label.graph.dialog.title.power", vehicleType.getDisplacement()));
 			}
 		}
 	}

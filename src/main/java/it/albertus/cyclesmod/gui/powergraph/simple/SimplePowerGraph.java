@@ -21,8 +21,8 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	public SimplePowerGraph(final Vehicle bike) {
-		super(bike);
+	public SimplePowerGraph(final Vehicle vehicle) {
+		super(vehicle);
 
 		final Axis abscissae = getAbscissae();
 		abscissae.setAutoScale(DEFAULT_AUTOSCALE);

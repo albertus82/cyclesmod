@@ -642,7 +642,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		this.lastPersistedProperties.putAll(lastPersistedProperties);
 	}
 
-	public VehiclesInf getBikesInf() {
+	public VehiclesInf getVehiclesInf() {
 		return engine.getVehiclesInf();
 	}
 
