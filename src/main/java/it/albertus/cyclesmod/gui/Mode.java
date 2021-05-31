@@ -12,19 +12,17 @@ public enum Mode {
 	CYCLES(Game.CYCLES),
 	GPC(Game.GPC);
 
-	private final Game game;
+	@NonNull private final Game game;
 
 	public static final Mode DEFAULT = CYCLES;
 
 	public static Mode forGame(@NonNull final Game game) {
-		switch (game) {
-		case CYCLES:
-			return CYCLES;
-		case GPC:
-			return GPC;
-		default:
-			throw new IllegalArgumentException("Unknown game: " + game);
+		for (final Mode mode : values()) {
+			if (mode.game.equals(game)) {
+				return mode;
+			}
 		}
+		return null;
 	}
 
 }
