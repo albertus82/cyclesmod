@@ -23,8 +23,8 @@ import it.albertus.cyclesmod.common.engine.InvalidNumberException;
 import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
-import it.albertus.cyclesmod.common.model.BikesCfg;
-import it.albertus.cyclesmod.common.model.BikesInf;
+import it.albertus.cyclesmod.common.model.VehiclesCfg;
+import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -64,14 +64,14 @@ public class CyclesModCli implements Callable<Integer> {
 				path = prepareWorkingDirectory(path);
 			}
 			loadOriginalConfiguration();
-			final Path bikesCfgFile = Paths.get(path.toString(), BikesCfg.FILE_NAME);
+			final Path bikesCfgFile = Paths.get(path.toString(), VehiclesCfg.FILE_NAME);
 			if (!bikesCfgFile.toFile().exists()) {
 				createBikesCfg(bikesCfgFile);
 			}
 			else {
 				applyCustomizations(bikesCfgFile);
 			}
-			final Path bikesInfFile = Paths.get(path.toString(), BikesInf.FILE_NAME);
+			final Path bikesInfFile = Paths.get(path.toString(), VehiclesInf.FILE_NAME);
 			createBikesInf(bikesInfFile);
 			return ExitCode.OK;
 		}
@@ -110,37 +110,37 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private void loadOriginalConfiguration() {
 		System.out.print(messages.get("console.message.reading.original.configuration") + ' ');
-		engine.setVehiclesInf(new BikesInf());
+		engine.setVehiclesInf(new VehiclesInf());
 		System.out.println(DONE);
 	}
 
 	private void createBikesCfg(@NonNull final Path bikesCfgFile) throws IOException {
-		System.out.print(messages.get("console.message.creating.default.file", BikesCfg.FILE_NAME) + ' ');
+		System.out.print(messages.get("console.message.creating.default.file", VehiclesCfg.FILE_NAME) + ' ');
 		try {
-			BikesCfg.writeDefault(bikesCfgFile);
+			VehiclesCfg.writeDefault(bikesCfgFile);
 			System.out.println(DONE);
 		}
 		catch (final IOException e) {
 			System.out.println(ERROR);
-			System.err.println(messages.get("console.error.cannot.create.default.file", BikesCfg.FILE_NAME, e));
+			System.err.println(messages.get("console.error.cannot.create.default.file", VehiclesCfg.FILE_NAME, e));
 			throw e;
 		}
 	}
 
 	private void applyCustomizations(@NonNull final Path bikesCfgFile) throws IOException, InvalidPropertyException {
-		System.out.print(messages.get("console.message.applying.customizations", BikesCfg.FILE_NAME) + ' ');
+		System.out.print(messages.get("console.message.applying.customizations", VehiclesCfg.FILE_NAME) + ' ');
 		if (Files.isDirectory(bikesCfgFile)) {
 			System.out.println(ERROR);
-			System.err.println(messages.get("console.error.cannot.open.file.directory", BikesCfg.FILE_NAME));
+			System.err.println(messages.get("console.error.cannot.open.file.directory", VehiclesCfg.FILE_NAME));
 			throw new IOException(bikesCfgFile + "is a directory");
 		}
 		final Properties properties;
 		try {
-			properties = new BikesCfg(bikesCfgFile).getProperties();
+			properties = new VehiclesCfg(bikesCfgFile).getProperties();
 		}
 		catch (final IOException e) {
 			System.out.println(ERROR);
-			System.err.println(messages.get("console.error.cannot.read.file", BikesCfg.FILE_NAME, e));
+			System.err.println(messages.get("console.error.cannot.read.file", VehiclesCfg.FILE_NAME, e));
 			throw e;
 		}
 		short changesCount = 0;
@@ -175,15 +175,15 @@ public class CyclesModCli implements Callable<Integer> {
 	}
 
 	private void createBikesInf(@NonNull final Path bikesInfFile) throws IOException {
-		System.out.print(messages.get("console.message.preparing.new.file", BikesInf.FILE_NAME) + ' ');
+		System.out.print(messages.get("console.message.preparing.new.file", VehiclesInf.FILE_NAME) + ' ');
 		final byte[] currentBytes = engine.getVehiclesInf().toByteArray();
 		if (bikesInfFile.toFile().exists()) {
 			if (Files.isDirectory(bikesInfFile)) {
 				System.out.println(ERROR);
-				System.err.println(messages.get("console.error.cannot.open.file.directory", BikesInf.FILE_NAME));
+				System.err.println(messages.get("console.error.cannot.open.file.directory", VehiclesInf.FILE_NAME));
 				throw new IOException(bikesInfFile + " is a directory");
 			}
-			if (bikesInfFile.toFile().length() == BikesInf.FILE_SIZE) {
+			if (bikesInfFile.toFile().length() == VehiclesInf.FILE_SIZE) {
 				final byte[] existingBytes;
 				try {
 					existingBytes = Files.readAllBytes(bikesInfFile);
@@ -191,7 +191,7 @@ public class CyclesModCli implements Callable<Integer> {
 				}
 				catch (final IOException e) {
 					System.out.println(ERROR);
-					System.err.println(messages.get("console.error.cannot.read.file", BikesInf.FILE_NAME, e));
+					System.err.println(messages.get("console.error.cannot.read.file", VehiclesInf.FILE_NAME, e));
 					throw e;
 				}
 				if (!Arrays.equals(currentBytes, existingBytes)) {
@@ -199,7 +199,7 @@ public class CyclesModCli implements Callable<Integer> {
 					writeBikesInf(currentBytes, bikesInfFile);
 				}
 				else {
-					System.out.println(messages.get("console.message.already.uptodate", BikesInf.FILE_NAME));
+					System.out.println(messages.get("console.message.already.uptodate", VehiclesInf.FILE_NAME));
 				}
 			}
 			else {
@@ -215,7 +215,7 @@ public class CyclesModCli implements Callable<Integer> {
 	}
 
 	private void backupBikesInf(@NonNull final Path bikesInfFile) throws IOException {
-		System.out.print(messages.get("console.message.backup.file", BikesInf.FILE_NAME) + ' ');
+		System.out.print(messages.get("console.message.backup.file", VehiclesInf.FILE_NAME) + ' ');
 		try {
 			int i = 0;
 			final String parent = bikesInfFile.toFile().getParent();
@@ -235,20 +235,20 @@ public class CyclesModCli implements Callable<Integer> {
 		}
 		catch (final IOException e) {
 			System.out.println(ERROR);
-			System.err.println(messages.get("console.error.cannot.backup.file", BikesInf.FILE_NAME, e));
+			System.err.println(messages.get("console.error.cannot.backup.file", VehiclesInf.FILE_NAME, e));
 			throw e;
 		}
 	}
 
 	private void writeBikesInf(@NonNull final byte[] bytes, @NonNull final Path bikesInfFile) throws IOException {
-		System.out.print(messages.get("console.message.writing.new.file", BikesInf.FILE_NAME) + ' ');
+		System.out.print(messages.get("console.message.writing.new.file", VehiclesInf.FILE_NAME) + ' ');
 		try {
 			Files.write(bikesInfFile, bytes);
 			System.out.println(DONE);
 		}
 		catch (final IOException e) {
 			System.out.println(ERROR);
-			System.err.println(messages.get("console.error.cannot.write.file", BikesInf.FILE_NAME, e));
+			System.err.println(messages.get("console.error.cannot.write.file", VehiclesInf.FILE_NAME, e));
 			throw e;
 		}
 	}
