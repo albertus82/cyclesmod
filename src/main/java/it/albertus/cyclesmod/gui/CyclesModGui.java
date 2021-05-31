@@ -80,7 +80,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private CyclesModGui(@NonNull final Display display) {
 		for (final Game game : Game.values()) {
-			defaultProperties.put(game, Collections.unmodifiableMap(new VehiclesCfg(new VehiclesInf(game)).getMap()));
+			defaultProperties.put(game, Collections.unmodifiableMap(new VehiclesCfg(game, new VehiclesInf(game)).getMap()));
 		}
 		lastPersistedProperties = new HashMap<>(defaultProperties.get(mode.getGame()));
 
@@ -149,9 +149,9 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (focused != null && !focused.isDisposed()) {
 			focused.notifyListeners(SWT.FocusOut, null); // force auto-correction for focused field
 		}
-		for (final String key : tabs.getFormProperties().keySet()) {
+		for (final String key : tabs.getFormProperties().get(mode.getGame()).keySet()) {
 			try {
-				engine.applyProperty(key, tabs.getFormProperties().get(key).getValue());
+				engine.applyProperty(key, tabs.getFormProperties().get(mode.getGame()).get(key).getValue());
 			}
 			catch (final InvalidPropertyException e) {
 				if (!lenient) {
@@ -339,7 +339,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private void updateGuiStatusAfterOpening(final Path file) throws IOException {
 		tabs.updateFormValues();
-		setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
+		setLastPersistedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 		currentFileName = file.toFile().getCanonicalPath();
 		setCurrentFileModificationStatus(false);
 	}
@@ -363,7 +363,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
-		final String str = VehiclesCfg.createProperties(engine.getVehiclesInf().getVehicles().get(vehicleType));
+		final String str = VehiclesCfg.createProperties(mode.getGame(), engine.getVehiclesInf().getVehicles().get(vehicleType));
 		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), VehiclesCfg.CHARSET)) {
 			writer.write(str);
 			return true;
@@ -394,7 +394,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (fileName == null || fileName.trim().isEmpty()) {
 			return false;
 		}
-		final String str = VehiclesCfg.createProperties(engine.getVehiclesInf().getVehicles().values().toArray(new Vehicle[0]));
+		final String str = VehiclesCfg.createProperties(mode.getGame(), engine.getVehiclesInf().getVehicles().values().toArray(new Vehicle[0]));
 		try (final Writer writer = Files.newBufferedWriter(Paths.get(fileName), VehiclesCfg.CHARSET)) {
 			writer.write(str);
 			return true;
@@ -482,7 +482,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				throw new IllegalStateException("Unknown mode: " + mode);
 			}
 			Files.write(destFile, bytes);
-			setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
+			setLastPersistedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 			setCurrentFileModificationStatus(false);
 			return true;
 		}
@@ -525,7 +525,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				Files.write(Paths.get(fileName), engine.getVehiclesInf().toByteArray());
 				currentFileName = fileName;
 				setCurrentFileModificationStatus(false);
-				setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
+				setLastPersistedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -558,7 +558,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				Files.write(Paths.get(userChoosenFileName), newExe);
 				currentFileName = userChoosenFileName;
 				setCurrentFileModificationStatus(false);
-				setLastPersistedProperties(new VehiclesCfg(engine.getVehiclesInf()).getMap());
+				setLastPersistedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -590,7 +590,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			default:
 				throw new IllegalStateException("Unknown mode: " + mode);
 			}
-			final Properties properties = new VehiclesCfg(new Vehicle(type, byteArray)).getProperties();
+			final Properties properties = new VehiclesCfg(mode.getGame(), new Vehicle(type, byteArray)).getProperties();
 			for (final String key : properties.stringPropertyNames()) {
 				engine.applyProperty(key, properties.getProperty(key));
 			}
@@ -607,7 +607,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private boolean isConfigurationChanged() {
-		return !new VehiclesCfg(engine.getVehiclesInf()).getMap().equals(getLastPersistedProperties());
+		return !new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap().equals(getLastPersistedProperties());
 	}
 
 	public void setCurrentFileModificationStatus(final boolean modified) {

@@ -152,15 +152,15 @@ public class MenuBar implements Multilanguage {
 		editMenuHeader.addArmListener(editMenuListener);
 
 		editCutMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.cut") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_CUT));
-		editCutMenuItem.addSelectionListener(new CutSelectionListener(gui::getTabs));
+		editCutMenuItem.addSelectionListener(new CutSelectionListener(gui));
 		editCutMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_CUT);
 
 		editCopyMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.copy") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_COPY));
-		editCopyMenuItem.addSelectionListener(new CopySelectionListener(gui::getTabs));
+		editCopyMenuItem.addSelectionListener(new CopySelectionListener(gui));
 		editCopyMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_COPY);
 
 		editPasteMenuItem = newLocalizedMenuItem(editMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.paste") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_PASTE));
-		editPasteMenuItem.addSelectionListener(new PasteSelectionListener(gui::getTabs));
+		editPasteMenuItem.addSelectionListener(new PasteSelectionListener(gui));
 		editPasteMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_PASTE);
 
 		new MenuItem(editMenu, SWT.SEPARATOR);

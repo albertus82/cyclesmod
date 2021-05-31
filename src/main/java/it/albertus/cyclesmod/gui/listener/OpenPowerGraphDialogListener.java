@@ -38,15 +38,15 @@ public class OpenPowerGraphDialogListener extends MouseAdapter implements Select
 	private void handleEvent() {
 		final PowerGraphDialog powerGraphDialog = new PowerGraphDialog(gui.getShell());
 		final Map<Integer, Short> map = new TreeMap<>();
-		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties();
+		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties().get(gui.getMode().getGame());
 		for (int i = 0; i < Power.LENGTH; i++) {
-			final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(vehicleType, Power.PREFIX, i));
+			final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicleType, Power.PREFIX, i));
 			map.put(Power.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
 		}
 
 		if (powerGraphDialog.open(map, vehicleType, false) == SWT.OK) {
 			for (int i = 0; i < Power.LENGTH; i++) {
-				final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(vehicleType, Power.PREFIX, i));
+				final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicleType, Power.PREFIX, i));
 				final Text text = formProperty.getText();
 				final String oldValue = text.getText();
 				final String newValue = Long.toString(Math.max(Power.MIN_VALUE, Math.min(Power.MAX_VALUE, Math.round(powerGraphDialog.getPowerGraph().getPowerValue(i)))), gui.getNumeralSystem().getRadix());

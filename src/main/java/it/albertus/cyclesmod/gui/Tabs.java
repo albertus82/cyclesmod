@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
+import it.albertus.cyclesmod.common.model.Game;
 import it.albertus.cyclesmod.common.model.Gearbox;
 import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Setting;
@@ -60,7 +61,7 @@ public class Tabs implements Multilanguage {
 
 	@Getter private final TabFolder tabFolder;
 
-	private final Map<String, FormProperty> formProperties = new HashMap<>();
+	private final Map<Game, Map<String, FormProperty>> formProperties = new EnumMap<>(Game.class);
 
 	private final Map<VehicleType, PowerGraphCanvas> powerCanvases = new EnumMap<>(VehicleType.class);
 
@@ -72,6 +73,10 @@ public class Tabs implements Multilanguage {
 	private final PropertyKeyListener propertyKeyListener;
 
 	Tabs(@NonNull final CyclesModGui gui) {
+		for (final Game game : Game.values()) {
+			formProperties.put(game, new HashMap<>());
+		}
+
 		this.gui = gui;
 		textFormatter = new TextFormatter(gui);
 		propertyVerifyListener = new PropertyVerifyListener(gui);
@@ -100,22 +105,31 @@ public class Tabs implements Multilanguage {
 			GridLayoutFactory.swtDefaults().numColumns(6).applyTo(settingsGroup);
 
 			for (final Setting setting : vehicle.getSettings().getValues().keySet()) {
-				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Settings.PREFIX, setting.getKey());
-				final Integer defaultValue = gui.getDefaultProperties().get(gui.getMode().getGame()).get(key);
+				final Map<Game, String> keyMap = new EnumMap<>(Game.class);
+				for (final Game game : Game.values()) {
+					keyMap.put(game, VehiclesCfg.buildPropertyKey(game, vehicle.getType(), Settings.PREFIX, setting.getKey()));
+				}
+				final Map<Game, Integer> defaultValueMap = new EnumMap<>(Game.class);
+				for (final Game game : Game.values()) {
+					defaultValueMap.put(game, gui.getDefaultProperties().get(game).get(keyMap.get(game)));
+				}
 				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
-				label.setToolTipText(key);
+				label.setToolTipText(keyMap.get(gui.getMode().getGame()));
 				if (!setting.isActive()) {
 					label.setEnabled(false);
 				}
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				text.setData(new GenericTextData(key, defaultValue, Settings.MAX_VALUE));
+				text.setData(new GenericTextData(keyMap, defaultValueMap, Settings.MAX_VALUE));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				formProperties.put(key, new FormProperty(text));
+				final FormProperty formProperty = new FormProperty(text);
+				for (final Game game : Game.values()) {
+					formProperties.get(game).put(keyMap.get(game), formProperty);
+				}
 				label.addMouseListener(new LabelMouseListener(text));
 			}
 			for (final Setting setting : vehicle.getSettings().getValues().keySet()) {
@@ -135,7 +149,7 @@ public class Tabs implements Multilanguage {
 				@Override
 				public void mousePressed(@NonNull final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(vehicle.getType(), Power.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
+						final FormProperty formProperty = formProperties.get(gui.getMode().getGame()).get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicle.getType(), Power.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
 						}
@@ -151,20 +165,29 @@ public class Tabs implements Multilanguage {
 			GridLayoutFactory.swtDefaults().numColumns(10).applyTo(gearboxGroup);
 
 			for (int index = 0; index < vehicle.getGearbox().getRatios().length; index++) {
-				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Gearbox.PREFIX, index);
-				final Integer defaultValue = gui.getDefaultProperties().get(gui.getMode().getGame()).get(key);
+				final Map<Game, String> keyMap = new EnumMap<>(Game.class);
+				for (final Game game : Game.values()) {
+					keyMap.put(game, VehiclesCfg.buildPropertyKey(game, vehicle.getType(), Gearbox.PREFIX, index));
+				}
+				final Map<Game, Integer> defaultValueMap = new EnumMap<>(Game.class);
+				for (final Game game : Game.values()) {
+					defaultValueMap.put(game, gui.getDefaultProperties().get(game).get(keyMap.get(game)));
+				}
 				final Serializable gearName = index != 0 ? index : "N";
 				final Label label = newLocalizedLabel(gearboxGroup, SWT.NONE, () -> messages.get("gui.label.gearbox.gear", gearName));
 				GridDataFactory.swtDefaults().applyTo(label);
-				label.setToolTipText(key);
+				label.setToolTipText(keyMap.get(gui.getMode().getGame()));
 				final Text text = new Text(gearboxGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				text.setData(new GenericTextData(key, defaultValue, Gearbox.MAX_VALUE));
+				text.setData(new GenericTextData(keyMap, defaultValueMap, Gearbox.MAX_VALUE));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(propertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				formProperties.put(key, new FormProperty(text));
+				final FormProperty formProperty = new FormProperty(text);
+				for (final Game game : Game.values()) {
+					formProperties.get(game).put(keyMap.get(game), formProperty);
+				}
 				label.addMouseListener(new LabelMouseListener(text));
 			}
 
@@ -174,20 +197,29 @@ public class Tabs implements Multilanguage {
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
 
 			for (int index = 0; index < vehicle.getPower().getCurve().length; index++) {
-				final String key = VehiclesCfg.buildPropertyKey(vehicle.getType(), Power.PREFIX, index);
-				final Integer defaultValue = gui.getDefaultProperties().get(gui.getMode().getGame()).get(key);
+				final Map<Game, String> keyMap = new EnumMap<>(Game.class);
+				for (final Game game : Game.values()) {
+					keyMap.put(game, VehiclesCfg.buildPropertyKey(game, vehicle.getType(), Power.PREFIX, index));
+				}
+				final Map<Game, Integer> defaultValueMap = new EnumMap<>(Game.class);
+				for (final Game game : Game.values()) {
+					defaultValueMap.put(game, gui.getDefaultProperties().get(game).get(keyMap.get(game)));
+				}
 				final int rpm = Power.getRpm(index);
 				final Label label = newLocalizedLabel(powerGroup, SWT.NONE, () -> messages.get("gui.label.power.rpm", rpm));
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
-				label.setToolTipText(key);
+				label.setToolTipText(keyMap.get(gui.getMode().getGame()));
 				final Text text = new Text(powerGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				text.setData(new PowerTextData(key, defaultValue, Power.MAX_VALUE, index, powerGraph));
+				text.setData(new PowerTextData(keyMap, defaultValueMap, Power.MAX_VALUE, index, powerGraph));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(powerPropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
-				formProperties.put(key, new FormProperty(text));
+				final FormProperty formProperty = new FormProperty(text);
+				for (final Game game : Game.values()) {
+					formProperties.get(game).put(keyMap.get(game), formProperty);
+				}
 				label.addMouseListener(new LabelMouseListener(text));
 			}
 			tabScrolledComposite.setContent(tabComposite);
@@ -207,17 +239,17 @@ public class Tabs implements Multilanguage {
 
 		// Update form fields...
 		disableTextListeners();
-		for (final FormProperty formProperty : formProperties.values()) {
+		for (final FormProperty formProperty : formProperties.get(gui.getMode().getGame()).values()) {
 			formProperty.backup();
 			final Text text = formProperty.getText();
 			text.setVisible(false);
 			textFormatter.setSampleNumber(text);
 		}
 		gui.getShell().layout(true, true);
-		for (final FormProperty formProperty : formProperties.values()) {
+		for (final FormProperty formProperty : formProperties.get(gui.getMode().getGame()).values()) {
 			formProperty.restore();
 			final Text text = formProperty.getText();
-			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString(((GenericTextData) text.getData()).getDefaultValue(), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString(((GenericTextData) text.getData()).getDefaultValueMap().get(gui.getMode().getGame()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
 			if (text.getToolTipText() == null || !text.getToolTipText().equals(toolTipText)) {
 				text.setToolTipText(toolTipText);
 			}
@@ -226,10 +258,10 @@ public class Tabs implements Multilanguage {
 	}
 
 	public void updateFormValues() {
-		final Map<String, Integer> properties = new VehiclesCfg(gui.getVehiclesInf()).getMap();
+		final Map<String, Integer> properties = new VehiclesCfg(gui.getMode().getGame(), gui.getVehiclesInf()).getMap();
 
 		// Consistency check...
-		if (properties.size() != formProperties.size()) {
+		if (properties.size() != formProperties.get(gui.getMode().getGame()).size()) {
 			throw new IllegalStateException(messages.get("gui.error.properties.number"));
 		}
 
@@ -251,7 +283,7 @@ public class Tabs implements Multilanguage {
 	}
 
 	private void updateFields(final Map<String, Integer> properties) {
-		for (final Entry<String, FormProperty> entry : formProperties.entrySet()) {
+		for (final Entry<String, FormProperty> entry : formProperties.get(gui.getMode().getGame()).entrySet()) {
 			if (!properties.containsKey(entry.getKey())) {
 				throw new IllegalStateException(messages.get("gui.error.property.missing", entry.getKey()));
 			}
@@ -282,7 +314,7 @@ public class Tabs implements Multilanguage {
 			}
 
 			// Update tooltip text...
-			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString(((GenericTextData) field.getData()).getDefaultValue(), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
+			final String toolTipText = messages.get("gui.message.tooltip.default", Integer.toString(((GenericTextData) field.getData()).getDefaultValueMap().get(gui.getMode().getGame()), gui.getNumeralSystem().getRadix()).toUpperCase(Locale.ROOT));
 			if (field.getToolTipText() == null || !field.getToolTipText().equals(toolTipText)) {
 				field.setToolTipText(toolTipText);
 			}
@@ -306,7 +338,7 @@ public class Tabs implements Multilanguage {
 		powerPropertyFocusListener.setEnabled(false);
 	}
 
-	public Map<String, FormProperty> getFormProperties() {
+	public Map<Game, Map<String, FormProperty>> getFormProperties() {
 		return Collections.unmodifiableMap(formProperties);
 	}
 
