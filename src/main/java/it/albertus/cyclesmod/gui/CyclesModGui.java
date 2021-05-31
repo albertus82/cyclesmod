@@ -73,7 +73,8 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@Getter private final Tabs tabs;
 
 	@Getter private final Map<Game, Map<String, Integer>> defaultProperties = new EnumMap<>(Game.class);
-	private final Map<String, Integer> lastPersistedProperties;
+	private final Map<String, Integer> lastSavedProperties;
+	private final Map<String, Integer> lastExportedProperties;
 
 	private String currentFileName;
 	private byte[] gpcOriginalExeBytes;
@@ -82,7 +83,8 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		for (final Game game : Game.values()) {
 			defaultProperties.put(game, Collections.unmodifiableMap(new VehiclesCfg(game, new VehiclesInf(game)).getMap()));
 		}
-		lastPersistedProperties = new HashMap<>(defaultProperties.get(mode.getGame()));
+		lastSavedProperties = new HashMap<>(defaultProperties.get(mode.getGame()));
+		lastExportedProperties = new HashMap<>(defaultProperties.get(mode.getGame()));
 
 		// Shell creation...
 		shell = new Shell(display);
@@ -339,7 +341,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private void updateGuiStatusAfterOpening(final Path file) throws IOException {
 		tabs.updateFormValues();
-		setLastPersistedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
+		setLastSavedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 		currentFileName = file.toFile().getCanonicalPath();
 		setCurrentFileModificationStatus(false);
 	}
@@ -407,7 +409,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean resetSingle(@NonNull final VehicleType vehicleType) {
-		if (openMessageBox(messages.get("gui.message.reset.overwrite.single", vehicleType.getDisplacement()), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
+		if (openMessageBox(messages.get("gui.message.reset.overwrite.single", vehicleType.getDescription(mode.getGame())), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
 			return false;
 		}
 		try {
@@ -434,7 +436,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean resetAll() {
-		if (openMessageBox(messages.get("gui.message.reset.overwrite.all"), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
+		if (openMessageBox(messages.get("gui.message.reset.overwrite.all." + mode.getGame().toString().toLowerCase(Locale.ROOT)), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
 			return false;
 		}
 		try {
@@ -482,7 +484,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				throw new IllegalStateException("Unknown mode: " + mode);
 			}
 			Files.write(destFile, bytes);
-			setLastPersistedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
+			setLastSavedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 			setCurrentFileModificationStatus(false);
 			return true;
 		}
@@ -525,7 +527,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				Files.write(Paths.get(fileName), engine.getVehiclesInf().toByteArray());
 				currentFileName = fileName;
 				setCurrentFileModificationStatus(false);
-				setLastPersistedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
+				setLastSavedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -558,7 +560,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				Files.write(Paths.get(userChoosenFileName), newExe);
 				currentFileName = userChoosenFileName;
 				setCurrentFileModificationStatus(false);
-				setLastPersistedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
+				setLastSavedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
 				return true;
 			}
 			catch (final IOException | RuntimeException e) {
@@ -573,7 +575,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean loadHiddenCfg(@NonNull final VehicleType type) {
-		if (openMessageBox(messages.get("gui.message.hiddenCfg.overwrite", type.getDisplacement()), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
+		if (openMessageBox(messages.get("gui.message.hiddenCfg.overwrite", type.getDescription(mode.getGame())), SWT.ICON_QUESTION | SWT.YES | SWT.NO) != SWT.YES) {
 			return false;
 		}
 		try {
@@ -607,7 +609,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private boolean isConfigurationChanged() {
-		return !new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap().equals(getLastPersistedProperties());
+		return !new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap().equals(lastSavedProperties);
 	}
 
 	public void setCurrentFileModificationStatus(final boolean modified) {
@@ -669,13 +671,14 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		tabs.updateFormValues();
 	}
 
-	public Map<String, Integer> getLastPersistedProperties() {
-		return Collections.unmodifiableMap(lastPersistedProperties);
+	private void setLastSavedProperties(final Map<String, Integer> lastSavedProperties) {
+		this.lastSavedProperties.clear();
+		this.lastSavedProperties.putAll(lastSavedProperties);
 	}
 
-	private void setLastPersistedProperties(final Map<String, Integer> lastPersistedProperties) {
-		this.lastPersistedProperties.clear();
-		this.lastPersistedProperties.putAll(lastPersistedProperties);
+	private void setLastExportedProperties(final Map<String, Integer> lastExportedProperties) {
+		this.lastExportedProperties.clear();
+		this.lastExportedProperties.putAll(lastExportedProperties);
 	}
 
 	public VehiclesInf getVehiclesInf() {
