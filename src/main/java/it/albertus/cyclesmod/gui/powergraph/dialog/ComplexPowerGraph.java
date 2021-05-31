@@ -80,7 +80,7 @@ public class ComplexPowerGraph extends PowerGraph {
 		final FontData titleFontData = xyGraph.getTitleFontData();
 		xyGraph.setTitleFont(XYGraphMediaFactory.getInstance().getFont(titleFontData.getName(), Math.round(titleFontData.getHeight() * TITLE_HEIGHT_FACTOR), SWT.NORMAL));
 		xyGraph.setTitle(" ");
-		plotArea.addMouseMotionListener(new UpdateTitleListener(this));
+		plotArea.addMouseMotionListener(new UpdateTitleListener(this, mode));
 
 		abscissae.performAutoScale(true);
 		ordinates.performAutoScale(true);
