@@ -26,7 +26,6 @@ import lombok.extern.java.Log;
 @Log
 public class VehiclesCfg {
 
-	public static final String FILE_NAME = "BIKES.CFG";
 	public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
 
 	private static final int RADIX = 10;
@@ -167,6 +166,28 @@ public class VehiclesCfg {
 					break;
 				}
 			}
+		}
+	}
+
+	public static String getFileName(@NonNull final Game game) {
+		switch (game) {
+		case CYCLES:
+			return "BIKES.CFG";
+		case GPC:
+			return "CARS.CFG";
+		default:
+			throw new IllegalArgumentException("Unknown game: " + game);
+		}
+	}
+
+	public static String getFileName(@NonNull final Game game, @NonNull final VehicleType vehicleType) {
+		switch (game) {
+		case CYCLES:
+			return "BIKE" + vehicleType.getIndex() + ".CFG";
+		case GPC:
+			return "CAR" + vehicleType.getIndex() + ".CFG";
+		default:
+			throw new IllegalArgumentException("Unknown game: " + game);
 		}
 	}
 

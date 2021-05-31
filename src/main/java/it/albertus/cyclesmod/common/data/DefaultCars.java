@@ -2,6 +2,7 @@ package it.albertus.cyclesmod.common.data;
 
 import java.util.zip.DataFormatException;
 
+import it.albertus.cyclesmod.common.model.Game;
 import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.cyclesmod.common.resources.CommonMessages;
 import it.albertus.cyclesmod.common.resources.Messages;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DefaultCars {
+
+	private static final String FILE_NAME = VehiclesInf.getFileName(Game.GPC);
 
 	private static final long CRC32 = Integer.toUnsignedLong(0x8B31837B);
 
@@ -22,13 +25,13 @@ public class DefaultCars {
 			return DataUtils.inflate(DEFLATED_BASE64, VehiclesInf.FILE_SIZE, CRC32);
 		}
 		catch (final IllegalArgumentException | DataFormatException e) {
-			throw new VerifyError(messages.get("common.error.original.file.corrupted", VehiclesInf.FILE_NAME), e);
+			throw new VerifyError(messages.get("common.error.original.file.corrupted", FILE_NAME), e);
 		}
 		catch (final InvalidSizeException e) {
-			throw new VerifyError(messages.get("common.error.original.file.corrupted.size", VehiclesInf.FILE_NAME, e.getExpected(), e.getActual()), e);
+			throw new VerifyError(messages.get("common.error.original.file.corrupted.size", FILE_NAME, e.getExpected(), e.getActual()), e);
 		}
 		catch (final InvalidChecksumException e) {
-			throw new VerifyError(messages.get("common.error.original.file.corrupted.crc", VehiclesInf.FILE_NAME, String.format("%08X", e.getExpected()), String.format("%08X", e.getActual())), e);
+			throw new VerifyError(messages.get("common.error.original.file.corrupted.crc", FILE_NAME, String.format("%08X", e.getExpected()), String.format("%08X", e.getActual())), e);
 		}
 	}
 
