@@ -55,29 +55,21 @@ public class UpdateTitleListener extends MouseMotionListener.Stub {
 
 	private void handleEvent(final Point location) {
 		final short value = powerGraph.getPowerValue(location);
+		final short hp = Mode.GPC.equals(mode) ? (short) (value * GPC_FACTOR) : value;
+		final double kw = hp / KW_TO_HP;
+		final int rpm = Power.getRpm(powerGraph.getPowerIndex(location));
+		final double nm = PowerGraph.hpToNm(hp, rpm);
+		final double lbft = nm * NM_TO_LBFT;
+		final String currentPosition;
 		if (Mode.GPC.equals(mode)) {
-			final short hp = (short) (value * GPC_FACTOR);
-			final double kw = hp / KW_TO_HP;
-			final int rpm = Power.getRpm(powerGraph.getPowerIndex(location));
-			final double nm = PowerGraph.hpToNm(hp, rpm);
-			final double lbft = nm * NM_TO_LBFT;
-			final String currentPosition = messages.get("gui.label.graph.powerAtRpm." + mode.getGame().toString().toLowerCase(Locale.ROOT), value, hp, numberFormat.format(kw), numberFormat.format(nm), numberFormat.format(lbft), rpm);
-			if (!currentPosition.equals(lastPosition)) {
-				lastPosition = currentPosition;
-				powerGraph.getXyGraph().setTitle(lastPosition);
-			}
+			currentPosition = messages.get("gui.label.graph.powerAtRpm." + mode.getGame().toString().toLowerCase(Locale.ROOT), value, hp, numberFormat.format(kw), numberFormat.format(nm), numberFormat.format(lbft), rpm);
 		}
 		else {
-			final short hp = value;
-			final double kw = hp / KW_TO_HP;
-			final int rpm = Power.getRpm(powerGraph.getPowerIndex(location));
-			final double nm = PowerGraph.hpToNm(hp, rpm);
-			final double lbft = nm * NM_TO_LBFT;
-			final String currentPosition = messages.get("gui.label.graph.powerAtRpm." + mode.getGame().toString().toLowerCase(Locale.ROOT), hp, numberFormat.format(kw), numberFormat.format(nm), numberFormat.format(lbft), rpm);
-			if (!currentPosition.equals(lastPosition)) {
-				lastPosition = currentPosition;
-				powerGraph.getXyGraph().setTitle(lastPosition);
-			}
+			currentPosition = messages.get("gui.label.graph.powerAtRpm." + mode.getGame().toString().toLowerCase(Locale.ROOT), hp, numberFormat.format(kw), numberFormat.format(nm), numberFormat.format(lbft), rpm);
+		}
+		if (!currentPosition.equals(lastPosition)) {
+			lastPosition = currentPosition;
+			powerGraph.getXyGraph().setTitle(lastPosition);
 		}
 	}
 
