@@ -63,7 +63,6 @@ class DataUtils {
 			if (compressedDataLength <= 0) {
 				throw new IOException();
 			}
-			System.out.println(compressedDataLength);
 			return Base64.getEncoder().encodeToString(Arrays.copyOf(outputBytes, compressedDataLength));
 		}
 		finally {
