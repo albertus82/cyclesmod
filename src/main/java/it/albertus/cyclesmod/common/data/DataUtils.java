@@ -11,6 +11,8 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+import javax.naming.SizeLimitExceededException;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -44,18 +46,25 @@ class DataUtils {
 		return crc.getValue();
 	}
 
-	static String deflateToBase64(@NonNull final Path path) throws IOException {
-		final long inputSize = Files.size(path);
-		if (inputSize > 0x200000) { // 2 MiB
-			throw new IllegalArgumentException("Input file is too large");
+	static String deflateToBase64(@NonNull final Path path) throws IOException, SizeLimitExceededException {
+		final long inputFileSize = Files.size(path);
+		final int sizeLimit = 0x200000;
+		if (inputFileSize > sizeLimit) { // 2 MiB
+			throw new SizeLimitExceededException("Input file exceeds the limit of " + sizeLimit + " bytes");
 		}
-		final byte[] output = new byte[(int) inputSize];
+		final double inverse = 1d / inputFileSize;
+		final int bufferSize = (int) (inputFileSize + inputFileSize * 0.1 + inverse * 1000);
+		final byte[] outputBytes = new byte[bufferSize];
 		final Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
 		try {
 			deflater.setInput(Files.readAllBytes(path));
 			deflater.finish();
-			int compressedDataLength = deflater.deflate(output);
-			return Base64.getEncoder().encodeToString(Arrays.copyOf(output, compressedDataLength));
+			int compressedDataLength = deflater.deflate(outputBytes);
+			if (compressedDataLength <= 0) {
+				throw new IOException();
+			}
+			System.out.println(compressedDataLength);
+			return Base64.getEncoder().encodeToString(Arrays.copyOf(outputBytes, compressedDataLength));
 		}
 		finally {
 			deflater.end();
