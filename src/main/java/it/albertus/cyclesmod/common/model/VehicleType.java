@@ -1,5 +1,7 @@
 package it.albertus.cyclesmod.common.model;
 
+import java.util.Locale;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum VehicleType {
 
-	FERRARI_125(1, "Ferrari", 125),
-	MCLAREN_250(2, "McLaren", 250),
-	WILLIAMS_500(3, "Williams", 500);
+	FERRARI_125(0, "Ferrari", 125),
+	MCLAREN_250(1, "McLaren", 250),
+	WILLIAMS_500(2, "Williams", 500);
 
 	private final int index;
 	@NonNull private final String team;
@@ -21,7 +23,7 @@ public enum VehicleType {
 		case CYCLES:
 			return Integer.toString(displacement);
 		case GPC:
-			return team;
+			return team.toLowerCase(Locale.ROOT);
 		default:
 			throw new IllegalArgumentException("Unknown game: " + game);
 		}

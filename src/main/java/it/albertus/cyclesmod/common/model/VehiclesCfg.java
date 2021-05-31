@@ -183,9 +183,9 @@ public class VehiclesCfg {
 	public static String getFileName(@NonNull final Game game, @NonNull final VehicleType vehicleType) {
 		switch (game) {
 		case CYCLES:
-			return "BIKE" + vehicleType.getIndex() + ".CFG";
+			return "BIKE" + (vehicleType.getIndex() + 1) + ".CFG";
 		case GPC:
-			return "CAR" + vehicleType.getIndex() + ".CFG";
+			return "CAR" + (vehicleType.getIndex() + 1) + ".CFG";
 		default:
 			throw new IllegalArgumentException("Unknown game: " + game);
 		}
