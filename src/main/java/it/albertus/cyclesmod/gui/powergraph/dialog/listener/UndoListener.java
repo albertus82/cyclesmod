@@ -4,15 +4,15 @@ import org.eclipse.nebula.visualization.internal.xygraph.undo.OperationsManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 
 import it.albertus.jface.SwtUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class UndoListener implements KeyListener, SelectionListener {
+public class UndoListener extends SelectionAdapter implements KeyListener {
 
 	private final OperationsManager manager;
 
@@ -30,8 +30,5 @@ public class UndoListener implements KeyListener, SelectionListener {
 
 	@Override
 	public void keyReleased(final KeyEvent e) {/* Ignore */}
-
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
 
 }

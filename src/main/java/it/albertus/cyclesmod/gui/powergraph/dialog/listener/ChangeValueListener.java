@@ -12,7 +12,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ChangeValueListener implements MouseListener, MouseMotionListener {
+public class ChangeValueListener extends MouseMotionListener.Stub implements MouseListener {
 
 	private static final int BUTTON_LEFT = 1;
 
@@ -51,15 +51,6 @@ public class ChangeValueListener implements MouseListener, MouseMotionListener {
 			powerGraph.getXyGraph().getOperationsManager().addCommand(new ChangeValueCommand(powerGraph, index, oldValue, newValue));
 		}
 	}
-
-	@Override
-	public void mouseExited(final MouseEvent me) {/* Ignore */}
-
-	@Override
-	public void mouseHover(final MouseEvent me) {/* Ignore */}
-
-	@Override
-	public void mouseMoved(final MouseEvent me) {/* Ignore */}
 
 	@Override
 	public void mouseReleased(final MouseEvent me) {/* Ignore */}

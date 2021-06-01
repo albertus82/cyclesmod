@@ -6,23 +6,23 @@ import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.PlotArea;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class ZoomListener implements KeyListener, SelectionListener {
+public abstract class ZoomListener extends SelectionAdapter implements KeyListener {
 
 	protected static final double ZOOM_RATIO = 0.1;
 
 	protected final IXYGraph xyGraph;
 
-	protected abstract void execute();
+	protected abstract void handleEvent();
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		execute();
+		handleEvent();
 	}
 
 	protected Point getPlotAreaCenter() {
@@ -37,8 +37,5 @@ public abstract class ZoomListener implements KeyListener, SelectionListener {
 
 	@Override
 	public final void keyReleased(final KeyEvent e) {/* Ignore */}
-
-	@Override
-	public final void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
 
 }
