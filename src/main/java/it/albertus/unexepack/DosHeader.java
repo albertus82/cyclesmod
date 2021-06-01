@@ -3,12 +3,13 @@ package it.albertus.unexepack;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class DosHeader {
 
 	static final int SIGNATURE = 0x5A4D;
