@@ -728,7 +728,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private void setMode(@NonNull final Mode mode) {
 		if (!this.mode.equals(mode)) {
 			this.mode = mode;
-			if (Mode.CYCLES.equals(mode)) {
+			if (!Mode.GPC.equals(mode)) {
 				gpcOriginalExeBytes = null;
 			}
 			menuBar.updateModeSpecificWidgets();
