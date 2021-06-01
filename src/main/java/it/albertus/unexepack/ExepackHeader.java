@@ -20,7 +20,7 @@ class ExepackHeader {
 	int realSs;
 	int destLen; // size (in 16-byte paragraphs) of the uncompressed data
 	int skipLen;
-	int signature;
+	int signature; // NOSONAR Rename field "signature" to prevent any misunderstanding/clash with field "SIGNATURE" defined on line 12. Methods and field names should not be the same or differ only by capitalization (java:S1845)
 
 	ExepackHeader(@NonNull final byte[] bytes) throws InvalidExepackHeaderException {
 		if (bytes.length != SIZE) {
