@@ -6,7 +6,7 @@ CyclesMod
 [![Build status](https://ci.appveyor.com/api/projects/status/github/albertus82/cyclesmod?branch=master&svg=true)](https://ci.appveyor.com/project/albertus82/cyclesmod)
 [![Known Vulnerabilities](https://snyk.io/test/github/albertus82/cyclesmod/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/albertus82/cyclesmod?targetFile=pom.xml)
 
-[**The Cycles - International Grand Prix Racing**](https://www.mobygames.com/game/cycles-international-grand-prix-racing) is a motorcycle simulation video game.
+[**The Cycles - International Grand Prix Racing**](https://www.mobygames.com/game/cycles-international-grand-prix-racing) is a motorcycle simulation video game developed by *Distinctive Software* and published by *Accolade*.
 
 Dating back to 1989, it was distributed for the most popular platforms of the time, from the Commodore 64 to the IBM PC (DOS), and is now easily available as *Abandonware*. 
 
@@ -107,7 +107,7 @@ It is also possibile to draw and modify the curve using the pointing device from
 
 ## Grand Prix Circuit
 
-The ancestor of **The Cycles** is the better known **Grand Prix Circuit**, released a year earlier in the 1988.
+**Grand Prix Circuit** is a car racing game developed by *Distinctive Software* and published by *Accolade* exactly like **The Cycles**, and in fact it is its ancestor, since it came out the previous year (1988).
 
 The cars featured in *Grand Prix Circuit* and the bikes featured in *The Cycles* shares the very same configuration scheme; there's only one biggest difference: the car settings of *Grand Prix Circuit* are stored directly in the game executable files instead of in an external file, therefore the only way to edit them is patch the executable itself, and CyclesMod is able to do it.
 
