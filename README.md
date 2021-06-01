@@ -105,9 +105,15 @@ The engine power curve is constructed from the values present in this group. Eac
 
 It is also possibile to draw and modify the curve using the pointing device from the *Power Graph* window, reachable from the *Edit* menu or simply double clicking on the graph in the main window.
 
+## Grand Prix Circuit
+
+The ancestor of **The Cycles** is the better known **Grand Prix Circuit**, released a year earlier in the 1988. The cars featured in *Grand Prix Circuit* and the bikes featured in *The Cycles* shares the very same configuration scheme; there's only one biggest difference: the car settings of *Grand Prix Circuit* are stored directly in the game executable files instead of in an external file, therefore the only way to edit them is patch the executable itself, and CyclesMod is able to do it. Simply open an original executable of *Grand Prix Circuit* (e.g. GPEGA.EXE) and start modifying the car configurations. When you are satisfied and want to try your trim on the circuit, issue the save command and choose a new name for your patched executable (e.g. GPEGAX.EXE).
+
+Because the car settings are incorporated in the game executables, the only way to change them is to patch the executable itself.
+
 ## Command line version
 
-If you prefer to operate without a graphical interface, a fully functional command line version of CyclesMod is available. It can be executed using the following executables:
+If you prefer to operate without a graphical interface, an almost full-featured command line version of CyclesMod is available. It can be executed using the following executables:
 
 * Windows: `CyclesMod.exe`
 * Linux: `cyclesmod.sh`
@@ -120,6 +126,8 @@ Next, the program reads the `BIKES.CFG` file contents and finally produces a new
 To make further changes to the bikes, simply open the `BIKES.CFG` file, modify the parameters of interest, save the file and re-run *CyclesMod*. The program will detect the existence of the `BIKES.CFG` file and will produce a new `BIKES.INF` containing the changes made. In case of errors, appropriate console messages will be displayed.
 
 **If you want to restore the original `BIKES.INF` file shipped with the game, simply delete the `BIKES.CFG` file and run the program without arguments: it will automatically generate default `BIKES.CFG` and `BIKES.INF` files.**
+
+
 
 ## Acknowledgements
 
