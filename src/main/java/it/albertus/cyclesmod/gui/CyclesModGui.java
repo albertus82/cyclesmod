@@ -724,7 +724,6 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private void setMode(final Mode mode) {
 		if (!this.mode.equals(mode)) {
 			this.mode = mode;
-			tabs.updateTabItemsText();
 			tabs.updateModeSpecificLabels();
 			menuBar.updateLanguage();
 			switch (mode) {

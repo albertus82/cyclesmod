@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.common.engine.CyclesModEngine;
+import it.albertus.cyclesmod.common.engine.NumeralSystem;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.model.Game;
 import it.albertus.cyclesmod.common.model.Gearbox;
@@ -119,9 +120,6 @@ public class Tabs implements Multilanguage {
 				final Label label = newLocalizedLabel(settingsGroup, SWT.NONE, "gui.label.settings." + setting.getKey());
 				GridDataFactory.swtDefaults().applyTo(label);
 				label.setToolTipText(keyMap.get(gui.getMode().getGame()));
-				if (!setting.isActive()) {
-					label.setEnabled(false);
-				}
 				final Text text = new Text(settingsGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
 				text.setData(new GenericTextData(keyMap, defaultValueMap, Settings.MAX_VALUE));
@@ -137,7 +135,6 @@ public class Tabs implements Multilanguage {
 			}
 			final Label noteLabel = newLocalizedLabel(settingsGroup, SWT.NONE, () -> messages.get("gui.label.settings.note." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT)));
 			GridDataFactory.swtDefaults().span(2, 1).align(SWT.END, SWT.CENTER).applyTo(noteLabel);
-			noteLabel.setEnabled(Mode.GPC.equals(gui.getMode()));
 			noteLabels.add(noteLabel);
 
 			// Power graph
@@ -227,35 +224,22 @@ public class Tabs implements Multilanguage {
 			tabScrolledComposite.setMinSize(tabComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			tabItem.setControl(outerComposite);
 		}
-		updateTabItemsText();
+		updateModeSpecificLabels();
 	}
 
-	public void updateTabItemsText() {
+	public void updateModeSpecificLabels() {
 		for (final VehicleType vehicleType : VehicleType.values()) {
-			tabFolder.getItem(vehicleType.getIndex()).setText(messages.get("gui.label.tabs." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT) + "." + vehicleType.getIndex()));
+			tabFolder.getItem(vehicleType.getIndex()).setText(messages.get("gui.label.tabs." + vehicleType.getIndex() + "." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT)));
 		}
-	}
-
-	public void updateModeSpecificLabels() { // FIXME TBC
-		switch (gui.getMode()) {
-		case CYCLES:
-			for (final Entry<String, FormProperty> e : formProperties.get(gui.getMode().getGame()).entrySet()) {
-				final Setting setting = Setting.forKey(e.getKey().substring(1 + e.getKey().lastIndexOf('.')));
-				if (setting != null) {
-					e.getValue().getLabel().setEnabled(setting.isActive());
-				}
+		for (final Entry<String, FormProperty> entry : formProperties.get(gui.getMode().getGame()).entrySet()) {
+			final String suffix = entry.getKey().substring(1 + entry.getKey().lastIndexOf('.'));
+			final Setting setting = Setting.forKey(suffix);
+			if (setting != null) {
+				entry.getValue().getLabel().setEnabled(setting.getGames().contains(gui.getMode().getGame()));
 			}
-			break;
-		case GPC:
-			for (final Entry<String, FormProperty> e : formProperties.get(gui.getMode().getGame()).entrySet()) {
-				final Setting setting = Setting.forKey(e.getKey().substring(1 + e.getKey().lastIndexOf('.')));
-				if (setting != null) {
-					e.getValue().getLabel().setEnabled(true);
-				}
+			if (CyclesModEngine.isNumeric(suffix, NumeralSystem.DECIMAL.getRadix()) && entry.getKey().toUpperCase(Locale.ROOT).contains(Gearbox.PREFIX.toUpperCase(Locale.ROOT))) {
+				entry.getValue().getLabel().setEnabled(Integer.parseInt(suffix) <= Gearbox.maxGearsCountMap.get(gui.getMode().getGame()).intValue());
 			}
-			break;
-		default:
-			break;
 		}
 		for (final Label noteLabel : noteLabels) {
 			noteLabel.setEnabled(Mode.GPC.equals(gui.getMode()));
