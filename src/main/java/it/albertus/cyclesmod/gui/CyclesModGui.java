@@ -556,7 +556,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		final String userChoosenFileName = saveDialog.open();
 		if (userChoosenFileName != null && !userChoosenFileName.trim().isEmpty()) {
 			if (Arrays.stream(RESERVED_FILE_NAMES).anyMatch(reservedFileName -> reservedFileName.equalsIgnoreCase(Paths.get(userChoosenFileName).getFileName().toString()))) {
-				openMessageBox("Cannot overwrite original EXE game files.", SWT.ICON_WARNING);
+				openMessageBox(messages.get("gui.message.alert.cannot.overwrite.exe"), SWT.ICON_WARNING);
 				return false;
 			}
 			try {
