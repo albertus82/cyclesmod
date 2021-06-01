@@ -2,6 +2,7 @@ package it.albertus.cyclesmod.gui.powergraph.simple;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import org.eclipse.draw2d.LightweightSystem;
 import org.eclipse.swt.SWT;
@@ -9,9 +10,11 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
 import it.albertus.cyclesmod.common.model.Vehicle;
+import it.albertus.cyclesmod.gui.Mode;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraphProvider;
 import it.albertus.jface.Multilanguage;
 import lombok.Getter;
+import lombok.NonNull;
 
 public class PowerGraphCanvas extends Canvas implements PowerGraphProvider, Multilanguage { // NOSONAR This class has 6 parents which is greater than 5 authorized. Inheritance tree of classes should not be too deep (java:S110)
 
@@ -19,11 +22,11 @@ public class PowerGraphCanvas extends Canvas implements PowerGraphProvider, Mult
 
 	private final Collection<Multilanguage> multilanguages = new ArrayList<>();
 
-	public PowerGraphCanvas(final Composite parent, final Vehicle vehicle) {
+	public PowerGraphCanvas(@NonNull final Composite parent, @NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
 		super(parent, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(this);
-		powerGraph = new SimplePowerGraph(vehicle);
+		powerGraph = new SimplePowerGraph(vehicle, modeSupplier);
 		multilanguages.add(powerGraph);
 		lws.setContents(powerGraph.getXyGraph());
 
@@ -37,6 +40,10 @@ public class PowerGraphCanvas extends Canvas implements PowerGraphProvider, Mult
 		for (final Multilanguage multilanguage : multilanguages) {
 			multilanguage.updateLanguage();
 		}
+	}
+
+	public void updateModeSpecificWidgets() {
+		powerGraph.updateModeSpecificWidgets();
 	}
 
 }

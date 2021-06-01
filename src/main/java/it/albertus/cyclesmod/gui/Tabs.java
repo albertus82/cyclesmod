@@ -137,7 +137,7 @@ public class Tabs implements Multilanguage {
 			noteLabels.add(noteLabel);
 
 			// Power graph
-			final PowerGraphCanvas canvas = new PowerGraphCanvas(tabComposite, vehicle);
+			final PowerGraphCanvas canvas = new PowerGraphCanvas(tabComposite, vehicle, gui::getMode);
 			canvas.addMouseListener(new OpenPowerGraphDialogListener(gui, vehicle.getType()));
 			final IPowerGraph powerGraph = canvas.getPowerGraph();
 			powerGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
@@ -244,6 +244,9 @@ public class Tabs implements Multilanguage {
 			noteLabel.setEnabled(Mode.GPC.equals(gui.getMode()));
 			noteLabel.setText(messages.get("gui.label.settings.note." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT)));
 			noteLabel.requestLayout();
+		}
+		for (final PowerGraphCanvas canvas : powerCanvases.values()) {
+			canvas.updateModeSpecificWidgets();
 		}
 	}
 
