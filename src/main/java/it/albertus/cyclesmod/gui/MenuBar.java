@@ -275,6 +275,10 @@ public class MenuBar implements Multilanguage {
 		localizedWidgets.resetAllTexts();
 	}
 
+	public void updateModeSpecificWidgets() {
+		updateLanguage();
+	}
+
 	private MenuItem newLocalizedMenuItem(@NonNull final Menu parent, final int style, @NonNull final String messageKey) {
 		return newLocalizedMenuItem(parent, style, () -> messages.get(messageKey));
 	}

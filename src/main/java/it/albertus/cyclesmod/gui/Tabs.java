@@ -224,10 +224,10 @@ public class Tabs implements Multilanguage {
 			tabScrolledComposite.setMinSize(tabComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			tabItem.setControl(outerComposite);
 		}
-		updateModeSpecificLabels();
+		updateModeSpecificWidgets();
 	}
 
-	public void updateModeSpecificLabels() {
+	public void updateModeSpecificWidgets() {
 		for (final VehicleType vehicleType : VehicleType.values()) {
 			tabFolder.getItem(vehicleType.getIndex()).setText(messages.get("gui.label.tabs." + vehicleType.getIndex() + "." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT)));
 		}

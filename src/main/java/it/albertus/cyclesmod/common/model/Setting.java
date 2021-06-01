@@ -41,7 +41,7 @@ public enum Setting { // The order matters.
 
 	public static Setting forKey(final String name) {
 		for (final Setting setting : Setting.values()) {
-			if (setting.getKey().equalsIgnoreCase(name)) { // Case insensitive.
+			if (setting.key.equalsIgnoreCase(name)) { // Case insensitive.
 				return setting;
 			}
 		}
@@ -50,7 +50,7 @@ public enum Setting { // The order matters.
 
 	public static Setting forIndex(final int index) {
 		for (final Setting setting : Setting.values()) {
-			if (setting.getIndex() == index) {
+			if (setting.index == index) {
 				return setting;
 			}
 		}
