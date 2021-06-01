@@ -14,8 +14,6 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import lombok.extern.java.Log;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -29,152 +27,8 @@ import picocli.CommandLine.Parameters;
 @Command
 public class UnExepack implements Callable<Integer> {
 
-	private static final int DOS_SIGNATURE = 0x5A4D;
-	private static final int EXEPACK_SIGNATURE = 0x4252;
-
-	private static final ByteOrder BYTE_ORDER = ByteOrder.LITTLE_ENDIAN;
 	private static final int MAX_INPUT_FILE_SIZE = 0x800000; // 8 MiB, based on the info available at https://w4kfu.github.io/unEXEPACK/files/exepack_list.html
 	private static final String LOGGING_FORMAT_PROPERTY = "java.util.logging.SimpleFormatter.format";
-
-	@Value
-	@RequiredArgsConstructor
-	private static class DosHeader {
-
-		private static final int SIZE = 14 * Short.BYTES; // bytes
-
-		int eMagic;
-		int eCblp;
-		int eCp;
-		int eCrlc;
-		int eCparhdr;
-		int eMinAlloc;
-		int eMaxAlloc;
-		int eSs;
-		int eSp;
-		int eCsum;
-		int eIp;
-		int eCs;
-		int eLfarlc;
-		int eOvno;
-
-		private DosHeader(@NonNull final byte[] bytes) throws InvalidDosHeaderException {
-			if (bytes.length != SIZE) {
-				throw new IllegalArgumentException("Invalid byte array size; expected: " + SIZE + " but was: " + bytes.length);
-			}
-			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			buf.order(BYTE_ORDER);
-			eMagic = Short.toUnsignedInt(buf.getShort(0));
-			eCblp = Short.toUnsignedInt(buf.getShort(2));
-			eCp = Short.toUnsignedInt(buf.getShort(4));
-			eCrlc = Short.toUnsignedInt(buf.getShort(6));
-			eCparhdr = Short.toUnsignedInt(buf.getShort(8));
-			eMinAlloc = Short.toUnsignedInt(buf.getShort(10));
-			eMaxAlloc = Short.toUnsignedInt(buf.getShort(12));
-			eSs = Short.toUnsignedInt(buf.getShort(14));
-			eSp = Short.toUnsignedInt(buf.getShort(16));
-			eCsum = Short.toUnsignedInt(buf.getShort(18));
-			eIp = Short.toUnsignedInt(buf.getShort(20));
-			eCs = Short.toUnsignedInt(buf.getShort(22));
-			eLfarlc = Short.toUnsignedInt(buf.getShort(24));
-			eOvno = Short.toUnsignedInt(buf.getShort(26));
-			if (!test()) {
-				throw new InvalidDosHeaderException(bytes);
-			}
-		}
-
-		private boolean test() {
-			if (eMagic != DOS_SIGNATURE) {
-				return false;
-			}
-			/* at least one page */
-			if (eCp == 0) {
-				return false;
-			}
-			/* last page must not hold 0 bytes */
-			if (eCblp == 0) {
-				return false;
-			}
-			/* not even number of paragraphs */
-			if (eCparhdr % 2 != 0) { // NOSONAR Replace this if-then-else statement by a single return statement. Return of boolean expressions should not be wrapped into an "if-then-else" statement (java:S1126)
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public String toString() {
-			return String.format("eMagic = 0x%04X, eCblp = 0x%04X, eCp = 0x%04X, eCrlc = 0x%04X, eCparhdr = 0x%04X, eMinAlloc = 0x%04X, eMaxAlloc = 0x%04X, eSs = 0x%04X, eSp = 0x%04X, eCsum = 0x%04X, eIp = 0x%04X, eCs = 0x%04X, eLfarlc = 0x%04X, eOvno = 0x%04X", eMagic, eCblp, eCp, eCrlc, eCparhdr, eMinAlloc, eMaxAlloc, eSs, eSp, eCsum, eIp, eCs, eLfarlc, eOvno);
-		}
-
-		private byte[] toByteArray() {
-			final ByteBuffer buf = ByteBuffer.allocate(SIZE);
-			buf.order(BYTE_ORDER);
-			buf.putShort((short) eMagic);
-			buf.putShort((short) eCblp);
-			buf.putShort((short) eCp);
-			buf.putShort((short) eCrlc);
-			buf.putShort((short) eCparhdr);
-			buf.putShort((short) eMinAlloc);
-			buf.putShort((short) eMaxAlloc);
-			buf.putShort((short) eSs);
-			buf.putShort((short) eSp);
-			buf.putShort((short) eCsum);
-			buf.putShort((short) eIp);
-			buf.putShort((short) eCs);
-			buf.putShort((short) eLfarlc);
-			buf.putShort((short) eOvno);
-			return buf.array();
-		}
-	}
-
-	@Value
-	private static class ExepackHeader {
-
-		private static final int SIZE = 9 * Short.BYTES; // bytes
-
-		int realIp;
-		int realCs;
-		int memStart; // temporary storage used by the decompression stub
-		int exepackSize; // size of the entire EXEPACK block: header, stub, and packed relocation table
-		int realSp;
-		int realSs;
-		int destLen; // size (in 16-byte paragraphs) of the uncompressed data
-		int skipLen;
-		int signature;
-
-		private ExepackHeader(@NonNull final byte[] bytes) throws InvalidExepackHeaderException {
-			if (bytes.length != SIZE) {
-				throw new IllegalArgumentException("Invalid byte array size; expected: " + SIZE + " but was: " + bytes.length);
-			}
-			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			buf.order(BYTE_ORDER);
-			realIp = Short.toUnsignedInt(buf.getShort(0));
-			realCs = Short.toUnsignedInt(buf.getShort(2));
-			memStart = Short.toUnsignedInt(buf.getShort(4));
-			exepackSize = Short.toUnsignedInt(buf.getShort(6));
-			realSp = Short.toUnsignedInt(buf.getShort(8));
-			realSs = Short.toUnsignedInt(buf.getShort(10));
-			destLen = Short.toUnsignedInt(buf.getShort(12));
-			final int word8 = Short.toUnsignedInt(buf.getShort(14));
-			final int word9 = Short.toUnsignedInt(buf.getShort(16));
-			if ((word9 != EXEPACK_SIGNATURE && word8 != EXEPACK_SIGNATURE) || exepackSize == 0x00) {
-				throw new InvalidExepackHeaderException(bytes);
-			}
-			if (word8 == EXEPACK_SIGNATURE && word9 != EXEPACK_SIGNATURE) {
-				this.skipLen = 1;
-				this.signature = word8;
-			}
-			else {
-				this.skipLen = word8;
-				this.signature = word9;
-			}
-		}
-
-		@Override
-		public String toString() {
-			return String.format("realIp = 0x%04X, realCs = 0x%04X, memStart = 0x%04X, exepackSize = 0x%04X, realSp = 0x%04X, realSs = 0x%04X, destLen = 0x%04X, skipLen = 0x%04X, signature = 0x%04X", realIp, realCs, memStart, exepackSize, realSp, realSs, destLen, skipLen, signature);
-		}
-	}
 
 	// @formatter:off
 	@Parameters(index = "0", paramLabel = "<EXEPACK_file>")
@@ -238,14 +92,14 @@ public class UnExepack implements Callable<Integer> {
 	}
 
 	private static byte[] createRelocTable(@NonNull final byte[] packedExec, @NonNull final DosHeader dh, @NonNull final ExepackHeader eh) {
-		final int exepackOffset = (dh.eCparhdr + dh.eCs) * 16;
+		final int exepackOffset = (dh.getECparhdr() + dh.getECs()) * 16;
 		final byte[] bytePattern = new byte[] { (byte) 0xcd, 0x21, (byte) 0xb8, (byte) 0xff, 0x4c, (byte) 0xcd, 0x21 }; // the byte pattern that precedes the error message, cd 21 b8 ff 4c cd 21, which encodes the instructions int 0x21; mov ax, 0x4cff; int 0x21
 		final int reloc = exepackOffset + memmem(Arrays.copyOfRange(packedExec, exepackOffset, packedExec.length), bytePattern) + bytePattern.length;
-		final int relocLength = eh.exepackSize - (reloc - exepackOffset) + "Packed file is corrupt".length();
+		final int relocLength = eh.getExepackSize() - (reloc - exepackOffset) + "Packed file is corrupt".length();
 		final int nbReloc = (relocLength - 16 * Short.BYTES) / 2;
 		final int relocTableSize = nbReloc * 2 * Short.BYTES;
 		final ByteBuffer buf = ByteBuffer.wrap(packedExec);
-		buf.order(BYTE_ORDER);
+		buf.order(ByteOrder.LITTLE_ENDIAN);
 		buf.position(reloc + "Packed file is corrupt".length());
 		try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			for (int i = 0; i < 16; i++) {
@@ -293,16 +147,16 @@ public class UnExepack implements Callable<Integer> {
 
 	private static byte[] craftExec(@NonNull final DosHeader dh, @NonNull final ExepackHeader eh, @NonNull final byte[] unpackedData, @NonNull final byte[] reloc) {
 		final int headerSize = DosHeader.SIZE + reloc.length;
-		final int eMagic = DOS_SIGNATURE;
+		final int eMagic = DosHeader.SIGNATURE;
 		int eCparhdr = (headerSize / 16) & 0xFFFF;
 		eCparhdr = (eCparhdr / 32 + 1) * 32;
 		final int paddingLength = eCparhdr * 16 - headerSize;
 		final int totalLength = headerSize + paddingLength + unpackedData.length;
-		final int eSs = eh.realSs;
-		final int eSp = eh.realSp;
-		final int eIp = eh.realIp;
-		final int eCs = eh.realCs;
-		final int eMinAlloc = dh.eMinAlloc;
+		final int eSs = eh.getRealSs();
+		final int eSp = eh.getRealSp();
+		final int eIp = eh.getRealIp();
+		final int eCs = eh.getRealCs();
+		final int eMinAlloc = dh.getEMinAlloc();
 		final int eMaxAlloc = 0xFFFF;
 		final int eLfarlc = DosHeader.SIZE;
 		final int eCrlc = (reloc.length / (2 * Short.BYTES)) & 0xFFFF;
@@ -317,17 +171,17 @@ public class UnExepack implements Callable<Integer> {
 		final DosHeader dh = new DosHeader(Arrays.copyOf(packedExec, DosHeader.SIZE));
 		log.log(Level.INFO, "DOS header: {0}", dh);
 
-		final int exeLen = decodeExeLen(dh.eCblp, dh.eCp);
+		final int exeLen = decodeExeLen(dh.getECblp(), dh.getECp());
 		if (exeLen < packedExec.length) {
 			log.log(Level.WARNING, "EXE file size is {0,number,#}; ignoring {1,number,#} trailing bytes.", new Integer[] { exeLen, packedExec.length - exeLen });
 		}
 
-		final int exepackOffset = (dh.eCparhdr + dh.eCs) * 16;
+		final int exepackOffset = (dh.getECparhdr() + dh.getECs()) * 16;
 		final ExepackHeader eh = new ExepackHeader(Arrays.copyOfRange(packedExec, exepackOffset, exepackOffset + ExepackHeader.SIZE));
 		log.log(Level.INFO, () -> String.format("Exepack header @ 0x%X: %s", exepackOffset, eh));
 
-		final int unpackedDataSize = eh.destLen * 16;
-		final int packedDataStart = dh.eCparhdr * 16;
+		final int unpackedDataSize = eh.getDestLen() * 16;
+		final int packedDataStart = dh.getECparhdr() * 16;
 		final int packedDataEnd = exepackOffset;
 
 		final byte[] packedData = Arrays.copyOfRange(packedExec, packedDataStart, packedDataEnd);
