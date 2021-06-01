@@ -237,7 +237,7 @@ public class Tabs implements Multilanguage {
 			if (setting != null) {
 				entry.getValue().getLabel().setEnabled(setting.getGames().contains(gui.getMode().getGame()));
 			}
-			if (CyclesModEngine.isNumeric(suffix, NumeralSystem.DECIMAL.getRadix()) && entry.getKey().toUpperCase(Locale.ROOT).contains(Gearbox.PREFIX.toUpperCase(Locale.ROOT))) {
+			if (entry.getKey().toUpperCase(Locale.ROOT).contains(Gearbox.PREFIX.toUpperCase(Locale.ROOT)) && CyclesModEngine.isNumeric(suffix, NumeralSystem.DECIMAL.getRadix())) {
 				entry.getValue().getLabel().setEnabled(Integer.parseInt(suffix) <= Gearbox.maxGearsCountMap.get(gui.getMode().getGame()).intValue());
 			}
 		}
