@@ -109,9 +109,9 @@ It is also possibile to draw and modify the curve using the pointing device from
 
 **Grand Prix Circuit** is a car racing game developed by *Distinctive Software* and published by *Accolade* exactly like **The Cycles**, and in fact it is its ancestor, since it came out the previous year (1988).
 
-The cars featured in *Grand Prix Circuit* and the bikes featured in *The Cycles* shares the very same configuration scheme; there's only one biggest difference: the car settings of *Grand Prix Circuit* are stored directly in the game executable files instead of in an external file, therefore the only way to edit them is patch the executable itself, and CyclesMod is able to do it.
+The cars featured in *Grand Prix Circuit* and the bikes featured in *The Cycles* shares the very same configuration scheme; there's only one biggest difference: the car settings of *Grand Prix Circuit* are stored directly in the game executable files instead of in an external file, therefore the only way to edit them is to patch the executable itself. CyclesMod is able to do it.
 
-Simply open an original executable of *Grand Prix Circuit* (e.g. GPEGA.EXE) and start modifying the car configurations. When you are satisfied and want to try your trim on the circuit, issue the save command and choose a new name for your patched executable (e.g. GPEGAX.EXE).
+Simply open an original executable file of *Grand Prix Circuit* (e.g. GPEGA.EXE) and start modifying the car configurations. When you are satisfied and want to try your setup on a circuit, issue the save command and choose a new name for your patched executable (e.g. GPEGAX.EXE).
 
 ## Command line version
 
