@@ -22,7 +22,7 @@ public class Settings implements ByteList {
 
 	private final Map<Setting, Integer> values = new EnumMap<>(Setting.class);
 
-	public Settings(int gearsCount, int rpmRedline, int rpmLimit, int overrevTolerance, int grip, int grip0, int brakingSpeed, int brakingSpeed0, int spinThreshold, int spinThreshold0, int rpmDownshift) {
+	public Settings(final int gearsCount, final int rpmRedline, final int rpmLimit, final int overrevTolerance, final int grip, final int grip0, final int brakingSpeed, final int brakingSpeed0, final int spinThreshold, final int spinThreshold0, final int rpmDownshift) {
 		values.put(Setting.GEARS_COUNT, gearsCount);
 		values.put(Setting.RPM_REDLINE, rpmRedline);
 		values.put(Setting.RPM_LIMIT, rpmLimit);
@@ -63,7 +63,6 @@ public class Settings implements ByteList {
 			throw new ValueOutOfRangeException(propertyName, newValue, MIN_VALUE, MAX_VALUE);
 		}
 		return (int) newValue;
-
 	}
 
 }
