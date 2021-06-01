@@ -38,7 +38,7 @@ public class OpenPowerGraphDialogListener extends MouseAdapter implements Select
 	private void handleEvent() {
 		final PowerGraphDialog powerGraphDialog = new PowerGraphDialog(gui.getShell(), gui.getMode());
 		final Map<Integer, Short> map = new TreeMap<>();
-		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties().get(gui.getMode().getGame());
+		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties().get(gui.getMode());
 		for (int i = 0; i < Power.LENGTH; i++) {
 			final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicleType, Power.PREFIX, i));
 			map.put(Power.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));

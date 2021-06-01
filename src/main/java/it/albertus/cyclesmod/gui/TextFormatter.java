@@ -44,7 +44,7 @@ public class TextFormatter {
 
 	public void updateFontStyle(final Text text) {
 		if (text != null && gui.isNumeric(text.getText()) && text.getFont() != null && text.getFont().getFontData() != null && text.getFont().getFontData().length > 0 && text.getData() instanceof GenericTextData) {
-			final int defaultValue = ((GenericTextData) text.getData()).getDefaultValueMap().get(gui.getMode().getGame());
+			final int defaultValue = ((GenericTextData) text.getData()).getDefaultValueMap().get(gui.getMode());
 			if (defaultValue != Integer.parseInt(text.getText(), gui.getNumeralSystem().getRadix())) {
 				if (text.getFont().getFontData()[0].getStyle() != SWT.BOLD) {
 					setBoldFontStyle(text);

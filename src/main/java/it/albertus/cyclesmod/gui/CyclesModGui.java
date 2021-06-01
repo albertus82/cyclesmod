@@ -37,7 +37,6 @@ import it.albertus.cyclesmod.common.engine.InvalidPropertyException;
 import it.albertus.cyclesmod.common.engine.NumeralSystem;
 import it.albertus.cyclesmod.common.engine.UnknownPropertyException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
-import it.albertus.cyclesmod.common.model.Game;
 import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.model.VehiclesCfg;
@@ -72,7 +71,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@Getter private final MenuBar menuBar;
 	@Getter private final Tabs tabs;
 
-	@Getter private final Map<Game, Map<String, Integer>> defaultProperties = new EnumMap<>(Game.class);
+	@Getter private final Map<Mode, Map<String, Integer>> defaultProperties = new EnumMap<>(Mode.class);
 	@NonNull private final Map<String, Integer> lastSavedProperties;
 	@NonNull private final Map<String, Integer> lastExportedProperties;
 
@@ -80,11 +79,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private byte[] gpcOriginalExecBytes;
 
 	private CyclesModGui(@NonNull final Display display) {
-		for (final Game game : Game.values()) {
-			defaultProperties.put(game, Collections.unmodifiableMap(new VehiclesCfg(game, new VehiclesInf(game)).getMap()));
+		for (final Mode m : Mode.values()) {
+			defaultProperties.put(m, Collections.unmodifiableMap(new VehiclesCfg(m.getGame(), new VehiclesInf(m.getGame())).getMap()));
 		}
-		lastSavedProperties = new HashMap<>(defaultProperties.get(mode.getGame()));
-		lastExportedProperties = new HashMap<>(defaultProperties.get(mode.getGame()));
+		lastSavedProperties = new HashMap<>(defaultProperties.get(mode));
+		lastExportedProperties = new HashMap<>(defaultProperties.get(mode));
 
 		// Shell creation...
 		shell = new Shell(display);
@@ -154,9 +153,9 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			shell.setFocus(); // trigger auto-correction for focused field & set file modification status if necessary
 			focused.setFocus(); // reset focus
 		}
-		for (final String key : tabs.getFormProperties().get(mode.getGame()).keySet()) {
+		for (final String key : tabs.getFormProperties().get(mode).keySet()) {
 			try {
-				engine.applyProperty(key, tabs.getFormProperties().get(mode.getGame()).get(key).getValue());
+				engine.applyProperty(key, tabs.getFormProperties().get(mode).get(key).getValue());
 			}
 			catch (final InvalidPropertyException e) {
 				if (!lenient) {
