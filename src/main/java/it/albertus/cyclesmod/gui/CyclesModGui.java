@@ -77,7 +77,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@NonNull private final Map<String, Integer> lastExportedProperties;
 
 	private String currentFileName;
-	private byte[] gpcOriginalExeBytes;
+	private byte[] gpcOriginalExecBytes;
 
 	private CyclesModGui(@NonNull final Display display) {
 		for (final Game game : Game.values()) {
@@ -305,7 +305,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			if (!file.toFile().setReadOnly()) {
 				log.log(Level.INFO, "Cannot set read only flag for file: {0}.", file);
 			}
-			gpcOriginalExeBytes = unpackedExec;
+			gpcOriginalExecBytes = unpackedExec;
 			engine.setVehiclesInf(new VehiclesInf(DefaultCars.getByteArray()));
 			updateGuiStatusAfterOpening(file, Mode.GPC);
 			return true;
@@ -479,11 +479,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		try {
 			final byte[] bytes;
 			if (Mode.GPC.equals(mode)) { // EXE
-				final int offset = UnExepack.memmem(gpcOriginalExeBytes, DefaultCars.getByteArray());
-				bytes = new byte[gpcOriginalExeBytes.length];
-				System.arraycopy(gpcOriginalExeBytes, 0, bytes, 0, offset);
-				System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, VehiclesInf.FILE_SIZE);
-				System.arraycopy(gpcOriginalExeBytes, offset + VehiclesInf.FILE_SIZE, bytes, offset + VehiclesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - VehiclesInf.FILE_SIZE);
+				bytes = patchOriginalGpcExec();
 			}
 			else if (Mode.CYCLES.equals(mode)) { // INF
 				bytes = engine.getVehiclesInf().toByteArray();
@@ -560,12 +556,8 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				return false;
 			}
 			try {
-				final int offset = UnExepack.memmem(gpcOriginalExeBytes, DefaultCars.getByteArray());
-				final byte[] newExe = new byte[gpcOriginalExeBytes.length];
-				System.arraycopy(gpcOriginalExeBytes, 0, newExe, 0, offset);
-				System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, newExe, offset, VehiclesInf.FILE_SIZE);
-				System.arraycopy(gpcOriginalExeBytes, offset + VehiclesInf.FILE_SIZE, newExe, offset + VehiclesInf.FILE_SIZE, gpcOriginalExeBytes.length - offset - VehiclesInf.FILE_SIZE);
-				Files.write(Paths.get(userChoosenFileName), newExe);
+				final byte[] bytes = patchOriginalGpcExec();
+				Files.write(Paths.get(userChoosenFileName), bytes);
 				currentFileName = userChoosenFileName;
 				setCurrentFileModificationStatus(false);
 				setLastSavedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
@@ -580,6 +572,15 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		else {
 			return false;
 		}
+	}
+
+	private byte[] patchOriginalGpcExec() {
+		final int offset = UnExepack.memmem(gpcOriginalExecBytes, DefaultCars.getByteArray());
+		final byte[] bytes = new byte[gpcOriginalExecBytes.length];
+		System.arraycopy(gpcOriginalExecBytes, 0, bytes, 0, offset);
+		System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, VehiclesInf.FILE_SIZE);
+		System.arraycopy(gpcOriginalExecBytes, offset + VehiclesInf.FILE_SIZE, bytes, offset + VehiclesInf.FILE_SIZE, gpcOriginalExecBytes.length - offset - VehiclesInf.FILE_SIZE);
+		return bytes;
 	}
 
 	public boolean loadHiddenCfg(@NonNull final VehicleType type) {
@@ -729,7 +730,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (!this.mode.equals(mode)) {
 			this.mode = mode;
 			if (!Mode.GPC.equals(mode)) {
-				gpcOriginalExeBytes = null;
+				gpcOriginalExecBytes = null;
 			}
 			menuBar.updateModeSpecificWidgets();
 			tabs.updateModeSpecificWidgets();
