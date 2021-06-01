@@ -129,9 +129,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	public void setLanguage(final Language language) {
-		messages.setLanguage(language);
-		updateLanguage();
+	public void setLanguage(@NonNull final Language language) {
+		if (!messages.getLanguage().equals(language)) {
+			messages.setLanguage(language);
+			updateLanguage();
+		}
 	}
 
 	@Override
@@ -692,15 +694,17 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		return engine.getNumeralSystem();
 	}
 
-	public void setNumeralSystem(final NumeralSystem numeralSystem) {
-		try {
-			updateModelValues(true);
+	public void setNumeralSystem(@NonNull final NumeralSystem numeralSystem) {
+		if (!engine.getNumeralSystem().equals(numeralSystem)) {
+			try {
+				updateModelValues(true);
+			}
+			catch (final InvalidPropertyException e) {
+				log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
+			}
+			engine.setNumeralSystem(numeralSystem);
+			tabs.updateFormValues();
 		}
-		catch (final InvalidPropertyException e) {
-			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-		}
-		engine.setNumeralSystem(numeralSystem);
-		tabs.updateFormValues();
 	}
 
 	private void setLastSavedProperties(final Map<String, Integer> lastSavedProperties) {
@@ -721,7 +725,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		return engine.isNumeric(value);
 	}
 
-	private void setMode(final Mode mode) {
+	private void setMode(@NonNull final Mode mode) {
 		if (!this.mode.equals(mode)) {
 			this.mode = mode;
 			if (Mode.CYCLES.equals(mode)) {
