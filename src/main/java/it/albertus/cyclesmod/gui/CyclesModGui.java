@@ -284,8 +284,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean openInf(@NonNull final Path file) throws IOException {
 		try {
 			engine.setVehiclesInf(new VehiclesInf(file));
-			setMode(Mode.CYCLES);
-			updateGuiStatusAfterOpening(file);
+			updateGuiStatusAfterOpening(file, Mode.CYCLES);
 			return true;
 		}
 		catch (final InvalidSizeException e) {
@@ -306,8 +305,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 			gpcOriginalExeBytes = unpackedExec;
 			engine.setVehiclesInf(new VehiclesInf(DefaultCars.getByteArray()));
-			setMode(Mode.GPC);
-			updateGuiStatusAfterOpening(file);
+			updateGuiStatusAfterOpening(file, Mode.GPC);
 			return true;
 		}
 		catch (final SizeLimitExceededException e) {
@@ -341,7 +339,8 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	private void updateGuiStatusAfterOpening(final Path file) throws IOException {
+	private void updateGuiStatusAfterOpening(@NonNull final Path file, @NonNull final Mode mode) throws IOException {
+		setMode(mode);
 		tabs.updateFormValues();
 		final Map<String, Integer> properties = new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap();
 		setLastSavedProperties(properties);
