@@ -113,7 +113,7 @@ The cars featured in *Grand Prix Circuit* and the bikes featured in *The Cycles*
 
 Simply *Open* your favorite original executable file of *Grand Prix Circuit* (e.g. GPEGA.EXE) and start modifying the car configurations. When you are satisfied and want to try your setup on a circuit, issue the *Save* command and choose a new name for your patched executable (e.g. GPEGAX.EXE).
 
-**Note that *CyclesMod* is able to open only the original executables of *Grand Prix Circuit***, so the only way to save settings in order to reload them after is to *Export* them as *CFG* using the appropriate functionality. This way, you can start reopening an original executable, then you can import the CFG exported previously.
+**Note that *CyclesMod* is able to open only the original executables of *Grand Prix Circuit***, so the only way to save the settings in order to work on it later is to *Export* them as a *CFG* file using the appropriate functionality. This way, you can resume your work by reopening an original executable, and then importing the previously exported *CFG* file.
 
 ## Command line version
 
