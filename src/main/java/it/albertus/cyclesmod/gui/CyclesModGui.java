@@ -299,7 +299,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		try {
 			final byte[] unpackedExec = unpackExec(file);
 			if (UnExepack.memmem(unpackedExec, DefaultCars.getByteArray()) == -1) {
-				openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
+				openMessageBox(messages.get("gui.error.file.open.invalid.exe"), SWT.ICON_WARNING);
 				return false;
 			}
 			if (!file.toFile().setReadOnly()) {
@@ -317,7 +317,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidDosHeaderException e) {
 			log.log(Level.FINE, "File '" + file + "' is not a valid MS-DOS executable:", e);
-			openMessageBox(messages.get("gui.error.file.open.invalid.type"), SWT.ICON_WARNING);
+			openMessageBox(messages.get("gui.error.file.open.invalid.exe"), SWT.ICON_WARNING);
 			return false;
 		}
 	}
