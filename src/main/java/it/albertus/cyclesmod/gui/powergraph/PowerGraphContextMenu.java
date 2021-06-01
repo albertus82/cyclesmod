@@ -42,7 +42,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 	@Getter(AccessLevel.PROTECTED) private final Menu menu;
 
-	protected PowerGraphContextMenu(final Control parent, final IPowerGraph powerGraph) {
+	protected PowerGraphContextMenu(@NonNull final Control parent, @NonNull final IPowerGraph powerGraph) {
 		this.parent = parent;
 		this.powerGraph = powerGraph;
 

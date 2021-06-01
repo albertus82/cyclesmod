@@ -87,7 +87,7 @@ public class ComplexPowerGraph extends PowerGraph {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void fixToolbarButtons(final ToolbarArmedXYGraph toolbarArmedXYGraph) {
+	private static void fixToolbarButtons(@NonNull final ToolbarArmedXYGraph toolbarArmedXYGraph) {
 		try {
 			final Field listenersField = OperationsManager.class.getDeclaredField("listeners");
 			listenersField.setAccessible(true);
@@ -118,7 +118,7 @@ public class ComplexPowerGraph extends PowerGraph {
 		}
 	}
 
-	private static void addUndoListener(final GrayableButton button, final OperationsManager manager) {
+	private static void addUndoListener(@NonNull final GrayableButton button, @NonNull final OperationsManager manager) {
 		manager.addListener(m -> {
 			final int undoCommandsSize = m.getUndoCommandsSize();
 			if (undoCommandsSize > 0) {
@@ -133,7 +133,7 @@ public class ComplexPowerGraph extends PowerGraph {
 		});
 	}
 
-	private static void addRedoListener(final GrayableButton button, final OperationsManager manager) {
+	private static void addRedoListener(@NonNull final GrayableButton button, @NonNull final OperationsManager manager) {
 		manager.addListener(m -> {
 			final int redoCommandsSize = m.getRedoCommandsSize();
 			if (redoCommandsSize > 0) {
