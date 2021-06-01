@@ -73,8 +73,8 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@Getter private final Tabs tabs;
 
 	@Getter private final Map<Game, Map<String, Integer>> defaultProperties = new EnumMap<>(Game.class);
-	private final Map<String, Integer> lastSavedProperties;
-	private final Map<String, Integer> lastExportedProperties;
+	@NonNull private final Map<String, Integer> lastSavedProperties;
+	@NonNull private final Map<String, Integer> lastExportedProperties;
 
 	private String currentFileName;
 	private byte[] gpcOriginalExeBytes;
@@ -724,19 +724,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private void setMode(final Mode mode) {
 		if (!this.mode.equals(mode)) {
 			this.mode = mode;
-			tabs.updateModeSpecificLabels();
-			menuBar.updateLanguage();
-			switch (mode) {
-			case CYCLES:
+			if (Mode.CYCLES.equals(mode)) {
 				gpcOriginalExeBytes = null;
-				// Set cycles labels
-				break;
-			case GPC:
-				// Set gpc labels
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown mode: " + mode);
 			}
+			menuBar.updateModeSpecificWidgets();
+			tabs.updateModeSpecificWidgets();
 		}
 	}
 
