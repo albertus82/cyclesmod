@@ -30,7 +30,7 @@ public class EditMenuListener implements ArmMenuListener {
 	}
 
 	private boolean canCopy() {
-		for (final FormProperty fp : gui.getTabs().getFormProperties().get(gui.getMode().getGame()).values()) {
+		for (final FormProperty fp : gui.getTabs().getFormProperties().get(gui.getMode()).values()) {
 			if (fp != null && fp.getText() != null && fp.getText().isFocusControl() && fp.getText().getSelectionText() != null && !fp.getText().getSelectionText().isEmpty()) {
 				return true;
 			}
@@ -40,7 +40,7 @@ public class EditMenuListener implements ArmMenuListener {
 
 	private boolean canPaste() {
 		if (SwtUtils.checkClipboard(TextTransfer.getInstance())) {
-			for (final FormProperty fp : gui.getTabs().getFormProperties().get(gui.getMode().getGame()).values()) {
+			for (final FormProperty fp : gui.getTabs().getFormProperties().get(gui.getMode()).values()) {
 				if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
 					return true;
 				}

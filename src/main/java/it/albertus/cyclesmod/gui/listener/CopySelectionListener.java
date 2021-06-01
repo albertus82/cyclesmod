@@ -15,7 +15,7 @@ public class CopySelectionListener extends SelectionAdapter {
 
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
-		for (final FormProperty fp : gui.getTabs().getFormProperties().get(gui.getMode().getGame()).values()) {
+		for (final FormProperty fp : gui.getTabs().getFormProperties().get(gui.getMode()).values()) {
 			if (fp != null && fp.getText() != null && fp.getText().isFocusControl() && fp.getText().getSelectionText() != null && !fp.getText().getSelectionText().isEmpty()) {
 				fp.getText().copy();
 				break;

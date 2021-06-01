@@ -18,7 +18,7 @@ public class PasteSelectionListener extends SelectionAdapter {
 	@Override
 	public void widgetSelected(final SelectionEvent se) {
 		if (SwtUtils.checkClipboard(TextTransfer.getInstance())) {
-			for (final FormProperty fp : gui.getTabs().getFormProperties().get(gui.getMode().getGame()).values()) {
+			for (final FormProperty fp : gui.getTabs().getFormProperties().get(gui.getMode()).values()) {
 				if (fp != null && fp.getText() != null && fp.getText().isFocusControl()) {
 					fp.getText().paste();
 					break;
