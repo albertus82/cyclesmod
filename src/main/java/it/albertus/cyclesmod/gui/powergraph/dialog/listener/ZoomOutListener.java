@@ -22,12 +22,12 @@ public class ZoomOutListener extends ZoomListener {
 	@Override
 	public void keyPressed(@NonNull final KeyEvent e) {
 		if ('-' == e.keyCode || SWT.KEYPAD_SUBTRACT == e.keyCode) {
-			execute();
+			handleEvent();
 		}
 	}
 
 	@Override
-	protected void execute() {
+	protected void handleEvent() {
 		final SaveStateCommand command = new ZoomCommand(messages.get("gui.label.graph.action.zoomOut"), xyGraph.getXAxisList(), xyGraph.getYAxisList());
 		final Point plotAreaCenter = getPlotAreaCenter();
 		xyGraph.getPlotArea().zoomInOut(true, true, plotAreaCenter.x, plotAreaCenter.y, ZOOM_RATIO * -1);

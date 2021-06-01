@@ -4,8 +4,8 @@ import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.FileDialog;
@@ -18,7 +18,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class SaveSnapshotListener implements KeyListener, SelectionListener {
+public class SaveSnapshotListener extends SelectionAdapter implements KeyListener {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
@@ -28,16 +28,16 @@ public class SaveSnapshotListener implements KeyListener, SelectionListener {
 	@Override
 	public void keyPressed(@NonNull final KeyEvent e) {
 		if (SWT.MOD1 == e.stateMask && SwtUtils.KEY_SAVE == e.keyCode) {
-			execute();
+			handleEvent();
 		}
 	}
 
 	@Override
 	public void widgetSelected(final SelectionEvent e) {
-		execute();
+		handleEvent();
 	}
 
-	private void execute() {
+	private void handleEvent() {
 		final ImageLoader loader = new ImageLoader();
 		loader.data = new ImageData[] { xyGraph.getImage().getImageData() };
 		final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
@@ -51,8 +51,5 @@ public class SaveSnapshotListener implements KeyListener, SelectionListener {
 
 	@Override
 	public void keyReleased(final KeyEvent e) {/* Ignore */}
-
-	@Override
-	public void widgetDefaultSelected(final SelectionEvent e) {/* Ignore */}
 
 }
