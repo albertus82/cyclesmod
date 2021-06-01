@@ -1,5 +1,8 @@
 package it.albertus.cyclesmod.common.model;
 
+import static it.albertus.cyclesmod.common.model.Game.CYCLES;
+import static it.albertus.cyclesmod.common.model.Game.GPC;
+
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
@@ -10,17 +13,17 @@ import lombok.NonNull;
 @Getter
 public enum Setting { // The order matters.
 
-	GEARS_COUNT(0, "gearsCount", 1, 9, Game.CYCLES, Game.GPC),
-	RPM_REDLINE(1, "rpmRedline", 8500, 32767, Game.CYCLES, Game.GPC),
-	RPM_LIMIT(2, "rpmLimit", 768, 14335, Game.CYCLES, Game.GPC), // 26239
-	OVERREV_TOLERANCE(3, "overrevTolerance", 0, 32767, Game.CYCLES, Game.GPC),
-	GRIP(4, "grip", 0, 65535, Game.CYCLES, Game.GPC),
-	GRIP_0(5, "grip0", 0, 65535, Game.GPC), // GPC only (pit stop)
-	BRAKING_SPEED(6, "brakingSpeed", 0, 65535, Game.CYCLES, Game.GPC),
-	BRAKING_SPEED_0(7, "brakingSpeed0", 0, 65535, Game.GPC), // GPC only (pit stop)
-	SPIN_THRESHOLD(8, "spinThreshold", 0, 32767, Game.CYCLES, Game.GPC),
-	SPIN_THRESHOLD_0(9, "spinThreshold0", 0, 32767, Game.GPC), // GPC only (pit stop)
-	RPM_DOWNSHIFT(10, "rpmDownshift", 0, 32767, Game.CYCLES, Game.GPC);
+	GEARS_COUNT(0, "gearsCount", 1, 9, CYCLES, GPC),
+	RPM_REDLINE(1, "rpmRedline", 8500, 32767, CYCLES, GPC),
+	RPM_LIMIT(2, "rpmLimit", 768, 14335, CYCLES, GPC), // 26239
+	OVERREV_TOLERANCE(3, "overrevTolerance", 0, 32767, CYCLES, GPC),
+	GRIP(4, "grip", 0, 65535, CYCLES, GPC),
+	GRIP_0(5, "grip0", 0, 65535, GPC), // GPC only (pit stop)
+	BRAKING_SPEED(6, "brakingSpeed", 0, 65535, CYCLES, GPC),
+	BRAKING_SPEED_0(7, "brakingSpeed0", 0, 65535, GPC), // GPC only (pit stop)
+	SPIN_THRESHOLD(8, "spinThreshold", 0, 32767, CYCLES, GPC),
+	SPIN_THRESHOLD_0(9, "spinThreshold0", 0, 32767, GPC), // GPC only (pit stop)
+	RPM_DOWNSHIFT(10, "rpmDownshift", 0, 32767, CYCLES, GPC);
 
 	private final int index;
 	private final String key;
