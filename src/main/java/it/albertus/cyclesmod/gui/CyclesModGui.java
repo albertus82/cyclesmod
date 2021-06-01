@@ -151,7 +151,8 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	public void updateModelValues(final boolean lenient) throws InvalidPropertyException {
 		final Control focused = shell.getDisplay().getFocusControl();
 		if (focused != null && !focused.isDisposed()) {
-			focused.notifyListeners(SWT.FocusOut, null); // force auto-correction for focused field
+			shell.setFocus(); // trigger auto-correction for focused field & set file modification status if necessary
+			focused.setFocus(); // reset focus
 		}
 		for (final String key : tabs.getFormProperties().get(mode.getGame()).keySet()) {
 			try {
