@@ -50,7 +50,7 @@ public class PowerGraph implements IPowerGraph {
 
 	private boolean torqueVisible;
 
-	public PowerGraph(@NonNull final Vehicle vehicle, @NonNull Supplier<Mode> modeSupplier) {
+	public PowerGraph(@NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
 		this.modeSupplier = modeSupplier;
 		for (int i = 0; i < Power.LENGTH; i++) {
 			xDataArray[i] = (double) Power.getRpm(i) / RPM_DIVISOR;
@@ -60,14 +60,14 @@ public class PowerGraph implements IPowerGraph {
 		init(vehicle.getType());
 	}
 
-	public PowerGraph(@NonNull final Map<Integer, Short> map, @NonNull final VehicleType vehicleType, @NonNull final Supplier<Mode> modeSupplier) {
+	public PowerGraph(@NonNull final Map<Integer, Short> powerMap, @NonNull final VehicleType vehicleType, @NonNull final Supplier<Mode> modeSupplier) {
 		this.modeSupplier = modeSupplier;
-		if (map.size() != Power.LENGTH) {
+		if (powerMap.size() != Power.LENGTH) {
 			throw new IllegalArgumentException("map size must be " + Power.LENGTH);
 		}
 
 		int i = 0;
-		for (final Entry<Integer, Short> entry : map.entrySet()) {
+		for (final Entry<Integer, Short> entry : powerMap.entrySet()) {
 			xDataArray[i] = entry.getKey().doubleValue() / RPM_DIVISOR;
 			powerValues[i] = entry.getValue();
 			torqueValues[i] = hpToNm(powerValues[i], Power.getRpm(i));
@@ -145,12 +145,12 @@ public class PowerGraph implements IPowerGraph {
 	}
 
 	@Override
-	public short getPowerValue(final Point location) {
+	public short getPowerValue(@NonNull final Point location) {
 		return (short) Math.round(Math.max(Power.MIN_VALUE, Math.min(Power.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
 	}
 
 	@Override
-	public int getPowerIndex(final Point location) {
+	public int getPowerIndex(@NonNull final Point location) {
 		return Math.max(Math.min(Power.indexOf(getAbscissae().getPositionValue(location.x, false) * RPM_DIVISOR), Power.LENGTH - 1), 0);
 	}
 
