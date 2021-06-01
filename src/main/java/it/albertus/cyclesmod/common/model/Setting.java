@@ -1,29 +1,40 @@
 package it.albertus.cyclesmod.common.model;
 
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
+
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 
 @Getter
-@RequiredArgsConstructor
 public enum Setting { // The order matters.
 
-	GEARS_COUNT(0, "gearsCount", 1, 9, true),
-	RPM_REDLINE(1, "rpmRedline", 8500, 32767, true),
-	RPM_LIMIT(2, "rpmLimit", 768, 14335, true), // 26239
-	OVERREV_TOLERANCE(3, "overrevTolerance", 0, 32767, true),
-	GRIP(4, "grip", 0, 65535, true),
-	GRIP_0(5, "grip0", 0, 65535, false), // unused (pit stop)
-	BRAKING_SPEED(6, "brakingSpeed", 0, 65535, true),
-	BRAKING_SPEED_0(7, "brakingSpeed0", 0, 65535, false), // unused (pit stop)
-	SPIN_THRESHOLD(8, "spinThreshold", 0, 32767, true),
-	SPIN_THRESHOLD_0(9, "spinThreshold0", 0, 32767, false), // unused (pit stop)
-	RPM_DOWNSHIFT(10, "rpmDownshift", 0, 32767, true);
+	GEARS_COUNT(0, "gearsCount", 1, 9, Game.CYCLES, Game.GPC),
+	RPM_REDLINE(1, "rpmRedline", 8500, 32767, Game.CYCLES, Game.GPC),
+	RPM_LIMIT(2, "rpmLimit", 768, 14335, Game.CYCLES, Game.GPC), // 26239
+	OVERREV_TOLERANCE(3, "overrevTolerance", 0, 32767, Game.CYCLES, Game.GPC),
+	GRIP(4, "grip", 0, 65535, Game.CYCLES, Game.GPC),
+	GRIP_0(5, "grip0", 0, 65535, Game.GPC), // GPC only (pit stop)
+	BRAKING_SPEED(6, "brakingSpeed", 0, 65535, Game.CYCLES, Game.GPC),
+	BRAKING_SPEED_0(7, "brakingSpeed0", 0, 65535, Game.GPC), // GPC only (pit stop)
+	SPIN_THRESHOLD(8, "spinThreshold", 0, 32767, Game.CYCLES, Game.GPC),
+	SPIN_THRESHOLD_0(9, "spinThreshold0", 0, 32767, Game.GPC), // GPC only (pit stop)
+	RPM_DOWNSHIFT(10, "rpmDownshift", 0, 32767, Game.CYCLES, Game.GPC);
 
 	private final int index;
 	private final String key;
 	private final int minValue;
 	private final int maxValue;
-	private final boolean active;
+	private final Set<Game> games = EnumSet.noneOf(Game.class);
+
+	private Setting(final int index, @NonNull final String key, final int minValue, final int maxValue, @NonNull final Game... games) {
+		this.index = index;
+		this.key = key;
+		this.minValue = minValue;
+		this.maxValue = maxValue;
+		this.games.addAll(Arrays.asList(games));
+	}
 
 	public static Setting forKey(final String name) {
 		for (final Setting setting : Setting.values()) {
