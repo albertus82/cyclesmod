@@ -1,5 +1,8 @@
 package it.albertus.cyclesmod.gui.powergraph.simple;
 
+import java.util.Locale;
+import java.util.function.Supplier;
+
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
@@ -8,9 +11,11 @@ import org.eclipse.swt.widgets.Display;
 
 import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.Mode;
 import it.albertus.cyclesmod.gui.powergraph.PowerGraph;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.Multilanguage;
+import lombok.NonNull;
 
 public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 
@@ -21,8 +26,8 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	public SimplePowerGraph(final Vehicle vehicle) {
-		super(vehicle);
+	public SimplePowerGraph(@NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
+		super(vehicle, modeSupplier);
 
 		final Axis abscissae = getAbscissae();
 		abscissae.setAutoScale(DEFAULT_AUTOSCALE);
@@ -59,11 +64,23 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 		getAbscissae().setTitle(messages.get("gui.label.graph.axis.x", RPM_DIVISOR));
 		if (isTorqueVisible()) {
 			getXyGraph().setTitle(messages.get("gui.label.graph.title.power.torque"));
-			getOrdinates().setTitle(messages.get("gui.label.graph.axis.y.power") + " / " + messages.get("gui.label.graph.axis.y.torque"));
 		}
 		else {
 			getXyGraph().setTitle(messages.get("gui.label.graph.title.power"));
-			getOrdinates().setTitle(messages.get("gui.label.graph.axis.y.power"));
+		}
+		setOrdinatesTitle();
+	}
+
+	public void updateModeSpecificWidgets() {
+		setOrdinatesTitle();
+	}
+
+	private void setOrdinatesTitle() {
+		if (isTorqueVisible()) {
+			getOrdinates().setTitle(messages.get("gui.label.graph.axis.y.power.torque." + getModeSupplier().get().getGame().toString().toLowerCase(Locale.ROOT)));
+		}
+		else {
+			getOrdinates().setTitle(messages.get("gui.label.graph.axis.y.power." + getModeSupplier().get().getGame().toString().toLowerCase(Locale.ROOT)));
 		}
 	}
 

@@ -1,7 +1,9 @@
 package it.albertus.cyclesmod.gui.powergraph;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.AbstractDataProvider;
@@ -21,7 +23,10 @@ import it.albertus.cyclesmod.common.model.Power;
 import it.albertus.cyclesmod.common.model.Vehicle;
 import it.albertus.cyclesmod.common.model.VehicleType;
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.cyclesmod.gui.Mode;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
+import lombok.Getter;
+import lombok.NonNull;
 
 public class PowerGraph implements IPowerGraph {
 
@@ -31,19 +36,22 @@ public class PowerGraph implements IPowerGraph {
 
 	private static final IDataProvider nullDataProvider = new NullDataProvider();
 
-	private final IXYGraph xyGraph = new XYGraph();
-	private final Axis abscissae = xyGraph.getPrimaryXAxis();
-	private final Axis ordinates = xyGraph.getPrimaryYAxis();
+	@Getter private final IXYGraph xyGraph = new XYGraph();
+	@Getter private final Axis abscissae = xyGraph.getPrimaryXAxis();
+	@Getter private final Axis ordinates = xyGraph.getPrimaryYAxis();
 	private final CircularBufferDataProvider powerDataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
-	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, ordinates, powerDataProvider);
-	private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
+	@Getter private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, ordinates, powerDataProvider);
+	@Getter private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
 	private final double[] powerValues = new double[Power.LENGTH];
 	private final double[] torqueValues = new double[Power.LENGTH];
 	private final double[] xDataArray = new double[Power.LENGTH];
+	@Getter private final Supplier<Mode> modeSupplier;
+
 	private boolean torqueVisible;
 
-	public PowerGraph(final Vehicle vehicle) {
+	public PowerGraph(@NonNull final Vehicle vehicle, @NonNull Supplier<Mode> modeSupplier) {
+		this.modeSupplier = modeSupplier;
 		for (int i = 0; i < Power.LENGTH; i++) {
 			xDataArray[i] = (double) Power.getRpm(i) / RPM_DIVISOR;
 			powerValues[i] = vehicle.getPower().getCurve()[i];
@@ -52,7 +60,8 @@ public class PowerGraph implements IPowerGraph {
 		init(vehicle.getType());
 	}
 
-	public PowerGraph(final Map<Integer, Short> map, final VehicleType vehicleType) {
+	public PowerGraph(@NonNull final Map<Integer, Short> map, @NonNull final VehicleType vehicleType, @NonNull final Supplier<Mode> modeSupplier) {
+		this.modeSupplier = modeSupplier;
 		if (map.size() != Power.LENGTH) {
 			throw new IllegalArgumentException("map size must be " + Power.LENGTH);
 		}
@@ -67,7 +76,7 @@ public class PowerGraph implements IPowerGraph {
 		init(vehicleType);
 	}
 
-	protected void init(final VehicleType vehicleType) {
+	protected void init(@NonNull final VehicleType vehicleType) {
 		powerDataProvider.setBufferSize(xDataArray.length);
 		powerDataProvider.setCurrentXDataArray(xDataArray);
 		powerDataProvider.setCurrentYDataArray(powerValues);
@@ -81,7 +90,7 @@ public class PowerGraph implements IPowerGraph {
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
-		ordinates.setTitle(messages.get("gui.label.graph.axis.y.power"));
+		ordinates.setTitle(messages.get("gui.label.graph.axis.y.power." + getModeSupplier().get().getGame().toString().toLowerCase(Locale.ROOT)));
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 
@@ -94,7 +103,7 @@ public class PowerGraph implements IPowerGraph {
 		torqueTrace.setTraceColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
 	}
 
-	private static Color getColor(final VehicleType vehicleType) {
+	private static Color getColor(@NonNull final VehicleType vehicleType) {
 		final Display display = Display.getCurrent();
 		switch (vehicleType) {
 		case FERRARI_125:
@@ -120,33 +129,8 @@ public class PowerGraph implements IPowerGraph {
 	}
 
 	@Override
-	public IXYGraph getXyGraph() {
-		return xyGraph;
-	}
-
-	@Override
-	public Axis getAbscissae() {
-		return abscissae;
-	}
-
-	@Override
-	public Axis getOrdinates() {
-		return ordinates;
-	}
-
-	@Override
 	public CircularBufferDataProvider getDataProvider() {
 		return powerDataProvider;
-	}
-
-	@Override
-	public Trace getPowerTrace() {
-		return powerTrace;
-	}
-
-	@Override
-	public Trace getTorqueTrace() {
-		return torqueTrace;
 	}
 
 	@Override
@@ -176,12 +160,12 @@ public class PowerGraph implements IPowerGraph {
 		if (visibility) {
 			torqueTrace.setDataProvider(torqueDataProvider);
 			xyGraph.addTrace(torqueTrace);
-			ordinates.setTitle(messages.get("gui.label.graph.axis.y.power") + " / " + messages.get("gui.label.graph.axis.y.torque"));
+			ordinates.setTitle(messages.get("gui.label.graph.axis.y.power.torque." + getModeSupplier().get().getGame().toString().toLowerCase(Locale.ROOT)));
 		}
 		else {
 			xyGraph.removeTrace(torqueTrace);
 			torqueTrace.setDataProvider(new NullDataProvider());
-			ordinates.setTitle(messages.get("gui.label.graph.axis.y.power"));
+			ordinates.setTitle(messages.get("gui.label.graph.axis.y.power." + getModeSupplier().get().getGame().toString().toLowerCase(Locale.ROOT)));
 		}
 	}
 
