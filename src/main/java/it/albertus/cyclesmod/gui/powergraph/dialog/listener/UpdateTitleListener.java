@@ -20,7 +20,7 @@ public class UpdateTitleListener extends MouseMotionListener.Stub {
 	private static final double NM_TO_LBFT = 0.73756214927727;
 	private static final double KW_TO_HP = 1.3404825737265;
 
-	private static final float GPC_FACTOR = 6.3f;
+	private static final float GPC_FACTOR = 6.8f; // Ferrari F1/87/88C (Ferrari 3.5L V12 - 680 bhp (507 kW; 689 PS))
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
