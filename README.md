@@ -18,7 +18,7 @@ Nowadays it cannot be executed natively on modern operating systems, but it runs
 
 ![Screenshot](https://user-images.githubusercontent.com/8672431/120505649-75f69500-c3c5-11eb-8294-8d8a522b7aba.png)
 
-The game allows to choose three different bikes: 125, 250 or 500cc. The motorcycle operating parameters are stored in the **`BIKES.INF`** binary file in the game directory. **CyclesMod** loads and interprets this file, and provides a graphical interface for inspecting and modifying the configuration of the bikes. On save, the program generates a new `BIKES.INF` containing the modified configuration.
+The game allows to choose three different bikes: 125, 250 or 500cc. The motorcycle operating parameters are stored in the **`BIKES.INF`** binary file in the game directory. *CyclesMod* loads and interprets this file, and provides a graphical interface for inspecting and modifying the configuration of the bikes. On save, the program generates a new `BIKES.INF` containing the modified configuration.
 
 
 ## Download
@@ -125,7 +125,7 @@ Simply *Open* your favorite original executable file of *Grand Prix Circuit* (e.
 
 ## Command line version
 
-If you prefer to operate without a graphical interface, an almost full-featured command line version of CyclesMod is available. It can be executed using the following executables:
+If you prefer to operate without a graphical interface, an almost full-featured command line version of *CyclesMod* is available. It can be executed using the following executables:
 
 * Windows: `CyclesMod.exe`
 * Linux: `cyclesmod.sh`
