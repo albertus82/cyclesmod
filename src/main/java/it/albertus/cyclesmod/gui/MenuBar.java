@@ -16,10 +16,11 @@ import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
 import it.albertus.cyclesmod.common.resources.Language;
 import it.albertus.cyclesmod.gui.listener.AboutListener;
 import it.albertus.cyclesmod.gui.listener.ArmMenuListener;
-import it.albertus.cyclesmod.gui.listener.ExitListener;
+import it.albertus.cyclesmod.gui.listener.CloseListener;
 import it.albertus.cyclesmod.gui.listener.CopySelectionListener;
 import it.albertus.cyclesmod.gui.listener.CutSelectionListener;
 import it.albertus.cyclesmod.gui.listener.EditMenuListener;
+import it.albertus.cyclesmod.gui.listener.ExitListener;
 import it.albertus.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
 import it.albertus.cyclesmod.gui.listener.PasteSelectionListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
@@ -73,7 +74,8 @@ public class MenuBar implements Multilanguage {
 
 		// File
 		final Menu fileMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		newLocalizedMenuItem(bar, SWT.CASCADE, "gui.label.menu.header.file").setMenu(fileMenu);
+		final MenuItem fileMenuHeader = newLocalizedMenuItem(bar, SWT.CASCADE, "gui.label.menu.header.file");
+		fileMenuHeader.setMenu(fileMenu);
 
 		final MenuItem fileOpenMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.open") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_OPEN));
 		fileOpenMenuItem.addSelectionListener(new SelectionAdapter() {
@@ -83,6 +85,11 @@ public class MenuBar implements Multilanguage {
 			}
 		});
 		fileOpenMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_OPEN);
+
+		final MenuItem fileCloseMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, "gui.label.menu.item.close");
+		fileCloseMenuItem.addSelectionListener(new CloseListener(gui));
+
+		new MenuItem(fileMenu, SWT.SEPARATOR);
 
 		final MenuItem fileSaveMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.save") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
 		fileSaveMenuItem.addSelectionListener(new SelectionAdapter() {
@@ -263,6 +270,9 @@ public class MenuBar implements Multilanguage {
 			newLocalizedMenuItem(helpMenu, SWT.PUSH, "gui.label.menu.item.about").addSelectionListener(new AboutListener(gui));
 		}
 
+		final ArmMenuListener fileMenuListener = e -> fileCloseMenuItem.setEnabled(gui.getCurrentFileName() != null && !gui.getCurrentFileName().isEmpty());
+		fileMenu.addMenuListener(fileMenuListener);
+		fileMenuHeader.addArmListener(fileMenuListener);
 		final ArmMenuListener helpMenuListener = e -> helpSystemInfoItem.setEnabled(SystemInformationDialog.isAvailable());
 		helpMenu.addMenuListener(helpMenuListener);
 		helpMenuHeader.addArmListener(helpMenuListener);

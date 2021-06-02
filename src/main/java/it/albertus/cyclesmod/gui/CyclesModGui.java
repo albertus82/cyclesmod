@@ -76,7 +76,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	@NonNull private final Map<String, Integer> lastSavedProperties;
 	@NonNull private final Map<String, Integer> lastExportedProperties;
 
-	private String currentFileName;
+	@Getter private String currentFileName;
 	private byte[] gpcOriginalExecBytes;
 
 	private CyclesModGui(@NonNull final Display display) {
@@ -618,6 +618,16 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
+	public void close() {
+		setMode(Mode.DEFAULT);
+		currentFileName = null;
+		engine.getVehiclesInf().reset(mode.getGame());
+		tabs.updateFormValues();
+		setLastSavedProperties(defaultProperties.get(mode));
+		setLastExportedProperties(defaultProperties.get(mode));
+		setCurrentFileModificationStatus(false);
+	}
+
 	private boolean isNotSaved() {
 		return !new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap().equals(lastSavedProperties);
 	}
@@ -627,8 +637,14 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public void setCurrentFileModificationStatus(final boolean modified) {
-		if (currentFileName != null && shell != null && !shell.isDisposed()) {
-			final String title = getWindowTitle() + " - " + (modified ? "*" : "") + currentFileName;
+		if (shell != null && !shell.isDisposed()) {
+			final String title;
+			if (currentFileName != null && !currentFileName.isEmpty()) {
+				title = getWindowTitle() + " - " + (modified ? "*" : "") + currentFileName;
+			}
+			else {
+				title = getWindowTitle();
+			}
 			if (!title.equals(shell.getText())) {
 				shell.setText(title);
 			}
