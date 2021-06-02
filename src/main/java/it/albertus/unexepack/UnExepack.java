@@ -135,9 +135,7 @@ public class UnExepack implements Callable<Integer> {
 		final ByteBuffer buf = ByteBuffer.allocate(header.length + reloc.length + padding + unpackedData.length);
 		buf.put(header);
 		buf.put(reloc);
-		for (int i = 0; i < padding; i++) {
-			buf.put((byte) 0x0);
-		}
+		buf.position(buf.position() + padding);
 		buf.put(unpackedData);
 		return buf.array();
 	}
