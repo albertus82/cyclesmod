@@ -93,7 +93,7 @@ Each bike has eight general settings that determine the following characteristic
 
 * **Grip**: skid threshold, which determines the speed with which it is possible to take curves. Valid values between `0` (the bike skids immediately and does not turn at all) and `65535` (the bike never skids).
 
-* **Braking speed**: determines the stopping time of the motorcycle. Valid values between `0` (the bike does not brake, on the contrary, friction and aerodynamic resistance are eliminated) and `65535` (the bike stops instantly on brake).
+* **Braking speed**: determines the stopping time of the motorcycle. Valid values between `0` (the bike does not brake at all; on the contrary, friction and aerodynamic resistance are eliminated) and `65535` (the bike stops instantly on brake).
 
 * **Spin threshold**: ease with which the bike spins while skidding around a corner. Valid values between `0` (the bike spins at the first hint of skidding) and `32767` (the bike never spins).
 
