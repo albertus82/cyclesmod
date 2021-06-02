@@ -18,9 +18,11 @@ Nowadays it cannot be executed natively on modern operating systems, but runs [f
 
 The game allows to choose three different bikes: 125, 250 or 500cc. The motorcycle operating parameters are stored in the **`BIKES.INF`** binary file in the game directory. **CyclesMod** loads and interprets this file, and provides a graphical interface for inspecting and modifying the configuration of the bikes. On save, the program generates a new `BIKES.INF` containing the modified configuration.
 
+
 ## Download
 
 Download the [latest release](https://github.com/albertus82/cyclesmod/releases/latest) from the [releases page](https://github.com/albertus82/cyclesmod/releases).
+
 
 ## Installation
 
@@ -34,6 +36,7 @@ Download the [latest release](https://github.com/albertus82/cyclesmod/releases/l
 * **Linux** & **macOS**: unpack the archive.
 
 **This application requires [Java SE Runtime Environment (JRE)](https://www.java.com) v1.8 (or newer) to run.**
+
 
 ## Usage
 
@@ -64,6 +67,7 @@ After modifying the desired properties, simply use the *Save* or *Save as...* fu
 #### Restoration of the original `BIKES.INF` file
 
 If you want to restore the original configurations of all the bikes, simply use the *Reset* function (*Edit* menu), which will reset the settings like the original `BIKES.INF` file supplied with the game. After that, use the *Save* or *Save as...* function to re-create the original version of the `BIKES.INF` file.
+
 
 ## Bike configuration
 
@@ -105,15 +109,17 @@ The engine power curve is constructed from the values present in this group. Eac
 
 It is also possibile to draw and modify the curve using the pointing device from the *Power Graph* window, reachable from the *Edit* menu or simply double clicking on the graph in the main window.
 
+
 ## Grand Prix Circuit
 
 [**Grand Prix Circuit**](https://www.mobygames.com/game/grand-prix-circuit) is a car racing game developed by *Distinctive Software* and published by *Accolade* exactly like **The Cycles**, and in fact it is its ancestor, since it came out the previous year (1988).
 
-The cars featured in *Grand Prix Circuit* and the bikes featured in *The Cycles* share the very same configuration scheme; there's only one biggest difference: the car settings of *Grand Prix Circuit* are stored directly in the game executable files instead of in an external file, therefore the only way to edit them is to patch the executable itself. CyclesMod is able to do this.
+The cars featured in *Grand Prix Circuit* and the bikes featured in *The Cycles* share the very same configuration scheme; there's only one biggest difference: the car settings of *Grand Prix Circuit* are stored inside the game executable files instead of in an external file, therefore the only way to edit them is to patch the executable itself. CyclesMod is able to do this.
 
 Simply *Open* your favorite original executable file of *Grand Prix Circuit* (e.g. GPEGA.EXE) and start modifying the car configurations. When you are satisfied and want to try your setup on a circuit, issue the *Save* command and choose a new name for your patched executable (e.g. GPEGAX.EXE).
 
 **Note that *CyclesMod* is able to open only the original executables of *Grand Prix Circuit***, it cannot open patched versions, so the only way to save the settings in order to work on them later is to *Export* them as a *CFG* file using the appropriate functionality. This way, you can resume your work by reopening an original executable, and then importing the previously exported *CFG* file.
+
 
 ## Command line version
 
@@ -130,7 +136,6 @@ Next, the program reads the `BIKES.CFG` file contents and finally produces a new
 To make further changes to the bikes, simply open the `BIKES.CFG` file, modify the parameters of interest, save the file and re-run *CyclesMod*. The program will detect the existence of the `BIKES.CFG` file and will produce a new `BIKES.INF` containing the changes made. In case of errors, appropriate console messages will be displayed.
 
 **If you want to restore the original `BIKES.INF` file shipped with the game, simply delete the `BIKES.CFG` file and run the program without arguments: it will automatically generate default `BIKES.CFG` and `BIKES.INF` files.**
-
 
 
 ## Acknowledgements
