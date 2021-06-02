@@ -13,7 +13,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CloseListener extends ShellAdapter implements SelectionListener, Listener {
+public class ExitListener extends ShellAdapter implements SelectionListener, Listener {
 
 	@NonNull private final CyclesModGui gui;
 
@@ -21,7 +21,7 @@ public class CloseListener extends ShellAdapter implements SelectionListener, Li
 		return gui.askForSavingAndExport();
 	}
 
-	private void disposeShellAndDisplay() {
+	private void disposeAll() {
 		gui.getShell().dispose();
 		final Display display = Display.getCurrent();
 		if (display != null) {
@@ -33,7 +33,7 @@ public class CloseListener extends ShellAdapter implements SelectionListener, Li
 	@Override
 	public void handleEvent(final Event event) {
 		if (canClose()) {
-			disposeShellAndDisplay();
+			disposeAll();
 		}
 		else if (event != null) {
 			event.doit = false;
@@ -44,7 +44,7 @@ public class CloseListener extends ShellAdapter implements SelectionListener, Li
 	@Override
 	public void widgetSelected(final SelectionEvent event) {
 		if (canClose()) {
-			disposeShellAndDisplay();
+			disposeAll();
 		}
 		else if (event != null) {
 			event.doit = false;
@@ -55,7 +55,7 @@ public class CloseListener extends ShellAdapter implements SelectionListener, Li
 	@Override
 	public void shellClosed(final ShellEvent event) {
 		if (canClose()) {
-			disposeShellAndDisplay();
+			disposeAll();
 		}
 		else if (event != null) {
 			event.doit = false;

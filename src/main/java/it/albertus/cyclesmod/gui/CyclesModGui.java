@@ -44,7 +44,7 @@ import it.albertus.cyclesmod.common.model.VehiclesCfg;
 import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
 import it.albertus.cyclesmod.common.resources.Language;
-import it.albertus.cyclesmod.gui.listener.CloseListener;
+import it.albertus.cyclesmod.gui.listener.ExitListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.EnhancedErrorDialog;
 import it.albertus.jface.Multilanguage;
@@ -91,7 +91,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		shell.setImages(Images.getAppIconArray());
 		shell.setText(getWindowTitle());
 		shell.setLayout(new FillLayout());
-		shell.addShellListener(new CloseListener(this));
+		shell.addShellListener(new ExitListener(this));
 
 		menuBar = new MenuBar(this);
 

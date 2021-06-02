@@ -16,7 +16,7 @@ import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
 import it.albertus.cyclesmod.common.resources.Language;
 import it.albertus.cyclesmod.gui.listener.AboutListener;
 import it.albertus.cyclesmod.gui.listener.ArmMenuListener;
-import it.albertus.cyclesmod.gui.listener.CloseListener;
+import it.albertus.cyclesmod.gui.listener.ExitListener;
 import it.albertus.cyclesmod.gui.listener.CopySelectionListener;
 import it.albertus.cyclesmod.gui.listener.CutSelectionListener;
 import it.albertus.cyclesmod.gui.listener.EditMenuListener;
@@ -55,13 +55,13 @@ public class MenuBar implements Multilanguage {
 	@Getter(AccessLevel.NONE) private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
 
 	MenuBar(@NonNull final CyclesModGui gui) {
-		final CloseListener closeListener = new CloseListener(gui);
+		final ExitListener exitListener = new ExitListener(gui);
 		final AboutListener aboutListener = new AboutListener(gui);
 
 		boolean cocoaMenuCreated = false;
 		if (Util.isCocoa()) {
 			try {
-				new CocoaUIEnhancer(gui.getShell().getDisplay()).hookApplicationMenu(closeListener, aboutListener, null);
+				new CocoaUIEnhancer(gui.getShell().getDisplay()).hookApplicationMenu(exitListener, aboutListener, null);
 				cocoaMenuCreated = true;
 			}
 			catch (final CocoaEnhancerException cee) {
@@ -148,7 +148,7 @@ public class MenuBar implements Multilanguage {
 		if (!cocoaMenuCreated) {
 			new MenuItem(fileMenu, SWT.SEPARATOR);
 
-			newLocalizedMenuItem(fileMenu, SWT.PUSH, "gui.label.menu.item.exit").addSelectionListener(closeListener);
+			newLocalizedMenuItem(fileMenu, SWT.PUSH, "gui.label.menu.item.exit").addSelectionListener(exitListener);
 		}
 
 		// Edit
