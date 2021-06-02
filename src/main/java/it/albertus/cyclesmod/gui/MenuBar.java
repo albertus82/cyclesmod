@@ -16,7 +16,6 @@ import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
 import it.albertus.cyclesmod.common.resources.Language;
 import it.albertus.cyclesmod.gui.listener.AboutListener;
 import it.albertus.cyclesmod.gui.listener.ArmMenuListener;
-import it.albertus.cyclesmod.gui.listener.CloseListener;
 import it.albertus.cyclesmod.gui.listener.CopySelectionListener;
 import it.albertus.cyclesmod.gui.listener.CutSelectionListener;
 import it.albertus.cyclesmod.gui.listener.EditMenuListener;
@@ -87,7 +86,12 @@ public class MenuBar implements Multilanguage {
 		fileOpenMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_OPEN);
 
 		final MenuItem fileCloseMenuItem = newLocalizedMenuItem(fileMenu, SWT.PUSH, "gui.label.menu.item.close");
-		fileCloseMenuItem.addSelectionListener(new CloseListener(gui));
+		fileCloseMenuItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				gui.close();
+			}
+		});
 
 		new MenuItem(fileMenu, SWT.SEPARATOR);
 

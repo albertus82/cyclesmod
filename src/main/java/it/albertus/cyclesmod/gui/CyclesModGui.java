@@ -618,7 +618,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	public void close() {
+	public boolean close() {
+		if (!askForSavingAndExport()) {
+			return false;
+		}
 		setMode(Mode.DEFAULT);
 		currentFileName = null;
 		engine.getVehiclesInf().reset(mode.getGame());
@@ -626,6 +629,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		setLastSavedProperties(defaultProperties.get(mode));
 		setLastExportedProperties(defaultProperties.get(mode));
 		setCurrentFileModificationStatus(false);
+		return true;
 	}
 
 	private boolean isNotSaved() {
@@ -673,7 +677,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			case SWT.NO:
 				return true;
 			default:
-				return false;
+				return false; // Cancel
 			}
 		}
 		else {
@@ -693,7 +697,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			case SWT.NO:
 				return true;
 			default:
-				return false;
+				return false; // Cancel
 			}
 		}
 		else {
