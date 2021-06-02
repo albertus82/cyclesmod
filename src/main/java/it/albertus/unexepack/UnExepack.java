@@ -131,18 +131,15 @@ public class UnExepack implements Callable<Integer> {
 	}
 
 	private static byte[] writeExe(@NonNull final DosHeader dh, @NonNull final byte[] unpackedData, @NonNull final byte[] reloc, final int padding) {
-		try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-			baos.write(dh.toByteArray());
-			baos.write(reloc);
-			for (int i = 0; i < padding; i++) {
-				baos.write(0);
-			}
-			baos.write(unpackedData);
-			return baos.toByteArray();
+		final byte[] header = dh.toByteArray();
+		final ByteBuffer buf = ByteBuffer.allocate(header.length + reloc.length + padding + unpackedData.length);
+		buf.put(header);
+		buf.put(reloc);
+		for (int i = 0; i < padding; i++) {
+			buf.put((byte) 0x0);
 		}
-		catch (final IOException e) {
-			throw new UncheckedIOException(e);
-		}
+		buf.put(unpackedData);
+		return buf.array();
 	}
 
 	private static byte[] craftExec(@NonNull final DosHeader dh, @NonNull final ExepackHeader eh, @NonNull final byte[] unpackedData, @NonNull final byte[] reloc) {
