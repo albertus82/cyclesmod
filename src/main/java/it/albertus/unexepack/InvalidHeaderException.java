@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class InvalidHeaderException extends Exception {
+public abstract class InvalidHeaderException extends Exception {
 
 	private static final long serialVersionUID = -7116701588107760281L;
 
