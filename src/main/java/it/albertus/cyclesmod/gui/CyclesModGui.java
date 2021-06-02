@@ -313,7 +313,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final SizeLimitExceededException e) {
 			log.log(Level.FINE, "File '" + file + "' is too large:", e);
-			openMessageBox(messages.get("gui.error.file.open.invalid.size"), SWT.ICON_WARNING);
+			openMessageBox(messages.get("gui.error.file.open.invalid.exe", Game.GPC.getName()), SWT.ICON_WARNING);
 			return false;
 		}
 		catch (final InvalidDosHeaderException e) {
