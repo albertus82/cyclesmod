@@ -12,9 +12,9 @@ public enum Mode {
 	CYCLES(Game.CYCLES),
 	GPC(Game.GPC);
 
-	@NonNull private final Game game;
-
 	public static final Mode DEFAULT = CYCLES;
+
+	@NonNull private final Game game;
 
 	public static Mode forGame(@NonNull final Game game) {
 		for (final Mode mode : values()) {
