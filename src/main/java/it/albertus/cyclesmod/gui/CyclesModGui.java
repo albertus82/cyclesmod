@@ -60,7 +60,7 @@ import lombok.extern.java.Log;
 @Log
 public class CyclesModGui implements IShellProvider, Multilanguage {
 
-	private static final String[] RESERVED_FILE_NAMES = { "GP.EXE", "GPCGA.EXE", "GPEGA.EXE", "GPTDY.EXE" };
+	private static final String[] RESERVED_FILE_NAMES = { "GP.EXE", "GPCGA.EXE", "GPCONFIG.EXE", "GPEGA.EXE", "GPTDY.EXE" };
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
