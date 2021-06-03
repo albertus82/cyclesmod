@@ -1,4 +1,4 @@
-package it.albertus.cyclesmod;
+package it.albertus;
 
 import java.io.IOException;
 import java.io.InputStream;
