@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 
-import it.albertus.cyclesmod.BaseTest;
+import it.albertus.BaseTest;
 import it.albertus.cyclesmod.CyclesMod;
 import it.albertus.cyclesmod.cli.resources.ConsoleMessages;
 import it.albertus.cyclesmod.common.resources.CommonMessages;

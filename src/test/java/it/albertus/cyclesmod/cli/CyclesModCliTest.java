@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import it.albertus.cyclesmod.BaseTest;
+import it.albertus.BaseTest;
 import lombok.extern.java.Log;
 
 @Log
