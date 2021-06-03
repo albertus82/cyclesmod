@@ -40,7 +40,7 @@ public class UnExepackTest extends BaseTest {
 	}
 
 	@Test
-	public void testUnpack() throws IOException {
+	public void testUnpack() throws IOException, InvalidHeaderException {
 		final String secret = System.getProperty("7zip.secret");
 		if (secret != null) {
 			final Path path = Paths.get(projectProperties.getProperty("project.build.testSourceDirectory"), "..", "resources", "exepacked.7z");
@@ -49,16 +49,9 @@ public class UnExepackTest extends BaseTest {
 			while ((entry = sevenZFile.getNextEntry()) != null) {
 				log.log(Level.INFO, "{0}", entry.getName());
 				final byte[] buf = new byte[(int) entry.getSize()];
-				final int bytesRead = sevenZFile.read(buf);
-				Assert.assertEquals(entry.getSize(), bytesRead);
+				Assert.assertEquals(entry.getSize(), sevenZFile.read(buf));
 				Assert.assertEquals(-1, sevenZFile.read());
-				try {
-					final byte[] unpacked = UnExepack.unpack(buf);
-					Assert.assertEquals(digests.get(entry.getName()), DigestUtils.sha256Hex(unpacked));
-				}
-				catch (final InvalidDosHeaderException | InvalidExepackHeaderException e) {
-					log.log(Level.SEVERE, "", e);
-				}
+				Assert.assertEquals(digests.get(entry.getName()), DigestUtils.sha256Hex(UnExepack.unpack(buf)));
 			}
 		}
 		else {
