@@ -19,7 +19,7 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
-    - run: mvn -D7zip.secret=${{ secrets.SZ_SECRET }} clean verify -B -V -e -ntp
+    - run: mvn clean verify -B -V -e -ntp -DtestSecret=${{ secrets.TEST_SECRET }}
     - if: matrix.os == 'ubuntu-latest' && matrix.java == '11'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
