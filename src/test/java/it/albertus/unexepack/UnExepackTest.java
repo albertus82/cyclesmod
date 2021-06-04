@@ -41,7 +41,8 @@ public class UnExepackTest extends BaseTest {
 
 	@Test
 	public void testUnpack() throws IOException, InvalidHeaderException {
-		final String secret = System.getProperty("testSecret");
+		final String propertyName = "testSecret";
+		final String secret = System.getProperty(propertyName);
 		if (secret != null) {
 			final Path path = Paths.get(projectProperties.getProperty("project.build.testSourceDirectory"), "..", "resources", "exepacked.7z");
 			final SevenZFile sevenZFile = new SevenZFile(path.toFile(), secret.toCharArray());
@@ -55,7 +56,7 @@ public class UnExepackTest extends BaseTest {
 			}
 		}
 		else {
-			log.warning("Missing system property '7zip.secret', skipping unpacking test.");
+			log.log(Level.WARNING, "Missing system property ''{0}'', skipping unpacking test.", propertyName);
 		}
 	}
 
