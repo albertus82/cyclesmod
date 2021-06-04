@@ -108,7 +108,7 @@ Gear ratios can be configured for each individual gear. Higher values correspond
 
 ### Power curve
 
-The engine power curve is constructed from the values present in this group. Each value represents the engine power in *hp* at a given engine speed indicated on the label associated with the field containing the value. Allowed values are between `0` and `255` hp. The resulting curve is graphically represented in a dedicated frame. 
+The engine power curve is constructed from the values present in this group. Each value represents the engine power in *hp* (or something similar) at a given engine speed indicated on the label associated with the field containing the value. Allowed values are between `0` and `255` hp. The resulting curve is graphically represented in a dedicated frame.
 
 It is also possibile to draw and modify the curve using the pointing device from the *Power Graph* window, reachable from the *Edit* menu or simply double clicking on the graph in the main window.
 
