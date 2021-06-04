@@ -253,6 +253,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean importCfg(@NonNull final Path file) throws IOException {
 		try {
 			final VehiclesCfg vehiclesCfg = new VehiclesCfg(file);
+			updateModelValuesLenient();
 			int count = 0;
 			final NumeralSystem backup = engine.getNumeralSystem();
 			engine.setNumeralSystem(NumeralSystem.DEFAULT);
@@ -434,12 +435,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private void doResetSingle(@NonNull final VehicleType vehicleType) {
-		try {
-			updateModelValues(true);
-		}
-		catch (final InvalidPropertyException e) {
-			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-		}
+		updateModelValuesLenient();
 		engine.getVehiclesInf().reset(mode.getGame(), vehicleType);
 		tabs.updateFormValues();
 	}
@@ -656,12 +652,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	public boolean askForSavingAndExport() {
-		try {
-			updateModelValues(true);
-		}
-		catch (final InvalidPropertyException e) {
-			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-		}
+		updateModelValuesLenient();
 		return askForSaving() && askForExport();
 	}
 
@@ -718,12 +709,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	public void setNumeralSystem(@NonNull final NumeralSystem numeralSystem) {
 		if (!engine.getNumeralSystem().equals(numeralSystem)) {
-			try {
-				updateModelValues(true);
-			}
-			catch (final InvalidPropertyException e) {
-				log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-			}
+			updateModelValuesLenient();
 			engine.setNumeralSystem(numeralSystem);
 			tabs.updateFormValues();
 		}
@@ -755,6 +741,15 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 			menuBar.updateModeSpecificWidgets();
 			tabs.updateModeSpecificWidgets();
+		}
+	}
+
+	private void updateModelValuesLenient() {
+		try {
+			updateModelValues(true);
+		}
+		catch (final InvalidPropertyException e) {
+			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
 		}
 	}
 
