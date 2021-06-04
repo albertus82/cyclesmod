@@ -41,7 +41,7 @@ public class UnExepackTest extends BaseTest {
 
 	@Test
 	public void testUnpack() throws IOException, InvalidHeaderException {
-		final String secret = System.getProperty("7zip.secret");
+		final String secret = System.getProperty("testSecret");
 		if (secret != null) {
 			final Path path = Paths.get(projectProperties.getProperty("project.build.testSourceDirectory"), "..", "resources", "exepacked.7z");
 			final SevenZFile sevenZFile = new SevenZFile(path.toFile(), secret.toCharArray());
