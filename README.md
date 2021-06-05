@@ -119,7 +119,7 @@ It is also possibile to draw and modify the curve using the pointing device from
 
 The cars featured in *Grand Prix Circuit* and the bikes featured in *The Cycles* share the very same configuration scheme; there's only one biggest difference: the car settings of *Grand Prix Circuit* are stored inside the game executable files instead of an external file, therefore the only way to edit them is to patch the executable itself. *CyclesMod* is able to do this.
 
-Simply *Open* your favorite original executable file of *Grand Prix Circuit* (e.g. `GPEGA.EXE`) and start modifying the car configurations. When you are satisfied and want to try your setup on a circuit, issue the *Save* command and choose a new name for your patched executable (e.g. `GPEGAX.EXE`).
+Simply *Open* your favorite original executable file of *Grand Prix Circuit* (e.g. `GPEGA.EXE`) and start modifying the car configurations. When you are satisfied and want to try your setup on a circuit, issue the *Save* command and choose a new name for your patched executable (e.g. `GPEGAX.EXE`) and eventually run the game using this new EXE. Like *The Cycles*, *Grand Prix Circuit* is also [compatible](https://www.dosbox.com/comp_list.php?showID=376) with DOSBox.
 
 **Note that *CyclesMod* is able to open only the original executables of *Grand Prix Circuit***, it cannot open patched versions, so the only way to save the settings in order to work on them later is to *Export* them as a *CFG* file using the appropriate functionality. This way, you can resume your work by reopening an original executable, and then importing the previously exported *CFG* file.
 
