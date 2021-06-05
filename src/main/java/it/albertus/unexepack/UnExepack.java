@@ -104,17 +104,13 @@ public class UnExepack implements Callable<Integer> {
 		try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			for (int i = 0; i < 16; i++) {
 				final int count = Short.toUnsignedInt(buf.getShort());
-				if (log.isLoggable(Level.FINE)) {
-					log.fine(String.format("i: %d, count: %d", i, count));
-				}
+				log.log(Level.FINE, () -> String.format("i: %d, count: %d", i, count));
 				for (int j = 0; j < count; j++) {
 					if (baos.size() >= relocTableSize) {
 						throw new BufferOverflowException();
 					}
 					final int entry = Short.toUnsignedInt(buf.getShort());
-					if (log.isLoggable(Level.FINE)) {
-						log.fine(String.format("i: %d, j: %d, entry: 0x%04X", i, j, entry));
-					}
+					log.log(Level.FINE, () -> String.format("i: %d, j: %d, entry: 0x%04X", i, j, entry));
 					baos.write(new byte[] { (byte) entry, (byte) (entry >> 8) });
 					if (baos.size() >= relocTableSize) {
 						throw new BufferOverflowException();
