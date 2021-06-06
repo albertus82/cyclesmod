@@ -9,7 +9,7 @@ import lombok.Value;
 @Value
 class ExepackHeader {
 
-	static final int SIGNATURE = 0x4252;
+	static final int SIGNATURE = 0x4252; // RB
 	static final int SIZE = 9 * Short.BYTES; // bytes
 
 	int realIp;
