@@ -12,7 +12,7 @@ import lombok.Value;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class DosHeader {
 
-	static final int SIGNATURE = 0x5A4D;
+	static final int SIGNATURE = 0x5A4D; // MZ
 	static final int SIZE = 14 * Short.BYTES; // bytes
 
 	private static final ByteOrder BYTE_ORDER = ByteOrder.LITTLE_ENDIAN;
