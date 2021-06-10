@@ -6,7 +6,7 @@ CyclesMod
 [![Build status](https://ci.appveyor.com/api/projects/status/github/albertus82/cyclesmod?branch=master&svg=true)](https://ci.appveyor.com/project/albertus82/cyclesmod)
 [![Known Vulnerabilities](https://snyk.io/test/github/albertus82/cyclesmod/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/albertus82/cyclesmod?targetFile=pom.xml)
 
-## :checkered_flag: Works with [**Grand Prix Circuit**](#grand-prix-circuit) too!
+## :checkered_flag: Works also with [**Grand Prix Circuit**](#grand-prix-circuit)!
 
 [**The Cycles - International Grand Prix Racing**](https://www.mobygames.com/game/cycles-international-grand-prix-racing) is a motorcycle simulation video game developed by *Distinctive Software* and published by *Accolade*.
 
