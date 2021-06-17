@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import it.albertus.cyclesmod.common.engine.InvalidNumberException;
 import it.albertus.cyclesmod.common.engine.ValueOutOfRangeException;
@@ -31,13 +34,13 @@ public class Gearbox implements ByteList {
 	 */
 	public static final int MAX_VALUE = 65535;
 
-	public static final Map<Game, Integer> maxGearsCountMap;
+	@Getter private static final Map<Game, Set<Byte>> validGears;
 
 	static {
-		final Map<Game, Integer> map = new EnumMap<>(Game.class);
-		map.put(Game.GPC, 6);
-		map.put(Game.CYCLES, 9);
-		maxGearsCountMap = Collections.unmodifiableMap(map);
+		final Map<Game, Set<Byte>> map = new EnumMap<>(Game.class);
+		map.put(Game.GPC, Collections.unmodifiableSet(IntStream.rangeClosed(1, 6).boxed().map(Integer::byteValue).collect(Collectors.toSet())));
+		map.put(Game.CYCLES, Collections.unmodifiableSet(IntStream.rangeClosed(1, 9).boxed().map(Integer::byteValue).collect(Collectors.toSet())));
+		validGears = Collections.unmodifiableMap(map);
 	}
 
 	/** 22-41 (N, 1, 2, 3, 4, 5, 6, 7, 8, 9) */
