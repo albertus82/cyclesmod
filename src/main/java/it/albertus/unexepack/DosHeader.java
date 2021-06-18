@@ -52,12 +52,12 @@ class DosHeader {
 		eCs = Short.toUnsignedInt(buf.getShort(22));
 		eLfarlc = Short.toUnsignedInt(buf.getShort(24));
 		eOvno = Short.toUnsignedInt(buf.getShort(26));
-		if (!test()) {
+		if (!validate()) {
 			throw new InvalidDosHeaderException(bytes);
 		}
 	}
 
-	private boolean test() {
+	private boolean validate() {
 		if (eMagic != SIGNATURE) {
 			return false;
 		}
