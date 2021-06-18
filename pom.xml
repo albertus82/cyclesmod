@@ -24,8 +24,8 @@
 		<thirdparty.license.directory>3rdparty</thirdparty.license.directory>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<maven.version.rules>${project.baseUri}/maven-version-rules.xml</maven.version.rules>
-		<swt.version>3.116.0</swt.version>
-		<jface.version>3.22.100</jface.version>
+		<swt.version>3.116.100</swt.version>
+		<jface.version>3.22.200</jface.version>
 		<windows.build.finalName>${project.name}</windows.build.finalName>
 		<linux.build.finalName>${project.artifactId}</linux.build.finalName>
 		<mac.build.finalName>${project.name}</mac.build.finalName>
@@ -57,17 +57,17 @@
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.core.commands</artifactId>
-			<version>3.9.800</version>
+			<version>3.10.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.equinox.common</artifactId>
-			<version>3.14.100</version>
+			<version>3.15.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.osgi</artifactId>
-			<version>3.16.200</version>
+			<version>3.16.300</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.draw2d.plugins</groupId>
@@ -112,7 +112,7 @@
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.9.0</version>
+			<version>2.10.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
