@@ -11,6 +11,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,20 +44,19 @@ public class UnExepackTest extends BaseTest {
 	public void testUnpack() throws IOException, InvalidHeaderException {
 		final String propertyName = "testSecret";
 		final String secret = System.getProperty(propertyName);
-		if (secret != null) {
-			final Path path = Paths.get(projectProperties.getProperty("project.build.testSourceDirectory"), "..", "resources", "exepacked.7z");
-			final SevenZFile sevenZFile = new SevenZFile(path.toFile(), secret.toCharArray());
-			SevenZArchiveEntry entry;
-			while ((entry = sevenZFile.getNextEntry()) != null) {
-				log.log(Level.INFO, "{0}", entry.getName());
-				final byte[] buf = new byte[(int) entry.getSize()];
-				Assert.assertEquals(entry.getSize(), sevenZFile.read(buf));
-				Assert.assertEquals(-1, sevenZFile.read());
-				Assert.assertEquals(digests.get(entry.getName()), DigestUtils.sha256Hex(UnExepack.unpack(buf)));
-			}
-		}
-		else {
+		if (secret == null) {
 			log.log(Level.WARNING, "Missing system property ''{0}'', skipping unpacking test.", propertyName);
+		}
+		Assume.assumeNotNull(secret);
+		final Path path = Paths.get(projectProperties.getProperty("project.build.testSourceDirectory"), "..", "resources", "exepacked.7z");
+		final SevenZFile sevenZFile = new SevenZFile(path.toFile(), secret.toCharArray());
+		SevenZArchiveEntry entry;
+		while ((entry = sevenZFile.getNextEntry()) != null) {
+			log.log(Level.INFO, "{0}", entry.getName());
+			final byte[] buf = new byte[(int) entry.getSize()];
+			Assert.assertEquals(entry.getSize(), sevenZFile.read(buf));
+			Assert.assertEquals(-1, sevenZFile.read());
+			Assert.assertEquals(digests.get(entry.getName()), DigestUtils.sha256Hex(UnExepack.unpack(buf)));
 		}
 	}
 
