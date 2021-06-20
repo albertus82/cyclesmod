@@ -123,6 +123,18 @@ Simply *Open* your favorite original executable file of *Grand Prix Circuit* (e.
 
 **Note that *CyclesMod* is able to open only the original executables of *Grand Prix Circuit***, it cannot open patched versions, so the only way to save the settings in order to work on them later is to *Export* them as a *CFG* file using the appropriate functionality. This way, you can resume your work by reopening an original executable, and then importing the previously exported *CFG* file.
 
+### unEXEPACK
+
+The original executables of *Grand Prix Circuit* are compressed with [*Microsoft EXEPACK*](https://www.bamsoftware.com/software/exepack/) and must be unpacked before they can be loaded and patched by *CyclesMod*. In order to automate this process, a suitable unpacker had to be incorporated into *CyclesMod*.
+
+Although many unpackers were freely available in various languages like [C](https://github.com/w4kfu/unEXEPACK) and [Rust](https://www.bamsoftware.com/software/exepack/), I couldn't find any in pure Java, so I decided to translate the C code written by [**@w4kfu**](https://github.com/w4kfu) to Java.
+
+This bonus utility is available also as a standalone executable located in the main directory of *CyclesMod*:
+
+* Windows: `unEXEPACK.exe`
+* Linux: `unexepack.sh`
+* macOS: `unexepack.command`
+
 
 ## Command line version
 
