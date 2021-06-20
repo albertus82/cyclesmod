@@ -129,7 +129,7 @@ The original executables of *Grand Prix Circuit* are compressed with [*Microsoft
 
 Although many unpackers were freely available in various languages like [C](https://github.com/w4kfu/unEXEPACK) and [Rust](https://www.bamsoftware.com/software/exepack/), I couldn't find any in pure Java, so I decided to translate the [C code](https://github.com/w4kfu/unEXEPACK/blob/master/unpack.c) written by [**@w4kfu**](https://github.com/w4kfu) to [Java](https://github.com/albertus82/cyclesmod/blob/master/src/main/java/it/albertus/unexepack/UnExepack.java).
 
-This bonus utility is available also as a standalone executable located in the main directory of *CyclesMod*:
+This bonus utility is available also as a standalone executable in the *CyclesMod* packages:
 
 * Windows: `unEXEPACK.exe`
 * Linux: `unexepack.sh`
