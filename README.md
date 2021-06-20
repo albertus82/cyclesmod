@@ -125,7 +125,7 @@ Simply *Open* your favorite original executable file of *Grand Prix Circuit* (e.
 
 ### unEXEPACK
 
-The original executables of *Grand Prix Circuit* are compressed with [*Microsoft EXEPACK*](https://www.bamsoftware.com/software/exepack/) and must be unpacked before they can be loaded and patched by *CyclesMod*. In order to automate this process, a suitable unpacker had to be incorporated into *CyclesMod*.
+The original executables of *Grand Prix Circuit* are compressed with [*Microsoft EXEPACK*](https://moddingwiki.shikadi.net/wiki/Microsoft_EXEPACK) and must be unpacked before they can be loaded and patched by *CyclesMod*. In order to automate this process, a suitable unpacker had to be incorporated into *CyclesMod*.
 
 Although many unpackers were freely available in various languages like [C](https://github.com/w4kfu/unEXEPACK) and [Rust](https://www.bamsoftware.com/software/exepack/), I couldn't find any in pure Java, so I decided to translate the [C code](https://github.com/w4kfu/unEXEPACK/blob/master/unpack.c) written by [**@w4kfu**](https://github.com/w4kfu) to [Java](https://github.com/albertus82/cyclesmod/blob/master/src/main/java/it/albertus/unexepack/UnExepack.java).
 
