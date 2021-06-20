@@ -13,7 +13,7 @@
 
 	<target name="jarbundler">
 		<mkdir dir="${project.build.directory}/jarbundler" />
-		<jarbundler vmoptions="${mac.vmoptions}" dir="${project.build.directory}/jarbundler" name="${project.name}" mainclass="${mainClass}" startonmainthread="true" version="${project.version}" icon="${project.build.iconsSourceDirectory}/mac/${mac.build.finalName}.icns" usejavaxkey="true" jvmversion="${maven.compiler.target}+" stubfile="${project.build.binSourceDirectory}/mac/universalJavaApplicationStub" highresolutioncapable="true">
+		<jarbundler vmoptions="${mac.vmoptions}" dir="${project.build.directory}/jarbundler" name="${project.name}" mainclass="${cyclesmod.mainClass}" startonmainthread="true" version="${project.version}" icon="${project.build.iconsSourceDirectory}/mac/${mac.build.finalName}.icns" usejavaxkey="true" jvmversion="${maven.compiler.target}+" stubfile="${project.build.binSourceDirectory}/mac/universalJavaApplicationStub" highresolutioncapable="true">
 			<jarfileset dir="${project.build.directory}" includes="*.${project.packaging},${dependencies.directory}/*.jar" />
 		</jarbundler>
 	</target>
@@ -73,7 +73,7 @@
 		<mkdir dir="${project.build.directory}/launch4j" />
 		<launch4j bindir="${launch4j.bindir}">
 			<config outfile="${project.build.directory}/launch4j/${windows.gui.exeFileName}" jarpath="${windows.build.finalName}.${project.packaging}" headertype="gui" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir="." icon="${project.build.iconsSourceDirectory}/windows/${windows.build.finalName}.ico">
-				<singleInstance mutexname="${mainClass}" windowtitle="${project.name}" />
+				<singleInstance mutexname="${cyclesmod.mainClass}" windowtitle="${project.name}" />
 				<jre runtimebits="${launch4j.jre.runtimeBits}" minversion="${maven.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${gui.vm.initialHeapSize}" maxheapsize="${gui.vm.maxHeapSize}">
 					<opt>-DG</opt>
 				</jre>
@@ -86,6 +86,13 @@
 					<opt>-DC</opt>
 				</jre>
 				<versionInfo fileversion="${project.version}.0" txtfileversion="${project.version}" filedescription="${project.name}" copyright="${launch4j.copyright}" productversion="${project.version}.0" txtproductversion="${project.version}" productname="${project.name}" internalname="${project.name}" originalfilename="${windows.cli.exeFileName}" companyname="${launch4j.companyName}" />
+			</config>
+		</launch4j>
+		<launch4j bindir="${launch4j.bindir}">
+			<config outfile="${project.build.directory}/launch4j/${windows.unexepack.exeFileName}" jarpath="${windows.build.finalName}.${project.packaging}" headertype="console" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir=".">
+				<jre minversion="${maven.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${unexepack.vm.initialHeapSize}" maxheapsize="${unexepack.vm.maxHeapSize}" />
+				<classPath mainclass="${unexepack.mainClass}" cp="${dependencies.directory}/*.jar" />
+				<versionInfo fileversion="${project.version}.0" txtfileversion="${project.version}" filedescription="${launch4j.unexepack.name}" copyright="${launch4j.copyright}" productversion="${project.version}.0" txtproductversion="${project.version}" productname="${launch4j.unexepack.name}" internalname="${launch4j.unexepack.name}" originalfilename="${windows.unexepack.exeFileName}" companyname="${launch4j.companyName}" />
 			</config>
 		</launch4j>
 	</target>
@@ -106,7 +113,7 @@
 			AppPublisherURL=${innoSetup.AppPublisherURL}
 			AppSupportURL=${innoSetup.AppSupportURL}
 			AppUpdatesURL=${innoSetup.AppUpdatesURL}
-			AppMutex=${mainClass}
+			AppMutex=${cyclesmod.mainClass}
 			TimeStampsInUTC=yes
 			PrivilegesRequired=lowest
 			PrivilegesRequiredOverridesAllowed=dialog
@@ -160,7 +167,7 @@
 			AppPublisherURL=${innoSetup.AppPublisherURL}
 			AppSupportURL=${innoSetup.AppSupportURL}
 			AppUpdatesURL=${innoSetup.AppUpdatesURL}
-			AppMutex=${mainClass}
+			AppMutex=${cyclesmod.mainClass}
 			TimeStampsInUTC=yes
 			PrivilegesRequired=lowest
 			PrivilegesRequiredOverridesAllowed=dialog

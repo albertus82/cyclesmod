@@ -33,7 +33,10 @@
 		<gui.vm.maxHeapSize>32</gui.vm.maxHeapSize>
 		<cli.vm.initialHeapSize>4</cli.vm.initialHeapSize>
 		<cli.vm.maxHeapSize>16</cli.vm.maxHeapSize>
-		<mainClass>it.albertus.cyclesmod.CyclesMod</mainClass>
+		<unexepack.vm.initialHeapSize>4</unexepack.vm.initialHeapSize>
+		<unexepack.vm.maxHeapSize>32</unexepack.vm.maxHeapSize>
+		<cyclesmod.mainClass>it.albertus.cyclesmod.CyclesMod</cyclesmod.mainClass>
+		<unexepack.mainClass>it.albertus.unexepack.UnExepack</unexepack.mainClass>
 	</properties>
 
 	<dependencies>
@@ -598,7 +601,7 @@
 							<X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
 						</manifestEntries>
 						<manifest>
-							<mainClass>${mainClass}</mainClass>
+							<mainClass>${cyclesmod.mainClass}</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>${dependencies.directory}/</classpathPrefix>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
