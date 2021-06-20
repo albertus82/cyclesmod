@@ -21,7 +21,7 @@ import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Help.Visibility;
 import picocli.CommandLine.Parameters;
 
-// Converted from the C language version at https://github.com/w4kfu/unEXEPACK
+// Ported to Java from the C language version at https://github.com/w4kfu/unEXEPACK
 // See also: https://www.bamsoftware.com/software/exepack/
 @Log
 @Command
