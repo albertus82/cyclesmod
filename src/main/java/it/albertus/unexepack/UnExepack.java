@@ -24,7 +24,7 @@ import picocli.CommandLine.Parameters;
 // Ported to Java from the C language version at https://github.com/w4kfu/unEXEPACK
 // See also: https://www.bamsoftware.com/software/exepack/
 @Log
-@Command
+@Command(description = "Unpacker for Microsoft EXEPACK utility compressor.")
 public class UnExepack implements Callable<Integer> {
 
 	private static final int MAX_INPUT_FILE_SIZE = 0x800000; // 8 MiB, based on the info available at https://w4kfu.github.io/unEXEPACK/files/exepack_list.html
