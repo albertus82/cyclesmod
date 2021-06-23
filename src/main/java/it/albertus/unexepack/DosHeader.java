@@ -8,6 +8,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+// See also: https://www.tavi.co.uk/phobos/exeformat.html
+//           https://www.delorie.com/djgpp/doc/exe/
 @Value
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 class DosHeader {
@@ -17,20 +19,20 @@ class DosHeader {
 
 	private static final ByteOrder BYTE_ORDER = ByteOrder.LITTLE_ENDIAN;
 
-	int eMagic;
-	int eCblp;
-	int eCp;
-	int eCrlc;
-	int eCparhdr;
-	int eMinAlloc;
-	int eMaxAlloc;
-	int eSs;
-	int eSp;
-	int eCsum;
-	int eIp;
-	int eCs;
-	int eLfarlc;
-	int eOvno;
+	int eMagic; // "MZ"
+	int eCblp; // Last page size in bytes
+	int eCp; // Number of pages
+	int eCrlc; // Number of entries in the relocation table
+	int eCparhdr; // Size of the EXE header in paragraphs
+	int eMinAlloc; // Minimum number of paragraphs allocated
+	int eMaxAlloc; // Maximum number of paragraphs allocated
+	int eSs; // Initial SS value
+	int eSp; // Initial SP value
+	int eCsum; // Checksum (rarely checked)
+	int eIp; // Initial IP value
+	int eCs; // Initial CS value
+	int eLfarlc; // Relocation table offset
+	int eOvno; // Overlay number
 
 	DosHeader(@NonNull final byte[] bytes) throws InvalidDosHeaderException {
 		if (bytes.length != SIZE) {
