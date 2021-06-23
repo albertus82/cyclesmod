@@ -6,20 +6,21 @@ import java.nio.ByteOrder;
 import lombok.NonNull;
 import lombok.Value;
 
+// See also: https://moddingwiki.shikadi.net/wiki/Microsoft_EXEPACK
 @Value
 class ExepackHeader {
 
 	static final int SIGNATURE = 0x4252; // "RB"
 	static final int SIZE = 9 * Short.BYTES; // bytes
 
-	int realIp; // original initial IP value
-	int realCs; // original initial (relative) CS value
-	int memStart; // temporary storage used by the decompression stub
-	int exepackSize; // size of the entire EXEPACK block: header, stub, and packed relocation table
-	int realSp; // original initial SP value
-	int realSs; // original initial (relative) SS value
-	int destLen; // size (in 16-byte paragraphs) of the uncompressed data
-	int skipLen; // field only present in specific version of EXEPACK, not used by the unpacker
+	int realIp; // Original initial IP value
+	int realCs; // Original initial (relative) CS value
+	int memStart; // Temporary storage used by the decompression stub
+	int exepackSize; // Size of the entire EXEPACK block: header, stub, and packed relocation table
+	int realSp; // Original initial SP value
+	int realSs; // Original initial (relative) SS value
+	int destLen; // Size (in 16-byte paragraphs) of the uncompressed data
+	int skipLen; // Field only present in specific version of EXEPACK, not used by the unpacker
 	int signature; // "RB" | NOSONAR Rename field "signature" to prevent any misunderstanding/clash with field "SIGNATURE" defined on line 12. Methods and field names should not be the same or differ only by capitalization (java:S1845)
 
 	ExepackHeader(@NonNull final byte[] bytes) throws InvalidExepackHeaderException {
@@ -41,12 +42,12 @@ class ExepackHeader {
 			throw new InvalidExepackHeaderException(bytes);
 		}
 		if (word8 == SIGNATURE && word9 != SIGNATURE) {
-			this.skipLen = 1;
-			this.signature = word8;
+			skipLen = 1;
+			signature = word8;
 		}
 		else {
-			this.skipLen = word8;
-			this.signature = word9;
+			skipLen = word8;
+			signature = word9;
 		}
 	}
 
