@@ -9,7 +9,7 @@ import lombok.Value;
 @Value
 class ExepackHeader {
 
-	static final int SIGNATURE = 0x4252; // RB
+	static final int SIGNATURE = 0x4252; // "RB"
 	static final int SIZE = 9 * Short.BYTES; // bytes
 
 	int realIp; // original initial IP value
@@ -19,8 +19,8 @@ class ExepackHeader {
 	int realSp; // original initial SP value
 	int realSs; // original initial (relative) SS value
 	int destLen; // size (in 16-byte paragraphs) of the uncompressed data
-	int skipLen; // field only present in specific version of EXEPACK : not used by the unpacker
-	int signature; // NOSONAR Rename field "signature" to prevent any misunderstanding/clash with field "SIGNATURE" defined on line 12. Methods and field names should not be the same or differ only by capitalization (java:S1845)
+	int skipLen; // field only present in specific version of EXEPACK, not used by the unpacker
+	int signature; // "RB" | NOSONAR Rename field "signature" to prevent any misunderstanding/clash with field "SIGNATURE" defined on line 12. Methods and field names should not be the same or differ only by capitalization (java:S1845)
 
 	ExepackHeader(@NonNull final byte[] bytes) throws InvalidExepackHeaderException {
 		if (bytes.length != SIZE) {
