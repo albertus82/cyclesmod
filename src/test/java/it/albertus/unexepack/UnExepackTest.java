@@ -10,21 +10,21 @@ import java.util.logging.Level;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import it.albertus.BaseTest;
 import lombok.extern.java.Log;
 
 @Log
-public class UnExepackTest extends BaseTest {
+class UnExepackTest extends BaseTest {
 
 	private static final Map<String, String> digests = new HashMap<>();
 
-	@BeforeClass
-	public static void beforeAll() {
+	@BeforeAll
+	static void beforeAll() {
 		digests.put("A.EXE", "592744c31541044c673e4647cc75f853abbc508d7bc56dcbcae9578e07f2f39c");
 		digests.put("B.EXE", "d5d3127e36ec942fd8f722714f6604f28a2fed5c305e5c91648d16285396cf2b");
 		digests.put("C.EXE", "0a02d7e93da2b92914142daeea344c4b8d8adfce6dfae44118c46b65024ceaef");
@@ -41,40 +41,40 @@ public class UnExepackTest extends BaseTest {
 	}
 
 	@Test
-	public void testUnpack() throws IOException, InvalidHeaderException {
+	void testUnpack() throws IOException, InvalidHeaderException {
 		final String propertyName = "testSecret";
 		final String secret = System.getProperty(propertyName);
 		if (secret == null) {
 			log.log(Level.WARNING, "Missing system property ''{0}'', skipping unpacking test.", propertyName);
 		}
-		Assume.assumeNotNull(secret);
+		Assumptions.assumeTrue(secret != null);
 		final Path path = Paths.get(projectProperties.getProperty("project.build.testSourceDirectory"), "..", "resources", "exepacked.7z");
 		final SevenZFile sevenZFile = new SevenZFile(path.toFile(), secret.toCharArray());
 		SevenZArchiveEntry entry;
 		while ((entry = sevenZFile.getNextEntry()) != null) {
 			log.log(Level.INFO, "{0}", entry.getName());
 			final byte[] buf = new byte[(int) entry.getSize()];
-			Assert.assertEquals(entry.getSize(), sevenZFile.read(buf));
-			Assert.assertEquals(-1, sevenZFile.read());
-			Assert.assertEquals(digests.get(entry.getName()), DigestUtils.sha256Hex(UnExepack.unpack(buf)));
+			Assertions.assertEquals(entry.getSize(), sevenZFile.read(buf));
+			Assertions.assertEquals(-1, sevenZFile.read());
+			Assertions.assertEquals(digests.get(entry.getName()), DigestUtils.sha256Hex(UnExepack.unpack(buf)));
 		}
 	}
 
 	@Test
-	public void testDecodeExeLen() {
-		Assert.assertEquals(0, UnExepack.decodeExeLen(0, 0));
-		Assert.assertEquals(1, UnExepack.decodeExeLen(1, 1));
-		Assert.assertEquals(511, UnExepack.decodeExeLen(511, 1));
-		Assert.assertEquals(512, UnExepack.decodeExeLen(0, 1));
-		Assert.assertEquals(513, UnExepack.decodeExeLen(1, 2));
-		Assert.assertEquals(0xFFFF * 512 - 1, UnExepack.decodeExeLen(511, 0xFFFF));
-		Assert.assertEquals(0xFFFF * 512, UnExepack.decodeExeLen(0, 0xFFFF));
+	void testDecodeExeLen() {
+		Assertions.assertEquals(0, UnExepack.decodeExeLen(0, 0));
+		Assertions.assertEquals(1, UnExepack.decodeExeLen(1, 1));
+		Assertions.assertEquals(511, UnExepack.decodeExeLen(511, 1));
+		Assertions.assertEquals(512, UnExepack.decodeExeLen(0, 1));
+		Assertions.assertEquals(513, UnExepack.decodeExeLen(1, 2));
+		Assertions.assertEquals(0xFFFF * 512 - 1, UnExepack.decodeExeLen(511, 0xFFFF));
+		Assertions.assertEquals(0xFFFF * 512, UnExepack.decodeExeLen(0, 0xFFFF));
 
 		// When e_cp == 0, e_cblp must be 0, otherwise it would encode a negative length.
-		Assert.assertEquals(-1, UnExepack.decodeExeLen(1, 0));
-		Assert.assertEquals(-1, UnExepack.decodeExeLen(511, 0));
+		Assertions.assertEquals(-1, UnExepack.decodeExeLen(1, 0));
+		Assertions.assertEquals(-1, UnExepack.decodeExeLen(511, 0));
 		// e_cblp must be <= 511.
-		Assert.assertEquals(-1, UnExepack.decodeExeLen(512, 1));
+		Assertions.assertEquals(-1, UnExepack.decodeExeLen(512, 1));
 	}
 
 }
