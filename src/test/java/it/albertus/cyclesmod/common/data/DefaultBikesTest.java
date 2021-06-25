@@ -3,21 +3,21 @@ package it.albertus.cyclesmod.common.data;
 import java.io.IOException;
 import java.util.zip.CRC32;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import it.albertus.cyclesmod.common.model.VehiclesInf;
 
-public class DefaultBikesTest {
+class DefaultBikesTest {
 
 	@Test
-	public void test() throws IOException {
+	void test() throws IOException {
 		final byte[] bytes = DefaultBikes.getByteArray();
-		Assert.assertEquals(VehiclesInf.FILE_SIZE, bytes.length);
+		Assertions.assertEquals(VehiclesInf.FILE_SIZE, bytes.length);
 
 		final CRC32 crc = new CRC32();
 		crc.update(bytes);
-		Assert.assertEquals(0x28A33682L, crc.getValue());
+		Assertions.assertEquals(0x28A33682L, crc.getValue());
 	}
 
 }
