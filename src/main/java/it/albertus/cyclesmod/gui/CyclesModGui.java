@@ -64,19 +64,27 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	@Getter private Mode mode = Mode.DEFAULT;
+	@Getter
+	private Mode mode = Mode.DEFAULT;
 
 	private final CyclesModEngine engine = new CyclesModEngine(new VehiclesInf(mode.getGame()));
 
-	@Getter private final Shell shell;
-	@Getter private final MenuBar menuBar;
-	@Getter private final Tabs tabs;
+	@Getter
+	private final Shell shell;
+	@Getter
+	private final MenuBar menuBar;
+	@Getter
+	private final Tabs tabs;
 
-	@Getter private final Map<Mode, Map<String, Integer>> defaultProperties = new EnumMap<>(Mode.class);
-	@NonNull private final Map<String, Integer> lastSavedProperties;
-	@NonNull private final Map<String, Integer> lastExportedProperties;
+	@Getter
+	private final Map<Mode, Map<String, Integer>> defaultProperties = new EnumMap<>(Mode.class);
+	@NonNull
+	private final Map<String, Integer> lastSavedProperties;
+	@NonNull
+	private final Map<String, Integer> lastExportedProperties;
 
-	@Getter private String currentFileName;
+	@Getter
+	private String currentFileName;
 	private byte[] gpcOriginalExecBytes;
 
 	private CyclesModGui(@NonNull final Display display) {
@@ -754,7 +762,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private static String getWindowTitle() {
-		return messages.get("gui.label.window.title");
+		return messages.get("gui.message.application.name");
 	}
 
 }
