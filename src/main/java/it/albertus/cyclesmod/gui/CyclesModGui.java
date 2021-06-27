@@ -97,7 +97,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		// Shell creation...
 		shell = new Shell(display);
 		shell.setImages(Images.getAppIconArray());
-		shell.setText(getWindowTitle());
+		shell.setText(getApplicationName());
 		shell.setLayout(new FillLayout());
 		shell.addShellListener(new ExitListener(this));
 
@@ -113,7 +113,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	/* GUI entry point. */
 	public static void main(final String... args) {
-		Display.setAppName(getWindowTitle());
+		Display.setAppName(getApplicationName());
 		Display.setAppVersion(Version.getNumber());
 		Shell shell = null;
 		try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
@@ -133,7 +133,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final RuntimeException | Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)
 			log.log(Level.SEVERE, "An unexpected error has occurred:", e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, getWindowTitle(), messages.get("gui.error.unexpected"), IStatus.ERROR, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell != null ? shell : null, getApplicationName(), messages.get("gui.error.unexpected"), IStatus.ERROR, e, Images.getAppIconArray());
 		}
 	}
 
@@ -210,12 +210,12 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidPathException e) {
 			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		catch (final RuntimeException | IOException e) {
 			log.log(Level.WARNING, "Cannot open file '" + path + "':", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -248,12 +248,12 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidPathException e) {
 			log.log(Level.WARNING, "Cannot import file '" + path + "':", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.open.invalid.path"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		catch (final RuntimeException | IOException e) {
 			log.log(Level.WARNING, "Cannot import file '" + path + "':", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.open.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -367,7 +367,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog exportDialog = new FileDialog(shell, SWT.SAVE);
@@ -388,7 +388,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final IOException | RuntimeException e) {
 			log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -399,7 +399,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		final FileDialog exportDialog = new FileDialog(shell, SWT.SAVE);
@@ -421,7 +421,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final IOException | RuntimeException e) {
 			log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -437,7 +437,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final RuntimeException e) {
 			log.log(Level.WARNING, "Cannot reset vehicle " + vehicleType + ':', e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -460,7 +460,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final RuntimeException e) {
 			log.log(Level.WARNING, "Cannot reset vehicles:", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.reset"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -478,7 +478,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		try {
@@ -499,7 +499,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final IOException | RuntimeException e) {
 			log.log(Level.WARNING, "Cannot save file:", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -510,7 +510,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidPropertyException e) {
 			log.log(Level.WARNING, "Invalid property \"" + e.getPropertyName() + "\":", e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.invalid.property", e.getPropertyName()), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 		switch (mode) {
@@ -541,7 +541,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 			catch (final IOException | RuntimeException e) {
 				log.log(Level.WARNING, "Cannot save file as '" + fileName + "':", e);
-				EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 		}
@@ -570,7 +570,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 			catch (final IOException | RuntimeException e) {
 				log.log(Level.WARNING, "Cannot save file as '" + userChoosenFileName + "':", e);
-				EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
+				EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.file.save.unexpected"), IStatus.WARNING, e, Images.getAppIconArray());
 				return false;
 			}
 		}
@@ -617,7 +617,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		catch (final InvalidPropertyException | RuntimeException e) {
 			log.log(Level.WARNING, "Cannot load hidden configuration into vehicle " + type + ':', e);
-			EnhancedErrorDialog.openError(shell, getWindowTitle(), messages.get("gui.error.hiddenCfg"), IStatus.WARNING, e, Images.getAppIconArray());
+			EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.hiddenCfg"), IStatus.WARNING, e, Images.getAppIconArray());
 			return false;
 		}
 	}
@@ -648,10 +648,10 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (shell != null && !shell.isDisposed()) {
 			final String title;
 			if (currentFileName != null && !currentFileName.isEmpty()) {
-				title = getWindowTitle() + " - " + (modified ? "*" : "") + currentFileName;
+				title = getApplicationName() + " - " + (modified ? "*" : "") + currentFileName;
 			}
 			else {
-				title = getWindowTitle();
+				title = getApplicationName();
 			}
 			if (!title.equals(shell.getText())) {
 				shell.setText(title);
@@ -667,7 +667,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean askForSaving() {
 		if (isNotSaved()) {
 			final MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
-			messageBox.setText(getWindowTitle());
+			messageBox.setText(getApplicationName());
 			messageBox.setMessage(messages.get("gui.message.confirm.save.changes"));
 			final int selectedButton = messageBox.open();
 			switch (selectedButton) {
@@ -687,7 +687,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean askForExport() {
 		if (Mode.GPC.equals(mode) && isNotExported()) {
 			final MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO | SWT.CANCEL | SWT.ICON_QUESTION);
-			messageBox.setText(getWindowTitle());
+			messageBox.setText(getApplicationName());
 			messageBox.setMessage(messages.get("gui.message.confirm.export.changes"));
 			final int selectedButton = messageBox.open();
 			switch (selectedButton) {
@@ -706,7 +706,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private int openMessageBox(@NonNull final String message, final int style) {
 		final MessageBox messageBox = new MessageBox(shell, style);
-		messageBox.setText(getWindowTitle());
+		messageBox.setText(getApplicationName());
 		messageBox.setMessage(message);
 		return messageBox.open();
 	}
@@ -761,7 +761,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	private static String getWindowTitle() {
+	private static String getApplicationName() {
 		return messages.get("gui.message.application.name");
 	}
 
