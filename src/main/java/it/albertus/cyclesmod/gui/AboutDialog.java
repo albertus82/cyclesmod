@@ -183,7 +183,7 @@ public class AboutDialog extends Dialog {
 		}
 		applicationNameLabel.setFont(fontRegistry.getBold(SYM_NAME_FONT_APPNAME));
 		GridDataFactory.swtDefaults().grab(true, false).applyTo(applicationNameLabel);
-		applicationNameLabel.setText(messages.get("gui.message.application.name"));
+		applicationNameLabel.setText(CyclesModGui.getApplicationName());
 
 		final Link versionAndHomePageLink = new Link(headerComposite, SWT.NONE);
 		Date versionDate;

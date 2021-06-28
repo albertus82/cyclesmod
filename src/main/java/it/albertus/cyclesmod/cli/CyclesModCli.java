@@ -50,9 +50,11 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private static final Game GAME = Game.CYCLES;
 
-	@Parameters(descriptionKey = "parameter.path", defaultValue = "") private Path path;
+	@Parameters(descriptionKey = "parameter.path", defaultValue = "")
+	private Path path;
 
-	@Option(names = { "-e", "--errors" }, descriptionKey = "option.errors") private boolean errors;
+	@Option(names = { "-e", "--errors" }, descriptionKey = "option.errors")
+	private boolean errors;
 
 	private final CyclesModEngine engine = new CyclesModEngine();
 

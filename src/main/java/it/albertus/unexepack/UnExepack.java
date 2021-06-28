@@ -30,13 +30,11 @@ public class UnExepack implements Callable<Integer> {
 	private static final int MAX_INPUT_FILE_SIZE = 0x800000; // 8 MiB, based on the info available at https://w4kfu.github.io/unEXEPACK/files/exepack_list.html
 	private static final String LOGGING_FORMAT_PROPERTY = "java.util.logging.SimpleFormatter.format";
 
-	// @formatter:off
 	@Parameters(index = "0", paramLabel = "<EXEPACK_file>")
 	private Path inputFile;
 
 	@Parameters(index = "1", paramLabel = "OUTPUT_FILE", defaultValue = "unpacked", showDefaultValue = Visibility.ALWAYS, arity = "0..1")
 	private Path outputFile;
-	// @formatter:on
 
 	private static void reverse(@NonNull final byte[] array) {
 		for (int i = 0, j = array.length - 1; i < j; i++, j--) {
