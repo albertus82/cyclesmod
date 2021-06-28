@@ -761,7 +761,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 	}
 
-	private static String getApplicationName() {
+	public static String getApplicationName() {
 		return messages.get("gui.message.application.name");
 	}
 
