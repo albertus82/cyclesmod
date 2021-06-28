@@ -11,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CopySelectionListener extends SelectionAdapter {
 
-	@NonNull private final CyclesModGui gui;
+	@NonNull
+	private final CyclesModGui gui;
 
 	@Override
 	public void widgetSelected(final SelectionEvent se) {

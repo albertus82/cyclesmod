@@ -32,7 +32,8 @@ public class VehiclesCfg {
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
-	@Getter private final Properties properties = new Properties();
+	@Getter
+	private final Properties properties = new Properties();
 
 	/**
 	 * Creates a new instance containing the provided configuration.

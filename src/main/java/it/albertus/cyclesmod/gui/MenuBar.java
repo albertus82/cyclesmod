@@ -52,7 +52,8 @@ public class MenuBar implements Multilanguage {
 	private final MenuItem editCopyMenuItem;
 	private final MenuItem editPasteMenuItem;
 
-	@Getter(AccessLevel.NONE) private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
+	@Getter(AccessLevel.NONE)
+	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
 
 	MenuBar(@NonNull final CyclesModGui gui) {
 		final ExitListener exitListener = new ExitListener(gui);

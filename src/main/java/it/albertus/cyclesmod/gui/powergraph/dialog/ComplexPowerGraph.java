@@ -46,7 +46,8 @@ public class ComplexPowerGraph extends PowerGraph {
 	private final Mode mode;
 	private final VehicleType vehicleType;
 
-	@Getter private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
+	@Getter
+	private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
 	public ComplexPowerGraph(@NonNull final Map<Integer, Short> map, @NonNull final Mode mode, @NonNull final VehicleType vehicleType, @NonNull final Shell shell) {
 		super(map, vehicleType, () -> mode);

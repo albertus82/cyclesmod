@@ -27,7 +27,8 @@ public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	@Getter private final MenuItem showTorqueMenuItem;
+	@Getter
+	private final MenuItem showTorqueMenuItem;
 
 	public ComplexPowerGraphContextMenu(final Control control, final IPowerGraph powerGraph) {
 		super(control, powerGraph);

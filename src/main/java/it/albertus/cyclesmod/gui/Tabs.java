@@ -59,9 +59,11 @@ public class Tabs implements Multilanguage {
 
 	private final CyclesModGui gui;
 
-	@Getter private final TextFormatter textFormatter;
+	@Getter
+	private final TextFormatter textFormatter;
 
-	@Getter private final TabFolder tabFolder;
+	@Getter
+	private final TabFolder tabFolder;
 
 	private final Set<Label> noteLabels = new HashSet<>();
 

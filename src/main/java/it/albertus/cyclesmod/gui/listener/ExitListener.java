@@ -15,7 +15,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ExitListener extends ShellAdapter implements SelectionListener, Listener {
 
-	@NonNull private final CyclesModGui gui;
+	@NonNull
+	private final CyclesModGui gui;
 
 	private boolean canClose() {
 		return gui.askForSavingAndExport();

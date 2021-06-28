@@ -27,7 +27,8 @@ public class Images {
 	 * Main application icon in various formats, sorted by size (area)
 	 * <b>descending</b>.
 	 */
-	@Getter private static final Map<Rectangle, Image> appIconMap = Collections.unmodifiableMap(loadFromResources(Images.class.getPackage().getName() + ".icon.app"));
+	@Getter
+	private static final Map<Rectangle, Image> appIconMap = Collections.unmodifiableMap(loadFromResources(Images.class.getPackage().getName() + ".icon.app"));
 
 	private static Map<Rectangle, Image> loadFromResources(final String packageName) {
 		final Reflections reflections = new Reflections(packageName, new ResourcesScanner());

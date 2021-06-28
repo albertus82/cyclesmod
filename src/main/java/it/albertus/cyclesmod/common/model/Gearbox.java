@@ -32,9 +32,10 @@ public class Gearbox implements ByteList {
 	 * I valori sono a 16 bit, ma di fatto vengono considerati solo 8 bit (si
 	 * procede per multipli di 256).
 	 */
-	public static final int MAX_VALUE = 65535;
+	public static final int MAX_VALUE = 0xffff;
 
-	@Getter private static final Map<Game, Set<Byte>> validGears;
+	@Getter
+	private static final Map<Game, Set<Byte>> validGears;
 
 	static {
 		final Map<Game, Set<Byte>> map = new EnumMap<>(Game.class);

@@ -22,8 +22,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OpenPowerGraphDialogListener extends MouseAdapter implements SelectionListener {
 
-	@NonNull private final CyclesModGui gui;
-	@NonNull private final VehicleType vehicleType;
+	@NonNull
+	private final CyclesModGui gui;
+	@NonNull
+	private final VehicleType vehicleType;
 
 	@Override
 	public void mouseDoubleClick(final MouseEvent e) {

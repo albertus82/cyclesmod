@@ -11,8 +11,13 @@ import lombok.ToString;
 @ToString(onlyExplicitlyIncluded = true)
 public class FormProperty {
 
-	@Getter @ToString.Include private final Label label;
-	@Getter @ToString.Include private final Text text;
+	@Getter
+	@ToString.Include
+	private final Label label;
+
+	@Getter
+	@ToString.Include
+	private final Text text;
 
 	private TextBackup textBackup;
 

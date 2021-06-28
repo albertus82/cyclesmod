@@ -16,7 +16,7 @@ public class Settings implements ByteList {
 
 	public static final int LENGTH = 22;
 	public static final int MIN_VALUE = 0;
-	public static final int MAX_VALUE = 65535;
+	public static final int MAX_VALUE = 0xffff;
 
 	public static final String PREFIX = "settings";
 

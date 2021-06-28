@@ -11,6 +11,7 @@ public enum Game {
 	CYCLES("The Cycles: International Grand Prix Racing"),
 	GPC("Grand Prix Circuit");
 
-	@NonNull private String name;
+	@NonNull
+	private final String name;
 
 }
