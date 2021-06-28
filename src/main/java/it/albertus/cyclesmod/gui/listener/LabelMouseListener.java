@@ -10,7 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LabelMouseListener extends MouseAdapter {
 
-	@NonNull private final Text text;
+	@NonNull
+	private final Text text;
 
 	@Override
 	public void mouseDown(@NonNull final MouseEvent e) {

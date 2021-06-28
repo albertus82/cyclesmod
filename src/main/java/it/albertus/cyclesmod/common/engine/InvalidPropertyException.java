@@ -10,7 +10,8 @@ public class InvalidPropertyException extends Exception {
 
 	private static final long serialVersionUID = -3070582022827873L;
 
-	@NonNull private final String propertyName;
+	@NonNull
+	private final String propertyName;
 
 	public InvalidPropertyException(@NonNull final String propertyName, final String message, final Throwable cause) {
 		super(message, cause);

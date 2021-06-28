@@ -15,7 +15,8 @@ public enum VehicleType {
 	WILLIAMS_500(2, "Williams", 500);
 
 	private final int index;
-	@NonNull private final String team;
+	@NonNull
+	private final String team;
 	private final int displacement;
 
 	public String getKey(@NonNull final Game game) {

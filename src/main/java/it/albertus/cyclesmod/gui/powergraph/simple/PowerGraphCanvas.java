@@ -18,7 +18,8 @@ import lombok.NonNull;
 
 public class PowerGraphCanvas extends Canvas implements PowerGraphProvider, Multilanguage { // NOSONAR This class has 6 parents which is greater than 5 authorized. Inheritance tree of classes should not be too deep (java:S110)
 
-	@Getter private final SimplePowerGraph powerGraph;
+	@Getter
+	private final SimplePowerGraph powerGraph;
 
 	private final Collection<Multilanguage> multilanguages = new ArrayList<>();
 

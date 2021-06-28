@@ -14,7 +14,8 @@ public enum Mode {
 
 	public static final Mode DEFAULT = CYCLES;
 
-	@NonNull private final Game game;
+	@NonNull
+	private final Game game;
 
 	public static Mode forGame(@NonNull final Game game) {
 		for (final Mode mode : values()) {

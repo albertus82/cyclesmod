@@ -9,11 +9,14 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+@Setter
 public class PropertyKeyListener extends KeyAdapter {
 
-	@NonNull private final Tabs tabs;
+	@NonNull
+	private final Tabs tabs;
 
-	@Getter @Setter private boolean enabled = true;
+	@Getter
+	private boolean enabled = true;
 
 	public PropertyKeyListener(final Tabs tabs) {
 		this.tabs = tabs;

@@ -22,8 +22,10 @@ public class SaveSnapshotListener extends SelectionAdapter implements KeyListene
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	@NonNull private final Shell shell;
-	@NonNull private final IXYGraph xyGraph;
+	@NonNull
+	private final Shell shell;
+	@NonNull
+	private final IXYGraph xyGraph;
 
 	@Override
 	public void keyPressed(@NonNull final KeyEvent e) {

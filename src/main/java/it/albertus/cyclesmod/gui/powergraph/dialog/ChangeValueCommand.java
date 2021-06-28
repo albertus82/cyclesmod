@@ -13,7 +13,8 @@ public class ChangeValueCommand implements IUndoableCommand {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	@NonNull private final IPowerGraph powerGraph;
+	@NonNull
+	private final IPowerGraph powerGraph;
 	private final int index;
 	private final short oldValue;
 	private final short newValue;

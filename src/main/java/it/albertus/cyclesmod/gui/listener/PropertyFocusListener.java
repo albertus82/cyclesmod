@@ -11,12 +11,15 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Setter
 @RequiredArgsConstructor
 public class PropertyFocusListener implements FocusListener {
 
-	@NonNull protected final CyclesModGui gui;
+	@NonNull
+	protected final CyclesModGui gui;
 
-	@Getter @Setter private boolean enabled = true;
+	@Getter
+	private boolean enabled = true;
 
 	private String before;
 

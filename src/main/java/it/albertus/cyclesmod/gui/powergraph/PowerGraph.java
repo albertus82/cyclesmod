@@ -36,17 +36,23 @@ public class PowerGraph implements IPowerGraph {
 
 	private static final IDataProvider nullDataProvider = new NullDataProvider();
 
-	@Getter private final IXYGraph xyGraph = new XYGraph();
-	@Getter private final Axis abscissae = xyGraph.getPrimaryXAxis();
-	@Getter private final Axis ordinates = xyGraph.getPrimaryYAxis();
+	@Getter
+	private final IXYGraph xyGraph = new XYGraph();
+	@Getter
+	private final Axis abscissae = xyGraph.getPrimaryXAxis();
+	@Getter
+	private final Axis ordinates = xyGraph.getPrimaryYAxis();
 	private final CircularBufferDataProvider powerDataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
-	@Getter private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, ordinates, powerDataProvider);
-	@Getter private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
+	@Getter
+	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, ordinates, powerDataProvider);
+	@Getter
+	private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
 	private final double[] powerValues = new double[Power.LENGTH];
 	private final double[] torqueValues = new double[Power.LENGTH];
 	private final double[] xDataArray = new double[Power.LENGTH];
-	@Getter private final Supplier<Mode> modeSupplier;
+	@Getter
+	private final Supplier<Mode> modeSupplier;
 
 	private boolean torqueVisible;
 

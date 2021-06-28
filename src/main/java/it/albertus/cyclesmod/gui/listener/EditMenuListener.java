@@ -16,7 +16,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EditMenuListener implements ArmMenuListener {
 
-	@NonNull private final CyclesModGui gui;
+	@NonNull
+	private final CyclesModGui gui;
 
 	@Override
 	public void menuArmed(final TypedEvent e) {
