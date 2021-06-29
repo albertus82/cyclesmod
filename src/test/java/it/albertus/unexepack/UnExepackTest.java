@@ -23,6 +23,9 @@ class UnExepackTest extends BaseTest {
 
 	private static final Map<String, String> digests = new HashMap<>();
 
+	private static final byte[] MZ = new byte[] { 0x4D, 0x5A, (byte) 0xB5, 0x00, (byte) 0x99, 0x00, 0x00, 0x00, 0x20, 0x00, (byte) 0xA9, 0x05, (byte) 0xA9, 0x05, (byte) 0xC5, 0x17, (byte) 0x80, 0x00, 0x00, 0x00, 0x12, 0x00, (byte) 0xD2, 0x12, 0x1E, 0x00, 0x00, 0x00 };
+	private static final byte[] RB = new byte[] { (byte) 0x94, (byte) 0xBB, 0x00, 0x00, 0x00, 0x00, (byte) 0x95, 0x01, 0x00, 0x08, 0x14, 0x18, (byte) 0xAB, 0x17, 0x01, 0x00, 0x52, 0x42 };
+
 	@BeforeAll
 	static void beforeAll() {
 		digests.put("A.EXE", "592744c31541044c673e4647cc75f853abbc508d7bc56dcbcae9578e07f2f39c");
@@ -38,6 +41,20 @@ class UnExepackTest extends BaseTest {
 		digests.put("K.EXE", "9b8dc9e4208ef1b4a2af3b516c23a64007f55e9b24ab4fd019f68d454d380c8a");
 		digests.put("L.EXE", "f5923fa58a07523a8ca850684b6c96737ac9cde9e938f16f1d48105bc9e8267b");
 		digests.put("M.EXE", "8f397594e14eaf2b3e6174c4c747366dde1ef864a82d292c08225af4452537eb");
+	}
+
+	@Test
+	void testHeaders() throws InvalidDosHeaderException {
+		Assertions.assertDoesNotThrow(() -> new DosHeader(MZ));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> new DosHeader(new byte[27]));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> new DosHeader(new byte[29]));
+
+		DosHeader dh = new DosHeader(MZ);
+		Assertions.assertArrayEquals(MZ, dh.toByteArray());
+
+		Assertions.assertDoesNotThrow(() -> new ExepackHeader(RB));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> new ExepackHeader(new byte[17]));
+		Assertions.assertThrows(IllegalArgumentException.class, () -> new ExepackHeader(new byte[19]));
 	}
 
 	@Test
