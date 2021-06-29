@@ -2,6 +2,7 @@ package it.albertus.unexepack;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 import lombok.NonNull;
 import lombok.Value;
@@ -27,17 +28,16 @@ class ExepackHeader {
 		if (bytes.length != SIZE) {
 			throw new IllegalArgumentException("Invalid byte array size; expected: " + SIZE + " but was: " + bytes.length);
 		}
-		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		buf.order(ByteOrder.LITTLE_ENDIAN);
-		realIp = Short.toUnsignedInt(buf.getShort(0));
-		realCs = Short.toUnsignedInt(buf.getShort(2));
-		memStart = Short.toUnsignedInt(buf.getShort(4));
-		exepackSize = Short.toUnsignedInt(buf.getShort(6));
-		realSp = Short.toUnsignedInt(buf.getShort(8));
-		realSs = Short.toUnsignedInt(buf.getShort(10));
-		destLen = Short.toUnsignedInt(buf.getShort(12));
-		final int word8 = Short.toUnsignedInt(buf.getShort(14));
-		final int word9 = Short.toUnsignedInt(buf.getShort(16));
+		final ShortBuffer buf = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
+		realIp = Short.toUnsignedInt(buf.get(0));
+		realCs = Short.toUnsignedInt(buf.get(1));
+		memStart = Short.toUnsignedInt(buf.get(2));
+		exepackSize = Short.toUnsignedInt(buf.get(3));
+		realSp = Short.toUnsignedInt(buf.get(4));
+		realSs = Short.toUnsignedInt(buf.get(5));
+		destLen = Short.toUnsignedInt(buf.get(6));
+		final int word8 = Short.toUnsignedInt(buf.get(7));
+		final int word9 = Short.toUnsignedInt(buf.get(8));
 		if ((word9 != SIGNATURE && word8 != SIGNATURE) || exepackSize == 0x00) {
 			throw new InvalidExepackHeaderException(bytes);
 		}

@@ -2,6 +2,7 @@ package it.albertus.unexepack;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -38,22 +39,21 @@ class DosHeader {
 		if (bytes.length != SIZE) {
 			throw new IllegalArgumentException("Invalid byte array size; expected: " + SIZE + " but was: " + bytes.length);
 		}
-		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		buf.order(BYTE_ORDER);
-		eMagic = Short.toUnsignedInt(buf.getShort(0));
-		eCblp = Short.toUnsignedInt(buf.getShort(2));
-		eCp = Short.toUnsignedInt(buf.getShort(4));
-		eCrlc = Short.toUnsignedInt(buf.getShort(6));
-		eCparhdr = Short.toUnsignedInt(buf.getShort(8));
-		eMinAlloc = Short.toUnsignedInt(buf.getShort(10));
-		eMaxAlloc = Short.toUnsignedInt(buf.getShort(12));
-		eSs = Short.toUnsignedInt(buf.getShort(14));
-		eSp = Short.toUnsignedInt(buf.getShort(16));
-		eCsum = Short.toUnsignedInt(buf.getShort(18));
-		eIp = Short.toUnsignedInt(buf.getShort(20));
-		eCs = Short.toUnsignedInt(buf.getShort(22));
-		eLfarlc = Short.toUnsignedInt(buf.getShort(24));
-		eOvno = Short.toUnsignedInt(buf.getShort(26));
+		final ShortBuffer buf = ByteBuffer.wrap(bytes).order(BYTE_ORDER).asShortBuffer();
+		eMagic = Short.toUnsignedInt(buf.get(0));
+		eCblp = Short.toUnsignedInt(buf.get(1));
+		eCp = Short.toUnsignedInt(buf.get(2));
+		eCrlc = Short.toUnsignedInt(buf.get(3));
+		eCparhdr = Short.toUnsignedInt(buf.get(4));
+		eMinAlloc = Short.toUnsignedInt(buf.get(5));
+		eMaxAlloc = Short.toUnsignedInt(buf.get(6));
+		eSs = Short.toUnsignedInt(buf.get(7));
+		eSp = Short.toUnsignedInt(buf.get(8));
+		eCsum = Short.toUnsignedInt(buf.get(9));
+		eIp = Short.toUnsignedInt(buf.get(10));
+		eCs = Short.toUnsignedInt(buf.get(11));
+		eLfarlc = Short.toUnsignedInt(buf.get(12));
+		eOvno = Short.toUnsignedInt(buf.get(13));
 		if (!validate()) {
 			throw new InvalidDosHeaderException(bytes);
 		}
