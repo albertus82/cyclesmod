@@ -85,7 +85,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	@Getter
 	private String currentFileName;
-	private byte[] gpcOriginalExecBytes;
+	private byte[] originalGpcExecBytes;
 
 	private CyclesModGui(@NonNull final Display display) {
 		for (final Mode m : Mode.values()) {
@@ -315,7 +315,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			if (!file.toFile().setReadOnly()) {
 				log.log(Level.INFO, "Cannot set read only flag for file: {0}.", file);
 			}
-			gpcOriginalExecBytes = unpackedExec;
+			originalGpcExecBytes = unpackedExec;
 			engine.setVehiclesInf(new VehiclesInf(DefaultCars.getByteArray()));
 			updateGuiStatusAfterOpening(file, Mode.GPC);
 			return true;
@@ -580,11 +580,11 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private byte[] patchOriginalGpcExec() {
-		final int offset = UnExepack.memmem(gpcOriginalExecBytes, DefaultCars.getByteArray());
-		final byte[] bytes = new byte[gpcOriginalExecBytes.length];
-		System.arraycopy(gpcOriginalExecBytes, 0, bytes, 0, offset);
+		final int offset = UnExepack.memmem(originalGpcExecBytes, DefaultCars.getByteArray());
+		final byte[] bytes = new byte[originalGpcExecBytes.length];
+		System.arraycopy(originalGpcExecBytes, 0, bytes, 0, offset);
 		System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, VehiclesInf.FILE_SIZE);
-		System.arraycopy(gpcOriginalExecBytes, offset + VehiclesInf.FILE_SIZE, bytes, offset + VehiclesInf.FILE_SIZE, gpcOriginalExecBytes.length - offset - VehiclesInf.FILE_SIZE);
+		System.arraycopy(originalGpcExecBytes, offset + VehiclesInf.FILE_SIZE, bytes, offset + VehiclesInf.FILE_SIZE, originalGpcExecBytes.length - offset - VehiclesInf.FILE_SIZE);
 		return bytes;
 	}
 
@@ -745,7 +745,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		if (!this.mode.equals(mode)) {
 			this.mode = mode;
 			if (!Mode.GPC.equals(mode)) {
-				gpcOriginalExecBytes = null;
+				originalGpcExecBytes = null;
 			}
 			menuBar.updateModeSpecificWidgets();
 			tabs.updateModeSpecificWidgets();
