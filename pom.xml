@@ -61,7 +61,7 @@
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.core.commands</artifactId>
-			<version>3.9.800</version> <!-- Last version compatible with JRE 8 -->
+			<version>3.10.0</version> <!-- Last version compatible with JRE 8 -->
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
@@ -204,8 +204,8 @@
 								</goals>
 								<configuration>
 									<target>
-										<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpathref="maven.plugin.classpath" />
-										<ant target="jarbundler" />
+										<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpathref="maven.plugin.classpath"/>
+										<ant target="jarbundler"/>
 									</target>
 								</configuration>
 							</execution>
@@ -379,7 +379,7 @@
 								</goals>
 								<configuration>
 									<target>
-										<ant target="launch4j" />
+										<ant target="launch4j"/>
 									</target>
 								</configuration>
 							</execution>
@@ -430,7 +430,7 @@
 								</goals>
 								<configuration>
 									<target>
-										<ant target="launch4j" />
+										<ant target="launch4j"/>
 									</target>
 								</configuration>
 							</execution>
@@ -723,7 +723,7 @@
 						<configuration>
 							<skip>${maven.antrun.skip.lombok}</skip>
 							<target>
-								<ant target="lombok" />
+								<ant target="lombok"/>
 							</target>
 						</configuration>
 					</execution>
@@ -735,8 +735,8 @@
 						</goals>
 						<configuration>
 							<target>
-								<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="maven.plugin.classpath" />
-								<ant target="innosetup" />
+								<taskdef resource="net/sf/antcontrib/antlib.xml" classpathref="maven.plugin.classpath"/>
+								<ant target="innosetup"/>
 							</target>
 						</configuration>
 					</execution>
@@ -748,7 +748,7 @@
 						</goals>
 						<configuration>
 							<target>
-								<ant target="checksums" />
+								<ant target="checksums"/>
 							</target>
 						</configuration>
 					</execution>
