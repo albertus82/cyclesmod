@@ -153,10 +153,93 @@
 
 	<profiles>
 		<profile>
+			<id>cocoa-macosx-aarch64</id>
+			<activation>
+				<os>
+					<family>mac</family>
+					<arch>aarch64</arch>
+				</os>
+			</activation>
+			<properties>
+				<platform>cocoa-macosx-aarch64</platform>
+				<assembly.descriptor>mac.xml</assembly.descriptor>
+				<assembly.outputTimestamp>${zoned.git.commit.time}</assembly.outputTimestamp>
+				<ignoreWineErrors>true</ignoreWineErrors>
+			</properties>
+			<build>
+				<finalName>${mac.build.finalName}</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<configuration>
+							<includeScope>runtime</includeScope>
+							<useBaseVersion>false</useBaseVersion>
+							<outputDirectory>${project.build.directory}/${dependencies.directory}</outputDirectory>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<dependencies>
+							<dependency>
+								<groupId>com.ultramixer.jarbundler</groupId>
+								<artifactId>jarbundler-core</artifactId>
+								<version>3.3.0</version>
+								<exclusions>
+									<exclusion>
+										<groupId>*</groupId>
+										<artifactId>ant</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+						</dependencies>
+						<executions>
+							<execution>
+								<id>jarbundler</id>
+								<phase>package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<taskdef name="jarbundler" classname="com.ultramixer.jarbundler.JarBundler" classpathref="maven.plugin.classpath" />
+										<ant target="jarbundler" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.cocoa.macosx.aarch64</artifactId>
+					<version>${swt.version}</version>
+					<exclusions>
+						<exclusion>
+							<groupId>*</groupId>
+							<artifactId>*</artifactId>
+						</exclusion>
+					</exclusions>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
 			<id>cocoa-macosx-x86_64</id>
 			<activation>
 				<os>
 					<family>mac</family>
+					<arch>x86_64</arch>
 				</os>
 			</activation>
 			<properties>
@@ -171,7 +254,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-dependency-plugin</artifactId>
-						<version>3.2.0</version>
 						<configuration>
 							<includeScope>runtime</includeScope>
 							<useBaseVersion>false</useBaseVersion>
@@ -524,6 +606,11 @@
 					<artifactId>maven-antrun-plugin</artifactId>
 					<version>3.0.0</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -804,9 +891,20 @@
 				</configuration>
 				<executions>
 					<execution>
+						<id>cocoa-macosx-aarch64</id>
+						<configuration>
+							<profiles>cocoa-macosx-aarch64,!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
+						</configuration>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>cocoa-macosx-x86_64</id>
 						<configuration>
-							<profiles>cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
+							<profiles>!cocoa-macosx-aarch64,cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
 						</configuration>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -817,7 +915,7 @@
 					<execution>
 						<id>gtk-linux-aarch64</id>
 						<configuration>
-							<profiles>!cocoa-macosx-x86_64,gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
+							<profiles>!cocoa-macosx-aarch64,!cocoa-macosx-x86_64,gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
 						</configuration>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -828,7 +926,7 @@
 					<execution>
 						<id>gtk-linux-armhf</id>
 						<configuration>
-							<profiles>!cocoa-macosx-x86_64,!gtk-linux-aarch64,gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
+							<profiles>!cocoa-macosx-aarch64,!cocoa-macosx-x86_64,!gtk-linux-aarch64,gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
 						</configuration>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -839,7 +937,7 @@
 					<execution>
 						<id>gtk-linux-x86</id>
 						<configuration>
-							<profiles>!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
+							<profiles>!cocoa-macosx-aarch64,!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
 						</configuration>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -850,7 +948,7 @@
 					<execution>
 						<id>gtk-linux-x86_64</id>
 						<configuration>
-							<profiles>!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
+							<profiles>!cocoa-macosx-aarch64,!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,gtk-linux-x86_64,!win32-win32-x86,!win32-win32-x86_64</profiles>
 						</configuration>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -861,7 +959,7 @@
 					<execution>
 						<id>win32-win32-x86</id>
 						<configuration>
-							<profiles>!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,win32-win32-x86,!win32-win32-x86_64</profiles>
+							<profiles>!cocoa-macosx-aarch64,!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,win32-win32-x86,!win32-win32-x86_64</profiles>
 						</configuration>
 						<phase>pre-integration-test</phase>
 						<goals>
@@ -872,7 +970,7 @@
 					<execution>
 						<id>win32-win32-x86_64</id>
 						<configuration>
-							<profiles>!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,win32-win32-x86_64</profiles>
+							<profiles>!cocoa-macosx-aarch64,!cocoa-macosx-x86_64,!gtk-linux-aarch64,!gtk-linux-armhf,!gtk-linux-x86,!gtk-linux-x86_64,!win32-win32-x86,win32-win32-x86_64</profiles>
 						</configuration>
 						<phase>pre-integration-test</phase>
 						<goals>
