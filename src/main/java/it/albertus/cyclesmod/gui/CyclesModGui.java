@@ -132,12 +132,12 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			}
 		}
 		catch (final RuntimeException e) {
-			log.log(Level.SEVERE, messages.get("gui.error.unexpected"), e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, getApplicationName(), messages.get("gui.error.unexpected"), IStatus.ERROR, e, Images.getAppIconArray());
+			log.log(Level.SEVERE, messages.get("gui.error.fatal"), e);
+			EnhancedErrorDialog.openError(shell != null ? shell : null, getApplicationName(), messages.get("gui.error.fatal"), IStatus.ERROR, e, Images.getAppIconArray());
 			throw e;
 		}
 		catch (final Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)
-			log.log(Level.SEVERE, "An unexpected error has occurred:", e);
+			log.log(Level.SEVERE, "An unrecoverable error has occurred:", e);
 			throw e;
 		}
 	}
