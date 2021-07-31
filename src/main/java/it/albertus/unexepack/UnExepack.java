@@ -3,6 +3,7 @@ package it.albertus.unexepack;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.Buffer;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -98,7 +99,7 @@ public class UnExepack implements Callable<Integer> {
 		final int relocTableSize = nbReloc * 2 * Short.BYTES;
 		final ByteBuffer buf = ByteBuffer.wrap(packedExec);
 		buf.order(ByteOrder.LITTLE_ENDIAN);
-		buf.position(reloc + "Packed file is corrupt".length());
+		((Buffer) buf).position(reloc + "Packed file is corrupt".length()); // Avoid java.lang.NoSuchMethodError (see: https://stackoverflow.com/q/61267495)
 		try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			for (int i = 0; i < 16; i++) {
 				final int count = Short.toUnsignedInt(buf.getShort());
@@ -133,7 +134,7 @@ public class UnExepack implements Callable<Integer> {
 		final ByteBuffer buf = ByteBuffer.allocate(header.length + reloc.length + padding + unpackedData.length);
 		buf.put(header);
 		buf.put(reloc);
-		buf.position(buf.position() + padding);
+		((Buffer) buf).position(buf.position() + padding); // Avoid java.lang.NoSuchMethodError (see: https://stackoverflow.com/q/61267495)
 		buf.put(unpackedData);
 		return buf.array();
 	}
