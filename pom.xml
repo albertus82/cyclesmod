@@ -153,6 +153,15 @@
 
 	<profiles>
 		<profile>
+			<id>javac-release-option</id>
+			<activation>
+				<jdk>[9,)</jdk>
+			</activation>
+			<properties>
+				<maven.compiler.release>8</maven.compiler.release>
+			</properties>
+		</profile>
+		<profile>
 			<id>cocoa-macosx-aarch64</id>
 			<activation>
 				<os>
@@ -881,7 +890,6 @@
 					<noLog>true</noLog>
 					<properties>
 						<skipTests>${skipTests}</skipTests>
-						<animal.sniffer.skip>true</animal.sniffer.skip>
 						<maven.gitcommitid.skip>true</maven.gitcommitid.skip>
 						<maven.antrun.skip.lombok>true</maven.antrun.skip.lombok>
 						<jacoco.skip>true</jacoco.skip>
