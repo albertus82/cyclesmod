@@ -888,6 +888,7 @@
 					<pom>pom.xml</pom>
 					<streamLogs>true</streamLogs>
 					<noLog>true</noLog>
+					<showVersion>true</showVersion>
 					<properties>
 						<skipTests>${skipTests}</skipTests>
 						<maven.gitcommitid.skip>true</maven.gitcommitid.skip>
@@ -976,6 +977,21 @@
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-help-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<?m2e ignore?>
+						<phase>initialize</phase>
+						<goals>
+							<goal>active-profiles</goal>
 						</goals>
 					</execution>
 				</executions>
