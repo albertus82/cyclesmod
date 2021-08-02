@@ -86,20 +86,20 @@ class DosHeader {
 	byte[] toByteArray() {
 		final ByteBuffer buf = ByteBuffer.allocate(SIZE);
 		buf.order(BYTE_ORDER);
-		buf.putShort((short) eMagic);
-		buf.putShort((short) eCblp);
-		buf.putShort((short) eCp);
-		buf.putShort((short) eCrlc);
-		buf.putShort((short) eCparhdr);
-		buf.putShort((short) eMinAlloc);
-		buf.putShort((short) eMaxAlloc);
-		buf.putShort((short) eSs);
-		buf.putShort((short) eSp);
-		buf.putShort((short) eCsum);
-		buf.putShort((short) eIp);
-		buf.putShort((short) eCs);
-		buf.putShort((short) eLfarlc);
-		buf.putShort((short) eOvno);
+		buf.putShort(0 * Short.BYTES, (short) eMagic);
+		buf.putShort(1 * Short.BYTES, (short) eCblp);
+		buf.putShort(2 * Short.BYTES, (short) eCp);
+		buf.putShort(3 * Short.BYTES, (short) eCrlc);
+		buf.putShort(4 * Short.BYTES, (short) eCparhdr);
+		buf.putShort(5 * Short.BYTES, (short) eMinAlloc);
+		buf.putShort(6 * Short.BYTES, (short) eMaxAlloc);
+		buf.putShort(7 * Short.BYTES, (short) eSs);
+		buf.putShort(8 * Short.BYTES, (short) eSp);
+		buf.putShort(9 * Short.BYTES, (short) eCsum);
+		buf.putShort(10 * Short.BYTES, (short) eIp);
+		buf.putShort(11 * Short.BYTES, (short) eCs);
+		buf.putShort(12 * Short.BYTES, (short) eLfarlc);
+		buf.putShort(13 * Short.BYTES, (short) eOvno);
 		return buf.array();
 	}
 
