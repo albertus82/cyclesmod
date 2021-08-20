@@ -113,26 +113,35 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	/* GUI entry point */
 	public static void main(final String... args) {
-		Display.setAppName(getApplicationName());
-		Display.setAppVersion(Version.getNumber());
-		Shell shell = null;
-		try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
-			final CyclesModGui gui = new CyclesModGui(cd.getDevice());
-			shell = gui.getShell();
-			shell.open();
-			// Loading custom properties...
-			if (args != null && args.length > 0 && args[0] != null) {
-				gui.open(args[0]);
-			}
-			loop(shell);
+		try {
+			Display.setAppName(getApplicationName());
+			Display.setAppVersion(Version.getNumber());
+			try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
+				Shell shell = null;
+				try {
+					final CyclesModGui gui = new CyclesModGui(cd.getDevice());
+					shell = gui.getShell();
+					shell.open();
+					// Loading custom properties...
+					if (args != null && args.length > 0 && args[0] != null) {
+						gui.open(args[0]);
+					}
+					loop(shell);
+				}
+				catch (final RuntimeException e) {
+					final String message = messages.get("gui.error.fatal");
+					if (shell != null && shell.isDisposed()) {
+						log.log(Level.FINE, message, e);
+						// Do not rethrow, exiting with status OK.
+					}
+					else {
+						EnhancedErrorDialog.openError(shell, getApplicationName(), message, IStatus.ERROR, e, Images.getAppIconArray());
+						throw e;
+					}
+				}
+			} // Display is disposed before the catch!
 		}
-		catch (final RuntimeException e) {
-			final String message = messages.get("gui.error.fatal");
-			log.log(Level.SEVERE, message, e);
-			EnhancedErrorDialog.openError(shell, getApplicationName(), message, IStatus.ERROR, e, Images.getAppIconArray());
-			throw e;
-		}
-		catch (final Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)
+		catch (final RuntimeException | Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)
 			log.log(Level.SEVERE, "An unrecoverable error has occurred:", e);
 			throw e;
 		}
