@@ -69,7 +69,7 @@ public class ComplexPowerGraph extends PowerGraph {
 		final Trace torqueTrace = getTorqueTrace();
 		torqueTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
-		fixToolbarButtons(toolbarArmedXYGraph);
+		customizeToolbarButtons(toolbarArmedXYGraph);
 
 		final IXYGraph xyGraph = getXyGraph();
 		final PlotArea plotArea = xyGraph.getPlotArea();
@@ -88,7 +88,7 @@ public class ComplexPowerGraph extends PowerGraph {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void fixToolbarButtons(@NonNull final ToolbarArmedXYGraph toolbarArmedXYGraph) {
+	private static void customizeToolbarButtons(@NonNull final ToolbarArmedXYGraph toolbarArmedXYGraph) {
 		try {
 			final Field listenersField = OperationsManager.class.getDeclaredField("listeners");
 			listenersField.setAccessible(true);
@@ -115,7 +115,7 @@ public class ComplexPowerGraph extends PowerGraph {
 			}
 		}
 		catch (final Exception e) {
-			log.log(Level.WARNING, e.toString(), e);
+			log.log(Level.WARNING, "Cannot customize toolbar buttons:", e);
 		}
 	}
 
