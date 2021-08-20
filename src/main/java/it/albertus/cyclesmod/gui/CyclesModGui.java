@@ -111,34 +111,39 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		tabs.updateFormValues();
 	}
 
-	/* GUI entry point. */
+	/* GUI entry point */
 	public static void main(final String... args) {
 		Display.setAppName(getApplicationName());
 		Display.setAppVersion(Version.getNumber());
 		Shell shell = null;
 		try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
-			final Display display = cd.getDevice();
-			final CyclesModGui gui = new CyclesModGui(display);
+			final CyclesModGui gui = new CyclesModGui(cd.getDevice());
 			shell = gui.getShell();
 			shell.open();
 			// Loading custom properties...
 			if (args != null && args.length > 0 && args[0] != null) {
 				gui.open(args[0]);
 			}
-			while (!shell.isDisposed()) {
-				if (!display.isDisposed() && !display.readAndDispatch()) {
-					display.sleep();
-				}
-			}
+			loop(shell);
 		}
 		catch (final RuntimeException e) {
-			log.log(Level.SEVERE, messages.get("gui.error.fatal"), e);
-			EnhancedErrorDialog.openError(shell != null ? shell : null, getApplicationName(), messages.get("gui.error.fatal"), IStatus.ERROR, e, Images.getAppIconArray());
+			final String message = messages.get("gui.error.fatal");
+			log.log(Level.SEVERE, message, e);
+			EnhancedErrorDialog.openError(shell, getApplicationName(), message, IStatus.ERROR, e, Images.getAppIconArray());
 			throw e;
 		}
 		catch (final Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)
 			log.log(Level.SEVERE, "An unrecoverable error has occurred:", e);
 			throw e;
+		}
+	}
+
+	private static void loop(@NonNull final Shell shell) {
+		final Display display = shell.getDisplay();
+		while (!shell.isDisposed()) {
+			if (!display.isDisposed() && !display.readAndDispatch()) {
+				display.sleep();
+			}
 		}
 	}
 
