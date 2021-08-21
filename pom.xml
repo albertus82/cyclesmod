@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>it.albertus</groupId>
 			<artifactId>jface-utils</artifactId>
-			<version>17.3.1</version>
+			<version>17.3.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
