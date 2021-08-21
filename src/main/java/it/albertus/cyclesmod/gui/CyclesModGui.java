@@ -129,13 +129,12 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 					loop(shell);
 				}
 				catch (final RuntimeException e) {
-					final String message = messages.get("gui.error.fatal");
 					if (shell != null && shell.isDisposed()) {
-						log.log(Level.FINE, message, e);
+						log.log(Level.FINE, "An unrecoverable error has occurred:", e);
 						// Do not rethrow, exiting with status OK.
 					}
 					else {
-						EnhancedErrorDialog.openError(shell, getApplicationName(), message, IStatus.ERROR, e, Images.getAppIconArray());
+						EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.fatal"), IStatus.ERROR, e, Images.getAppIconArray());
 						throw e;
 					}
 				}

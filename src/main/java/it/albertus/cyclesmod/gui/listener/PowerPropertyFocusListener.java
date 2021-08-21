@@ -22,12 +22,12 @@ public class PowerPropertyFocusListener extends PropertyFocusListener {
 	}
 
 	@Override
-	public void focusLost(@NonNull final FocusEvent fe) {
-		if (isEnabled() && fe.widget instanceof Text) {
-			super.focusLost(fe);
+	public void focusLost(@NonNull final FocusEvent event) {
+		if (isEnabled() && event.widget instanceof Text) {
+			super.focusLost(event);
 
 			// Update power graph...
-			final Text text = (Text) fe.widget;
+			final Text text = (Text) event.widget;
 			if (gui.isNumeric(text.getText().trim()) && text.getData() instanceof PowerTextData) {
 				final PowerTextData textData = (PowerTextData) text.getData();
 				try {
@@ -42,7 +42,7 @@ public class PowerPropertyFocusListener extends PropertyFocusListener {
 					}
 				}
 				catch (final InvalidNumberException | ValueOutOfRangeException e) {
-					log.log(Level.INFO, e.getMessage(), e);
+					log.log(Level.INFO, "Cannot update power graph on " + event + ':', e);
 				}
 			}
 		}
