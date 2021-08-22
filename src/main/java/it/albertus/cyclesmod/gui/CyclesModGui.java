@@ -116,34 +116,38 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		try {
 			Display.setAppName(getApplicationName());
 			Display.setAppVersion(Version.getNumber());
-			try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
-				Shell shell = null;
-				try {
-					final CyclesModGui gui = new CyclesModGui(cd.getDevice());
-					shell = gui.getShell();
-					shell.open();
-					// Loading custom properties...
-					if (args != null && args.length > 0 && args[0] != null) {
-						gui.open(args[0]);
-					}
-					loop(shell);
-				}
-				catch (final RuntimeException e) {
-					if (shell != null && shell.isDisposed()) {
-						log.log(Level.FINE, "An unrecoverable error has occurred:", e);
-						// Do not rethrow, exiting with status OK.
-					}
-					else {
-						EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.fatal"), IStatus.ERROR, e, Images.getAppIconArray());
-						throw e;
-					}
-				}
-			} // Display is disposed before the catch!
+			start(args);
 		}
 		catch (final RuntimeException | Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)
 			log.log(Level.SEVERE, "An unrecoverable error has occurred:", e);
 			throw e;
 		}
+	}
+
+	private static void start(final String... args) {
+		try (final CloseableDevice<Display> cd = new CloseableDevice<>(Display.getDefault())) {
+			Shell shell = null;
+			try {
+				final CyclesModGui gui = new CyclesModGui(cd.getDevice());
+				shell = gui.getShell();
+				shell.open();
+				// Loading custom properties...
+				if (args != null && args.length > 0 && args[0] != null) {
+					gui.open(args[0]);
+				}
+				loop(shell);
+			}
+			catch (final RuntimeException e) {
+				if (shell != null && shell.isDisposed()) {
+					log.log(Level.FINE, "An unrecoverable error has occurred:", e);
+					// Do not rethrow, exiting with status OK.
+				}
+				else {
+					EnhancedErrorDialog.openError(shell, getApplicationName(), messages.get("gui.error.fatal"), IStatus.ERROR, e, Images.getAppIconArray());
+					throw e;
+				}
+			}
+		} // Display is disposed before the catch!
 	}
 
 	private static void loop(@NonNull final Shell shell) {
