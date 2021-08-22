@@ -579,8 +579,13 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		final String userChoosenFileName = saveDialog.open();
 		if (userChoosenFileName != null && !userChoosenFileName.trim().isEmpty()) {
 			if (Arrays.stream(RESERVED_FILE_NAMES).anyMatch(reservedFileName -> reservedFileName.equalsIgnoreCase(Paths.get(userChoosenFileName).getFileName().toString()))) {
-				openMessageBox(messages.get("gui.message.alert.cannot.overwrite.exe"), SWT.ICON_WARNING);
-				return false;
+				final int buttonId = openMessageBox(messages.get("gui.message.alert.cannot.overwrite.exe"), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
+				if (buttonId == SWT.OK) {
+					return saveAsExe();
+				}
+				else {
+					return false;
+				}
 			}
 			try {
 				final byte[] bytes = patchOriginalGpcExec();
