@@ -124,6 +124,18 @@ class MessagesTest extends BaseTest {
 		checkUnreferencedMessages(getResourceNames(CommonMessages.class).iterator().next());
 	}
 
+	@Test
+	void testFallback() {
+		final String validKey = "lbl.system.info.dialog.title";
+		Assertions.assertNotEquals(validKey, GuiMessages.INSTANCE.get(validKey));
+		Assertions.assertNotEquals(validKey, CommonMessages.INSTANCE.get(validKey));
+		Assertions.assertNotEquals(validKey, ConsoleMessages.INSTANCE.get(validKey));
+		final String nonExistentKey = "qwertyuiop.asdfghjkl.zxcvbnm";
+		Assertions.assertEquals(nonExistentKey, GuiMessages.INSTANCE.get(nonExistentKey));
+		Assertions.assertEquals(nonExistentKey, CommonMessages.INSTANCE.get(nonExistentKey));
+		Assertions.assertEquals(nonExistentKey, ConsoleMessages.INSTANCE.get(nonExistentKey));
+	}
+
 	private void checkUnreferencedMessages(@NonNull final String resourceName) throws IOException {
 		final Properties p = new Properties();
 		try (final InputStream is = getClass().getResourceAsStream('/' + resourceName)) {
