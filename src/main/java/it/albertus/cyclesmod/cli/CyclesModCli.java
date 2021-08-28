@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -27,6 +28,7 @@ import it.albertus.cyclesmod.common.model.Game;
 import it.albertus.cyclesmod.common.model.VehiclesCfg;
 import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.cyclesmod.common.resources.Messages;
+import it.albertus.util.logging.LoggingSupport;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -56,6 +58,9 @@ public class CyclesModCli implements Callable<Integer> {
 	@Option(names = { "-e", "--errors" }, descriptionKey = "option.errors")
 	private boolean errors;
 
+	@Option(names = { "-d", "--debug" }, descriptionKey = "option.debug")
+	private boolean debug;
+
 	private final CyclesModEngine engine = new CyclesModEngine();
 
 	public static void main(final String... args) {
@@ -64,6 +69,14 @@ public class CyclesModCli implements Callable<Integer> {
 
 	@Override
 	public Integer call() {
+		if (debug) {
+			LoggingSupport.setRootLevel(Level.FINE);
+			errors = true;
+		}
+		else {
+			LoggingSupport.setRootLevel(Level.WARNING);
+		}
+
 		try {
 			if (!Paths.get("").equals(path)) {
 				path = prepareWorkingDirectory(path);

@@ -58,7 +58,7 @@ class CyclesModCliTest extends BaseTest {
 	@Test
 	void test() throws IOException {
 		// Check default
-		new CyclesModCli(outputDir, true).call();
+		new CyclesModCli(outputDir, true, false).call();
 		final Properties expected = new Properties();
 		final Properties actual = new Properties();
 		try (final InputStream is = getClass().getResourceAsStream("/bikes.cfg.default.gz"); final InputStream gzis = new GZIPInputStream(is); final Reader r = Files.newBufferedReader(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
@@ -74,7 +74,7 @@ class CyclesModCliTest extends BaseTest {
 		try (final Writer os = Files.newBufferedWriter(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
 			actual.store(os, null);
 		}
-		new CyclesModCli(outputDir, true).call();
+		new CyclesModCli(outputDir, true, false).call();
 		try (final InputStream is = Files.newInputStream(Paths.get(outputDir.toString(), BIKES_INF_FILENAME))) {
 			short byteCount = 0;
 			int byteValue;
@@ -93,7 +93,7 @@ class CyclesModCliTest extends BaseTest {
 		try (final Writer os = Files.newBufferedWriter(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME))) {
 			actual.store(os, null);
 		}
-		new CyclesModCli(outputDir, true).call();
+		new CyclesModCli(outputDir, true, false).call();
 		try (final InputStream is = Files.newInputStream(Paths.get(outputDir.toString(), BIKES_INF_FILENAME))) {
 			short byteCount = 0;
 			int byteValue;
