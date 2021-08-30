@@ -3,6 +3,7 @@ package it.albertus.cyclesmod.cli;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,7 +65,12 @@ public class CyclesModCli implements Callable<Integer> {
 	private final CyclesModEngine engine = new CyclesModEngine();
 
 	public static void main(final String... args) {
-		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setResourceBundle(ResourceBundle.getBundle(PicocliMessages.class.getName().toLowerCase(Locale.ROOT))).execute(args));
+		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setOut(new PrintWriter(System.out) {
+			@Override
+			public void write(final String s) {
+				System.out.print(s);
+			}
+		}).setResourceBundle(ResourceBundle.getBundle(PicocliMessages.class.getName().toLowerCase(Locale.ROOT))).execute(args));
 	}
 
 	@Override
