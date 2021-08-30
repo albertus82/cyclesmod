@@ -68,7 +68,9 @@ public class CyclesModCli implements Callable<Integer> {
 		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOut(new PrintWriter(System.out, true) {
 			@Override // Fix encoding problems in Windows Command Prompt with special characters
 			public void write(final String s) {
-				System.out.print(s);
+				synchronized (lock) {
+					System.out.print(s);
+				}
 			}
 		}).setResourceBundle(ResourceBundle.getBundle(PicocliMessages.class.getName().toLowerCase(Locale.ROOT))).setOptionsCaseInsensitive(true).execute(args));
 	}
