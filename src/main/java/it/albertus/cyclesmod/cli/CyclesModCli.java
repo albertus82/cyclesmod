@@ -65,8 +65,8 @@ public class CyclesModCli implements Callable<Integer> {
 	private final CyclesModEngine engine = new CyclesModEngine();
 
 	public static void main(final String... args) {
-		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setOut(new PrintWriter(System.out) {
-			@Override
+		System.exit(new CommandLine(new CyclesModCli()).setCommandName(CyclesMod.class.getSimpleName().toLowerCase(Locale.ROOT)).setOptionsCaseInsensitive(true).setOut(new PrintWriter(System.out, true) {
+			@Override // Fix encoding problems in Windows Command Prompt with special characters
 			public void write(final String s) {
 				System.out.print(s);
 			}
