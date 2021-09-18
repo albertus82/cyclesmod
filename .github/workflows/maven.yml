@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java: [ '8', '9', '10', '11', '12', '13', '14', '15', '16', '17-ea', '18-ea' ]
+        java: [ '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18-ea' ]
         os: [ 'windows-latest', 'ubuntu-latest', 'macOS-latest' ]
     runs-on: ${{ matrix.os }}
     env:
@@ -20,7 +20,7 @@ jobs:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
     - run: mvn clean verify -B -V -e -ntp -DtestSecret=${{ secrets.TEST_SECRET }}
-    - if: matrix.os == 'ubuntu-latest' && matrix.java == '11'
+    - if: matrix.os == 'ubuntu-latest' && matrix.java == '17'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
