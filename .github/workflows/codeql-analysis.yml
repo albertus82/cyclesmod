@@ -41,7 +41,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - run: mvn clean process-sources -B -V -e -ntp -P codeql
+    # Delombok
+    - run: mvn clean process-test-sources -P codeql -B -V -e -ntp -Dmaven.main.skip=true
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL

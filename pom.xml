@@ -167,6 +167,7 @@
 			<id>codeql</id>
 			<properties>
 				<lombok.outputDirectory>${project.build.directory}/generated-sources/delombok</lombok.outputDirectory>
+				<lombok.testOutputDirectory>${project.build.directory}/generated-test-sources/delombok</lombok.testOutputDirectory>
 			</properties>
 			<build>
 				<plugins>
@@ -176,14 +177,27 @@
 						<version>${lombok.version}.0</version>
 						<executions>
 							<execution>
+								<id>delombok</id>
 								<phase>generate-sources</phase>
 								<goals>
 									<goal>delombok</goal>
 								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+								</configuration>
+							</execution>
+							<execution>
+								<id>delombok-test</id>
+								<phase>generate-test-sources</phase>
+								<goals>
+									<goal>testDelombok</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+								</configuration>
 							</execution>
 						</executions>
 						<configuration>
-							<sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
 							<addOutputDirectory>false</addOutputDirectory>
 							<verbose>true</verbose>
 						</configuration>
@@ -194,11 +208,26 @@
 						<version>3.0.0</version>
 						<executions>
 							<execution>
+								<id>replace-sources</id>
 								<phase>process-sources</phase>
 								<configuration>
 									<target>
 										<copy overwrite="true" verbose="true" todir="${project.build.sourceDirectory}">
 											<fileset dir="${lombok.outputDirectory}" />
+										</copy>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>replace-test-sources</id>
+								<phase>process-test-sources</phase>
+								<configuration>
+									<target>
+										<copy overwrite="true" verbose="true" todir="${project.build.testSourceDirectory}">
+											<fileset dir="${lombok.testOutputDirectory}" />
 										</copy>
 									</target>
 								</configuration>
