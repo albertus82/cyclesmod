@@ -28,6 +28,7 @@
 		<swt.version>3.116.100</swt.version>
 		<jface.version>3.22.200</jface.version>
 		<picocli.version>4.6.1</picocli.version>
+		<lombok.version>1.18.20</lombok.version>
 		<windows.build.finalName>${project.name}</windows.build.finalName>
 		<linux.build.finalName>${project.artifactId}</linux.build.finalName>
 		<mac.build.finalName>${project.name}</mac.build.finalName>
@@ -99,7 +100,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.20</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -112,7 +113,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.7.2</version>
+			<version>5.8.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -161,6 +162,56 @@
 				<maven.compiler.release>8</maven.compiler.release>
 			</properties>
 		</profile>
+
+		<profile>
+			<id>codeql</id>
+			<properties>
+				<lombok.outputDirectory>${project.build.directory}/generated-sources/delombok</lombok.outputDirectory>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.projectlombok</groupId>
+						<artifactId>lombok-maven-plugin</artifactId>
+						<version>${lombok.version}.0</version>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>delombok</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+							<addOutputDirectory>false</addOutputDirectory>
+							<verbose>true</verbose>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<phase>process-sources</phase>
+								<configuration>
+									<target>
+										<copy overwrite="true" verbose="true" todir="${project.build.sourceDirectory}">
+											<fileset dir="${lombok.outputDirectory}" />
+										</copy>
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 		<profile>
 			<id>cocoa-macosx-aarch64</id>
 			<activation>
