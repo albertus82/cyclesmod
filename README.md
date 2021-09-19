@@ -14,7 +14,7 @@ Dating back to 1989, it was distributed for the most popular platforms of the ti
 
 Nowadays it cannot be executed natively on modern operating systems, but it runs [fine](https://www.dosbox.com/comp_list.php?showID=348) in [**DOSBox**](https://www.dosbox.com).
 
-**CyclesMod** is a *mod* for the DOS version of this game, which allows you to **change the configurations of the bikes**, which are normally not modifiable by the player:
+**CyclesMod** is a *mod* for the DOS version of this game, which allows to **change the configurations of the bikes**, which are normally not modifiable by the player:
 
 ![Screenshot](https://user-images.githubusercontent.com/8672431/122607209-86bc3180-d07a-11eb-9e86-dc7e967c41a9.png)
 
