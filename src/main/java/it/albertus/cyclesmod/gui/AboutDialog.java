@@ -7,10 +7,11 @@ import java.io.InputStreamReader;
 import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.text.DateFormat;
-import java.text.ParseException;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.time.temporal.TemporalAccessor;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TreeSet;
@@ -56,11 +57,11 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
 import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
+import it.albertus.cyclesmod.common.util.BuildInfo;
 import it.albertus.cyclesmod.gui.listener.LinkSelectionListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.SwtUtils;
 import it.albertus.jface.closeable.CloseableResource;
-import it.albertus.util.Version;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -186,15 +187,7 @@ public class AboutDialog extends Dialog {
 		applicationNameLabel.setText(CyclesModGui.getApplicationName());
 
 		final Link versionAndHomePageLink = new Link(headerComposite, SWT.NONE);
-		Date versionDate;
-		try {
-			versionDate = Version.getDate();
-		}
-		catch (final ParseException e) {
-			log.log(Level.WARNING, "Invalid version date:", e);
-			versionDate = new Date();
-		}
-		final String version = messages.get("gui.label.about.version", Version.getNumber(), DateFormat.getDateInstance(DateFormat.MEDIUM, messages.getLanguage().getLocale()).format(versionDate));
+		final String version = messages.get("gui.label.about.version", BuildInfo.getProperty("project.version"), DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(messages.getLanguage().getLocale()).format(getVersionTimestamp()));
 		final String homePageAnchor = buildAnchor(messages.get("gui.message.project.url"), messages.get("gui.label.about.home.page"));
 		versionAndHomePageLink.setText(version + " - " + homePageAnchor);
 		if (!fontRegistry.hasValueFor(SYM_NAME_FONT_DEFAULT)) {
@@ -268,6 +261,18 @@ public class AboutDialog extends Dialog {
 	private static void addUnobtrusiveSeparator(@NonNull final Composite parent) {
 		final Label separator = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR | SWT.SHADOW_NONE); // Invisible separator
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(separator);
+	}
+
+	private static TemporalAccessor getVersionTimestamp() {
+		try {
+			final TemporalAccessor timestamp = DateTimeFormatter.ISO_ZONED_DATE_TIME.parse(BuildInfo.getProperty("version.timestamp"));
+			log.log(Level.FINE, "{0}", timestamp);
+			return timestamp;
+		}
+		catch (final RuntimeException e) {
+			log.log(Level.WARNING, "Invalid version timestamp, falling back to current datetime:", e);
+			return Instant.now();
+		}
 	}
 
 	@Getter

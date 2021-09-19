@@ -44,6 +44,7 @@ import it.albertus.cyclesmod.common.model.VehiclesCfg;
 import it.albertus.cyclesmod.common.model.VehiclesInf;
 import it.albertus.cyclesmod.common.resources.ConfigurableMessages;
 import it.albertus.cyclesmod.common.resources.Language;
+import it.albertus.cyclesmod.common.util.BuildInfo;
 import it.albertus.cyclesmod.gui.listener.ExitListener;
 import it.albertus.cyclesmod.gui.resources.GuiMessages;
 import it.albertus.jface.EnhancedErrorDialog;
@@ -52,7 +53,6 @@ import it.albertus.jface.closeable.CloseableDevice;
 import it.albertus.unexepack.InvalidDosHeaderException;
 import it.albertus.unexepack.InvalidExepackHeaderException;
 import it.albertus.unexepack.UnExepack;
-import it.albertus.util.Version;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -115,7 +115,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	public static void main(final String... args) {
 		try {
 			Display.setAppName(getApplicationName());
-			Display.setAppVersion(Version.getNumber());
+			Display.setAppVersion(BuildInfo.getProperty("project.version"));
 			start(args);
 		}
 		catch (final RuntimeException | Error e) { // NOSONAR Catch Exception instead of Error. Throwable and Error should not be caught (java:S1181)

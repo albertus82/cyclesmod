@@ -757,25 +757,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.2.0</version>
-				<executions>
-					<execution>
-						<phase>initialize</phase>
-						<goals>
-							<goal>regex-property</goal>
-						</goals>
-						<configuration>
-							<value>${zoned.git.commit.time}</value> <!-- yyyy-MM-dd'T'HH:mm:ssXXX -->
-							<regex>T.*$</regex>
-							<name>version.date</name> <!-- yyyy-MM-dd -->
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.2.0</version>
