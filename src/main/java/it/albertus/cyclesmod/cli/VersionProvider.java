@@ -1,7 +1,7 @@
 package it.albertus.cyclesmod.cli;
 
 import java.text.ParseException;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.time.temporal.TemporalAccessor;
@@ -28,7 +28,7 @@ public class VersionProvider implements IVersionProvider {
 		}
 		catch (final RuntimeException e) {
 			log.log(Level.FINE, "Invalid version timestamp, falling back to current datetime:", e);
-			return Instant.now();
+			return LocalDateTime.now();
 		}
 	}
 
