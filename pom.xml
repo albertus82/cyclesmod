@@ -205,6 +205,9 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
+						<configuration>
+							<skip>${maven.antrun.skip.lombok}</skip>
+						</configuration>
 						<executions>
 							<execution>
 								<id>replace-sources</id>
@@ -973,6 +976,7 @@
 						<maven.gitcommitid.skip>true</maven.gitcommitid.skip>
 						<maven.antrun.skip.lombok>true</maven.antrun.skip.lombok>
 						<jacoco.skip>true</jacoco.skip>
+						<lombok.delombok.skip>true</lombok.delombok.skip>
 						<local.git.commit.time>${local.git.commit.time}</local.git.commit.time>
 						<zoned.git.commit.time>${zoned.git.commit.time}</zoned.git.commit.time>
 					</properties>
