@@ -27,7 +27,7 @@ class BuildInfoTest {
 			final String value = BuildInfo.getProperty(name);
 			Assertions.assertNotNull(value);
 			Assertions.assertNotEquals(0, value.length());
-			Assertions.assertFalse(value.contains("$"));
+			Assertions.assertFalse(value.contains("${"), name + '=' + value);
 		}
 	}
 
