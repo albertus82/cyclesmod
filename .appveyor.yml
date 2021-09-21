@@ -5,6 +5,8 @@ version: '{build}'
 clone_depth: 50
 
 environment:
+  TEST_SECRET:
+    secure: y6fntBCP/dHsbo4YqrNYRu3dwqF6JoipEEU8s6qK0K3gEUyIkMYgMgYznGF05HfrHWRHyZtTj/Wup0jW4KgX/ay54+UfvVZ9PScUW7CpvOw=
   matrix:
     - platform: x86
       JAVA_HOME: ${ProgramFiles(x86)}\Java\jdk1.8.0
@@ -14,10 +16,10 @@ environment:
         secure: 3sqJDjLAS708tR/LiAqKLZTnLLrhGJuWVzzI4nCjLbUUsZB+PPRG3y0BWWnMo14CDhBT4v6yjHTA23RdopoHDWJlBcGhKELKZOLhHsnJLU8=
 
 build_script:
-  - mvn clean verify -B -V -e -ntp
+  - cmd: mvn clean verify -B -V -e -ntp -DtestSecret=%TEST_SECRET%
 
 after_build:
-  - IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY SET ARTIFACTS_PATH=target\*.* & FOR /R target %%f IN (*.exe *.tar.gz *.zip) DO IF NOT %%~xf == .exec ECHO Submitting file "%%f" to VirusTotal... & curl -v -F "file=@%%f" -F apikey=%VT_API_KEY% https://www.virustotal.com/vtapi/v2/file/scan & ECHO File "%%f" submitted to VirusTotal. & TIMEOUT 15 /NOBREAK
+  - cmd: IF "%APPVEYOR_REPO_TAG%" == "true" IF DEFINED VT_API_KEY SET ARTIFACTS_PATH=target\*.* & FOR /R target %%f IN (*.exe *.tar.gz *.zip) DO IF NOT %%~xf == .exec ECHO Submitting file "%%f" to VirusTotal... & curl -v -F "file=@%%f" -F apikey=%VT_API_KEY% https://www.virustotal.com/vtapi/v2/file/scan & ECHO File "%%f" submitted to VirusTotal. & TIMEOUT 15 /NOBREAK
 
 artifacts:
   - path: $(ARTIFACTS_PATH)
