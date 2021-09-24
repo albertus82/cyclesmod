@@ -111,7 +111,7 @@
 		<launch4j bindir="${launch4j.bindir}">
 			<config outfile="${project.build.directory}/launch4j/${windows.unexepack.exeFileName}" jarpath="${windows.build.finalName}.${project.packaging}" headertype="console" dontwrapjar="${launch4j.dontWrapJar}" stayalive="${launch4j.stayAlive}" restartoncrash="${launch4j.restartOnCrash}" priority="${launch4j.priority}" errtitle="${launch4j.errTitle}" chdir=".">
 				<jre minversion="${maven.compiler.target}.0" jdkpreference="${launch4j.jdkPreference}" initialheapsize="${unexepack.vm.initialHeapSize}" maxheapsize="${unexepack.vm.maxHeapSize}" />
-				<classPath mainclass="${unexepack.mainClass}" cp="${dependencies.directory}/*.jar" />
+				<classPath mainclass="${unexepack.mainClass}" />
 				<versionInfo fileversion="${project.version}.0" txtfileversion="${project.version}" filedescription="${launch4j.unexepack.name}" copyright="${launch4j.copyright}" productversion="${project.version}.0" txtproductversion="${project.version}" productname="${launch4j.unexepack.name}" internalname="${launch4j.unexepack.name}" originalfilename="${windows.unexepack.exeFileName}" companyname="${launch4j.companyName}" />
 			</config>
 		</launch4j>

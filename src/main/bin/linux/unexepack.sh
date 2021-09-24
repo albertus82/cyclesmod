@@ -10,4 +10,4 @@ while [ -h "$PRG" ] ; do
   fi
 done
 PRGDIR=`dirname "$PRG"`
-java -Xms${unexepack.vm.initialHeapSize}m -Xmx${unexepack.vm.maxHeapSize}m -cp "$PRGDIR/${project.build.finalName}.${project.packaging}:$PRGDIR/lib/*" ${unexepack.mainClass} "$@"
+java -Xms${unexepack.vm.initialHeapSize}m -Xmx${unexepack.vm.maxHeapSize}m -cp "$PRGDIR/${project.build.finalName}.${project.packaging}" ${unexepack.mainClass} "$@"
