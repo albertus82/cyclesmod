@@ -114,7 +114,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.8.0</version>
+			<version>5.8.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -777,7 +777,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.0.0-M3</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 						<id>enforce-bytecode-version</id>
@@ -798,7 +798,7 @@
 					<dependency>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>extra-enforcer-rules</artifactId>
-						<version>1.3</version>
+						<version>1.4</version>
 					</dependency>
 				</dependencies>
 			</plugin>
