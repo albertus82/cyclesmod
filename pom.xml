@@ -215,9 +215,7 @@
 								<phase>process-sources</phase>
 								<configuration>
 									<target>
-										<copy overwrite="true" verbose="true" todir="${project.build.sourceDirectory}">
-											<fileset dir="${lombok.outputDirectory}" />
-										</copy>
+										<ant target="codeql-delombok" />
 									</target>
 								</configuration>
 								<goals>
@@ -229,9 +227,7 @@
 								<phase>process-test-sources</phase>
 								<configuration>
 									<target>
-										<copy overwrite="true" verbose="true" todir="${project.build.testSourceDirectory}">
-											<fileset dir="${lombok.testOutputDirectory}" />
-										</copy>
+										<ant target="codeql-delombok-test" />
 									</target>
 								</configuration>
 								<goals>

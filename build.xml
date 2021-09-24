@@ -11,6 +11,26 @@
 		</propertyfile>
 	</target>
 
+	<target name="codeql-delombok">
+		<tstamp>
+			<format property="tstamp.backup" pattern="yyyy-MM-dd_HH.mm.ss.SSS" />
+		</tstamp>
+		<zip destfile="${project.build.sourceDirectory}_${tstamp.backup}.zip" basedir="${project.build.sourceDirectory}" level="9" />
+		<copy overwrite="true" verbose="true" todir="${project.build.sourceDirectory}">
+			<fileset dir="${lombok.outputDirectory}" />
+		</copy>
+	</target>
+
+	<target name="codeql-delombok-test">
+		<tstamp>
+			<format property="tstamp.backup.test" pattern="yyyy-MM-dd_HH.mm.ss.SSS" />
+		</tstamp>
+		<zip destfile="${project.build.testSourceDirectory}_${tstamp.backup.test}.zip" basedir="${project.build.testSourceDirectory}" level="9" />
+		<copy overwrite="true" verbose="true" todir="${project.build.testSourceDirectory}">
+			<fileset dir="${lombok.testOutputDirectory}" />
+		</copy>
+	</target>
+
 	<target name="jarbundler">
 		<mkdir dir="${project.build.directory}/jarbundler" />
 		<jarbundler vmoptions="${mac.vmoptions}" dir="${project.build.directory}/jarbundler" name="${project.name}" mainclass="${cyclesmod.mainClass}" startonmainthread="true" version="${project.version}" icon="${project.build.iconsSourceDirectory}/mac/${mac.build.finalName}.icns" usejavaxkey="true" jvmversion="${maven.compiler.target}+" stubfile="${project.build.binSourceDirectory}/mac/universalJavaApplicationStub" highresolutioncapable="true">
