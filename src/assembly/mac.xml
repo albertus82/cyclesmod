@@ -38,10 +38,6 @@
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.binSourceDirectory}/mac</directory>
-			<includes>
-				<include>*JavaApplicationStub</include>
-				<include>*.command</include>
-			</includes>
 			<outputDirectory>${project.name}.app/Contents/MacOS</outputDirectory>
 			<filtered>true</filtered>
 			<lineEnding>lf</lineEnding>

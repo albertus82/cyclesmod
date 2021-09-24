@@ -46,9 +46,6 @@
 		</fileSet>
 		<fileSet>
 			<directory>${project.build.binSourceDirectory}/linux</directory>
-			<includes>
-				<include>*.sh</include>
-			</includes>
 			<outputDirectory>./</outputDirectory>
 			<filtered>true</filtered>
 			<lineEnding>lf</lineEnding>
