@@ -21,7 +21,11 @@
 		</copy>
 	</target>
 
-	<target name="codeql-delombok-test">
+	<condition property="testSourceDirectory.available">
+		<available file="${project.build.testSourceDirectory}" type="dir" />
+	</condition>
+
+	<target name="codeql-delombok-test" if="testSourceDirectory.available">
 		<tstamp>
 			<format property="tstamp.backup.test" pattern="yyyy-MM-dd_HH.mm.ss.SSS" />
 		</tstamp>
