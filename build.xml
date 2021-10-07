@@ -4,7 +4,7 @@
 
 	<property file="build.properties" />
 
-	<target name="lombok">
+	<target name="lombok-config">
 		<propertyfile file="lombok.config" jdkproperties="true">
 			<entry key="config.stopBubbling" value="true" />
 			<entry key="lombok.addLombokGeneratedAnnotation" value="true" />
