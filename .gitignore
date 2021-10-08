@@ -6,9 +6,9 @@
 interpolated-pom.xml
 lombok.config
 .DS_Store
-unpacked
 hs_err_pid*.log
 junit*.properties
+unpacked
 /*.[cC][fF][gG]
 /*.[iI][nN][fF]
 /*.[zZ][iI][pP]
