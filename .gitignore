@@ -8,7 +8,7 @@ lombok.config
 .DS_Store
 hs_err_pid*.log
 junit*.properties
-unpacked
+/unpacked
 /*.[cC][fF][gG]
 /*.[iI][nN][fF]
 /*.[zZ][iI][pP]
