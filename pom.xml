@@ -777,7 +777,6 @@
 				<version>3.0.0</version>
 				<executions>
 					<execution>
-						<id>enforce-bytecode-version</id>
 						<goals>
 							<goal>enforce</goal>
 						</goals>
@@ -786,6 +785,9 @@
 								<enforceBytecodeVersion>
 									<maxJdkVersion>${maven.compiler.target}</maxJdkVersion>
 								</enforceBytecodeVersion>
+								<requireMavenVersion>
+									<version>3.3.9</version>
+								</requireMavenVersion>
 							</rules>
 							<fail>true</fail>
 						</configuration>
