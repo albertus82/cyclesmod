@@ -5,7 +5,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>it.albertus</groupId>
+	<groupId>com.github.albertus82</groupId>
 	<artifactId>cyclesmod</artifactId>
 	<version>3.2.3</version>
 	<name>CyclesMod</name>
@@ -39,8 +39,8 @@
 		<cli.vm.maxHeapSize>16</cli.vm.maxHeapSize>
 		<unexepack.vm.initialHeapSize>4</unexepack.vm.initialHeapSize>
 		<unexepack.vm.maxHeapSize>32</unexepack.vm.maxHeapSize>
-		<cyclesmod.mainClass>it.albertus.cyclesmod.CyclesMod</cyclesmod.mainClass>
-		<unexepack.mainClass>it.albertus.unexepack.UnExepack</unexepack.mainClass>
+		<cyclesmod.mainClass>${project.groupId}.${project.artifactId}.CyclesMod</cyclesmod.mainClass>
+		<unexepack.mainClass>${project.groupId}.unexepack.UnExepack</unexepack.mainClass>
 	</properties>
 
 	<dependencies>
