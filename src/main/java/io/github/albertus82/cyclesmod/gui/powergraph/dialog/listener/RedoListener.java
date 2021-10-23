@@ -7,7 +7,7 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-import it.albertus.jface.SwtUtils;
+import io.github.albertus82.jface.SwtUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

@@ -1,8 +1,8 @@
 package io.github.albertus82.cyclesmod.common.model;
 
-import static it.albertus.util.ByteUtils.toInt;
-import static it.albertus.util.ByteUtils.toIntArray;
-import static it.albertus.util.ByteUtils.toShortArray;
+import static io.github.albertus82.util.ByteUtils.toInt;
+import static io.github.albertus82.util.ByteUtils.toIntArray;
+import static io.github.albertus82.util.ByteUtils.toShortArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;

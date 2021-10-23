@@ -14,7 +14,7 @@ import io.github.albertus82.cyclesmod.common.engine.InvalidNumberException;
 import io.github.albertus82.cyclesmod.common.engine.ValueOutOfRangeException;
 import io.github.albertus82.cyclesmod.common.resources.CommonMessages;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
-import it.albertus.util.ByteUtils;
+import io.github.albertus82.util.ByteUtils;
 import lombok.Getter;
 import lombok.NonNull;
 

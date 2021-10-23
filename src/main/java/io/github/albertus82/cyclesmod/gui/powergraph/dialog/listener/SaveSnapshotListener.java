@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import io.github.albertus82.cyclesmod.common.resources.Messages;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
-import it.albertus.jface.SwtUtils;
+import io.github.albertus82.jface.SwtUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

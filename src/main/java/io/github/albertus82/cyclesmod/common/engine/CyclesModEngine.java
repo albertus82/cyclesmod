@@ -10,7 +10,7 @@ import io.github.albertus82.cyclesmod.common.model.Settings;
 import io.github.albertus82.cyclesmod.common.model.Vehicle;
 import io.github.albertus82.cyclesmod.common.model.VehicleType;
 import io.github.albertus82.cyclesmod.common.model.VehiclesInf;
-import it.albertus.util.StringUtils;
+import io.github.albertus82.util.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

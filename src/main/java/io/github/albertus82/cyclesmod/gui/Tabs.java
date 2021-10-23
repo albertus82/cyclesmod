@@ -47,9 +47,9 @@ import io.github.albertus82.cyclesmod.gui.model.PowerTextData;
 import io.github.albertus82.cyclesmod.gui.powergraph.IPowerGraph;
 import io.github.albertus82.cyclesmod.gui.powergraph.simple.PowerGraphCanvas;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
-import it.albertus.jface.Multilanguage;
-import it.albertus.jface.i18n.LocalizedWidgets;
-import it.albertus.util.ISupplier;
+import io.github.albertus82.jface.Multilanguage;
+import io.github.albertus82.jface.i18n.LocalizedWidgets;
+import io.github.albertus82.util.ISupplier;
 import lombok.Getter;
 import lombok.NonNull;
 

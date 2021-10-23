@@ -14,7 +14,7 @@ import io.github.albertus82.cyclesmod.common.resources.Messages;
 import io.github.albertus82.cyclesmod.gui.Mode;
 import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraph;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
-import it.albertus.jface.Multilanguage;
+import io.github.albertus82.jface.Multilanguage;
 import lombok.NonNull;
 
 public class SimplePowerGraph extends PowerGraph implements Multilanguage {

@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import io.github.albertus82.cyclesmod.common.model.Vehicle;
 import io.github.albertus82.cyclesmod.gui.Mode;
 import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraphProvider;
-import it.albertus.jface.Multilanguage;
+import io.github.albertus82.jface.Multilanguage;
 import lombok.Getter;
 import lombok.NonNull;
 

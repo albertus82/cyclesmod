@@ -31,7 +31,7 @@ import io.github.albertus82.cyclesmod.CyclesMod;
 import io.github.albertus82.cyclesmod.cli.resources.ConsoleMessages;
 import io.github.albertus82.cyclesmod.common.resources.CommonMessages;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
-import it.albertus.util.StringUtils;
+import io.github.albertus82.util.StringUtils;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 

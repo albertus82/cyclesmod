@@ -14,7 +14,7 @@ import java.util.Map;
 import io.github.albertus82.cyclesmod.common.data.DefaultBikes;
 import io.github.albertus82.cyclesmod.common.data.DefaultCars;
 import io.github.albertus82.cyclesmod.common.data.InvalidSizeException;
-import it.albertus.util.ByteUtils;
+import io.github.albertus82.util.ByteUtils;
 import lombok.NonNull;
 
 public class VehiclesInf {

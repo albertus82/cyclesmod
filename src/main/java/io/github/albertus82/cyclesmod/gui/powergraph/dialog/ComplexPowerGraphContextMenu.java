@@ -20,7 +20,7 @@ import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.UndoListene
 import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
 import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
-import it.albertus.jface.SwtUtils;
+import io.github.albertus82.jface.SwtUtils;
 import lombok.Getter;
 
 public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {

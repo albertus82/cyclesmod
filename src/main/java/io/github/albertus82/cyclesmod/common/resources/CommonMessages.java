@@ -3,7 +3,7 @@ package io.github.albertus82.cyclesmod.common.resources;
 import java.util.Collection;
 import java.util.Locale;
 
-import it.albertus.jface.JFaceMessages;
+import io.github.albertus82.jface.JFaceMessages;
 import lombok.NonNull;
 
 public enum CommonMessages implements ConfigurableMessages {

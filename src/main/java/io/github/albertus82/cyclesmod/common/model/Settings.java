@@ -7,7 +7,7 @@ import java.util.Map;
 
 import io.github.albertus82.cyclesmod.common.engine.InvalidNumberException;
 import io.github.albertus82.cyclesmod.common.engine.ValueOutOfRangeException;
-import it.albertus.util.ByteUtils;
+import io.github.albertus82.util.ByteUtils;
 import lombok.Getter;
 import lombok.NonNull;
 

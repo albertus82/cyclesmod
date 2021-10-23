@@ -5,7 +5,7 @@ import org.eclipse.swt.events.TypedEvent;
 
 import io.github.albertus82.cyclesmod.gui.CyclesModGui;
 import io.github.albertus82.cyclesmod.gui.model.FormProperty;
-import it.albertus.jface.SwtUtils;
+import io.github.albertus82.jface.SwtUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 

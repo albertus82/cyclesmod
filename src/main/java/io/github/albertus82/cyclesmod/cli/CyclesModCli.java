@@ -29,7 +29,7 @@ import io.github.albertus82.cyclesmod.common.model.Game;
 import io.github.albertus82.cyclesmod.common.model.VehiclesCfg;
 import io.github.albertus82.cyclesmod.common.model.VehiclesInf;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
-import it.albertus.util.logging.LoggingSupport;
+import io.github.albertus82.util.logging.LoggingSupport;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

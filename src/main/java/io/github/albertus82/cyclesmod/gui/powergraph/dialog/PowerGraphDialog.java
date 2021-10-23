@@ -30,7 +30,7 @@ import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomInListe
 import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomMouseWheelListener;
 import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
-import it.albertus.jface.SwtUtils;
+import io.github.albertus82.jface.SwtUtils;
 import lombok.NonNull;
 
 public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
