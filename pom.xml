@@ -5,7 +5,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.albertus82</groupId>
+	<groupId>io.github.albertus82</groupId>
 	<artifactId>cyclesmod</artifactId>
 	<version>3.2.3</version>
 	<name>CyclesMod</name>
