@@ -39,7 +39,9 @@
 		<cli.vm.maxHeapSize>16</cli.vm.maxHeapSize>
 		<unexepack.vm.initialHeapSize>4</unexepack.vm.initialHeapSize>
 		<unexepack.vm.maxHeapSize>32</unexepack.vm.maxHeapSize>
-		<cyclesmod.mainClass>${project.groupId}.${project.artifactId}.CyclesMod</cyclesmod.mainClass>
+		<cli.mainClass>${project.groupId}.${project.artifactId}.cli.CyclesModCli</cli.mainClass>
+		<gui.mainClass>${project.groupId}.${project.artifactId}.gui.CyclesModGui</gui.mainClass>
+		<jar.mainClass>${project.groupId}.${project.artifactId}.CyclesMod</jar.mainClass>
 		<unexepack.mainClass>${project.groupId}.unexepack.UnExepack</unexepack.mainClass>
 	</properties>
 
@@ -762,7 +764,7 @@
 							<X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
 						</manifestEntries>
 						<manifest>
-							<mainClass>${cyclesmod.mainClass}</mainClass>
+							<mainClass>${jar.mainClass}</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>${dependencies.directory}/</classpathPrefix>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
