@@ -12,6 +12,19 @@
 	<url>https://github.com/albertus82/${project.artifactId}</url>
 	<description>A mod for "The Cycles: International Grand Prix Racing" (1989) and "Grand Prix Circuit" (1988).</description>
 
+	<licenses>
+		<license>
+			<name>GNU General Public License, Version 3</name>
+			<url>https://www.gnu.org/licenses/gpl-3.0.html</url>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:https://github.com/albertus82/cyclesmod.git</connection>
+		<developerConnection>scm:git:https://github.com/albertus82/cyclesmod.git</developerConnection>
+		<url>https://github.com/albertus82/cyclesmod</url>
+	</scm>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
