@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public class TextFormatter {
 
-	private static final String FONT_KEY = "it.albertus.jface.font.property";
+	private static final String SYMBOLIC_FONT_NAME = TextFormatter.class.getPackage().getName() + ".font.property";
 
 	private static final char SAMPLE_CHAR = '9';
 
@@ -75,17 +75,17 @@ public class TextFormatter {
 	}
 
 	public void setNormalFontStyle(final Control control) {
-		if (!fontRegistry.hasValueFor(FONT_KEY)) {
-			fontRegistry.put(FONT_KEY, control.getFont().getFontData());
+		if (!fontRegistry.hasValueFor(SYMBOLIC_FONT_NAME)) {
+			fontRegistry.put(SYMBOLIC_FONT_NAME, control.getFont().getFontData());
 		}
-		control.setFont(fontRegistry.get(FONT_KEY));
+		control.setFont(fontRegistry.get(SYMBOLIC_FONT_NAME));
 	}
 
 	public void setBoldFontStyle(final Control control) {
-		if (!fontRegistry.hasValueFor(FONT_KEY)) {
-			fontRegistry.put(FONT_KEY, control.getFont().getFontData());
+		if (!fontRegistry.hasValueFor(SYMBOLIC_FONT_NAME)) {
+			fontRegistry.put(SYMBOLIC_FONT_NAME, control.getFont().getFontData());
 		}
-		control.setFont(fontRegistry.getBold(FONT_KEY));
+		control.setFont(fontRegistry.getBold(SYMBOLIC_FONT_NAME));
 	}
 
 }
