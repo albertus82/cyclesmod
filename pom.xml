@@ -42,7 +42,7 @@
 		<swt.version>3.116.100</swt.version> <!-- Last version compatible with JRE 8 -->
 		<jface.version>3.22.200</jface.version> <!-- Last version compatible with JRE 8 -->
 		<lombok.version>1.18.20</lombok.version>
-		<picocli.version>4.6.1</picocli.version>
+		<picocli.version>4.6.2</picocli.version>
 		<windows.build.finalName>${project.name}</windows.build.finalName>
 		<linux.build.finalName>${project.artifactId}</linux.build.finalName>
 		<mac.build.finalName>${project.name}</mac.build.finalName>
