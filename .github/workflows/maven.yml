@@ -18,7 +18,7 @@ jobs:
         distribution: 'zulu'
         java-version: ${{ matrix.java }}
     - run: mvn clean verify -B -V -e -ntp -DtestSecret=${{ secrets.TEST_SECRET }}
-    - if: matrix.os == 'ubuntu-latest' && matrix.java == '17'
+    - if: matrix.os == 'macOS-latest' && matrix.java == '17'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
