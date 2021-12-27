@@ -50,12 +50,9 @@
 		<gui.vm.maxHeapSize>32</gui.vm.maxHeapSize>
 		<cli.vm.initialHeapSize>4</cli.vm.initialHeapSize>
 		<cli.vm.maxHeapSize>16</cli.vm.maxHeapSize>
-		<unexepack.vm.initialHeapSize>4</unexepack.vm.initialHeapSize>
-		<unexepack.vm.maxHeapSize>32</unexepack.vm.maxHeapSize>
 		<jar.mainClass>${project.groupId}.${project.artifactId}.CyclesMod</jar.mainClass>
 		<gui.mainClass>${project.groupId}.${project.artifactId}.gui.CyclesModGui</gui.mainClass>
 		<cli.mainClass>${project.groupId}.${project.artifactId}.cli.CyclesModCli</cli.mainClass>
-		<unexepack.mainClass>${project.groupId}.unexepack.UnExepack</unexepack.mainClass>
 	</properties>
 
 	<dependencies>
@@ -75,6 +72,11 @@
 			<groupId>io.github.albertus82</groupId>
 			<artifactId>jface-utils</artifactId>
 			<version>18.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.albertus82</groupId>
+			<artifactId>unexepack</artifactId>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
