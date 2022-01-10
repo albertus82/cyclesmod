@@ -76,7 +76,7 @@
 		<dependency>
 			<groupId>io.github.albertus82</groupId>
 			<artifactId>unexepack</artifactId>
-			<version>0.1.0</version>
+			<version>0.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
