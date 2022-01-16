@@ -2,7 +2,7 @@ CyclesMod
 =========
 
 [![Latest release](https://img.shields.io/github/release/albertus82/cyclesmod.svg)](https://github.com/albertus82/cyclesmod/releases/latest)
-[![Build status](https://github.com/albertus82/cyclesmod/workflows/build/badge.svg)](https://github.com/albertus82/cyclesmod/actions)
+[![Build status](https://github.com/albertus82/cyclesmod/actions/workflows/build.yml/badge.svg)](https://github.com/albertus82/cyclesmod/actions)
 [![Known Vulnerabilities](https://snyk.io/test/github/albertus82/cyclesmod/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/albertus82/cyclesmod?targetFile=pom.xml)
 
 ## :checkered_flag: Works also with [**Grand Prix Circuit**](#grand-prix-circuit)!
