@@ -1,0 +1,30 @@
+name: Release
+
+on: 
+  push:
+    tags: v*
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    env:
+      MAVEN_OPTS: -Dhttp.keepAlive=false
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v2
+      with:
+        distribution: temurin
+        java-version: 17
+    - run: mvn clean verify -B -V -e -ntp
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: target/*.exe, target/*.tar.gz, target/*.zip
+        bodyFile: target/checksums.md
+        token: ${{ secrets.GITHUB_TOKEN }}
+        draft: true
+        generateReleaseNotes: true
+    - run: FOR /R target %%G IN (*.exe *.tar.gz *.zip) DO IF NOT %%~xG == .exec ECHO Submitting file %%G to VirusTotal... & ping -n 16 -l 0 localhost & curl -v -F "file=@%%G" -F apikey=${{ secrets.VT_API_KEY }} https://www.virustotal.com/vtapi/v2/file/scan & ECHO; & ECHO File %%G submitted to VirusTotal.
+      shell: cmd

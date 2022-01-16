@@ -243,13 +243,6 @@
 			</sequential>
 		</for>
 
-		<condition property="wine.failonerror" else="false">
-			<isfalse value="${ignoreWineErrors}" />
-		</condition>
-		<condition property="wine.failifexecutionfails" else="false">
-			<isfalse value="${ignoreWineErrors}" />
-		</condition>
-
 		<for trim="true" list="${build.platforms.windows}" param="platform" parallel="false">
 			<sequential>
 				<exec osfamily="windows" executable="${innoSetup.directory}/ISCC.exe" failonerror="true">
@@ -257,7 +250,7 @@
 					<arg value="/O${project.build.basedir}" />
 					<arg value="/F${project.artifactId}-${project.version}-@{platform}-setup" />
 				</exec>
-				<exec osfamily="unix" executable="wine" failonerror="${wine.failonerror}" failifexecutionfails="${wine.failifexecutionfails}">
+				<exec osfamily="unix" executable="wine" failonerror="false" failifexecutionfails="false">
 					<arg value="${innoSetup.directory}/ISCC.exe" />
 					<arg value="${project.build.basedir}/@{platform}/innosetup/${project.artifactId}.iss" />
 					<arg value="/O${project.build.basedir}" />
