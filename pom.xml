@@ -72,7 +72,7 @@
 		<dependency>
 			<groupId>io.github.albertus82</groupId>
 			<artifactId>jface-utils</artifactId>
-			<version>19.0.0-SNAPSHOT</version>
+			<version>19.0.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.eclipse.platform</groupId>
