@@ -330,7 +330,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean openExe(@NonNull final Path file) throws IOException {
 		try {
 			final byte[] unpackedExec = unpackExec(file);
-			if (UnExepack.memmem(unpackedExec, DefaultCars.getByteArray()) == -1) {
+			if (!UnExepack.memmem(unpackedExec, DefaultCars.getByteArray()).isPresent()) {
 				openMessageBox(messages.get("gui.error.file.open.invalid.exe", Game.GPC.getName()), SWT.ICON_WARNING);
 				return false;
 			}
@@ -607,7 +607,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private byte[] patchOriginalGpcExec() {
-		final int offset = UnExepack.memmem(originalGpcExecBytes, DefaultCars.getByteArray());
+		final int offset = UnExepack.memmem(originalGpcExecBytes, DefaultCars.getByteArray()).orElseThrow(IllegalStateException::new);
 		final byte[] bytes = new byte[originalGpcExecBytes.length];
 		System.arraycopy(originalGpcExecBytes, 0, bytes, 0, offset);
 		System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, VehiclesInf.FILE_SIZE);
