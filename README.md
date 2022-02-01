@@ -128,7 +128,7 @@ The original executables of *Grand Prix Circuit* are compressed with [*Microsoft
 
 Although many unpackers were freely available in various languages like [C](https://github.com/w4kfu/unEXEPACK) and [Rust](https://www.bamsoftware.com/software/exepack/), I couldn't find any in pure Java, so I decided to translate the [C code](https://github.com/w4kfu/unEXEPACK/blob/master/unpack.c) written by [**@w4kfu**](https://github.com/w4kfu) to [Java](https://github.com/albertus82/unEXEPACK/blob/master/src/main/java/io/github/albertus82/unexepack/UnExepack.java).
 
-This unpacker is available also as a standalone executable at https://github.com/albertus82/unEXEPACK/releases/latest
+This unpacker is available also as a [standalone executable](https://github.com/albertus82/unEXEPACK/releases/latest) and as Java library on [Maven Central](https://search.maven.org/artifact/io.github.albertus82/unexepack).
 
 
 ## Command line version
