@@ -1039,8 +1039,8 @@
 
 	<repositories>
 		<repository>
-			<id>albertus82-github</id>
-			<url>https://albertus82.github.io/maven</url>
+			<id>${project.artifactId}-local</id>
+			<url>${project.baseUri}/mvn/repository</url>
 		</repository>
 		<repository>
 			<id>ossrh-snapshot</id>
