@@ -50,6 +50,7 @@ import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
 import io.github.albertus82.jface.EnhancedErrorDialog;
 import io.github.albertus82.jface.Multilanguage;
 import io.github.albertus82.jface.closeable.CloseableDevice;
+import io.github.albertus82.unexepack.ByteArrayUtils;
 import io.github.albertus82.unexepack.InvalidDosHeaderException;
 import io.github.albertus82.unexepack.InvalidExepackHeaderException;
 import io.github.albertus82.unexepack.UnExepack;
@@ -330,7 +331,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	private boolean openExe(@NonNull final Path file) throws IOException {
 		try {
 			final byte[] unpackedExec = unpackExec(file);
-			if (!UnExepack.memmem(unpackedExec, DefaultCars.getByteArray()).isPresent()) {
+			if (!ByteArrayUtils.memmem(unpackedExec, DefaultCars.getByteArray()).isPresent()) {
 				openMessageBox(messages.get("gui.error.file.open.invalid.exe", Game.GPC.getName()), SWT.ICON_WARNING);
 				return false;
 			}
@@ -607,7 +608,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 	}
 
 	private byte[] patchOriginalGpcExec() {
-		final int offset = UnExepack.memmem(originalGpcExecBytes, DefaultCars.getByteArray()).orElseThrow(IllegalStateException::new);
+		final int offset = ByteArrayUtils.memmem(originalGpcExecBytes, DefaultCars.getByteArray()).orElseThrow(IllegalStateException::new);
 		final byte[] bytes = new byte[originalGpcExecBytes.length];
 		System.arraycopy(originalGpcExecBytes, 0, bytes, 0, offset);
 		System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, VehiclesInf.FILE_SIZE);
