@@ -42,31 +42,22 @@ public enum VehicleType {
 		}
 	}
 
-	public static VehicleType get(final int index) {
-		for (final VehicleType vehicleType : values()) {
-			if (vehicleType.index == index) {
-				return vehicleType;
-			}
-		}
-		return null;
-	}
-
 	public static VehicleType forDisplacement(final int displacement) {
 		for (final VehicleType vehicleType : values()) {
 			if (vehicleType.displacement == displacement) {
 				return vehicleType;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("No enum constant " + VehicleType.class.getCanonicalName() + " for displacement " + displacement);
 	}
 
-	public static VehicleType forTeam(final String team) {
+	public static VehicleType forTeam(@NonNull final String team) {
 		for (final VehicleType vehicleType : values()) {
 			if (vehicleType.team.equalsIgnoreCase(team)) {
 				return vehicleType;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("No enum constant " + VehicleType.class.getCanonicalName() + " for team " + team);
 	}
 
 }

@@ -13,6 +13,7 @@ import io.github.albertus82.cyclesmod.common.model.VehiclesInf;
 import io.github.albertus82.util.StringUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
 
@@ -35,15 +36,16 @@ public class CyclesModEngine {
 	}
 
 	public boolean applyProperty(final String propertyName, final String value) throws UnknownPropertyException, InvalidNumberException, ValueOutOfRangeException {
+		final Vehicle vehicle = getVehicle(propertyName);
 		boolean applied = false;
 		if (isSettingsProperty(propertyName)) {
-			applied = applySettingProperty(propertyName, value);
+			applied = applySettingProperty(propertyName, value, vehicle);
 		}
 		else if (isGearboxProperty(propertyName)) {
-			applied = applyGearboxProperty(propertyName, value);
+			applied = applyGearboxProperty(propertyName, value, vehicle);
 		}
 		else if (isPowerProperty(propertyName)) {
-			applied = applyPowerProperty(propertyName, value);
+			applied = applyPowerProperty(propertyName, value, vehicle);
 		}
 		else {
 			throw new UnknownPropertyException(propertyName);
@@ -51,11 +53,9 @@ public class CyclesModEngine {
 		return applied;
 	}
 
-	private boolean applyPowerProperty(final String propertyName, final String value) throws InvalidNumberException, ValueOutOfRangeException, UnknownPropertyException {
+	private boolean applyPowerProperty(final String propertyName, final String value, @NonNull final Vehicle vehicle) throws InvalidNumberException, ValueOutOfRangeException, UnknownPropertyException {
 		boolean applied = false;
 		final short newValue = Power.parse(propertyName, value, numeralSystem.getRadix());
-
-		final Vehicle vehicle = getVehicle(propertyName);
 		final String suffix = StringUtils.substringAfter(propertyName, Power.PREFIX + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < vehicle.getPower().getCurve().length) {
 			final int index = Integer.parseInt(suffix);
@@ -71,11 +71,9 @@ public class CyclesModEngine {
 		return applied;
 	}
 
-	private boolean applyGearboxProperty(final String propertyName, final String value) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
+	private boolean applyGearboxProperty(final String propertyName, final String value, @NonNull final Vehicle vehicle) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
 		boolean applied = false;
 		final int newValue = Gearbox.parse(propertyName, value, numeralSystem.getRadix());
-
-		final Vehicle vehicle = getVehicle(propertyName);
 		final String suffix = StringUtils.substringAfter(propertyName, Gearbox.PREFIX + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < vehicle.getGearbox().getRatios().length) {
 			final int index = Integer.parseInt(suffix);
@@ -91,11 +89,9 @@ public class CyclesModEngine {
 		return applied;
 	}
 
-	private boolean applySettingProperty(final String propertyName, final String value) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
+	private boolean applySettingProperty(final String propertyName, final String value, @NonNull final Vehicle vehicle) throws ValueOutOfRangeException, InvalidNumberException, UnknownPropertyException {
 		boolean applied = false;
 		final int newValue = Settings.parse(propertyName, value, numeralSystem.getRadix());
-
-		final Vehicle vehicle = getVehicle(propertyName);
 		final String suffix = StringUtils.substringAfter(propertyName, Settings.PREFIX + '.');
 		final Setting setting = Setting.forKey(suffix);
 		if (setting != null) {
@@ -113,14 +109,24 @@ public class CyclesModEngine {
 
 	private Vehicle getVehicle(final String propertyName) throws UnknownPropertyException {
 		final String prefix = StringUtils.substringBefore(propertyName, ".");
-		VehicleType type = VehicleType.forTeam(prefix);
-		if (type == null && isNumeric(prefix, NumeralSystem.DECIMAL.getRadix())) {
-			type = VehicleType.forDisplacement(Integer.parseInt(prefix));
+		switch (vehiclesInf.getGame()) {
+		case CYCLES:
+			try {
+				return vehiclesInf.getVehicles().get(VehicleType.forDisplacement(Integer.parseInt(prefix)));
+			}
+			catch (final IllegalArgumentException e) {
+				throw new UnknownPropertyException(propertyName, e);
+			}
+		case GPC:
+			try {
+				return vehiclesInf.getVehicles().get(VehicleType.forTeam(prefix));
+			}
+			catch (final IllegalArgumentException e) {
+				throw new UnknownPropertyException(propertyName, e);
+			}
+		default:
+			throw new IllegalArgumentException("Unknown game: " + vehiclesInf.getGame());
 		}
-		if (type == null) {
-			throw new UnknownPropertyException(propertyName);
-		}
-		return vehiclesInf.getVehicles().get(type);
 	}
 
 	public static boolean isNumeric(final String value, final int radix) {

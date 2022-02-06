@@ -318,7 +318,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private boolean openInf(@NonNull final Path file) throws IOException {
 		try {
-			engine.setVehiclesInf(new VehiclesInf(file));
+			engine.setVehiclesInf(new VehiclesInf(Game.CYCLES, file));
 			updateGuiStatusAfterOpening(file, Mode.CYCLES);
 			return true;
 		}
@@ -339,7 +339,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				log.log(Level.INFO, "Cannot set read only flag for file: {0}.", file);
 			}
 			originalGpcExecBytes = unpackedExec;
-			engine.setVehiclesInf(new VehiclesInf(DefaultCars.getByteArray()));
+			engine.setVehiclesInf(new VehiclesInf(Game.GPC, DefaultCars.getByteArray()));
 			updateGuiStatusAfterOpening(file, Mode.GPC);
 			return true;
 		}

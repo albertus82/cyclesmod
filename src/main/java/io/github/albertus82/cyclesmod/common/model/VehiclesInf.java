@@ -13,6 +13,7 @@ import java.util.Map;
 import io.github.albertus82.cyclesmod.common.data.DefaultBikes;
 import io.github.albertus82.cyclesmod.common.data.DefaultCars;
 import io.github.albertus82.cyclesmod.common.data.InvalidSizeException;
+import lombok.Getter;
 import lombok.NonNull;
 
 public class VehiclesInf {
@@ -21,8 +22,13 @@ public class VehiclesInf {
 
 	private final Map<VehicleType, Vehicle> vehicles = new EnumMap<>(VehicleType.class);
 
+	@NonNull
+	@Getter
+	private Game game;
+
 	/** Creates a new instance based on the default configuration. */
 	public VehiclesInf(@NonNull final Game game) {
+		this.game = game;
 		reset(game);
 	}
 
@@ -34,7 +40,7 @@ public class VehiclesInf {
 	 * @throws IOException if an I/O error occurs
 	 * @throws InvalidSizeException if the size of provided file is not acceptable
 	 */
-	public VehiclesInf(@NonNull final Path sourceInfFile) throws InvalidSizeException, IOException {
+	public VehiclesInf(@NonNull final Game game, @NonNull final Path sourceInfFile) throws InvalidSizeException, IOException {
 		final long fileSize = Files.readAttributes(sourceInfFile, BasicFileAttributes.class).size();
 		if (fileSize != FILE_SIZE) {
 			throw new InvalidSizeException(FILE_SIZE, fileSize);
@@ -43,10 +49,12 @@ public class VehiclesInf {
 		if (bytes.length != FILE_SIZE) {
 			throw new InvalidSizeException(FILE_SIZE, bytes.length);
 		}
+		this.game = game;
 		parse(bytes);
 	}
 
-	public VehiclesInf(@NonNull final byte[] bytes, VehicleType... vehicleTypes) {
+	public VehiclesInf(@NonNull final Game game, @NonNull final byte[] bytes, VehicleType... vehicleTypes) {
+		this.game = game;
 		parse(bytes, vehicleTypes);
 	}
 
@@ -62,6 +70,7 @@ public class VehiclesInf {
 		default:
 			throw new IllegalArgumentException("Unknown game: " + game);
 		}
+		this.game = game;
 		parse(bytes, vehicleTypes);
 	}
 
