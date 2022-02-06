@@ -4,16 +4,15 @@ import static io.github.albertus82.util.ByteUtils.toInt;
 import static io.github.albertus82.util.ByteUtils.toIntArray;
 import static io.github.albertus82.util.ByteUtils.toShortArray;
 
-import java.util.ArrayList;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.List;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class Vehicle implements ByteList {
+public class Vehicle implements ByteArray {
 
 	public static final int LENGTH = Settings.LENGTH + Gearbox.LENGTH + Power.LENGTH;
 
@@ -33,12 +32,12 @@ public class Vehicle implements ByteList {
 	}
 
 	@Override
-	public List<Byte> toByteList() {
-		final List<Byte> byteList = new ArrayList<>(LENGTH);
-		byteList.addAll(settings.toByteList());
-		byteList.addAll(gearbox.toByteList());
-		byteList.addAll(power.toByteList());
-		return byteList;
+	public byte[] toByteArray() {
+		final ByteBuffer buf = ByteBuffer.allocate(LENGTH);
+		buf.put(settings.toByteArray());
+		buf.put(gearbox.toByteArray());
+		buf.put(power.toByteArray());
+		return buf.array();
 	}
 
 }

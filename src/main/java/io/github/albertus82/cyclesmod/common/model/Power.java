@@ -1,8 +1,7 @@
 package io.github.albertus82.cyclesmod.common.model;
 
-import java.util.ArrayList;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.List;
 
 import io.github.albertus82.cyclesmod.common.engine.InvalidNumberException;
 import io.github.albertus82.cyclesmod.common.engine.ValueOutOfRangeException;
@@ -12,7 +11,7 @@ import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
-public class Power implements ByteList {
+public class Power implements ByteArray {
 
 	public static final int LENGTH = 106;
 	public static final short MIN_VALUE = 0;
@@ -42,12 +41,12 @@ public class Power implements ByteList {
 	}
 
 	@Override
-	public List<Byte> toByteList() {
-		final List<Byte> byteList = new ArrayList<>(LENGTH);
+	public byte[] toByteArray() {
+		final ByteBuffer buf = ByteBuffer.allocate(LENGTH);
 		for (final short point : curve) {
-			byteList.add((byte) point);
+			buf.put((byte) point);
 		}
-		return byteList;
+		return buf.array();
 	}
 
 	public static int getRpm(final int index) {

@@ -1,18 +1,17 @@
 package io.github.albertus82.cyclesmod.common.model;
 
-import java.util.ArrayList;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import io.github.albertus82.cyclesmod.common.engine.InvalidNumberException;
 import io.github.albertus82.cyclesmod.common.engine.ValueOutOfRangeException;
-import io.github.albertus82.util.ByteUtils;
 import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
-public class Settings implements ByteList {
+public class Settings implements ByteArray {
 
 	public static final int LENGTH = 22;
 	public static final int MIN_VALUE = 0;
@@ -37,12 +36,12 @@ public class Settings implements ByteList {
 	}
 
 	@Override
-	public List<Byte> toByteList() {
-		final List<Byte> byteList = new ArrayList<>(LENGTH);
+	public byte[] toByteArray() {
+		final ByteBuffer buf = ByteBuffer.allocate(LENGTH).order(ByteOrder.LITTLE_ENDIAN);
 		for (final int value : values.values()) {
-			byteList.addAll(ByteUtils.toByteList(value));
+			buf.putShort((short) value);
 		}
-		return byteList;
+		return buf.array();
 	}
 
 	public static int parse(@NonNull final String propertyName, final String value, final int radix) throws ValueOutOfRangeException, InvalidNumberException {

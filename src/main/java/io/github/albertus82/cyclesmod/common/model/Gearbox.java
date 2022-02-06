@@ -1,10 +1,10 @@
 package io.github.albertus82.cyclesmod.common.model;
 
-import java.util.ArrayList;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,12 +14,11 @@ import io.github.albertus82.cyclesmod.common.engine.InvalidNumberException;
 import io.github.albertus82.cyclesmod.common.engine.ValueOutOfRangeException;
 import io.github.albertus82.cyclesmod.common.resources.CommonMessages;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
-import io.github.albertus82.util.ByteUtils;
 import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
-public class Gearbox implements ByteList {
+public class Gearbox implements ByteArray {
 
 	public static final int LENGTH = 20;
 	public static final int MIN_VALUE = 0;
@@ -55,12 +54,12 @@ public class Gearbox implements ByteList {
 	}
 
 	@Override
-	public List<Byte> toByteList() {
-		final List<Byte> byteList = new ArrayList<>(LENGTH);
+	public byte[] toByteArray() {
+		final ByteBuffer buf = ByteBuffer.allocate(LENGTH).order(ByteOrder.LITTLE_ENDIAN);
 		for (final int ratio : ratios) {
-			byteList.addAll(ByteUtils.toByteList(ratio));
+			buf.putShort((short) ratio);
 		}
-		return byteList;
+		return buf.array();
 	}
 
 	public static int parse(@NonNull final String propertyName, final String value, final int radix) throws ValueOutOfRangeException, InvalidNumberException {

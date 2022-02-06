@@ -1,20 +1,18 @@
 package io.github.albertus82.cyclesmod.common.model;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 
 import io.github.albertus82.cyclesmod.common.data.DefaultBikes;
 import io.github.albertus82.cyclesmod.common.data.DefaultCars;
 import io.github.albertus82.cyclesmod.common.data.InvalidSizeException;
-import io.github.albertus82.util.ByteUtils;
 import lombok.NonNull;
 
 public class VehiclesInf {
@@ -84,14 +82,14 @@ public class VehiclesInf {
 	 * @return A new byte array representing the BIKES.INF file.
 	 */
 	public byte[] toByteArray() {
-		final List<Byte> byteList = new ArrayList<>(FILE_SIZE);
-		for (final ByteList vehicle : vehicles.values()) {
-			byteList.addAll(vehicle.toByteList());
+		final ByteBuffer buf = ByteBuffer.allocate(FILE_SIZE);
+		for (final ByteArray vehicle : vehicles.values()) {
+			buf.put(vehicle.toByteArray());
 		}
-		if (byteList.size() != FILE_SIZE) {
-			throw new IllegalStateException(new InvalidSizeException(FILE_SIZE, byteList.size()));
+		if (buf.position() != buf.capacity()) {
+			throw new IllegalStateException(new InvalidSizeException(buf.capacity(), buf.position()));
 		}
-		return ByteUtils.toByteArray(byteList);
+		return buf.array();
 	}
 
 	public Map<VehicleType, Vehicle> getVehicles() {
