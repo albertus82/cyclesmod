@@ -177,7 +177,7 @@ public class VehiclesCfg {
 		case GPC:
 			return "CARS.CFG";
 		default:
-			throw new IllegalArgumentException("Unknown game: " + game);
+			throw new IllegalArgumentException("Unknown or unsupported game: " + game);
 		}
 	}
 
@@ -188,7 +188,7 @@ public class VehiclesCfg {
 		case GPC:
 			return "CAR" + (vehicleType.getIndex() + 1) + ".CFG";
 		default:
-			throw new IllegalArgumentException("Unknown game: " + game);
+			throw new IllegalArgumentException("Unknown or unsupported game: " + game);
 		}
 	}
 

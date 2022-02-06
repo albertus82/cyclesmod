@@ -26,7 +26,7 @@ public enum VehicleType {
 		case GPC:
 			return team.toLowerCase(Locale.ROOT);
 		default:
-			throw new IllegalArgumentException("Unknown game: " + game);
+			throw new IllegalArgumentException("Unknown or unsupported game: " + game);
 		}
 	}
 
@@ -38,7 +38,7 @@ public enum VehicleType {
 		case GPC:
 			return team;
 		default:
-			throw new IllegalArgumentException("Unknown game: " + game);
+			throw new IllegalArgumentException("Unknown or unsupported game: " + game);
 		}
 	}
 

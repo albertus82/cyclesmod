@@ -125,7 +125,7 @@ public class CyclesModEngine {
 				throw new UnknownPropertyException(propertyName, e);
 			}
 		default:
-			throw new IllegalArgumentException("Unknown game: " + vehiclesInf.getGame());
+			throw new IllegalArgumentException("Unknown or unsupported game: " + vehiclesInf.getGame());
 		}
 	}
 

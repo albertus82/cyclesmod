@@ -22,14 +22,13 @@ public class VehiclesInf {
 
 	private final Map<VehicleType, Vehicle> vehicles = new EnumMap<>(VehicleType.class);
 
-	@NonNull
 	@Getter
-	private Game game;
+	private final Game game;
 
 	/** Creates a new instance based on the default configuration. */
 	public VehiclesInf(@NonNull final Game game) {
 		this.game = game;
-		reset(game);
+		reset();
 	}
 
 	/**
@@ -58,7 +57,7 @@ public class VehiclesInf {
 		parse(bytes, vehicleTypes);
 	}
 
-	public void reset(@NonNull final Game game, final VehicleType... vehicleTypes) {
+	public void reset(final VehicleType... vehicleTypes) {
 		final byte[] bytes;
 		switch (game) {
 		case CYCLES:
@@ -68,9 +67,8 @@ public class VehiclesInf {
 			bytes = DefaultCars.getByteArray();
 			break;
 		default:
-			throw new IllegalArgumentException("Unknown game: " + game);
+			throw new IllegalStateException("Unknown or unsupported game: " + game);
 		}
-		this.game = game;
 		parse(bytes, vehicleTypes);
 	}
 
@@ -112,7 +110,7 @@ public class VehiclesInf {
 		case GPC:
 			return "CARS.INF";
 		default:
-			throw new IllegalArgumentException("Unknown game: " + game);
+			throw new IllegalArgumentException("Unknown or unsupported game: " + game);
 		}
 	}
 

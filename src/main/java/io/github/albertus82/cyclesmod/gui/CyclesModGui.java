@@ -467,7 +467,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 
 	private void doResetSingle(@NonNull final VehicleType vehicleType) {
 		updateModelValuesLenient();
-		engine.getVehiclesInf().reset(mode.getGame(), vehicleType);
+		engine.getVehiclesInf().reset(vehicleType);
 		tabs.updateFormValues();
 	}
 
@@ -476,7 +476,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			return false;
 		}
 		try {
-			engine.getVehiclesInf().reset(mode.getGame());
+			engine.getVehiclesInf().reset();
 			tabs.updateFormValues();
 			setCurrentFileModificationStatus(isNotSaved());
 			return true;
@@ -656,7 +656,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		}
 		setMode(Mode.DEFAULT);
 		currentFileName = null;
-		engine.getVehiclesInf().reset(mode.getGame());
+		engine.setVehiclesInf(new VehiclesInf(mode.getGame()));
 		tabs.updateFormValues();
 		setLastSavedProperties(defaultProperties.get(mode));
 		setLastExportedProperties(defaultProperties.get(mode));
