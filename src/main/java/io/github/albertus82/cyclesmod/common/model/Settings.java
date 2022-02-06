@@ -15,7 +15,7 @@ public class Settings implements ByteArray {
 
 	public static final int LENGTH = 22;
 	public static final int MIN_VALUE = 0;
-	public static final int MAX_VALUE = 0xffff;
+	public static final int MAX_VALUE = 0xFFFF;
 
 	public static final String PREFIX = "settings";
 

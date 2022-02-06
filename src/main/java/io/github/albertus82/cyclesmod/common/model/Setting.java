@@ -48,13 +48,4 @@ public enum Setting { // The order matters.
 		return null;
 	}
 
-	public static Setting forIndex(final int index) {
-		for (final Setting setting : Setting.values()) {
-			if (setting.index == index) {
-				return setting;
-			}
-		}
-		return null;
-	}
-
 }

@@ -15,7 +15,7 @@ public class Power implements ByteArray {
 
 	public static final int LENGTH = 106;
 	public static final short MIN_VALUE = 0;
-	public static final short MAX_VALUE = 0xff;
+	public static final short MAX_VALUE = 0xFF;
 
 	public static final String PREFIX = "power";
 

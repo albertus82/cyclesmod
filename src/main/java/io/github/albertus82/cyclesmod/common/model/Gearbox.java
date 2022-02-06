@@ -31,7 +31,7 @@ public class Gearbox implements ByteArray {
 	 * I valori sono a 16 bit, ma di fatto vengono considerati solo 8 bit (si
 	 * procede per multipli di 256).
 	 */
-	public static final int MAX_VALUE = 0xffff;
+	public static final int MAX_VALUE = 0xFFFF;
 
 	@Getter
 	private static final Map<Game, Set<Byte>> validGears;
