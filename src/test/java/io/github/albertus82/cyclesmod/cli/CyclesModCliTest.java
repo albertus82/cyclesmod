@@ -7,14 +7,18 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.AfterAll;
+import org.apache.commons.io.FilenameUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,16 +34,16 @@ class CyclesModCliTest extends BaseTest {
 
 	private static Path outputDir;
 
-	@BeforeAll
-	static void beforeAll() throws IOException {
+	@BeforeEach
+	void beforeEach() throws IOException {
 		outputDir = Paths.get(projectProperties.getProperty("project.build.directory"), "test-output-tmp");
 		log.log(Level.INFO, "Creating directory ''{0}''...", outputDir);
 		Files.createDirectories(outputDir);
 		log.log(Level.INFO, "Created directory ''{0}''.", outputDir);
 	}
 
-	@AfterAll
-	static void afterAll() {
+	@AfterEach
+	void afterEach() {
 		log.log(Level.INFO, "Deleting directory ''{0}''...", outputDir);
 		try {
 			FileUtils.deleteDirectory(outputDir.toFile());
@@ -50,9 +54,21 @@ class CyclesModCliTest extends BaseTest {
 		}
 	}
 
-	@BeforeEach
-	void before() throws IOException {
-		Files.deleteIfExists(Paths.get(outputDir.toString(), BIKES_CFG_FILENAME));
+	@Test
+	void testRandoms() throws IOException {
+		try (final InputStream is = getClass().getResourceAsStream("/random.cfg.zip"); final ZipInputStream zis = new ZipInputStream(is)) {
+			while (true) {
+				final ZipEntry e = zis.getNextEntry();
+				if (e == null) {
+					break;
+				}
+				final String expectedHash = FilenameUtils.getBaseName(e.getName());
+				Files.copy(zis, Paths.get(outputDir.toString(), BIKES_CFG_FILENAME), StandardCopyOption.REPLACE_EXISTING);
+				new CyclesModCli(outputDir, true, false).call();
+				final String actualHash = DigestUtils.sha256Hex(Files.readAllBytes(Paths.get(outputDir.toString(), BIKES_INF_FILENAME)));
+				Assertions.assertEquals(expectedHash, actualHash, e.toString());
+			}
+		}
 	}
 
 	@Test
