@@ -38,8 +38,8 @@ public class Settings implements ByteArray {
 	@Override
 	public byte[] toByteArray() {
 		final ByteBuffer buf = ByteBuffer.allocate(LENGTH).order(ByteOrder.LITTLE_ENDIAN);
-		for (final int value : values.values()) {
-			buf.putShort((short) value);
+		for (final Integer value : values.values()) {
+			buf.putShort(value.shortValue());
 		}
 		return buf.array();
 	}
