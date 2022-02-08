@@ -91,7 +91,7 @@ Each bike has eight general settings that determine the following characteristic
    * Level 4/5: 1 sec. = `120`.
    * Level 5/5 (Pro): 1 sec. = `160`.
 
-* **Grip**: skid threshold, which determines the speed at which corners can be tackled. Valid values between `0` (the bike skids immediately and does not turn at all) and `65535` (the bike never skids).
+* **Grip**: skid threshold, that determines the speed at which corners can be tackled. Valid values between `0` (the bike skids immediately and does not turn at all) and `65535` (the bike never skids).
 
 * **Braking speed**: determines the stopping time of the motorcycle. Valid values between `0` (the bike does not brake at all; on the contrary, friction and aerodynamic resistance are eliminated) and `65535` (the bike stops instantly on brake).
 
