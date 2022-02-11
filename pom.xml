@@ -1045,7 +1045,7 @@
 
 	<repositories>
 		<repository>
-			<id>${project.groupId}:${project.artifactId}-local</id>
+			<id>${project.groupId}_${project.artifactId}_local</id>
 			<url>${project.baseUri}/mvn/repository</url>
 		</repository>
 		<repository>
