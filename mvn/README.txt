@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=/path/to/my-library-1.2.3.jar -Dsources=/path/to/my-library-1.2.3-sources.jar -Djavadoc=/path/to/my-library-1.2.3-javadoc.jar -DgroupId=com.example -DartifactId=my-library -Dversion=1.2.3 -Dpackaging=jar -DcreateChecksum=true -DlocalRepositoryPath=.
