@@ -773,7 +773,7 @@
 									<maxJdkVersion>${maven.compiler.target}</maxJdkVersion>
 								</enforceBytecodeVersion>
 								<requireMavenVersion>
-									<version>3.5.4</version>
+									<version>3.5.2</version>
 								</requireMavenVersion>
 							</rules>
 						</configuration>
