@@ -93,7 +93,7 @@
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.osgi</artifactId>
-			<version>3.17.100</version>
+			<version>3.17.200</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.draw2d.plugins</groupId>
@@ -224,7 +224,7 @@
 								<phase>process-sources</phase>
 								<configuration>
 									<target>
-										<ant target="codeql-delombok" />
+										<ant target="codeql-delombok"/>
 									</target>
 								</configuration>
 								<goals>
@@ -236,7 +236,7 @@
 								<phase>process-test-sources</phase>
 								<configuration>
 									<target>
-										<ant target="codeql-delombok-test" />
+										<ant target="codeql-delombok-test"/>
 									</target>
 								</configuration>
 								<goals>
@@ -554,7 +554,7 @@
 								</goals>
 								<configuration>
 									<target>
-										<ant target="launch4j" />
+										<ant target="launch4j"/>
 									</target>
 								</configuration>
 							</execution>
@@ -604,7 +604,7 @@
 								</goals>
 								<configuration>
 									<target>
-										<ant target="launch4j" />
+										<ant target="launch4j"/>
 									</target>
 								</configuration>
 							</execution>
@@ -854,7 +854,7 @@
 						<configuration>
 							<skip>${maven.antrun.skip.lombok-config}</skip>
 							<target>
-								<ant target="lombok-config" />
+								<ant target="lombok-config"/>
 							</target>
 						</configuration>
 					</execution>
@@ -879,7 +879,7 @@
 						</goals>
 						<configuration>
 							<target>
-								<ant target="checksums" />
+								<ant target="checksums"/>
 							</target>
 						</configuration>
 					</execution>
