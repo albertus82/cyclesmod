@@ -41,7 +41,7 @@
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<maven.version.rules>${project.baseUri}maven-version-rules.xml</maven.version.rules>
 		<swt.version>3.116.100</swt.version> <!-- Last version compatible with JRE 8 -->
-		<jface.version>3.22.200</jface.version> <!-- Last version compatible with JRE 8 -->
+		<jface.version>3.25.0</jface.version> <!-- Last version compatible with JRE 8 -->
 		<lombok.version>1.18.20</lombok.version>
 		<picocli.version>4.6.3</picocli.version>
 		<windows.build.finalName>${project.name}</windows.build.finalName>
@@ -224,7 +224,7 @@
 								<phase>process-sources</phase>
 								<configuration>
 									<target>
-										<ant target="codeql-delombok" />
+										<ant target="codeql-delombok"/>
 									</target>
 								</configuration>
 								<goals>
@@ -236,7 +236,7 @@
 								<phase>process-test-sources</phase>
 								<configuration>
 									<target>
-										<ant target="codeql-delombok-test" />
+										<ant target="codeql-delombok-test"/>
 									</target>
 								</configuration>
 								<goals>
@@ -449,7 +449,7 @@
 			<properties>
 				<platform>gtk-linux-armhf</platform>
 				<assembly.descriptor>linux.xml</assembly.descriptor>
-				<jface.version>3.12.2</jface.version>
+				<jface.version>3.25.0</jface.version>
 			</properties>
 			<build>
 				<finalName>${linux.build.finalName}</finalName>
@@ -554,7 +554,7 @@
 								</goals>
 								<configuration>
 									<target>
-										<ant target="launch4j" />
+										<ant target="launch4j"/>
 									</target>
 								</configuration>
 							</execution>
@@ -604,7 +604,7 @@
 								</goals>
 								<configuration>
 									<target>
-										<ant target="launch4j" />
+										<ant target="launch4j"/>
 									</target>
 								</configuration>
 							</execution>
@@ -854,7 +854,7 @@
 						<configuration>
 							<skip>${maven.antrun.skip.lombok-config}</skip>
 							<target>
-								<ant target="lombok-config" />
+								<ant target="lombok-config"/>
 							</target>
 						</configuration>
 					</execution>
@@ -879,7 +879,7 @@
 						</goals>
 						<configuration>
 							<target>
-								<ant target="checksums" />
+								<ant target="checksums"/>
 							</target>
 						</configuration>
 					</execution>
