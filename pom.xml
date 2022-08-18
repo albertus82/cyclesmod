@@ -105,7 +105,7 @@
 		<dependency>
 			<groupId>org.eclipse.nebula</groupId>
 			<artifactId>org.eclipse.nebula.visualization.xygraph</artifactId>
-			<version>3.1.0.202011020719</version>
+			<version>3.1.0.202208171809</version>
 		</dependency>
 		<dependency>
 			<groupId>info.picocli</groupId>
