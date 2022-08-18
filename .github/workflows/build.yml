@@ -7,8 +7,8 @@ jobs:
     name: Build
     strategy:
       matrix:
-        java: [ '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19-ea' ]
-        os: [ windows-latest, ubuntu-latest, macOS-latest ]
+        java: [ '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19-ea', '20-ea' ]
+        os: [ windows-latest, ubuntu-20.04, macOS-latest ]
     runs-on: ${{ matrix.os }}
     env:
       MAVEN_OPTS: -Dhttp.keepAlive=false
@@ -18,4 +18,11 @@ jobs:
       with:
         distribution: zulu
         java-version: ${{ matrix.java }}
+    - if: contains(matrix.os, 'ubuntu')
+      name: Install dependencies
+      run: |
+        sudo rm -vf /etc/apt/sources.list.d/microsoft-prod.list
+        sudo apt-get update && sudo apt-get install -y --allow-downgrades libgd3/focal libpcre2-8-0/focal libpcre2-16-0/focal libpcre2-32-0/focal libpcre2-posix2/focal
+        sudo apt-get purge -y libmono* moby* mono* php* libgdiplus libpcre2-posix3 libzip4
+        sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y wine32
     - run: ./mvnw clean verify -B -V -e -ntp
