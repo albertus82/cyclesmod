@@ -7,7 +7,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        java: [ '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19-ea', '20-ea' ]
+        java: [ '8', '11', '17', '18', '19-ea', '20-ea' ]
         os: [ windows-latest, ubuntu-20.04, macOS-latest ]
     runs-on: ${{ matrix.os }}
     env:
