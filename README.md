@@ -103,7 +103,7 @@ Each bike has eight general settings that determine the following characteristic
 
 ### Gearbox
 
-Gear ratios can be configured for each individual gear. Higher values correspond to shorter ratios. The permitted values are between `0` and `65535` for gears 1 to 9, while for *N* (neutral) gear the value is irrelevant.
+Gear ratios can be configured for each individual gear. Higher values correspond to shorter ratios. Permitted values are between `0` and `65535` for gears 1 to 9, while for *N* (neutral) the value is irrelevant.
 
 ### Power curve
 
@@ -139,13 +139,13 @@ If you prefer to operate without a graphical interface, an almost full-featured 
 * Linux: `cyclesmod.sh`
 * macOS: `cyclesmod.command`
 
-Once executed, the program first checks for the existence of a text file called `BIKES.CFG`; if not present, it creates a default one mapping the original `BIKES.INF` binary file. The `BIKES.CFG` file is basically a plain text translation of the `BIKES.INF` file; opening it with a text editor, it is possible to directly access the motorcycle parameters, which are quite self-explanatory and divided into the usual three groups: *settings*, *gearbox* and *power*. Thus, initially the `BIKES.CFG` file will contain the game defaults derived directly from the original `BIKES.INF` file.
+Once executed, the program first checks for the existence of a text file called `BIKES.CFG`; if not present, it creates a default one mapping the original `BIKES.INF` binary file. The `BIKES.CFG` file is basically a plain text translation of the `BIKES.INF` file; opening it with a text editor, you can directly access the motorcycle parameters, which are quite self-explanatory and divided into the usual three groups: *settings*, *gearbox* and *power*. Thus, initially the `BIKES.CFG` file will contain the game defaults derived directly from the original `BIKES.INF` file.
 
-Next, the program reads the `BIKES.CFG` file contents and eventually produces a new `BIKES.INF` file, making a backup of the existing one, if any. At this point it is sufficient to copy the generated `BIKES.INF` file into the game directory. Starting the game you will then be able to experiment with the changes made to the configuration.
+Next, the program reads the `BIKES.CFG` file contents and eventually produces a new `BIKES.INF` file, making a backup of the existing one, if any. At this point you can copy the generated `BIKES.INF` file into the game directory. Starting the game you will then be able to experiment with the changes made to the configuration.
 
 To make further changes to the bikes, simply open the `BIKES.CFG` file, modify the parameters of interest, save the file and re-run *CyclesMod*. The program will detect the existence of the `BIKES.CFG` file and will produce a new `BIKES.INF` containing the changes made. In case of errors, appropriate console messages will be displayed.
 
-**If you want to restore the original `BIKES.INF` file shipped with the game, simply delete the `BIKES.CFG` file and run the program without arguments: it will automatically generate default `BIKES.CFG` and `BIKES.INF` files.**
+**If you want to restore the original `BIKES.INF` file shipped with the game, simply delete the `BIKES.CFG` file and run the program with no arguments: it will automatically generate default `BIKES.CFG` and `BIKES.INF` files.**
 
 
 ## Acknowledgements
