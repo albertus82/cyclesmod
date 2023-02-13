@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>io.github.albertus82</groupId>
 			<artifactId>unexepack</artifactId>
-			<version>0.2.2</version>
+			<version>0.2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
