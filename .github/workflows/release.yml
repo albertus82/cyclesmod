@@ -26,5 +26,5 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         draft: true
         generateReleaseNotes: true
-    - run: FOR /R target %%G IN (*.exe *.tar.gz *.zip) DO IF NOT %%~xG == .exec ECHO Submitting file %%G to VirusTotal... & ping -n 16 -l 0 localhost & curl -v -F "file=@%%G" -F apikey=${{ secrets.VT_API_KEY }} https://www.virustotal.com/vtapi/v2/file/scan & ECHO; & ECHO File %%G submitted to VirusTotal.
+    - run: FOR /R target %%G IN (*.exe *.tar.gz *.zip) DO IF NOT %%~xG == .exec ECHO Submitting file %%G to VirusTotal... & ping -n 16 -l 0 localhost & curl -v -H "accept: application/json" -H "content-type: multipart/form-data" -H "x-apikey: ${{ secrets.VT_API_KEY }}" -F "file=@%%G" https://www.virustotal.com/api/v3/files & ECHO; & ECHO File %%G submitted to VirusTotal.
       shell: cmd
