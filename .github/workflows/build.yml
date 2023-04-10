@@ -6,6 +6,7 @@ jobs:
   build:
     name: Build
     strategy:
+      fail-fast: false
       matrix:
         java: [ '8', '11', '17', '19', '20-ea' ]
         os: [ windows-latest, ubuntu-20.04, macOS-latest ]
