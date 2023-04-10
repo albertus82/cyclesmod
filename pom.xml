@@ -27,8 +27,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.release>8</maven.compiler.release>
+		<maven.compiler.source>1.${maven.compiler.release}</maven.compiler.source>
+		<maven.compiler.target>1.${maven.compiler.release}</maven.compiler.target>
 		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
 		<maven.compiler.showWarnings>true</maven.compiler.showWarnings>
 		<project.url>${project.url}</project.url>
@@ -168,16 +169,6 @@
 	</dependencyManagement>
 
 	<profiles>
-		<profile>
-			<id>javac-release-option</id>
-			<activation>
-				<jdk>[9,)</jdk>
-			</activation>
-			<properties>
-				<maven.compiler.release>8</maven.compiler.release>
-			</properties>
-		</profile>
-
 		<profile>
 			<id>codeql</id>
 			<properties>
@@ -734,9 +725,9 @@
 			</plugin>
 
 			<plugin>
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
-				<version>4.0.5</version>
+				<groupId>io.github.git-commit-id</groupId>
+				<artifactId>git-commit-id-maven-plugin</artifactId>
+				<version>5.0.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -760,6 +751,7 @@
 						<manifestEntries>
 							<X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
 							<X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
+							<X-Compile-Release-JDK>${maven.compiler.release}</X-Compile-Release-JDK>
 						</manifestEntries>
 						<manifest>
 							<mainClass>${jar.mainClass}</mainClass>
@@ -774,7 +766,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -783,13 +775,13 @@
 						<configuration>
 							<rules>
 								<requireJavaVersion>
-									<version>${maven.compiler.source}</version>
+									<version>11</version>
 								</requireJavaVersion>
 								<requireMavenVersion>
 									<version>3.6.3</version>
 								</requireMavenVersion>
 								<enforceBytecodeVersion>
-									<maxJdkVersion>${maven.compiler.target}</maxJdkVersion>
+									<maxJdkVersion>${maven.compiler.release}</maxJdkVersion>
 								</enforceBytecodeVersion>
 							</rules>
 						</configuration>
@@ -799,7 +791,7 @@
 					<dependency>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>extra-enforcer-rules</artifactId>
-						<version>1.5.1</version>
+						<version>1.6.2</version>
 					</dependency>
 				</dependencies>
 			</plugin>
