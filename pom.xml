@@ -822,7 +822,7 @@
 				<version>2.15.0</version>
 				<executions>
 					<execution>
-						<phase>verify</phase>
+						<phase>validate</phase>
 						<goals>
 							<goal>display-property-updates</goal>
 							<goal>display-dependency-updates</goal>
@@ -915,7 +915,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-invoker-plugin</artifactId>
-				<version>3.5.0</version>
+				<version>3.5.1</version>
 				<configuration>
 					<pom>pom.xml</pom>
 					<streamLogs>true</streamLogs>
