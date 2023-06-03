@@ -45,8 +45,8 @@
 		<maven.version.rules>${project.baseUri}maven-version-rules.xml</maven.version.rules>
 		<swt.version>3.116.100</swt.version> <!-- Last version compatible with JRE 8 -->
 		<jface.version>3.22.200</jface.version> <!-- Last version compatible with JRE 8 -->
-		<lombok.version>1.18.26</lombok.version>
-		<picocli.version>4.7.3</picocli.version>
+		<lombok.version>1.18.28</lombok.version>
+		<picocli.version>4.7.4</picocli.version>
 		<windows.build.finalName>${project.name}</windows.build.finalName>
 		<linux.build.finalName>${project.artifactId}</linux.build.finalName>
 		<mac.build.finalName>${project.name}</mac.build.finalName>
