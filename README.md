@@ -139,7 +139,7 @@ If you prefer to operate without a graphical interface, an almost full-featured 
 * Linux: `cyclesmod.sh`
 * macOS: `cyclesmod.command`
 
-Once executed, the program first checks for the existence of a text file called `BIKES.CFG`; if not present, it creates a default one mapping the original `BIKES.INF` binary file. The `BIKES.CFG` file is basically a plain text translation of the `BIKES.INF` file; opening it with a text editor, you can directly access the motorcycle parameters, which are quite self-explanatory and divided into the usual three groups: *settings*, *gearbox* and *power*. Thus, initially the `BIKES.CFG` file will contain the game defaults derived directly from the original `BIKES.INF` file.
+Once executed, the program checks if a text file called `BIKES.CFG` exists; if not, it creates a default one mapping the original `BIKES.INF` binary file. The `BIKES.CFG` file is basically a plain text translation of the `BIKES.INF` file; opening it with a text editor, you can directly access the motorcycle parameters, which are quite self-explanatory and divided into the usual three groups: *settings*, *gearbox* and *power*. Thus, initially the `BIKES.CFG` file will contain the game defaults derived directly from the original `BIKES.INF` file.
 
 Next, the program reads the `BIKES.CFG` file contents and eventually produces a new `BIKES.INF` file, making a backup of the existing one, if any. At this point you can copy the generated `BIKES.INF` file into the game directory. Starting the game you will then be able to experiment with the changes made to the configuration.
 
