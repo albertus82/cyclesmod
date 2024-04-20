@@ -45,8 +45,8 @@
 		<maven.version.rules>${project.baseUri}maven-version-rules.xml</maven.version.rules>
 		<swt.version>3.116.100</swt.version> <!-- Last version compatible with JRE 8 -->
 		<jface.version>3.22.200</jface.version> <!-- Last version compatible with JRE 8 -->
-		<lombok.version>1.18.28</lombok.version>
-		<picocli.version>4.7.4</picocli.version>
+		<lombok.version>1.18.32</lombok.version>
+		<picocli.version>4.7.5</picocli.version>
 		<windows.build.finalName>${project.name}</windows.build.finalName>
 		<linux.build.finalName>${project.artifactId}</linux.build.finalName>
 		<mac.build.finalName>${project.name}</mac.build.finalName>
@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>io.github.albertus82</groupId>
 			<artifactId>jface-utils</artifactId>
-			<version>19.0.7</version>
+			<version>20.0.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.eclipse.platform</groupId>
@@ -86,7 +86,7 @@
 		<dependency>
 			<groupId>io.github.albertus82</groupId>
 			<artifactId>unexepack</artifactId>
-			<version>0.2.3</version>
+			<version>0.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
@@ -96,7 +96,7 @@
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.osgi</artifactId>
-			<version>3.18.300</version>
+			<version>3.19.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.draw2d.plugins</groupId>
@@ -141,19 +141,19 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.9.2</version>
+			<version>5.10.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.11.0</version>
+			<version>2.16.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.15</version>
+			<version>1.16.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -791,7 +791,7 @@
 					<dependency>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>extra-enforcer-rules</artifactId>
-						<version>1.6.2</version>
+						<version>1.8.0</version>
 					</dependency>
 				</dependencies>
 			</plugin>
