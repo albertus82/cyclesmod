@@ -27,4 +27,10 @@ jobs:
         sudo apt-get update && sudo apt-get install -y --allow-downgrades libgd3/focal libpcre2-8-0/focal libpcre2-16-0/focal libpcre2-32-0/focal libpcre2-posix2/focal
         sudo apt-get purge -y libmono* moby* mono* php* libgdiplus libpcre2-posix3 libzip4
         sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y wine32
+    - uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
     - run: ./mvnw clean verify -B -V -e -ntp
