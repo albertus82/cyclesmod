@@ -26,8 +26,7 @@ jobs:
         sudo mkdir -pm755 /etc/apt/keyrings
         sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
         sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
-        sudo apt-get update -y
-        sudo apt-get install -y --install-recommends wine-devel-i386:i386 winehq-stable
+        sudo apt-get update && sudo apt-get install -y --install-recommends wine-devel-i386:i386 winehq-stable
     - uses: actions/cache@v3
       with:
         path: ~/.m2/repository
