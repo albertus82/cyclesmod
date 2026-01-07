@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         java: [ '11', '17', '21' ]
-        os: [ windows-latest, ubuntu-20.04, macOS-latest ]
+        os: [ windows-latest, ubuntu-latest, macOS-latest ]
     runs-on: ${{ matrix.os }}
     env:
       MAVEN_OPTS: -Dhttp.keepAlive=false
@@ -19,14 +19,15 @@ jobs:
       with:
         distribution: zulu
         java-version: ${{ matrix.java }}
-        cache: 'maven'
     - if: contains(matrix.os, 'ubuntu')
       name: Install dependencies
       run: |
-        sudo rm -vf /etc/apt/sources.list.d/microsoft-prod.list
-        sudo apt-get update && sudo apt-get install -y --allow-downgrades libgd3/focal libpcre2-8-0/focal libpcre2-16-0/focal libpcre2-32-0/focal libpcre2-posix2/focal
-        sudo apt-get purge -y libmono* moby* mono* php* libgdiplus libpcre2-posix3 libzip4
-        sudo dpkg --add-architecture i386 && sudo apt-get update && sudo apt-get install -y wine32
+        sudo dpkg --add-architecture i386 && sudo apt-get update
+        sudo mkdir -pm755 /etc/apt/keyrings
+        sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+        sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
+        sudo apt-get update -y
+        sudo apt-get install -y --install-recommends wine-devel-i386:i386 winehq-stable
     - uses: actions/cache@v3
       with:
         path: ~/.m2/repository
