@@ -537,7 +537,7 @@
 			<properties>
 				<platform>win32-win32-x86</platform>
 				<assembly.descriptor>windows.xml</assembly.descriptor>
-				<launch4j.jre.runtimeBits>32</launch4j.jre.runtimeBits>
+				<launch4j.jre.requires64Bit>false</launch4j.jre.requires64Bit>
 			</properties>
 			<build>
 				<finalName>${windows.build.finalName}</finalName>
@@ -587,7 +587,7 @@
 			<properties>
 				<platform>win32-win32-x86_64</platform>
 				<assembly.descriptor>windows.xml</assembly.descriptor>
-				<launch4j.jre.runtimeBits>64</launch4j.jre.runtimeBits>
+				<launch4j.jre.requires64Bit>true</launch4j.jre.requires64Bit>
 			</properties>
 			<build>
 				<finalName>${windows.build.finalName}</finalName>

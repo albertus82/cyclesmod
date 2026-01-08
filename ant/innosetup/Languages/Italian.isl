@@ -1,5 +1,5 @@
-﻿; bovirus@gmail.com
-; *** Inno Setup version 6.1.0+ Italian messages ***
+; bovirus@gmail.com
+; *** Inno Setup version 6.5.0+ Italian messages ***
 ;
 ; To download user-contributed translations of this file, go to:
 ;    https://jrsoftware.org/files/istrans/
@@ -9,7 +9,7 @@
 ; Setup adds the periods automatically (appending a period would result in
 ; two periods being displayed).
 ;
-; Italian.isl - Last Update: 25.07.2020  by bovirus (bovirus@gmail.com)
+; Italian.isl - Last Update: 28.09.2025  by bovirus (bovirus@gmail.com)
 ;
 ; Translator name:   bovirus
 ; Translator e-mail: bovirus@gmail.com
@@ -20,17 +20,17 @@
 ; understand the '[LangOptions] section' topic in the help file.
 LanguageName=Italiano
 LanguageID=$0410
+; LanguageCodePage should always be set if possible, even if this file is Unicode
+; For English it's set to zero anyway because English only uses ASCII characters
 LanguageCodePage=1252
 ; If the language you are translating to requires special font faces or
 ; sizes, uncomment any of the following entries and change them accordingly.
 ;DialogFontName=
-;DialogFontSize=8
-;WelcomeFontName=Verdana
-;WelcomeFontSize=12
-;TitleFontName=Arial
-;TitleFontSize=29
-;CopyrightFontName=Arial
-;CopyrightFontSize=8
+;DialogFontSize=9
+;DialogFontBaseScaleWidth=7
+;DialogFontBaseScaleHeight=15
+;WelcomeFontName=Segoe UI
+;WelcomeFontSize=14
 
 [Messages]
 
@@ -49,6 +49,7 @@ ErrorTitle=Errore
 SetupLdrStartupMessage=Questa è l'installazione di %1.%n%nVuoi continuare?
 LdrCannotCreateTemp=Impossibile creare un file temporaneo.%n%nInstallazione annullata.
 LdrCannotExecTemp=Impossibile eseguire un file nella cartella temporanea.%n%nInstallazione annullata.
+HelpTextNote=
 
 ; *** Startup error messages
 LastErrorMessage=%1.%n%nErrore %2: %3
@@ -85,12 +86,12 @@ ErrorTooManyFilesInDir=Impossibile creare i file nella cartella "%1" perché con
 
 ; *** Setup common messages
 ExitSetupTitle=Uscita dall'installazione
-ExitSetupMessage=L'installazione non è completa.%n%nUscendo dall'installazione in questo momento, il programma non sarà installato.%n%nÈ possibile eseguire l'installazione in un secondo tempo.%n%nVuoi uscire dall'installazione?
+ExitSetupMessage=L'installazione non è stata completata.%n%nUscendo dall'installazione in questo momento, il programma non sarà installato.%n%nÈ possibile eseguire l'installazione in un secondo tempo.%n%nVuoi uscire dall'installazione?
 AboutSetupMenuItem=&Informazioni sull'installazione...
 AboutSetupTitle=Informazioni sull'installazione
 AboutSetupMessage=%1 versione %2%n%3%n%n%1 sito web:%n%4
 AboutSetupNote=
-TranslatorNote=Traduzione italiana a cura di Rinaldo M. aka Whiteshark e bovirus (v. 11.09.2018)
+TranslatorNote=Traduzione italiana a cura di Rinaldo M. aka Whiteshark e bovirus (v. 12.06.2025)
 
 ; *** Buttons
 ButtonBack=< &Indietro
@@ -217,28 +218,38 @@ ReadyMemoGroup=Cartella del menu Avvio/Start:
 ReadyMemoTasks=Processi aggiuntivi:
 
 ; *** TDownloadWizardPage wizard page and DownloadTemporaryFile
-DownloadingLabel=Download file aggiuntivi...
+DownloadingLabel2=Download file...
 ButtonStopDownload=&Stop download
 StopDownload=Sei sicuro di voler interrompere il download?
 ErrorDownloadAborted=Download annullato
 ErrorDownloadFailed=Download fallito: %1 %2
 ErrorDownloadSizeFailed=Rilevamento dimensione fallito: %1 %2
-ErrorFileHash1=Errore hash file: %1
-ErrorFileHash2=Hash file non valido: atteso %1, trovato %2
 ErrorProgress=Progresso non valido: %1 di %2
 ErrorFileSize=Dimensione file non valida: attesa %1, trovata %2
+
+; *** TExtractionWizardPage wizard page and Extract7ZipArchive
+ExtractingLabel=Estrazione file...
+ButtonStopExtraction=Interrompi e&strazione
+StopExtraction=Sei sicuro di voler interrompere l'estrazione?
+ErrorExtractionAborted=Estrazione interrotta
+ErrorExtractionFailed=Estrazione fallita: %1
+
+; *** Archive extraction failure details
+ArchiveIncorrectPassword=La password non è corretta
+ArchiveIsCorrupted=L'archivio non è integro
+ArchiveUnsupportedFormat=Questo formato archivio non è supportato
 
 ; *** "Preparing to Install" wizard page
 WizardPreparing=Preparazione all'installazione
 PreparingDesc=Preparazione all'installazione di [name] nel computer.
-PreviousInstallNotCompleted=L'installazione/rimozione precedente del programma non è stata completata.%n%nÈ necessario riavviare il sistema per completare l'installazione.%n%nDopo il riavvio del sistema esegui di nuovo l'installazione di [name].
+PreviousInstallNotCompleted=L'installazione/rimozione precedente del programma non è stata completata.%n%nPer completare l'installazione è necessario riavviare il sistema.%n%nDopo il riavvio del sistema esegui di nuovo l'installazione di [name].
 CannotContinue=L'installazione non può continuare. Seleziona "Annulla" per uscire.
 ApplicationsFound=Le seguenti applicazioni stanno usando file che devono essere aggiornati dall'installazione.%n%nTi consigliamo di permettere al processo di chiudere automaticamente queste applicazioni.
-ApplicationsFound2=Le seguenti applicazioni stanno usando file che devono essere aggiornati dall'installazione.%n%nTi consigliamo di permettere al processo di chiudere automaticamente queste applicazioni.%n%nAl completamento dell'installazione, il processo tenterà di riavviare le applicazioni.
+ApplicationsFound2=Le seguenti applicazioni stanno usando file che devono essere aggiornati dall'installazione.%n%nTi consigliamo di permettere al processo di chiudere automaticamente queste applicazioni.%n%nAd installazione completata, il processo tenterà di riavviare le applicazioni.
 CloseApplications=Chiudi &automaticamente le applicazioni
 DontCloseApplications=&Non chiudere le applicazioni
 ErrorCloseApplications=L'installazione non è riuscita a chiudere automaticamente tutte le applicazioni.%n%nPrima di proseguire ti raccomandiamo di chiudere tutte le applicazioni che usano file che devono essere aggiornati durante l'installazione.
-PrepareToInstallNeedsRestart=Il programma di installazione deve riavviare il computer.%nDopo aver riavviato il computer esegui di nuovo il programma di installazione per completare l'installazione di [name].%n%nVuoi riavviare il computer ora?
+PrepareToInstallNeedsRestart=Il programma di installazione deve riavviare il computer.%Per completare l'installazione di [name] dopo aver riavviato il sistema esegui di nuovo il programma di installazione.%n%nVuoi riavviare il sistema?
 
 ; *** "Installing" wizard page
 WizardInstalling=Installazione in corso
@@ -249,8 +260,8 @@ FinishedHeadingLabel=Installazione di [name] completata
 FinishedLabelNoIcons=Installazione di [name] completata.
 FinishedLabel=Installazione di [name] completata.%n%nL'applicazione può essere eseguita selezionando le relative icone.
 ClickFinish=Seleziona "Fine" per uscire dall'installazione.
-FinishedRestartLabel=Per completare l'installazione di [name], è necessario riavviare il sistema.%n%nVuoi riavviare adesso?
-FinishedRestartMessage=Per completare l'installazione di [name], è necessario riavviare il sistema.%n%nVuoi riavviare adesso?
+FinishedRestartLabel=Per completare l'installazione di [name], è necessario riavviare il sistema.%n%nVuoi riavviare il sistema?
+FinishedRestartMessage=Per completare l'installazione di [name], è necessario riavviare il sistema.%n%nVuoi riavviare il sistema?
 ShowReadmeCheck=Si, visualizza ora il file LEGGIMI
 YesRadio=&Si, riavvia il sistema adesso
 NoRadio=&No, riavvia il sistema più tardi
@@ -272,11 +283,15 @@ AbortRetryIgnoreSelectAction=Seleziona azione
 AbortRetryIgnoreRetry=&Riprova
 AbortRetryIgnoreIgnore=&Ignora questo errore e continua
 AbortRetryIgnoreCancel=Annulla installazione
+RetryCancelSelectAction=Seleziona azione
+RetryCancelRetry=&Riprova
+RetryCancelCancel=Annulla
 
 ; *** Installation status messages
 StatusClosingApplications=Chiusura applicazioni...
 StatusCreateDirs=Creazione cartelle...
 StatusExtractFiles=Estrazione file...
+StatusDownloadFiles=Download file...
 StatusCreateIcons=Creazione icone...
 StatusCreateIniEntries=Creazione voci nei file INI...
 StatusCreateRegistryEntries=Creazione voci di registro...
@@ -306,6 +321,14 @@ FileAbortRetryIgnoreSkipNotRecommended=&Salta questo file (non suggerito)
 FileAbortRetryIgnoreIgnoreNotRecommended=&Ignora questo errore e continua (non suggerito)
 SourceIsCorrupted=Il file sorgente è danneggiato
 SourceDoesntExist=Il file sorgente "%1" non esiste
+SourceVerificationFailed=Verifica del file sorgente non riuscita: %1
+VerificationSignatureDoesntExist=File firma "%1" non disponibile
+VerificationSignatureInvalid=Il file firma "%1" non è valido
+VerificationKeyNotFound=Il file firma "%1" usa una chiave sconosciuta
+VerificationFileNameIncorrect=Il nome del file non è corretto
+VerificationFileTagIncorrect=L'etichetta del file non è corretta
+VerificationFileSizeIncorrect=La dimensione del file non è corretta
+VerificationFileHashIncorrect=L'hash del file non è corretto
 ExistingFileReadOnly2=Il file esistente non può essere sostituito in quanto segnato come in sola lettura.
 ExistingFileReadOnlyRetry=&Rimuovi attributo di sola lettura e riprova
 ExistingFileReadOnlyKeepExisting=&Mantieni il file esistente
@@ -324,6 +347,8 @@ ErrorChangingAttr=Si è verificato un errore durante il tentativo di modifica de
 ErrorCreatingTemp=Si è verificato un errore durante la creazione di un file nella cartella di installazione:
 ErrorReadingSource=Si è verificato un errore durante la lettura del file sorgente:
 ErrorCopying=Si è verificato un errore durante la copia di un file:
+ErrorDownloading=Si è verificato un errore durante il download di un file:
+ErrorExtracting=Si è verificato un errore durante l'estrazione di un archivio:
 ErrorReplacingExistingFile=Si è verificato un errore durante la sovrascrittura del file esistente:
 ErrorRestartReplace=Errore durante riavvio o sostituzione:
 ErrorRenamingTemp=Si è verificato un errore durante il tentativo di rinominare un file nella cartella di installazione:
@@ -356,7 +381,7 @@ OnlyAdminCanUninstall=Questa applicazione può essere disinstallata solo da un u
 UninstallStatusLabel=Attendi fino a che %1 è stato rimosso dal computer.
 UninstalledAll=Disinstallazione di %1 completata.
 UninstalledMost=Disinstallazione di %1 completata.%n%nAlcuni elementi non possono essere rimossi.%n%nDovranno essere rimossi manualmente.
-UninstalledAndNeedsRestart=Per completare la disinstallazione di %1, è necessario riavviare il sistema.%n%nVuoi riavviare il sistema adesso?
+UninstalledAndNeedsRestart=Per completare la disinstallazione di %1, è necessario riavviare il sistema.%n%nVuoi riavviare il sistema?
 UninstallDataCorrupted=Il file "%1" è danneggiato. Impossibile disinstallare
 
 ; *** Uninstallation phase messages
