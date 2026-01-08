@@ -8,14 +8,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ '11', '17', '21' ]
+        java: [ '17', '21', '25' ]
         os: [ windows-latest, ubuntu-latest, macOS-latest ]
     runs-on: ${{ matrix.os }}
     env:
       MAVEN_OPTS: -Dhttp.keepAlive=false
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-java@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-java@v5
       with:
         distribution: zulu
         java-version: ${{ matrix.java }}
@@ -27,7 +27,7 @@ jobs:
         sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
         sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/noble/winehq-noble.sources
         sudo apt-get update && sudo apt-get install -y --install-recommends wine-devel-i386:i386 winehq-stable
-    - uses: actions/cache@v3
+    - uses: actions/cache@v5
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}

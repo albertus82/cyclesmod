@@ -45,8 +45,8 @@
 		<maven.version.rules>${project.baseUri}maven-version-rules.xml</maven.version.rules>
 		<swt.version>3.116.100</swt.version> <!-- Last version compatible with JRE 8 -->
 		<jface.version>3.22.200</jface.version> <!-- Last version compatible with JRE 8 -->
-		<lombok.version>1.18.32</lombok.version>
-		<picocli.version>4.7.5</picocli.version>
+		<lombok.version>1.18.42</lombok.version>
+		<picocli.version>4.7.7</picocli.version>
 		<windows.build.finalName>${project.name}</windows.build.finalName>
 		<linux.build.finalName>${project.artifactId}</linux.build.finalName>
 		<mac.build.finalName>${project.name}</mac.build.finalName>
@@ -75,7 +75,7 @@
 		<dependency>
 			<groupId>io.github.albertus82</groupId>
 			<artifactId>jface-utils</artifactId>
-			<version>20.0.0</version>
+			<version>20.2.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.eclipse.platform</groupId>
@@ -87,7 +87,7 @@
 			<groupId>io.github.albertus82</groupId>
 			<artifactId>unexepack</artifactId>
 			<version>0.3.1</version>
-		</dependency>
+		</dependency>		
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.core.commands</artifactId>
@@ -96,7 +96,7 @@
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.osgi</artifactId>
-			<version>3.19.0</version>
+			<version>3.24.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.draw2d.plugins</groupId>
@@ -141,19 +141,19 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.10.2</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.16.1</version>
+			<version>6.0.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.16.1</version>
+			<version>1.20.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.21.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -679,17 +679,17 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>3.0.0</version>
+					<version>3.5.4</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-antrun-plugin</artifactId>
-					<version>3.1.0</version>
+					<version>3.2.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>3.5.0</version>
+					<version>3.9.0</version>
 				</plugin>
 				<plugin>
 				    <groupId>org.sonarsource.scanner.maven</groupId>
@@ -703,7 +703,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>3.2.0</version>
+				<version>3.5.0</version>
 				<configuration>
 					<excludeDefaultDirectories>true</excludeDefaultDirectories>
 					<filesets>
@@ -723,16 +723,23 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>3.14.1</version>
 				<configuration>
 					<compilerArgument>-Xlint:all</compilerArgument>
+					<annotationProcessorPaths>
+					    <path>
+					        <groupId>org.projectlombok</groupId>
+					        <artifactId>lombok</artifactId>
+					        <version>${lombok.version}</version>
+					    </path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>io.github.git-commit-id</groupId>
 				<artifactId>git-commit-id-maven-plugin</artifactId>
-				<version>5.0.0</version>
+				<version>9.0.2</version>
 				<executions>
 					<execution>
 						<goals>
@@ -750,7 +757,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.5.0</version>
 				<configuration>
 					<archive>
 						<manifestEntries>
@@ -771,7 +778,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.6.2</version>
 				<executions>
 					<execution>
 						<goals>
@@ -780,13 +787,14 @@
 						<configuration>
 							<rules>
 								<requireJavaVersion>
-									<version>11</version>
+									<version>17</version>
 								</requireJavaVersion>
 								<requireMavenVersion>
 									<version>3.6.3</version>
 								</requireMavenVersion>
 								<enforceBytecodeVersion>
 									<maxJdkVersion>${maven.compiler.release}</maxJdkVersion>
+									<ignoredScopes>test</ignoredScopes>
 								</enforceBytecodeVersion>
 							</rules>
 						</configuration>
@@ -796,7 +804,7 @@
 					<dependency>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>extra-enforcer-rules</artifactId>
-						<version>1.8.0</version>
+						<version>1.11.0</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -804,7 +812,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.9</version>
+				<version>0.8.14</version>
 				<executions>
 					<execution>
 						<id>default-prepare-agent</id>
@@ -824,7 +832,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.15.0</version>
+				<version>2.20.1</version>
 				<executions>
 					<execution>
 						<phase>verify</phase>
@@ -899,7 +907,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.5.0</version>
+				<version>3.8.0</version>
 				<configuration>
 					<finalName>${assembly.finalName}</finalName>
 					<outputDirectory>${assembly.outputDirectory}</outputDirectory>
@@ -920,7 +928,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-invoker-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>3.9.1</version>
 				<configuration>
 					<pom>pom.xml</pom>
 					<streamLogs>true</streamLogs>
@@ -1022,7 +1030,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-help-plugin</artifactId>
-				<version>3.4.0</version>
+				<version>3.5.1</version>
 				<executions>
 					<execution>
 						<?m2e ignore?>
@@ -1038,7 +1046,7 @@
 
 	<repositories>
 		<repository>
-			<id>${project.groupId}_${project.artifactId}</id>
+			<id>${project.groupId}_${project.artifactId}_local</id>
 			<url>${project.baseUri}mvn/repository</url>
 		</repository>
 		<repository>
@@ -1054,4 +1062,3 @@
 	</repositories>
 
 </project>
-
