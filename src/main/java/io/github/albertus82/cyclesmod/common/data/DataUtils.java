@@ -21,10 +21,10 @@ import lombok.NonNull;
 class DataUtils {
 
 	static byte[] inflate(@NonNull final String deflatedBase64, final int expectedSize, final long expectedCrc32) throws DataFormatException, InvalidSizeException, InvalidChecksumException {
-		final Inflater inflater = new Inflater();
-		inflater.setInput(Base64.getDecoder().decode(deflatedBase64));
 		final byte[] bytes = new byte[expectedSize];
+		final Inflater inflater = new Inflater();
 		try {
+			inflater.setInput(Base64.getDecoder().decode(deflatedBase64));
 			final int actualSize = inflater.inflate(bytes);
 			if (actualSize != expectedSize) {
 				throw new InvalidSizeException(expectedSize, actualSize);
