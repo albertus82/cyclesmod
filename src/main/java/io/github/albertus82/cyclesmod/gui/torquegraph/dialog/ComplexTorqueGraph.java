@@ -60,6 +60,9 @@ public class ComplexTorqueGraph extends BasicTorqueGraph {
 
 		final Axis ordinates = getOrdinates();
 		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
+		
+		final Axis powerOrdinates = getPowerOrdinates();
+		powerOrdinates.setAutoScale(DEFAULT_AUTOSCALE);
 
 		final Trace torqueTrace = getTorqueTrace();
 		torqueTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
@@ -150,10 +153,10 @@ public class ComplexTorqueGraph extends BasicTorqueGraph {
 	}
 
 	@Override
-	public void toggleTorqueVisibility(final boolean visibility) {
-		super.toggleTorqueVisibility(visibility);
+	public void togglePowerVisibility( ) {
+		super.togglePowerVisibility( );
 		if (shell != null && !shell.isDisposed()) {
-			if (visibility) {
+			if (isPowerVisible()) {
 				shell.setText(messages.get("gui.label.graph.dialog.title.torque.power", vehicleType.getDescription(mode.getGame())));
 			}
 			else {

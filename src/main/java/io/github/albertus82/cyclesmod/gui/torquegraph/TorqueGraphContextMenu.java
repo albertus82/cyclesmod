@@ -210,7 +210,7 @@ public abstract class TorqueGraphContextMenu implements Multilanguage {
 		item.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				graph.toggleTorqueVisibility(item.getSelection());
+				graph.togglePowerVisibility( );
 			}
 		});
 		return item;

@@ -5,14 +5,13 @@ import java.util.Map.Entry;
 import java.util.function.Supplier;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.nebula.visualization.xygraph.dataprovider.AbstractDataProvider;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.CircularBufferDataProvider;
-import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
-import org.eclipse.nebula.visualization.xygraph.dataprovider.ISample;
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
+import org.eclipse.nebula.visualization.xygraph.linearscale.AbstractScale.LabelSide;
+import org.eclipse.nebula.visualization.xygraph.linearscale.LinearScale.Orientation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -34,7 +33,7 @@ public class BasicTorqueGraph implements TorqueGraph {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	private static final IDataProvider nullDataProvider = new NullDataProvider();
+	//	private static final IDataProvider nullDataProvider = new NullDataProvider();
 
 	@Getter
 	private final IXYGraph xyGraph = new XYGraph();
@@ -42,19 +41,27 @@ public class BasicTorqueGraph implements TorqueGraph {
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
 	@Getter
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
+	@Getter
+	private final Axis powerOrdinates = new Axis("secondary", true);
+	{
+		powerOrdinates.setOrientation(Orientation.VERTICAL);
+		powerOrdinates.setTickLabelSide(LabelSide.Secondary);
+		//		powerOrdinates.setAutoScaleThreshold(0.1);
+		xyGraph.addAxis(powerOrdinates);
+	}
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider powerDataProvider = new CircularBufferDataProvider(false);
 	@Getter
 	private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), abscissae, ordinates, torqueDataProvider);
 	@Getter
-	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, ordinates, nullDataProvider);
+	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, powerOrdinates, powerDataProvider/* nullDataProvider */);
 	private final double[] torqueValues = new double[Torque.LENGTH];
 	private final double[] powerValues = new double[Torque.LENGTH];
 	private final double[] xDataArray = new double[Torque.LENGTH];
 	@Getter
 	private final Supplier<Mode> modeSupplier;
-	@Getter
-	private boolean powerVisible;
+	//	@Getter
+	//	private boolean powerVisible = true;
 
 	public BasicTorqueGraph(@NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
 		this.modeSupplier = modeSupplier;
@@ -66,14 +73,14 @@ public class BasicTorqueGraph implements TorqueGraph {
 		init(vehicle.getType());
 	}
 
-	public BasicTorqueGraph(@NonNull final Map<Integer, Short> powerMap, @NonNull final VehicleType vehicleType, @NonNull final Supplier<Mode> modeSupplier) {
+	public BasicTorqueGraph(@NonNull final Map<Integer, Short> torqueMap, @NonNull final VehicleType vehicleType, @NonNull final Supplier<Mode> modeSupplier) {
 		this.modeSupplier = modeSupplier;
-		if (powerMap.size() != Torque.LENGTH) {
+		if (torqueMap.size() != Torque.LENGTH) {
 			throw new IllegalArgumentException("map size must be " + Torque.LENGTH);
 		}
 
 		int i = 0;
-		for (final Entry<Integer, Short> entry : powerMap.entrySet()) {
+		for (final Entry<Integer, Short> entry : torqueMap.entrySet()) {
 			xDataArray[i] = entry.getKey().doubleValue() / RPM_DIVISOR;
 			torqueValues[i] = entry.getValue();
 			powerValues[i] = torqueToPower(torqueValues[i], Torque.getRpm(i));
@@ -99,11 +106,17 @@ public class BasicTorqueGraph implements TorqueGraph {
 		ordinates.setTitle(messages.get("gui.label.graph.axis.y.torque"));
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
-		
+
+		powerOrdinates.setTitle(messages.get("gui.label.graph.axis.y.power"));
+		powerOrdinates.setTitleFont(axisTitleFont);
+		powerOrdinates.setShowMajorGrid(true);
+		powerOrdinates.setPrimarySide(false);
+		powerOrdinates.setAutoScale(true);
 
 		xyGraph.addTrace(torqueTrace);
-		toggleTorqueVisibility(false);
-		toggleTorqueVisibility(true);
+		xyGraph.addTrace(powerTrace);
+		//		togglePowerVisibility(false);
+		//togglePowerVisibility(true);
 		xyGraph.setShowLegend(false);
 
 		torqueTrace.setTraceColor(getColor(vehicleType));
@@ -125,8 +138,8 @@ public class BasicTorqueGraph implements TorqueGraph {
 	}
 
 	public static double torqueToPower(final double torque, final int rpm) {
-		//	final double kw = torque * 0.7457;
-		//return 9.5488 * kw / rpm * 1000;
+		// final double kw = torque * 0.7457;
+		// return 9.5488 * kw / rpm * 1000;
 		return (torque / (MAX_RPM / (double) RPM_DIVISOR)) * (rpm / (double) RPM_DIVISOR);
 	}
 
@@ -163,35 +176,31 @@ public class BasicTorqueGraph implements TorqueGraph {
 	}
 
 	@Override
-	public void toggleTorqueVisibility(final boolean visibility) {
-		this.powerVisible = visibility;
-		if (visibility) {
-			powerTrace.setDataProvider(powerDataProvider);
-			xyGraph.addTrace(powerTrace);
-			ordinates.setTitle(messages.get("gui.label.graph.axis.y.torque.power"));
-		}
-		else {
-			xyGraph.removeTrace(powerTrace);
-			powerTrace.setDataProvider(new NullDataProvider());
-			ordinates.setTitle(messages.get("gui.label.graph.axis.y.torque"));
-		}
+	public void togglePowerVisibility() {
+		powerOrdinates.setVisible(!powerTrace.isVisible());
+		powerTrace.setVisible(!powerTrace.isVisible());
 	}
 
-	private static class NullDataProvider extends AbstractDataProvider {
-
-		public NullDataProvider() {
-			super(false);
-		}
-
-		@Override
-		public int getSize() {
-			return 0;
-		}
-
-		@Override
-		public ISample getSample(int index) {
-			return null;
-		}
+	@Override
+	public boolean isPowerVisible() {
+		return powerTrace.isVisible();
 	}
+
+	//	private static class NullDataProvider extends AbstractDataProvider {
+	//
+	//		public NullDataProvider() {
+	//			super(false);
+	//		}
+	//
+	//		@Override
+	//		public int getSize() {
+	//			return 0;
+	//		}
+	//
+	//		@Override
+	//		public ISample getSample(int index) {
+	//			return null;
+	//		}
+	//	}
 
 }

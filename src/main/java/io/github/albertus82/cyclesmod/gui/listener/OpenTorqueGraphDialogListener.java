@@ -46,12 +46,12 @@ public class OpenTorqueGraphDialogListener extends MouseAdapter implements Selec
 			map.put(Torque.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
 		}
 
-		if (dialog.open(map, vehicleType, false) == SWT.OK) {
+		if (dialog.open(map, vehicleType, gui.getTabs().getTorqueCanvases().get(vehicleType).getGraph().isPowerVisible()) == SWT.OK) {
 			for (int i = 0; i < Torque.LENGTH; i++) {
 				final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicleType, Torque.PREFIX, i));
 				final Text text = formProperty.getText();
 				final String oldValue = text.getText();
-				final String newValue = Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(dialog.getTorqueGraph().getTorqueValue(i)))), gui.getNumeralSystem().getRadix());
+				final String newValue = Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(dialog.getGraph().getTorqueValue(i)))), gui.getNumeralSystem().getRadix());
 				if (!oldValue.equals(newValue)) {
 					text.setText(newValue);
 					text.notifyListeners(SWT.FocusOut, null);

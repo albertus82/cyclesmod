@@ -69,6 +69,7 @@ public class Tabs implements Multilanguage {
 
 	private final Map<Mode, Map<String, FormProperty>> formProperties = new EnumMap<>(Mode.class);
 
+	@Getter
 	private final Map<VehicleType, TorqueGraphCanvas> torqueCanvases = new EnumMap<>(VehicleType.class);
 
 	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
@@ -141,7 +142,7 @@ public class Tabs implements Multilanguage {
 			// Torque graph
 			final TorqueGraphCanvas canvas = new TorqueGraphCanvas(tabComposite, vehicle, gui::getMode);
 			canvas.addMouseListener(new OpenTorqueGraphDialogListener(gui, vehicle.getType()));
-			final TorqueGraph graph = canvas.getTorqueGraph();
+			final TorqueGraph graph = canvas.getGraph();
 			graph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(@NonNull final MouseEvent me) {
@@ -294,7 +295,7 @@ public class Tabs implements Multilanguage {
 
 		// Update torque graphs...
 		for (final Vehicle vehicle : gui.getVehiclesInf().getVehicles().values()) {
-			final TorqueGraph graph = torqueCanvases.get(vehicle.getType()).getTorqueGraph();
+			final TorqueGraph graph = torqueCanvases.get(vehicle.getType()).getGraph();
 			for (short i = 0; i < vehicle.getTorque().getCurve().length; i++) {
 				graph.setTorqueValue(i, vehicle.getTorque().getCurve()[i]);
 			}

@@ -30,7 +30,7 @@ public interface TorqueGraph {
 
 	int getTorqueIndex(Point location);
 
-	void toggleTorqueVisibility(boolean visibility);
+	void togglePowerVisibility();
 
 	boolean isPowerVisible();
 
