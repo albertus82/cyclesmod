@@ -31,7 +31,7 @@ public class Torque implements ByteArray {
 	public static final short POINT_WIDTH_RPM = 128;
 
 	/**
-	 * 42-147: power curve (RPM range: 768-14335 RPM).
+	 * 42-147: torque curve (RPM range: 768-14335 RPM).
 	 */
 	private final short[] curve;
 

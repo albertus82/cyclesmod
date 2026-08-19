@@ -185,13 +185,13 @@ public class MenuBar implements Multilanguage {
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
-		final MenuItem editPowerSubMenuItem = newLocalizedMenuItem(editMenu, SWT.CASCADE, "gui.label.menu.item.torque.curve");
+		final MenuItem editTorqueSubMenuItem = newLocalizedMenuItem(editMenu, SWT.CASCADE, "gui.label.menu.item.torque.curve");
 
-		final Menu editPowerSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		editPowerSubMenuItem.setMenu(editPowerSubMenu);
+		final Menu editTorqueSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		editTorqueSubMenuItem.setMenu(editTorqueSubMenu);
 
 		for (final VehicleType vehicleType : VehicleType.values()) {
-			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.torque.curve.vehicle", vehicleType.getDescription(gui.getMode().getGame()))).addSelectionListener(new OpenTorqueGraphDialogListener(gui, vehicleType));
+			newLocalizedMenuItem(editTorqueSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.torque.curve.vehicle", vehicleType.getDescription(gui.getMode().getGame()))).addSelectionListener(new OpenTorqueGraphDialogListener(gui, vehicleType));
 		}
 
 		new MenuItem(editMenu, SWT.SEPARATOR);

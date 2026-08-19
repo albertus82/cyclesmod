@@ -56,6 +56,7 @@ public class UpdateTitleListener extends MouseMotionListener.Stub {
 		final short torque = torqueGraph.getTorqueValue(location);
 		final int rpm = Torque.getRpm(torqueGraph.getTorqueIndex(location));
 		final double power = BasicTorqueGraph.torqueToPower(torque, rpm);
+		// TODO convert to human readable measure units
 		final String currentPosition = messages.get("gui.label.graph.torqueAtRpm", torque, numberFormat.format(power), rpm);
 		if (!currentPosition.equals(lastPosition)) {
 			lastPosition = currentPosition;

@@ -138,15 +138,15 @@ public class Tabs implements Multilanguage {
 			GridDataFactory.swtDefaults().span(2, 1).align(SWT.END, SWT.CENTER).applyTo(noteLabel);
 			noteLabels.add(noteLabel);
 
-			// Power graph
+			// Torque graph
 			final TorqueGraphCanvas canvas = new TorqueGraphCanvas(tabComposite, vehicle, gui::getMode);
 			canvas.addMouseListener(new OpenTorqueGraphDialogListener(gui, vehicle.getType()));
-			final TorqueGraph powerGraph = canvas.getTorqueGraph();
-			powerGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
+			final TorqueGraph graph = canvas.getTorqueGraph();
+			graph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(@NonNull final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final FormProperty formProperty = formProperties.get(gui.getMode()).get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicle.getType(), Torque.PREFIX, powerGraph.getTorqueIndex(me.getLocation())));
+						final FormProperty formProperty = formProperties.get(gui.getMode()).get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicle.getType(), Torque.PREFIX, graph.getTorqueIndex(me.getLocation())));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
 						}
@@ -188,10 +188,10 @@ public class Tabs implements Multilanguage {
 				label.addMouseListener(new LabelMouseListener(text));
 			}
 
-			// Power
-			final Group powerGroup = newLocalizedGroup(tabComposite, SWT.NONE, "gui.label.power");
-			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(powerGroup);
-			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
+			// Torque
+			final Group torqueGroup = newLocalizedGroup(tabComposite, SWT.NONE, "gui.label.torque");
+			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(torqueGroup);
+			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(torqueGroup);
 
 			for (int index = 0; index < vehicle.getTorque().getCurve().length; index++) {
 				final Map<Mode, String> keyMap = new EnumMap<>(Mode.class);
@@ -203,12 +203,12 @@ public class Tabs implements Multilanguage {
 					defaultValueMap.put(mode, gui.getDefaultProperties().get(mode).get(keyMap.get(mode)));
 				}
 				final int rpm = Torque.getRpm(index);
-				final Label label = newLocalizedLabel(powerGroup, SWT.NONE, () -> messages.get("gui.label.power.rpm", rpm));
+				final Label label = newLocalizedLabel(torqueGroup, SWT.NONE, () -> messages.get("gui.label.torque.rpm", rpm));
 				GridDataFactory.swtDefaults().align(SWT.TRAIL, SWT.CENTER).applyTo(label);
 				label.setToolTipText(keyMap.get(gui.getMode()));
-				final Text text = new Text(powerGroup, SWT.BORDER);
+				final Text text = new Text(torqueGroup, SWT.BORDER);
 				GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, true).applyTo(text);
-				text.setData(new TorqueTextData(keyMap, defaultValueMap, Torque.MAX_VALUE, index, powerGraph));
+				text.setData(new TorqueTextData(keyMap, defaultValueMap, Torque.MAX_VALUE, index, graph));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
 				text.addFocusListener(torquePropertyFocusListener);
@@ -292,13 +292,13 @@ public class Tabs implements Multilanguage {
 		updateFields(properties);
 		enableTextListeners();
 
-		// Update power graphs...
+		// Update torque graphs...
 		for (final Vehicle vehicle : gui.getVehiclesInf().getVehicles().values()) {
-			final TorqueGraph powerGraph = torqueCanvases.get(vehicle.getType()).getTorqueGraph();
+			final TorqueGraph graph = torqueCanvases.get(vehicle.getType()).getTorqueGraph();
 			for (short i = 0; i < vehicle.getTorque().getCurve().length; i++) {
-				powerGraph.setTorqueValue(i, vehicle.getTorque().getCurve()[i]);
+				graph.setTorqueValue(i, vehicle.getTorque().getCurve()[i]);
 			}
-			powerGraph.refresh();
+			graph.refresh();
 		}
 
 		propertyFocusListener.reset();

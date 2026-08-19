@@ -38,7 +38,7 @@ public class OpenTorqueGraphDialogListener extends MouseAdapter implements Selec
 	}
 
 	private void handleEvent() {
-		final TorqueGraphDialog powerGraphDialog = new TorqueGraphDialog(gui.getShell(), gui.getMode());
+		final TorqueGraphDialog dialog = new TorqueGraphDialog(gui.getShell(), gui.getMode());
 		final Map<Integer, Short> map = new TreeMap<>();
 		final Map<String, FormProperty> formProperties = gui.getTabs().getFormProperties().get(gui.getMode());
 		for (int i = 0; i < Torque.LENGTH; i++) {
@@ -46,12 +46,12 @@ public class OpenTorqueGraphDialogListener extends MouseAdapter implements Selec
 			map.put(Torque.getRpm(i), Short.valueOf(formProperty.getValue(), gui.getNumeralSystem().getRadix()));
 		}
 
-		if (powerGraphDialog.open(map, vehicleType, false) == SWT.OK) {
+		if (dialog.open(map, vehicleType, false) == SWT.OK) {
 			for (int i = 0; i < Torque.LENGTH; i++) {
 				final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicleType, Torque.PREFIX, i));
 				final Text text = formProperty.getText();
 				final String oldValue = text.getText();
-				final String newValue = Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(powerGraphDialog.getTorqueGraph().getTorqueValue(i)))), gui.getNumeralSystem().getRadix());
+				final String newValue = Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(dialog.getTorqueGraph().getTorqueValue(i)))), gui.getNumeralSystem().getRadix());
 				if (!oldValue.equals(newValue)) {
 					text.setText(newValue);
 					text.notifyListeners(SWT.FocusOut, null);

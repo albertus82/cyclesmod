@@ -12,12 +12,12 @@ import lombok.Value;
 public class TorqueTextData extends GenericTextData {
 
 	int index;
-	TorqueGraph powerGraph;
+	TorqueGraph graph;
 
-	public TorqueTextData(final Map<Mode, String> keyMap, final Map<Mode, Integer> defaultValueMap, final int maxValue, final int index, final TorqueGraph powerGraph) {
+	public TorqueTextData(final Map<Mode, String> keyMap, final Map<Mode, Integer> defaultValueMap, final int maxValue, final int index, final TorqueGraph graph) {
 		super(keyMap, defaultValueMap, maxValue);
 		this.index = index;
-		this.powerGraph = powerGraph;
+		this.graph = graph;
 	}
 
 }

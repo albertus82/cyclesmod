@@ -12,8 +12,8 @@ import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraphContextMenu;
 
 public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 
-	public SimpleTorqueGraphContextMenu(final Control parent, final TorqueGraph powerGraph) {
-		super(parent, powerGraph);
+	public SimpleTorqueGraphContextMenu(final Control parent, final TorqueGraph graph) {
+		super(parent, graph);
 
 		final Menu menu = getMenu();
 

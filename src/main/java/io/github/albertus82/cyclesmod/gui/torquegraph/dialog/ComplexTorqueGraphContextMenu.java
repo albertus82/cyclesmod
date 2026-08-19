@@ -30,14 +30,14 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 	@Getter
 	private final MenuItem showTorqueMenuItem;
 
-	public ComplexTorqueGraphContextMenu(final Control control, final TorqueGraph powerGraph) {
-		super(control, powerGraph);
+	public ComplexTorqueGraphContextMenu(final Control control, final TorqueGraph graph) {
+		super(control, graph);
 
 		final Menu menu = getMenu();
 
 		final XYGraphMediaFactory mediaFactory = XYGraphMediaFactory.getInstance();
 
-		final OperationsManager manager = powerGraph.getXyGraph().getOperationsManager();
+		final OperationsManager manager = graph.getXyGraph().getOperationsManager();
 
 		final MenuItem undoMenuItem = new MenuItem(menu, SWT.PUSH);
 		undoMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_UNDO);
@@ -53,7 +53,7 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		saveImageMenuItem.setImage(mediaFactory.getImage("images/camera.png"));
 		saveImageMenuItem.setText(messages.get("gui.label.menu.item.graph.saveImageAs") + SwtUtils.getMod1ShortcutLabel(SwtUtils.KEY_SAVE));
 		saveImageMenuItem.setAccelerator(SWT.MOD1 | SwtUtils.KEY_SAVE);
-		saveImageMenuItem.addSelectionListener(new SaveSnapshotListener(control.getShell(), powerGraph.getXyGraph()));
+		saveImageMenuItem.addSelectionListener(new SaveSnapshotListener(control.getShell(), graph.getXyGraph()));
 
 		new MenuItem(menu, SWT.SEPARATOR);
 
@@ -63,12 +63,12 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				if (autoScaleMenuItem.getSelection()) {
-					powerGraph.getAbscissae().setAutoScale(true);
-					powerGraph.getOrdinates().setAutoScale(true);
+					graph.getAbscissae().setAutoScale(true);
+					graph.getOrdinates().setAutoScale(true);
 				}
 				else {
-					powerGraph.getAbscissae().setAutoScale(false);
-					powerGraph.getOrdinates().setAutoScale(false);
+					graph.getAbscissae().setAutoScale(false);
+					graph.getOrdinates().setAutoScale(false);
 				}
 			}
 		});
@@ -77,13 +77,13 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		zoomInMenuItem.setText(messages.get("gui.label.menu.item.graph.zoomIn") + SwtUtils.getShortcutLabel("+"));
 		zoomInMenuItem.setAccelerator('+');
 		zoomInMenuItem.setImage(ZoomType.ZOOM_IN.getIconImage());
-		zoomInMenuItem.addSelectionListener(new ZoomInListener(powerGraph.getXyGraph()));
+		zoomInMenuItem.addSelectionListener(new ZoomInListener(graph.getXyGraph()));
 
 		final MenuItem zoomOutMenuItem = new MenuItem(menu, SWT.PUSH);
 		zoomOutMenuItem.setText(messages.get("gui.label.menu.item.graph.zoomOut") + SwtUtils.getShortcutLabel("-"));
 		zoomOutMenuItem.setAccelerator('-');
 		zoomOutMenuItem.setImage(ZoomType.ZOOM_OUT.getIconImage());
-		zoomOutMenuItem.addSelectionListener(new ZoomOutListener(powerGraph.getXyGraph()));
+		zoomOutMenuItem.addSelectionListener(new ZoomOutListener(graph.getXyGraph()));
 
 		final MenuItem performAutoScaleMenuItem = new MenuItem(menu, SWT.PUSH);
 		performAutoScaleMenuItem.setText(messages.get("gui.label.menu.item.graph.autoscaleNow"));
@@ -91,7 +91,7 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		performAutoScaleMenuItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				powerGraph.getXyGraph().performAutoScale();
+				graph.getXyGraph().performAutoScale();
 			}
 		});
 
@@ -112,7 +112,7 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		final Image imageRedoGray = mediaFactory.getImage("images/Redo_Gray.png");
 
 		control.addMenuDetectListener(e -> {
-			autoScaleMenuItem.setSelection(powerGraph.getAbscissae().isAutoScale() && powerGraph.getOrdinates().isAutoScale());
+			autoScaleMenuItem.setSelection(graph.getAbscissae().isAutoScale() && graph.getOrdinates().isAutoScale());
 
 			// Undo/Redo
 			if (manager.getUndoCommandsSize() > 0) {

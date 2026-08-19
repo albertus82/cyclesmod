@@ -26,13 +26,13 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 		if (isEnabled() && event.widget instanceof Text) {
 			super.focusLost(event);
 
-			// Update power graph...
+			// Update torque graph...
 			final Text text = (Text) event.widget;
 			if (gui.isNumeric(text.getText().trim()) && text.getData() instanceof TorqueTextData) {
 				final TorqueTextData textData = (TorqueTextData) text.getData();
 				try {
 					final int index = textData.getIndex();
-					final TorqueGraph graph = textData.getPowerGraph();
+					final TorqueGraph graph = textData.getGraph();
 
 					final short newValue = Torque.parse(textData.getKeyMap().get(gui.getMode()), text.getText().trim(), gui.getNumeralSystem().getRadix());
 					final short oldValue = (short) graph.getTorqueValue(index);
@@ -42,7 +42,7 @@ public class TorquePropertyFocusListener extends PropertyFocusListener {
 					}
 				}
 				catch (final InvalidNumberException | ValueOutOfRangeException e) {
-					log.log(Level.INFO, "Cannot update power graph on " + event + ':', e);
+					log.log(Level.INFO, "Cannot update torque graph on " + event + ':', e);
 				}
 			}
 		}

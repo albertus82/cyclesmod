@@ -113,7 +113,7 @@ public class VehiclesCfg {
 				props.append(lineSeparator);
 			}
 
-			// Power
+			// Torque
 			props.append(lineSeparator);
 			props.append("# ").append(Torque.class.getSimpleName()).append(" (").append(Torque.getRpm(0)).append('-').append(Torque.getRpm(Torque.LENGTH) - 1).append(" RPM) #");
 			props.append(lineSeparator);

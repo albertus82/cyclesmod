@@ -99,6 +99,7 @@ public class BasicTorqueGraph implements TorqueGraph {
 		ordinates.setTitle(messages.get("gui.label.graph.axis.y.torque"));
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
+		
 
 		xyGraph.addTrace(torqueTrace);
 		toggleTorqueVisibility(false);
