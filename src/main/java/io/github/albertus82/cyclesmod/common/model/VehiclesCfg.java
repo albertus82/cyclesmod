@@ -117,14 +117,14 @@ public class VehiclesCfg {
 			props.append(lineSeparator);
 			props.append("# ").append(Torque.class.getSimpleName()).append(" (").append(Torque.getRpm(0)).append('-').append(Torque.getRpm(Torque.LENGTH) - 1).append(" RPM) #");
 			props.append(lineSeparator);
-			for (int index = 0; index < vehicle.getPower().getCurve().length; index++) {
+			for (int index = 0; index < vehicle.getTorque().getCurve().length; index++) {
 				if (index > 0 && index % 8 == 0) {
 					props.append("# ").append(Torque.getRpm(index)).append(" RPM");
 					props.append(lineSeparator);
 				}
 				props.append(buildPropertyKey(game, vehicle.getType(), Torque.PREFIX, index));
 				props.append('=');
-				props.append(vehicle.getPower().getCurve()[index]);
+				props.append(vehicle.getTorque().getCurve()[index]);
 				props.append(lineSeparator);
 			}
 

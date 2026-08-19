@@ -35,7 +35,7 @@ public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 
 		new MenuItem(menu, SWT.SEPARATOR);
 
-		addShowTorqueMenuItem();
+		addShowPowerMenuItem();
 
 		parent.addMenuDetectListener(e -> menu.setVisible(true));
 	}

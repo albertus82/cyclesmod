@@ -1,6 +1,5 @@
 package io.github.albertus82.cyclesmod.gui.torquegraph.simple;
 
-import java.util.Locale;
 import java.util.function.Supplier;
 
 import org.eclipse.nebula.visualization.xygraph.figures.Axis;
@@ -35,16 +34,16 @@ public class SimpleTorqueGraph extends BasicTorqueGraph implements Multilanguage
 		final Axis ordinates = getOrdinates();
 		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
 
-		final Trace powerTrace = getPowerTrace();
-		powerTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
-		powerTrace.setLineWidth(DEFAULT_LINE_WIDTH);
-		powerTrace.setPointSize(DEFAULT_POINT_SIZE);
-
 		final Trace torqueTrace = getTorqueTrace();
+		torqueTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
 		torqueTrace.setLineWidth(DEFAULT_LINE_WIDTH);
+		torqueTrace.setPointSize(DEFAULT_POINT_SIZE);
+
+		final Trace powerTrace = getPowerTrace();
+		powerTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
 		final IXYGraph xyGraph = getXyGraph();
-		xyGraph.setTitle(messages.get("gui.label.graph.title.power.torque"));
+		xyGraph.setTitle(messages.get("gui.label.graph.title.torque.power"));
 		xyGraph.setTitleFont(Display.getCurrent().getSystemFont());
 	}
 
@@ -52,21 +51,21 @@ public class SimpleTorqueGraph extends BasicTorqueGraph implements Multilanguage
 	public void toggleTorqueVisibility(final boolean visibility) {
 		super.toggleTorqueVisibility(visibility);
 		if (visibility) {
-			getXyGraph().setTitle(messages.get("gui.label.graph.title.power.torque"));
+			getXyGraph().setTitle(messages.get("gui.label.graph.title.torque.power"));
 		}
 		else {
-			getXyGraph().setTitle(messages.get("gui.label.graph.title.power"));
+			getXyGraph().setTitle(messages.get("gui.label.graph.title.torque"));
 		}
 	}
 
 	@Override
 	public void updateLanguage() {
 		getAbscissae().setTitle(messages.get("gui.label.graph.axis.x", RPM_DIVISOR));
-		if (isTorqueVisible()) {
-			getXyGraph().setTitle(messages.get("gui.label.graph.title.power.torque"));
+		if (isPowerVisible()) {
+			getXyGraph().setTitle(messages.get("gui.label.graph.title.torque.power"));
 		}
 		else {
-			getXyGraph().setTitle(messages.get("gui.label.graph.title.power"));
+			getXyGraph().setTitle(messages.get("gui.label.graph.title.torque"));
 		}
 		setOrdinatesTitle();
 	}
@@ -76,11 +75,11 @@ public class SimpleTorqueGraph extends BasicTorqueGraph implements Multilanguage
 	}
 
 	private void setOrdinatesTitle() {
-		if (isTorqueVisible()) {
-			getOrdinates().setTitle(messages.get("gui.label.graph.axis.y.power.torque." + getModeSupplier().get().getGame().toString().toLowerCase(Locale.ROOT)));
+		if (isPowerVisible()) {
+			getOrdinates().setTitle(messages.get("gui.label.graph.axis.y.torque.power"));
 		}
 		else {
-			getOrdinates().setTitle(messages.get("gui.label.graph.axis.y.power." + getModeSupplier().get().getGame().toString().toLowerCase(Locale.ROOT)));
+			getOrdinates().setTitle(messages.get("gui.label.graph.axis.y.torque"));
 		}
 	}
 

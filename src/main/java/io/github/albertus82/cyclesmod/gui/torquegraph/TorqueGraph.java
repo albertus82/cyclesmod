@@ -20,18 +20,18 @@ public interface TorqueGraph {
 
 	Trace getTorqueTrace();
 
-	double getPowerValue(int index);
+	double getTorqueValue(int index);
 
-	void setPowerValue(int index, double value);
+	void setTorqueValue(int index, double value);
 
 	void refresh();
 
-	short getPowerValue(Point location);
+	short getTorqueValue(Point location);
 
-	int getPowerIndex(Point location);
+	int getTorqueIndex(Point location);
 
 	void toggleTorqueVisibility(boolean visibility);
 
-	boolean isTorqueVisible();
+	boolean isPowerVisible();
 
 }

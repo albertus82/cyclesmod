@@ -14,21 +14,21 @@ public class ChangeValueCommand implements IUndoableCommand {
 	private static final Messages messages = GuiMessages.INSTANCE;
 
 	@NonNull
-	private final TorqueGraph powerGraph;
+	private final TorqueGraph torqueGraph;
 	private final int index;
 	private final short oldValue;
 	private final short newValue;
 
 	@Override
 	public void undo() {
-		powerGraph.setPowerValue(index, oldValue);
-		powerGraph.refresh();
+		torqueGraph.setTorqueValue(index, oldValue);
+		torqueGraph.refresh();
 	}
 
 	@Override
 	public void redo() {
-		powerGraph.setPowerValue(index, newValue);
-		powerGraph.refresh();
+		torqueGraph.setTorqueValue(index, newValue);
+		torqueGraph.refresh();
 	}
 
 	@Override

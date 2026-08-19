@@ -104,7 +104,7 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 
 		new MenuItem(menu, SWT.SEPARATOR);
 
-		showTorqueMenuItem = addShowTorqueMenuItem();
+		showTorqueMenuItem = addShowPowerMenuItem();
 
 		final Image imageUndo = mediaFactory.getImage("images/Undo.png");
 		final Image imageUndoGray = mediaFactory.getImage("images/Undo_Gray.png");

@@ -61,13 +61,13 @@ public class ComplexTorqueGraph extends BasicTorqueGraph {
 		final Axis ordinates = getOrdinates();
 		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
 
-		final Trace powerTrace = getPowerTrace();
-		powerTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
-		powerTrace.setLineWidth(DEFAULT_LINE_WIDTH);
-		powerTrace.setPointSize(DEFAULT_POINT_SIZE);
-
 		final Trace torqueTrace = getTorqueTrace();
+		torqueTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
 		torqueTrace.setLineWidth(DEFAULT_LINE_WIDTH);
+		torqueTrace.setPointSize(DEFAULT_POINT_SIZE);
+
+		final Trace powerTrace = getPowerTrace();
+		powerTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
 		customizeToolbarButtons(toolbarArmedXYGraph);
 
@@ -154,10 +154,10 @@ public class ComplexTorqueGraph extends BasicTorqueGraph {
 		super.toggleTorqueVisibility(visibility);
 		if (shell != null && !shell.isDisposed()) {
 			if (visibility) {
-				shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDescription(mode.getGame())));
+				shell.setText(messages.get("gui.label.graph.dialog.title.torque.power", vehicleType.getDescription(mode.getGame())));
 			}
 			else {
-				shell.setText(messages.get("gui.label.graph.dialog.title.power", vehicleType.getDescription(mode.getGame())));
+				shell.setText(messages.get("gui.label.graph.dialog.title.torque", vehicleType.getDescription(mode.getGame())));
 			}
 		}
 	}

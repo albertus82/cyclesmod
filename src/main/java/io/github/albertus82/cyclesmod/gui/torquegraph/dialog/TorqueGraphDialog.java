@@ -42,7 +42,7 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 	private final Mode mode;
 
 	private int returnCode = SWT.CANCEL;
-	private ComplexTorqueGraph powerGraph;
+	private ComplexTorqueGraph torqueGraph;
 
 	public TorqueGraphDialog(@NonNull final Shell parent, @NonNull final Mode mode) {
 		super(parent, SWT.SHEET | SWT.RESIZE | SWT.MAX);
@@ -51,7 +51,7 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 
 	public int open(@NonNull final Map<Integer, Short> map, @NonNull final VehicleType vehicleType, final boolean torqueVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
-		shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDescription(mode.getGame())));
+		shell.setText(messages.get("gui.label.graph.dialog.title.torque.power", vehicleType.getDescription(mode.getGame())));
 		shell.setImages(Images.getAppIconArray());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
 		createContents(shell, map, vehicleType, torqueVisible);
@@ -87,17 +87,17 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		powerGraph = new ComplexTorqueGraph(map, mode, vehicleType, shell);
-		final ComplexTorqueGraphContextMenu menu = new ComplexTorqueGraphContextMenu(canvas, powerGraph);
+		torqueGraph = new ComplexTorqueGraph(map, mode, vehicleType, shell);
+		final ComplexTorqueGraphContextMenu menu = new ComplexTorqueGraphContextMenu(canvas, torqueGraph);
 		if (torqueVisible) {
-			powerGraph.toggleTorqueVisibility(true);
+			torqueGraph.toggleTorqueVisibility(true);
 			menu.getShowTorqueMenuItem().setSelection(true);
 		}
-		lws.setContents(powerGraph.getToolbarArmedXYGraph());
+		lws.setContents(torqueGraph.getToolbarArmedXYGraph());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
-		final IXYGraph xyGraph = powerGraph.getXyGraph();
+		final IXYGraph xyGraph = torqueGraph.getXyGraph();
 		canvas.addKeyListener(new ZoomInListener(xyGraph));
 		canvas.addKeyListener(new ZoomOutListener(xyGraph));
 		canvas.addKeyListener(new UndoListener(xyGraph.getOperationsManager()));
@@ -143,8 +143,8 @@ public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 	}
 
 	@Override
-	public ComplexTorqueGraph getPowerGraph() {
-		return powerGraph;
+	public ComplexTorqueGraph getTorqueGraph() {
+		return torqueGraph;
 	}
 
 }

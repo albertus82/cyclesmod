@@ -1,7 +1,6 @@
 package io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener;
 
 import java.text.NumberFormat;
-import java.util.Locale;
 
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
@@ -17,21 +16,21 @@ import lombok.NonNull;
 
 public class UpdateTitleListener extends MouseMotionListener.Stub {
 
-	private static final double NM_TO_LBFT = 0.73756214927727;
-	private static final double KW_TO_HP = 1.3404825737265;
-
-	private static final float GPC_FACTOR = 6.8f; // Ferrari F1/87/88C (Ferrari 3.5L V12 - 680 bhp (507 kW; 689 PS))
+	//	private static final double NM_TO_LBFT = 0.73756214927727;
+	//	private static final double KW_TO_HP = 1.3404825737265;
+	//
+	//	private static final float GPC_FACTOR = 6.8f; // Ferrari F1/87/88C (Ferrari 3.5L V12 - 680 bhp (507 kW; 689 PS))
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	private final TorqueGraph powerGraph;
+	private final TorqueGraph torqueGraph;
 	private final Mode mode;
 	private final NumberFormat numberFormat;
 
 	private String lastPosition;
 
-	public UpdateTitleListener(@NonNull final TorqueGraph powerGraph, @NonNull final Mode mode) {
-		this.powerGraph = powerGraph;
+	public UpdateTitleListener(@NonNull final TorqueGraph torqueGraph, @NonNull final Mode mode) {
+		this.torqueGraph = torqueGraph;
 		this.mode = mode;
 		numberFormat = NumberFormat.getNumberInstance(messages.getLanguage().getLocale());
 		numberFormat.setMaximumFractionDigits(1);
@@ -45,7 +44,7 @@ public class UpdateTitleListener extends MouseMotionListener.Stub {
 	@Override
 	public void mouseExited(final MouseEvent me) {
 		lastPosition = " ";
-		powerGraph.getXyGraph().setTitle(lastPosition);
+		torqueGraph.getXyGraph().setTitle(lastPosition);
 	}
 
 	@Override
@@ -54,22 +53,13 @@ public class UpdateTitleListener extends MouseMotionListener.Stub {
 	}
 
 	private void handleEvent(final Point location) {
-		final short value = powerGraph.getPowerValue(location);
-		final short hp = Mode.GPC.equals(mode) ? (short) (value * GPC_FACTOR) : value;
-		final double kw = hp / KW_TO_HP;
-		final int rpm = Torque.getRpm(powerGraph.getPowerIndex(location));
-		final double nm = BasicTorqueGraph.hpToNm(hp, rpm);
-		final double lbft = nm * NM_TO_LBFT;
-		final String currentPosition;
-		if (Mode.GPC.equals(mode)) {
-			currentPosition = messages.get("gui.label.graph.powerAtRpm." + mode.getGame().toString().toLowerCase(Locale.ROOT), value, hp, numberFormat.format(kw), numberFormat.format(nm), numberFormat.format(lbft), rpm);
-		}
-		else {
-			currentPosition = messages.get("gui.label.graph.powerAtRpm." + mode.getGame().toString().toLowerCase(Locale.ROOT), hp, numberFormat.format(kw), numberFormat.format(nm), numberFormat.format(lbft), rpm);
-		}
+		final short torque = torqueGraph.getTorqueValue(location);
+		final int rpm = Torque.getRpm(torqueGraph.getTorqueIndex(location));
+		final double power = BasicTorqueGraph.torqueToPower(torque, rpm);
+		final String currentPosition = messages.get("gui.label.graph.torqueAtRpm", torque, numberFormat.format(power), rpm);
 		if (!currentPosition.equals(lastPosition)) {
 			lastPosition = currentPosition;
-			powerGraph.getXyGraph().setTitle(lastPosition);
+			torqueGraph.getXyGraph().setTitle(lastPosition);
 		}
 	}
 

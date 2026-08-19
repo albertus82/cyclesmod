@@ -51,7 +51,7 @@ public class OpenTorqueGraphDialogListener extends MouseAdapter implements Selec
 				final FormProperty formProperty = formProperties.get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicleType, Torque.PREFIX, i));
 				final Text text = formProperty.getText();
 				final String oldValue = text.getText();
-				final String newValue = Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(powerGraphDialog.getPowerGraph().getPowerValue(i)))), gui.getNumeralSystem().getRadix());
+				final String newValue = Long.toString(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, Math.round(powerGraphDialog.getTorqueGraph().getTorqueValue(i)))), gui.getNumeralSystem().getRadix());
 				if (!oldValue.equals(newValue)) {
 					text.setText(newValue);
 					text.notifyListeners(SWT.FocusOut, null);

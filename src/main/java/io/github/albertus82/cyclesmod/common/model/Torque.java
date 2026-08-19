@@ -18,6 +18,8 @@ public class Torque implements ByteArray {
 	public static final short MAX_VALUE = 0xFF;
 
 	public static final String PREFIX = "torque";
+	@Deprecated
+	public static final String ALT_PREFIX = "power";
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
@@ -35,7 +37,7 @@ public class Torque implements ByteArray {
 
 	public Torque(@NonNull final short[] curve) {
 		if (curve.length > LENGTH) {
-			throw new IllegalArgumentException(messages.get("common.error.power", LENGTH, curve.length));
+			throw new IllegalArgumentException(messages.get("common.error.torque", LENGTH, curve.length));
 		}
 		this.curve = Arrays.copyOf(curve, LENGTH);
 	}

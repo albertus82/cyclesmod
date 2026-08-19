@@ -28,19 +28,19 @@ import io.github.albertus82.cyclesmod.common.engine.CyclesModEngine;
 import io.github.albertus82.cyclesmod.common.engine.NumeralSystem;
 import io.github.albertus82.cyclesmod.common.engine.UnknownPropertyException;
 import io.github.albertus82.cyclesmod.common.model.Gearbox;
-import io.github.albertus82.cyclesmod.common.model.Torque;
 import io.github.albertus82.cyclesmod.common.model.Setting;
 import io.github.albertus82.cyclesmod.common.model.Settings;
+import io.github.albertus82.cyclesmod.common.model.Torque;
 import io.github.albertus82.cyclesmod.common.model.Vehicle;
 import io.github.albertus82.cyclesmod.common.model.VehicleType;
 import io.github.albertus82.cyclesmod.common.model.VehiclesCfg;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
 import io.github.albertus82.cyclesmod.gui.listener.LabelMouseListener;
 import io.github.albertus82.cyclesmod.gui.listener.OpenTorqueGraphDialogListener;
-import io.github.albertus82.cyclesmod.gui.listener.TorquePropertyFocusListener;
 import io.github.albertus82.cyclesmod.gui.listener.PropertyFocusListener;
 import io.github.albertus82.cyclesmod.gui.listener.PropertyKeyListener;
 import io.github.albertus82.cyclesmod.gui.listener.PropertyVerifyListener;
+import io.github.albertus82.cyclesmod.gui.listener.TorquePropertyFocusListener;
 import io.github.albertus82.cyclesmod.gui.model.FormProperty;
 import io.github.albertus82.cyclesmod.gui.model.GenericTextData;
 import io.github.albertus82.cyclesmod.gui.model.TorqueTextData;
@@ -69,13 +69,13 @@ public class Tabs implements Multilanguage {
 
 	private final Map<Mode, Map<String, FormProperty>> formProperties = new EnumMap<>(Mode.class);
 
-	private final Map<VehicleType, TorqueGraphCanvas> powerCanvases = new EnumMap<>(VehicleType.class);
+	private final Map<VehicleType, TorqueGraphCanvas> torqueCanvases = new EnumMap<>(VehicleType.class);
 
 	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
 
 	private final PropertyVerifyListener propertyVerifyListener;
 	private final PropertyFocusListener propertyFocusListener;
-	private final TorquePropertyFocusListener powerPropertyFocusListener;
+	private final TorquePropertyFocusListener torquePropertyFocusListener;
 	private final PropertyKeyListener propertyKeyListener;
 
 	Tabs(@NonNull final CyclesModGui gui) {
@@ -87,7 +87,7 @@ public class Tabs implements Multilanguage {
 		textFormatter = new TextFormatter(gui);
 		propertyVerifyListener = new PropertyVerifyListener(gui);
 		propertyFocusListener = new PropertyFocusListener(gui);
-		powerPropertyFocusListener = new TorquePropertyFocusListener(gui);
+		torquePropertyFocusListener = new TorquePropertyFocusListener(gui);
 		propertyKeyListener = new PropertyKeyListener(this);
 
 		tabFolder = new TabFolder(gui.getShell(), SWT.NONE);
@@ -141,12 +141,12 @@ public class Tabs implements Multilanguage {
 			// Power graph
 			final TorqueGraphCanvas canvas = new TorqueGraphCanvas(tabComposite, vehicle, gui::getMode);
 			canvas.addMouseListener(new OpenTorqueGraphDialogListener(gui, vehicle.getType()));
-			final TorqueGraph powerGraph = canvas.getPowerGraph();
+			final TorqueGraph powerGraph = canvas.getTorqueGraph();
 			powerGraph.getXyGraph().getPlotArea().addMouseListener(new MouseListener.Stub() {
 				@Override
 				public void mousePressed(@NonNull final MouseEvent me) {
 					if (me.button == 1) { // left button
-						final FormProperty formProperty = formProperties.get(gui.getMode()).get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicle.getType(), Torque.PREFIX, powerGraph.getPowerIndex(me.getLocation())));
+						final FormProperty formProperty = formProperties.get(gui.getMode()).get(VehiclesCfg.buildPropertyKey(gui.getMode().getGame(), vehicle.getType(), Torque.PREFIX, powerGraph.getTorqueIndex(me.getLocation())));
 						if (formProperty != null) {
 							formProperty.getText().setFocus();
 						}
@@ -154,7 +154,7 @@ public class Tabs implements Multilanguage {
 				}
 			});
 			GridDataFactory.fillDefaults().grab(true, true).span(1, 2).applyTo(canvas);
-			powerCanvases.put(vehicle.getType(), canvas);
+			torqueCanvases.put(vehicle.getType(), canvas);
 
 			// Gearbox
 			final Group gearboxGroup = newLocalizedGroup(tabComposite, SWT.NONE, "gui.label.gearbox");
@@ -193,7 +193,7 @@ public class Tabs implements Multilanguage {
 			GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(powerGroup);
 			GridLayoutFactory.swtDefaults().numColumns(18).applyTo(powerGroup);
 
-			for (int index = 0; index < vehicle.getPower().getCurve().length; index++) {
+			for (int index = 0; index < vehicle.getTorque().getCurve().length; index++) {
 				final Map<Mode, String> keyMap = new EnumMap<>(Mode.class);
 				for (final Mode mode : Mode.values()) {
 					keyMap.put(mode, VehiclesCfg.buildPropertyKey(mode.getGame(), vehicle.getType(), Torque.PREFIX, index));
@@ -211,7 +211,7 @@ public class Tabs implements Multilanguage {
 				text.setData(new TorqueTextData(keyMap, defaultValueMap, Torque.MAX_VALUE, index, powerGraph));
 				textFormatter.setSampleNumber(text);
 				text.addKeyListener(propertyKeyListener);
-				text.addFocusListener(powerPropertyFocusListener);
+				text.addFocusListener(torquePropertyFocusListener);
 				text.addVerifyListener(propertyVerifyListener);
 				final FormProperty formProperty = new FormProperty(label, text);
 				for (final Mode mode : Mode.values()) {
@@ -247,7 +247,7 @@ public class Tabs implements Multilanguage {
 			noteLabel.setText(messages.get("gui.label.settings.note." + gui.getMode().getGame().toString().toLowerCase(Locale.ROOT)));
 			noteLabel.requestLayout();
 		}
-		for (final TorqueGraphCanvas canvas : powerCanvases.values()) {
+		for (final TorqueGraphCanvas canvas : torqueCanvases.values()) {
 			canvas.updateModeSpecificWidgets();
 		}
 	}
@@ -255,7 +255,7 @@ public class Tabs implements Multilanguage {
 	@Override
 	public void updateLanguage() {
 		localizedWidgets.resetAllTexts();
-		for (final Multilanguage canvas : powerCanvases.values()) {
+		for (final Multilanguage canvas : torqueCanvases.values()) {
 			canvas.updateLanguage();
 		}
 
@@ -294,9 +294,9 @@ public class Tabs implements Multilanguage {
 
 		// Update power graphs...
 		for (final Vehicle vehicle : gui.getVehiclesInf().getVehicles().values()) {
-			final TorqueGraph powerGraph = powerCanvases.get(vehicle.getType()).getPowerGraph();
-			for (short i = 0; i < vehicle.getPower().getCurve().length; i++) {
-				powerGraph.setPowerValue(i, vehicle.getPower().getCurve()[i]);
+			final TorqueGraph powerGraph = torqueCanvases.get(vehicle.getType()).getTorqueGraph();
+			for (short i = 0; i < vehicle.getTorque().getCurve().length; i++) {
+				powerGraph.setTorqueValue(i, vehicle.getTorque().getCurve()[i]);
 			}
 			powerGraph.refresh();
 		}
@@ -320,7 +320,7 @@ public class Tabs implements Multilanguage {
 			else if (CyclesModEngine.isGearboxProperty(entry.getKey())) {
 				textLimit = Integer.toString(Gearbox.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
-			else if (CyclesModEngine.isPowerProperty(entry.getKey())) {
+			else if (CyclesModEngine.isTorqueProperty(entry.getKey())) {
 				textLimit = Integer.toString(Torque.MAX_VALUE, gui.getNumeralSystem().getRadix()).length();
 			}
 			else {
@@ -357,14 +357,14 @@ public class Tabs implements Multilanguage {
 		propertyKeyListener.setEnabled(true);
 		propertyVerifyListener.setEnabled(true);
 		propertyFocusListener.setEnabled(true);
-		powerPropertyFocusListener.setEnabled(true);
+		torquePropertyFocusListener.setEnabled(true);
 	}
 
 	private void disableTextListeners() {
 		propertyKeyListener.setEnabled(false);
 		propertyVerifyListener.setEnabled(false);
 		propertyFocusListener.setEnabled(false);
-		powerPropertyFocusListener.setEnabled(false);
+		torquePropertyFocusListener.setEnabled(false);
 	}
 
 	public Map<Mode, Map<String, FormProperty>> getFormProperties() {

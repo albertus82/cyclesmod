@@ -19,7 +19,7 @@ import lombok.NonNull;
 public class TorqueGraphCanvas extends Canvas implements TorqueGraphProvider, Multilanguage { // NOSONAR This class has 6 parents which is greater than 5 authorized. Inheritance tree of classes should not be too deep (java:S110)
 
 	@Getter
-	private final SimpleTorqueGraph powerGraph;
+	private final SimpleTorqueGraph torqueGraph;
 
 	private final Collection<Multilanguage> multilanguages = new ArrayList<>();
 
@@ -27,13 +27,13 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraphProvider, Mu
 		super(parent, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(this);
-		powerGraph = new SimpleTorqueGraph(vehicle, modeSupplier);
-		multilanguages.add(powerGraph);
-		lws.setContents(powerGraph.getXyGraph());
+		torqueGraph = new SimpleTorqueGraph(vehicle, modeSupplier);
+		multilanguages.add(torqueGraph);
+		lws.setContents(torqueGraph.getXyGraph());
 
 		setBackground(getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
 
-		multilanguages.add(new SimpleTorqueGraphContextMenu(this, powerGraph));
+		multilanguages.add(new SimpleTorqueGraphContextMenu(this, torqueGraph));
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class TorqueGraphCanvas extends Canvas implements TorqueGraphProvider, Mu
 	}
 
 	public void updateModeSpecificWidgets() {
-		powerGraph.updateModeSpecificWidgets();
+		torqueGraph.updateModeSpecificWidgets();
 	}
 
 }
