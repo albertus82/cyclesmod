@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph;
+package io.github.albertus82.cyclesmod.gui.torquegraph;
 
 import java.util.Locale;
 import java.util.Map;
@@ -19,7 +19,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Display;
 
-import io.github.albertus82.cyclesmod.common.model.Power;
+import io.github.albertus82.cyclesmod.common.model.Torque;
 import io.github.albertus82.cyclesmod.common.model.Vehicle;
 import io.github.albertus82.cyclesmod.common.model.VehicleType;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
@@ -28,7 +28,7 @@ import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class PowerGraph implements IPowerGraph {
+public class BasicTorqueGraph implements TorqueGraph {
 
 	public static final int RPM_DIVISOR = 1000;
 
@@ -48,35 +48,35 @@ public class PowerGraph implements IPowerGraph {
 	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, ordinates, powerDataProvider);
 	@Getter
 	private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), abscissae, ordinates, nullDataProvider);
-	private final double[] powerValues = new double[Power.LENGTH];
-	private final double[] torqueValues = new double[Power.LENGTH];
-	private final double[] xDataArray = new double[Power.LENGTH];
+	private final double[] powerValues = new double[Torque.LENGTH];
+	private final double[] torqueValues = new double[Torque.LENGTH];
+	private final double[] xDataArray = new double[Torque.LENGTH];
 	@Getter
 	private final Supplier<Mode> modeSupplier;
 
 	private boolean torqueVisible;
 
-	public PowerGraph(@NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
+	public BasicTorqueGraph(@NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
 		this.modeSupplier = modeSupplier;
-		for (int i = 0; i < Power.LENGTH; i++) {
-			xDataArray[i] = (double) Power.getRpm(i) / RPM_DIVISOR;
+		for (int i = 0; i < Torque.LENGTH; i++) {
+			xDataArray[i] = (double) Torque.getRpm(i) / RPM_DIVISOR;
 			powerValues[i] = vehicle.getPower().getCurve()[i];
-			torqueValues[i] = hpToNm(powerValues[i], Power.getRpm(i));
+			torqueValues[i] = hpToNm(powerValues[i], Torque.getRpm(i));
 		}
 		init(vehicle.getType());
 	}
 
-	public PowerGraph(@NonNull final Map<Integer, Short> powerMap, @NonNull final VehicleType vehicleType, @NonNull final Supplier<Mode> modeSupplier) {
+	public BasicTorqueGraph(@NonNull final Map<Integer, Short> powerMap, @NonNull final VehicleType vehicleType, @NonNull final Supplier<Mode> modeSupplier) {
 		this.modeSupplier = modeSupplier;
-		if (powerMap.size() != Power.LENGTH) {
-			throw new IllegalArgumentException("map size must be " + Power.LENGTH);
+		if (powerMap.size() != Torque.LENGTH) {
+			throw new IllegalArgumentException("map size must be " + Torque.LENGTH);
 		}
 
 		int i = 0;
 		for (final Entry<Integer, Short> entry : powerMap.entrySet()) {
 			xDataArray[i] = entry.getKey().doubleValue() / RPM_DIVISOR;
 			powerValues[i] = entry.getValue();
-			torqueValues[i] = hpToNm(powerValues[i], Power.getRpm(i));
+			torqueValues[i] = hpToNm(powerValues[i], Torque.getRpm(i));
 			i++;
 		}
 		init(vehicleType);
@@ -123,9 +123,10 @@ public class PowerGraph implements IPowerGraph {
 		}
 	}
 
-	public static double hpToNm(final double hp, final int rpm) {
-		final double kw = hp * 0.7457;
-		return 9.5488 * kw / rpm * 1000;
+	public static double hpToNm(final double torque, final int rpm) {
+	//	final double kw = torque * 0.7457;
+		//return 9.5488 * kw / rpm * 1000;
+		return( torque/ 16) * (rpm/1000d);
 	}
 
 	@Override
@@ -147,17 +148,17 @@ public class PowerGraph implements IPowerGraph {
 	@Override
 	public void setPowerValue(final int index, final double value) {
 		powerValues[index] = value;
-		torqueValues[index] = hpToNm(value, Power.getRpm(index));
+		torqueValues[index] = hpToNm(value, Torque.getRpm(index));
 	}
 
 	@Override
 	public short getPowerValue(@NonNull final Point location) {
-		return (short) Math.round(Math.max(Power.MIN_VALUE, Math.min(Power.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
+		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
 	}
 
 	@Override
 	public int getPowerIndex(@NonNull final Point location) {
-		return Math.max(Math.min(Power.indexOf(getAbscissae().getPositionValue(location.x, false) * RPM_DIVISOR), Power.LENGTH - 1), 0);
+		return Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(location.x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0);
 	}
 
 	@Override

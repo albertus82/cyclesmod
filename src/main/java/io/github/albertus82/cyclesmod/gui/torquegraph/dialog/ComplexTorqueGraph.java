@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -22,16 +22,16 @@ import org.eclipse.swt.widgets.Shell;
 import io.github.albertus82.cyclesmod.common.model.VehicleType;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
 import io.github.albertus82.cyclesmod.gui.Mode;
-import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraph;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.UpdateTitleListener;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
+import io.github.albertus82.cyclesmod.gui.torquegraph.BasicTorqueGraph;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ChangeValueListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.UpdateTitleListener;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
-public class ComplexPowerGraph extends PowerGraph {
+public class ComplexTorqueGraph extends BasicTorqueGraph {
 
 	private static final byte DEFAULT_POINT_SIZE = 6;
 	private static final byte DEFAULT_LINE_WIDTH = 2;
@@ -49,7 +49,7 @@ public class ComplexPowerGraph extends PowerGraph {
 	@Getter
 	private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-	public ComplexPowerGraph(@NonNull final Map<Integer, Short> map, @NonNull final Mode mode, @NonNull final VehicleType vehicleType, @NonNull final Shell shell) {
+	public ComplexTorqueGraph(@NonNull final Map<Integer, Short> map, @NonNull final Mode mode, @NonNull final VehicleType vehicleType, @NonNull final Shell shell) {
 		super(map, vehicleType, () -> mode);
 		this.shell = shell;
 		this.mode = mode;

@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog;
 
 import org.eclipse.nebula.visualization.internal.xygraph.undo.OperationsManager;
 import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
@@ -12,25 +12,25 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import io.github.albertus82.cyclesmod.common.resources.Messages;
-import io.github.albertus82.cyclesmod.gui.powergraph.IPowerGraph;
-import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraphContextMenu;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.RedoListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.SaveSnapshotListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.UndoListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraph;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraphContextMenu;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.RedoListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.SaveSnapshotListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.UndoListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ZoomInListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ZoomOutListener;
 import io.github.albertus82.jface.SwtUtils;
 import lombok.Getter;
 
-public class ComplexPowerGraphContextMenu extends PowerGraphContextMenu {
+public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
 	@Getter
 	private final MenuItem showTorqueMenuItem;
 
-	public ComplexPowerGraphContextMenu(final Control control, final IPowerGraph powerGraph) {
+	public ComplexTorqueGraphContextMenu(final Control control, final TorqueGraph powerGraph) {
 		super(control, powerGraph);
 
 		final Menu menu = getMenu();

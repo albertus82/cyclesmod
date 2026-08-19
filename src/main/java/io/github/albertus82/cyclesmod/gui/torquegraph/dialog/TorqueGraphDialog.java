@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog;
 
 import java.util.Map;
 
@@ -22,18 +22,18 @@ import io.github.albertus82.cyclesmod.common.model.VehicleType;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
 import io.github.albertus82.cyclesmod.gui.Images;
 import io.github.albertus82.cyclesmod.gui.Mode;
-import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraphProvider;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.RedoListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.SaveSnapshotListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.UndoListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomMouseWheelListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraphProvider;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.RedoListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.SaveSnapshotListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.UndoListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ZoomInListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ZoomMouseWheelListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ZoomOutListener;
 import io.github.albertus82.jface.SwtUtils;
 import lombok.NonNull;
 
-public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
+public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 
 	private static final int SHELL_SIZE_FACTOR = 3;
 
@@ -42,9 +42,9 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 	private final Mode mode;
 
 	private int returnCode = SWT.CANCEL;
-	private ComplexPowerGraph powerGraph;
+	private ComplexTorqueGraph powerGraph;
 
-	public PowerGraphDialog(@NonNull final Shell parent, @NonNull final Mode mode) {
+	public TorqueGraphDialog(@NonNull final Shell parent, @NonNull final Mode mode) {
 		super(parent, SWT.SHEET | SWT.RESIZE | SWT.MAX);
 		this.mode = mode;
 	}
@@ -87,8 +87,8 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		powerGraph = new ComplexPowerGraph(map, mode, vehicleType, shell);
-		final ComplexPowerGraphContextMenu menu = new ComplexPowerGraphContextMenu(canvas, powerGraph);
+		powerGraph = new ComplexTorqueGraph(map, mode, vehicleType, shell);
+		final ComplexTorqueGraphContextMenu menu = new ComplexTorqueGraphContextMenu(canvas, powerGraph);
 		if (torqueVisible) {
 			powerGraph.toggleTorqueVisibility(true);
 			menu.getShowTorqueMenuItem().setSelection(true);
@@ -143,7 +143,7 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 	}
 
 	@Override
-	public ComplexPowerGraph getPowerGraph() {
+	public ComplexTorqueGraph getPowerGraph() {
 		return powerGraph;
 	}
 

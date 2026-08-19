@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener;
 
 import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseListener;
@@ -6,8 +6,8 @@ import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.figures.ZoomType;
 
-import io.github.albertus82.cyclesmod.gui.powergraph.IPowerGraph;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.ChangeValueCommand;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraph;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.ChangeValueCommand;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ public class ChangeValueListener extends MouseMotionListener.Stub implements Mou
 
 	private static final int BUTTON_LEFT = 1;
 
-	private final IPowerGraph powerGraph;
+	private final TorqueGraph powerGraph;
 
 	private int mouseButton; // needed to detect drag only for left button.
 	private Point mouseEnteredLocation; // needed to manage double click (maximize) on the title bar.

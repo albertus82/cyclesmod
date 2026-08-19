@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph;
+package io.github.albertus82.cyclesmod.gui.torquegraph;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -27,7 +27,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
 
-public abstract class PowerGraphContextMenu implements Multilanguage {
+public abstract class TorqueGraphContextMenu implements Multilanguage {
 
 	private static final byte[] POINT_SIZE_OPTIONS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -37,13 +37,13 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
 
-	private final IPowerGraph powerGraph;
+	private final TorqueGraph powerGraph;
 	private final Control parent;
 
 	@Getter(AccessLevel.PROTECTED)
 	private final Menu menu;
 
-	protected PowerGraphContextMenu(@NonNull final Control parent, @NonNull final IPowerGraph powerGraph) {
+	protected TorqueGraphContextMenu(@NonNull final Control parent, @NonNull final TorqueGraph powerGraph) {
 		this.parent = parent;
 		this.powerGraph = powerGraph;
 

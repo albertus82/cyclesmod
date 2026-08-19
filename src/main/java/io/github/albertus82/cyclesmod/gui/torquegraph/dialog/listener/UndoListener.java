@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener;
 
 import org.eclipse.nebula.visualization.internal.xygraph.undo.OperationsManager;
 import org.eclipse.swt.SWT;

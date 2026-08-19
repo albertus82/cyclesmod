@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.simple;
+package io.github.albertus82.cyclesmod.gui.torquegraph.simple;
 
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -12,12 +12,12 @@ import org.eclipse.swt.widgets.Display;
 import io.github.albertus82.cyclesmod.common.model.Vehicle;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
 import io.github.albertus82.cyclesmod.gui.Mode;
-import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraph;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
+import io.github.albertus82.cyclesmod.gui.torquegraph.BasicTorqueGraph;
 import io.github.albertus82.jface.Multilanguage;
 import lombok.NonNull;
 
-public class SimplePowerGraph extends PowerGraph implements Multilanguage {
+public class SimpleTorqueGraph extends BasicTorqueGraph implements Multilanguage {
 
 	private static final byte DEFAULT_POINT_SIZE = 4;
 	private static final byte DEFAULT_LINE_WIDTH = 2;
@@ -26,7 +26,7 @@ public class SimplePowerGraph extends PowerGraph implements Multilanguage {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	public SimplePowerGraph(@NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
+	public SimpleTorqueGraph(@NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
 		super(vehicle, modeSupplier);
 
 		final Axis abscissae = getAbscissae();

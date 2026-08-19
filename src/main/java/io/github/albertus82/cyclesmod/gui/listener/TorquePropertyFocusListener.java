@@ -7,17 +7,17 @@ import org.eclipse.swt.widgets.Text;
 
 import io.github.albertus82.cyclesmod.common.engine.InvalidNumberException;
 import io.github.albertus82.cyclesmod.common.engine.ValueOutOfRangeException;
-import io.github.albertus82.cyclesmod.common.model.Power;
+import io.github.albertus82.cyclesmod.common.model.Torque;
 import io.github.albertus82.cyclesmod.gui.CyclesModGui;
-import io.github.albertus82.cyclesmod.gui.model.PowerTextData;
-import io.github.albertus82.cyclesmod.gui.powergraph.IPowerGraph;
+import io.github.albertus82.cyclesmod.gui.model.TorqueTextData;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraph;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
-public class PowerPropertyFocusListener extends PropertyFocusListener {
+public class TorquePropertyFocusListener extends PropertyFocusListener {
 
-	public PowerPropertyFocusListener(@NonNull final CyclesModGui gui) {
+	public TorquePropertyFocusListener(@NonNull final CyclesModGui gui) {
 		super(gui);
 	}
 
@@ -28,13 +28,13 @@ public class PowerPropertyFocusListener extends PropertyFocusListener {
 
 			// Update power graph...
 			final Text text = (Text) event.widget;
-			if (gui.isNumeric(text.getText().trim()) && text.getData() instanceof PowerTextData) {
-				final PowerTextData textData = (PowerTextData) text.getData();
+			if (gui.isNumeric(text.getText().trim()) && text.getData() instanceof TorqueTextData) {
+				final TorqueTextData textData = (TorqueTextData) text.getData();
 				try {
 					final int index = textData.getIndex();
-					final IPowerGraph graph = textData.getPowerGraph();
+					final TorqueGraph graph = textData.getPowerGraph();
 
-					final short newValue = Power.parse(textData.getKeyMap().get(gui.getMode()), text.getText().trim(), gui.getNumeralSystem().getRadix());
+					final short newValue = Torque.parse(textData.getKeyMap().get(gui.getMode()), text.getText().trim(), gui.getNumeralSystem().getRadix());
 					final short oldValue = (short) graph.getPowerValue(index);
 					if (oldValue != newValue) {
 						graph.setPowerValue(index, newValue);

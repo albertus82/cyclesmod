@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.simple;
+package io.github.albertus82.cyclesmod.gui.torquegraph.simple;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -7,12 +7,12 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import io.github.albertus82.cyclesmod.gui.powergraph.IPowerGraph;
-import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraphContextMenu;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraph;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraphContextMenu;
 
-public class SimplePowerGraphContextMenu extends PowerGraphContextMenu {
+public class SimpleTorqueGraphContextMenu extends TorqueGraphContextMenu {
 
-	public SimplePowerGraphContextMenu(final Control parent, final IPowerGraph powerGraph) {
+	public SimpleTorqueGraphContextMenu(final Control parent, final TorqueGraph powerGraph) {
 		super(parent, powerGraph);
 
 		final Menu menu = getMenu();

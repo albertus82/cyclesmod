@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph;
+package io.github.albertus82.cyclesmod.gui.torquegraph;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
@@ -6,7 +6,7 @@ import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 
-public interface IPowerGraph {
+public interface TorqueGraph {
 
 	IXYGraph getXyGraph();
 

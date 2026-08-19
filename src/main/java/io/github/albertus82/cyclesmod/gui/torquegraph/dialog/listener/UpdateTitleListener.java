@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -7,12 +7,12 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Point;
 
-import io.github.albertus82.cyclesmod.common.model.Power;
+import io.github.albertus82.cyclesmod.common.model.Torque;
 import io.github.albertus82.cyclesmod.common.resources.ConfigurableMessages;
 import io.github.albertus82.cyclesmod.gui.Mode;
-import io.github.albertus82.cyclesmod.gui.powergraph.IPowerGraph;
-import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraph;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
+import io.github.albertus82.cyclesmod.gui.torquegraph.BasicTorqueGraph;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraph;
 import lombok.NonNull;
 
 public class UpdateTitleListener extends MouseMotionListener.Stub {
@@ -24,13 +24,13 @@ public class UpdateTitleListener extends MouseMotionListener.Stub {
 
 	private static final ConfigurableMessages messages = GuiMessages.INSTANCE;
 
-	private final IPowerGraph powerGraph;
+	private final TorqueGraph powerGraph;
 	private final Mode mode;
 	private final NumberFormat numberFormat;
 
 	private String lastPosition;
 
-	public UpdateTitleListener(@NonNull final IPowerGraph powerGraph, @NonNull final Mode mode) {
+	public UpdateTitleListener(@NonNull final TorqueGraph powerGraph, @NonNull final Mode mode) {
 		this.powerGraph = powerGraph;
 		this.mode = mode;
 		numberFormat = NumberFormat.getNumberInstance(messages.getLanguage().getLocale());
@@ -57,8 +57,8 @@ public class UpdateTitleListener extends MouseMotionListener.Stub {
 		final short value = powerGraph.getPowerValue(location);
 		final short hp = Mode.GPC.equals(mode) ? (short) (value * GPC_FACTOR) : value;
 		final double kw = hp / KW_TO_HP;
-		final int rpm = Power.getRpm(powerGraph.getPowerIndex(location));
-		final double nm = PowerGraph.hpToNm(hp, rpm);
+		final int rpm = Torque.getRpm(powerGraph.getPowerIndex(location));
+		final double nm = BasicTorqueGraph.hpToNm(hp, rpm);
 		final double lbft = nm * NM_TO_LBFT;
 		final String currentPosition;
 		if (Mode.GPC.equals(mode)) {
