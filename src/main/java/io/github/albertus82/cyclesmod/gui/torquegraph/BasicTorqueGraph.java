@@ -10,8 +10,6 @@ import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 import org.eclipse.nebula.visualization.xygraph.figures.XYGraph;
-import org.eclipse.nebula.visualization.xygraph.linearscale.AbstractScale.LabelSide;
-import org.eclipse.nebula.visualization.xygraph.linearscale.LinearScale.Orientation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -37,24 +35,21 @@ public class BasicTorqueGraph implements TorqueGraph {
 
 	@Getter
 	private final IXYGraph xyGraph = new XYGraph();
-	@Getter
 	private final Axis abscissae = xyGraph.getPrimaryXAxis();
-	@Getter
 	private final Axis ordinates = xyGraph.getPrimaryYAxis();
-	@Getter
-	private final Axis powerOrdinates = new Axis("secondary", true);
-	{
-		powerOrdinates.setOrientation(Orientation.VERTICAL);
-		powerOrdinates.setTickLabelSide(LabelSide.Secondary);
-		//		powerOrdinates.setAutoScaleThreshold(0.1);
-		xyGraph.addAxis(powerOrdinates);
-	}
+	//	@Getter
+	//	private final Axis powerOrdinates = new Axis("secondary", true);
+	//	{
+	//		powerOrdinates.setOrientation(Orientation.VERTICAL);
+	//		powerOrdinates.setTickLabelSide(LabelSide.Secondary);
+	//		xyGraph.addAxis(powerOrdinates);
+	//	}
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider powerDataProvider = new CircularBufferDataProvider(false);
 	@Getter
 	private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), abscissae, ordinates, torqueDataProvider);
 	@Getter
-	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, powerOrdinates, powerDataProvider/* nullDataProvider */);
+	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, /* powerOrdinates */ordinates, powerDataProvider/* nullDataProvider */);
 	private final double[] torqueValues = new double[Torque.LENGTH];
 	private final double[] powerValues = new double[Torque.LENGTH];
 	private final double[] xDataArray = new double[Torque.LENGTH];
@@ -103,15 +98,15 @@ public class BasicTorqueGraph implements TorqueGraph {
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
 
-		ordinates.setTitle(messages.get("gui.label.graph.axis.y.torque"));
+		//		ordinates.setTitle(messages.get("gui.label.graph.axis.y.torque"));
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 
-		powerOrdinates.setTitle(messages.get("gui.label.graph.axis.y.power"));
-		powerOrdinates.setTitleFont(axisTitleFont);
-		powerOrdinates.setShowMajorGrid(true);
-		powerOrdinates.setPrimarySide(false);
-		powerOrdinates.setAutoScale(true);
+		//		powerOrdinates.setTitle(messages.get("gui.label.graph.axis.y.power"));
+		//		powerOrdinates.setTitleFont(axisTitleFont);
+		//		powerOrdinates.setShowMajorGrid(false);
+		//		powerOrdinates.setPrimarySide(false);
+		//		powerOrdinates.setAutoScale(true);
 
 		xyGraph.addTrace(torqueTrace);
 		xyGraph.addTrace(powerTrace);
@@ -121,6 +116,8 @@ public class BasicTorqueGraph implements TorqueGraph {
 
 		torqueTrace.setTraceColor(getColor(vehicleType));
 		powerTrace.setTraceColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
+
+		setOrdinatesTitle();
 	}
 
 	private static Color getColor(@NonNull final VehicleType vehicleType) {
@@ -135,12 +132,6 @@ public class BasicTorqueGraph implements TorqueGraph {
 		default:
 			throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
 		}
-	}
-
-	public static double torqueToPower(final double torque, final int rpm) {
-		// final double kw = torque * 0.7457;
-		// return 9.5488 * kw / rpm * 1000;
-		return (torque / (MAX_RPM / (double) RPM_DIVISOR)) * (rpm / (double) RPM_DIVISOR);
 	}
 
 	@Override
@@ -160,30 +151,39 @@ public class BasicTorqueGraph implements TorqueGraph {
 	}
 
 	@Override
-	public void setTorqueValue(final int index, final double value) {
+	public void setTorqueValue(final int index, final int value) {
 		torqueValues[index] = value;
 		powerValues[index] = torqueToPower(value, Torque.getRpm(index));
 	}
 
 	@Override
 	public short getTorqueValue(@NonNull final Point location) {
-		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, getOrdinates().getPositionValue(location.y, false))));
+		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, ordinates.getPositionValue(location.y, false))));
 	}
 
 	@Override
 	public int getTorqueIndex(@NonNull final Point location) {
-		return Math.max(Math.min(Torque.indexOf(getAbscissae().getPositionValue(location.x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0);
+		return Math.max(Math.min(Torque.indexOf(abscissae.getPositionValue(location.x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0);
 	}
 
 	@Override
-	public void togglePowerVisibility() {
-		powerOrdinates.setVisible(!powerTrace.isVisible());
-		powerTrace.setVisible(!powerTrace.isVisible());
+	public boolean togglePowerVisibility() {
+		powerTrace.setVisible(!isPowerVisible());
+		setOrdinatesTitle();
+		return isPowerVisible();
 	}
 
 	@Override
 	public boolean isPowerVisible() {
 		return powerTrace.isVisible();
+	}
+
+	protected void setOrdinatesTitle() {
+		ordinates.setTitle(messages.get(isPowerVisible() ? "gui.label.graph.axis.y.torque.power" : "gui.label.graph.axis.y.torque"));
+	}
+
+	public static double torqueToPower(final double torque, final int rpm) { // [0.0, 255.0]
+		return (torque / MAX_RPM * rpm);
 	}
 
 	//	private static class NullDataProvider extends AbstractDataProvider {

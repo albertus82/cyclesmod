@@ -55,14 +55,14 @@ public class ComplexTorqueGraph extends BasicTorqueGraph {
 		this.mode = mode;
 		this.vehicleType = vehicleType;
 
-		final Axis abscissae = getAbscissae();
+		final Axis abscissae = getXyGraph().getPrimaryXAxis();
 		abscissae.setAutoScale(DEFAULT_AUTOSCALE);
 
-		final Axis ordinates = getOrdinates();
+		final Axis ordinates = getXyGraph().getPrimaryYAxis();
 		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
-		
-		final Axis powerOrdinates = getPowerOrdinates();
-		powerOrdinates.setAutoScale(DEFAULT_AUTOSCALE);
+
+		//		final Axis powerOrdinates = getPowerOrdinates();
+		//		powerOrdinates.setAutoScale(DEFAULT_AUTOSCALE);
 
 		final Trace torqueTrace = getTorqueTrace();
 		torqueTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
@@ -153,16 +153,12 @@ public class ComplexTorqueGraph extends BasicTorqueGraph {
 	}
 
 	@Override
-	public void togglePowerVisibility( ) {
-		super.togglePowerVisibility( );
+	public boolean togglePowerVisibility() {
+		final boolean visible = super.togglePowerVisibility();
 		if (shell != null && !shell.isDisposed()) {
-			if (isPowerVisible()) {
-				shell.setText(messages.get("gui.label.graph.dialog.title.torque.power", vehicleType.getDescription(mode.getGame())));
-			}
-			else {
-				shell.setText(messages.get("gui.label.graph.dialog.title.torque", vehicleType.getDescription(mode.getGame())));
-			}
+			shell.setText(messages.get(visible ? "gui.label.graph.dialog.title.torque.power" : "gui.label.graph.dialog.title.torque", vehicleType.getDescription(mode.getGame())));
 		}
+		return visible;
 	}
 
 }

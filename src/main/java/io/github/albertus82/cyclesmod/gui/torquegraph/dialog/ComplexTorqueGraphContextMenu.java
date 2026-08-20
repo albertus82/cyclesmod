@@ -63,12 +63,12 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				if (autoScaleMenuItem.getSelection()) {
-					graph.getAbscissae().setAutoScale(true);
-					graph.getOrdinates().setAutoScale(true);
+					graph.getXyGraph().getPrimaryXAxis().setAutoScale(true);
+					graph.getXyGraph().getPrimaryYAxis().setAutoScale(true);
 				}
 				else {
-					graph.getAbscissae().setAutoScale(false);
-					graph.getOrdinates().setAutoScale(false);
+					graph.getXyGraph().getPrimaryXAxis().setAutoScale(false);
+					graph.getXyGraph().getPrimaryYAxis().setAutoScale(false);
 				}
 			}
 		});
@@ -112,7 +112,7 @@ public class ComplexTorqueGraphContextMenu extends TorqueGraphContextMenu {
 		final Image imageRedoGray = mediaFactory.getImage("images/Redo_Gray.png");
 
 		control.addMenuDetectListener(e -> {
-			autoScaleMenuItem.setSelection(graph.getAbscissae().isAutoScale() && graph.getOrdinates().isAutoScale());
+			autoScaleMenuItem.setSelection(graph.getXyGraph().getPrimaryXAxis().isAutoScale() && graph.getXyGraph().getPrimaryYAxis().isAutoScale());
 
 			// Undo/Redo
 			if (manager.getUndoCommandsSize() > 0) {

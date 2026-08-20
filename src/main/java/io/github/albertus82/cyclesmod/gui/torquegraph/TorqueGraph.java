@@ -2,17 +2,12 @@ package io.github.albertus82.cyclesmod.gui.torquegraph;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.nebula.visualization.xygraph.dataprovider.IDataProvider;
-import org.eclipse.nebula.visualization.xygraph.figures.Axis;
 import org.eclipse.nebula.visualization.xygraph.figures.IXYGraph;
 import org.eclipse.nebula.visualization.xygraph.figures.Trace;
 
 public interface TorqueGraph {
 
 	IXYGraph getXyGraph();
-
-	Axis getAbscissae();
-
-	Axis getOrdinates();
 
 	IDataProvider getDataProvider();
 
@@ -22,7 +17,7 @@ public interface TorqueGraph {
 
 	double getTorqueValue(int index);
 
-	void setTorqueValue(int index, double value);
+	void setTorqueValue(int index, int value);
 
 	void refresh();
 
@@ -30,7 +25,7 @@ public interface TorqueGraph {
 
 	int getTorqueIndex(Point location);
 
-	void togglePowerVisibility();
+	boolean togglePowerVisibility();
 
 	boolean isPowerVisible();
 
