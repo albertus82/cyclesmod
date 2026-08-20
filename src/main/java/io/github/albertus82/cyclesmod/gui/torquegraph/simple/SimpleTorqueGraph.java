@@ -29,15 +29,12 @@ public class SimpleTorqueGraph extends BasicTorqueGraph implements Multilanguage
 		super(vehicle, modeSupplier);
 
 		final IXYGraph xyGraph = getXyGraph();
-		
+
 		final Axis abscissae = xyGraph.getPrimaryXAxis();
 		abscissae.setAutoScale(DEFAULT_AUTOSCALE);
 
 		final Axis ordinates = xyGraph.getPrimaryYAxis();
 		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
-
-		//		final Axis powerOrdinates = getPowerOrdinates();
-		//		powerOrdinates.setAutoScale(DEFAULT_AUTOSCALE);
 
 		final Trace torqueTrace = getTorqueTrace();
 		torqueTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
@@ -47,7 +44,6 @@ public class SimpleTorqueGraph extends BasicTorqueGraph implements Multilanguage
 		final Trace powerTrace = getPowerTrace();
 		powerTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
-		
 		xyGraph.setTitle(messages.get("gui.label.graph.title.torque.power"));
 		xyGraph.setTitleFont(Display.getCurrent().getSystemFont());
 	}
@@ -55,7 +51,7 @@ public class SimpleTorqueGraph extends BasicTorqueGraph implements Multilanguage
 	public void updateModeSpecificWidgets() {
 		setOrdinatesTitle();
 	}
-	
+
 	@Override
 	public boolean togglePowerVisibility() {
 		final boolean visible = super.togglePowerVisibility();
@@ -63,15 +59,13 @@ public class SimpleTorqueGraph extends BasicTorqueGraph implements Multilanguage
 		return visible;
 	}
 
-	
 	@Override
 	public void updateLanguage() {
 		getXyGraph().getPrimaryXAxis().setTitle(messages.get("gui.label.graph.axis.x", RPM_DIVISOR));
-//		getAbscissae() abscissae.setTitle(messages.get("gui.label.graph.axis.x", RPM_DIVISOR));
 		setGraphTitle();
 		setOrdinatesTitle();
 	}
-	
+
 	private void setGraphTitle() {
 		getXyGraph().setTitle(messages.get(isPowerVisible() ? "gui.label.graph.title.torque.power" : "gui.label.graph.title.torque"));
 	}

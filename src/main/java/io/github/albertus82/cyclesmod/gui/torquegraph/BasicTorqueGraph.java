@@ -31,32 +31,23 @@ public class BasicTorqueGraph implements TorqueGraph {
 
 	private static final Messages messages = GuiMessages.INSTANCE;
 
-	//	private static final IDataProvider nullDataProvider = new NullDataProvider();
-
 	@Getter
 	private final IXYGraph xyGraph = new XYGraph();
-	private final Axis abscissae = xyGraph.getPrimaryXAxis();
-	private final Axis ordinates = xyGraph.getPrimaryYAxis();
-	//	@Getter
-	//	private final Axis powerOrdinates = new Axis("secondary", true);
-	//	{
-	//		powerOrdinates.setOrientation(Orientation.VERTICAL);
-	//		powerOrdinates.setTickLabelSide(LabelSide.Secondary);
-	//		xyGraph.addAxis(powerOrdinates);
-	//	}
+
 	private final CircularBufferDataProvider torqueDataProvider = new CircularBufferDataProvider(false);
 	private final CircularBufferDataProvider powerDataProvider = new CircularBufferDataProvider(false);
+
 	@Getter
-	private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), abscissae, ordinates, torqueDataProvider);
+	private final Trace torqueTrace = new Trace(messages.get("gui.label.graph.trace.torque"), xyGraph.getPrimaryXAxis(), xyGraph.getPrimaryYAxis(), torqueDataProvider);
 	@Getter
-	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), abscissae, /* powerOrdinates */ordinates, powerDataProvider/* nullDataProvider */);
+	private final Trace powerTrace = new Trace(messages.get("gui.label.graph.trace.power"), xyGraph.getPrimaryXAxis(), xyGraph.getPrimaryYAxis(), powerDataProvider);
+
 	private final double[] torqueValues = new double[Torque.LENGTH];
 	private final double[] powerValues = new double[Torque.LENGTH];
 	private final double[] xDataArray = new double[Torque.LENGTH];
+
 	@Getter
 	private final Supplier<Mode> modeSupplier;
-	//	@Getter
-	//	private boolean powerVisible = true;
 
 	public BasicTorqueGraph(@NonNull final Vehicle vehicle, @NonNull final Supplier<Mode> modeSupplier) {
 		this.modeSupplier = modeSupplier;
@@ -94,25 +85,18 @@ public class BasicTorqueGraph implements TorqueGraph {
 
 		final Font axisTitleFont = Display.getCurrent().getSystemFont();
 
-		abscissae.setTitle(messages.get("gui.label.graph.axis.x", RPM_DIVISOR));
+		final Axis abscissae = xyGraph.getPrimaryXAxis();
 		abscissae.setTitleFont(axisTitleFont);
 		abscissae.setShowMajorGrid(true);
+		abscissae.setTitle(messages.get("gui.label.graph.axis.x", RPM_DIVISOR));
 
-		//		ordinates.setTitle(messages.get("gui.label.graph.axis.y.torque"));
+		final Axis ordinates = xyGraph.getPrimaryYAxis();
 		ordinates.setTitleFont(axisTitleFont);
 		ordinates.setShowMajorGrid(true);
 
-		//		powerOrdinates.setTitle(messages.get("gui.label.graph.axis.y.power"));
-		//		powerOrdinates.setTitleFont(axisTitleFont);
-		//		powerOrdinates.setShowMajorGrid(false);
-		//		powerOrdinates.setPrimarySide(false);
-		//		powerOrdinates.setAutoScale(true);
-
+		xyGraph.setShowLegend(false);
 		xyGraph.addTrace(torqueTrace);
 		xyGraph.addTrace(powerTrace);
-		//		togglePowerVisibility(false);
-		//togglePowerVisibility(true);
-		xyGraph.setShowLegend(false);
 
 		torqueTrace.setTraceColor(getColor(vehicleType));
 		powerTrace.setTraceColor(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
@@ -158,12 +142,12 @@ public class BasicTorqueGraph implements TorqueGraph {
 
 	@Override
 	public short getTorqueValue(@NonNull final Point location) {
-		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, ordinates.getPositionValue(location.y, false))));
+		return (short) Math.round(Math.max(Torque.MIN_VALUE, Math.min(Torque.MAX_VALUE, xyGraph.getPrimaryYAxis().getPositionValue(location.y, false))));
 	}
 
 	@Override
 	public int getTorqueIndex(@NonNull final Point location) {
-		return Math.max(Math.min(Torque.indexOf(abscissae.getPositionValue(location.x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0);
+		return Math.max(Math.min(Torque.indexOf(xyGraph.getPrimaryXAxis().getPositionValue(location.x, false) * RPM_DIVISOR), Torque.LENGTH - 1), 0);
 	}
 
 	@Override
@@ -179,28 +163,11 @@ public class BasicTorqueGraph implements TorqueGraph {
 	}
 
 	protected void setOrdinatesTitle() {
-		ordinates.setTitle(messages.get(isPowerVisible() ? "gui.label.graph.axis.y.torque.power" : "gui.label.graph.axis.y.torque"));
+		xyGraph.getPrimaryYAxis().setTitle(messages.get(isPowerVisible() ? "gui.label.graph.axis.y.torque.power" : "gui.label.graph.axis.y.torque"));
 	}
 
 	public static double torqueToPower(final double torque, final int rpm) { // [0.0, 255.0]
 		return (torque / MAX_RPM * rpm);
 	}
-
-	//	private static class NullDataProvider extends AbstractDataProvider {
-	//
-	//		public NullDataProvider() {
-	//			super(false);
-	//		}
-	//
-	//		@Override
-	//		public int getSize() {
-	//			return 0;
-	//		}
-	//
-	//		@Override
-	//		public ISample getSample(int index) {
-	//			return null;
-	//		}
-	//	}
 
 }
