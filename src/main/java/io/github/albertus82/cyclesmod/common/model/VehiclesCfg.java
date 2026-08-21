@@ -154,7 +154,7 @@ public class VehiclesCfg {
 
 	private void manageDeprecatedProperties() {
 		final Map<String, String> replacements = new HashMap<>();
-		replacements.put(".torque.", '.' + Torque.PREFIX + '.');
+		replacements.put(".power.", '.' + Torque.PREFIX + '.');
 		replacements.put(".unknown1", '.' + Setting.GRIP_0.getKey());
 		replacements.put(".unknown2", '.' + Setting.BRAKING_SPEED_0.getKey());
 		replacements.put(".unknown3", '.' + Setting.SPIN_THRESHOLD_0.getKey());

@@ -18,8 +18,6 @@ public class Torque implements ByteArray {
 	public static final short MAX_VALUE = 0xFF;
 
 	public static final String PREFIX = "torque";
-	@Deprecated
-	public static final String ALT_PREFIX = "power";
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 

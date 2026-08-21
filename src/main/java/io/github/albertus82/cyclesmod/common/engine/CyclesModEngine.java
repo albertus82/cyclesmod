@@ -56,7 +56,7 @@ public class CyclesModEngine {
 	private boolean applyTorqueProperty(final String propertyName, final String value, @NonNull final Vehicle vehicle) throws InvalidNumberException, ValueOutOfRangeException, UnknownPropertyException {
 		boolean applied = false;
 		final short newValue = Torque.parse(propertyName, value, numeralSystem.getRadix());
-		final String suffix = StringUtils.substringAfter(propertyName, (propertyName.contains(Torque.ALT_PREFIX) ? Torque.ALT_PREFIX : Torque.PREFIX) + '.');
+		final String suffix = StringUtils.substringAfter(propertyName, Torque.PREFIX + '.');
 		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < vehicle.getTorque().getCurve().length) {
 			final int index = Integer.parseInt(suffix);
 			final short defaultValue = vehicle.getTorque().getCurve()[index];
@@ -141,8 +141,7 @@ public class CyclesModEngine {
 	}
 
 	public static boolean isTorqueProperty(final String propertyName) {
-		final String suffix = StringUtils.substringAfter(propertyName, ".");
-		return suffix.startsWith(Torque.PREFIX) || suffix.startsWith(Torque.ALT_PREFIX);
+		return StringUtils.substringAfter(propertyName, ".").startsWith(Torque.PREFIX);
 	}
 
 	public static boolean isGearboxProperty(final String propertyName) {
