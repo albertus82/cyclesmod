@@ -511,7 +511,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 				bytes = patchOriginalGpcExec();
 			}
 			else if (Mode.CYCLES.equals(mode)) { // INF
-				bytes = engine.getVehiclesInf().toByteArray();
+				bytes = engine.getVehiclesInf().toByteArray(false);
 			}
 			else {
 				throw new IllegalStateException("Unknown mode: " + mode);
@@ -557,7 +557,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		final String fileName = saveDialog.open();
 		if (fileName != null && !fileName.trim().isEmpty()) {
 			try {
-				Files.write(Paths.get(fileName), engine.getVehiclesInf().toByteArray());
+				Files.write(Paths.get(fileName), engine.getVehiclesInf().toByteArray(false));
 				currentFileName = fileName;
 				setCurrentFileModificationStatus(false);
 				setLastSavedProperties(new VehiclesCfg(mode.getGame(), engine.getVehiclesInf()).getMap());
@@ -612,8 +612,14 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 		final int offset = ByteArrayUtils.memmem(originalGpcExecBytes, DefaultCars.getByteArray()).orElseThrow(IllegalStateException::new);
 		final byte[] bytes = new byte[originalGpcExecBytes.length];
 		System.arraycopy(originalGpcExecBytes, 0, bytes, 0, offset);
-		System.arraycopy(engine.getVehiclesInf().toByteArray(), 0, bytes, offset, VehiclesInf.FILE_SIZE);
+		System.arraycopy(engine.getVehiclesInf().toByteArray(false), 0, bytes, offset, VehiclesInf.FILE_SIZE);
 		System.arraycopy(originalGpcExecBytes, offset + VehiclesInf.FILE_SIZE, bytes, offset + VehiclesInf.FILE_SIZE, originalGpcExecBytes.length - offset - VehiclesInf.FILE_SIZE);
+
+		final int offset2 = ByteArrayUtils.memmem(bytes, HiddenCar.getByteArray()).orElseThrow(IllegalStateException::new);
+		System.arraycopy(bytes, 0, bytes, 0, offset2);
+		System.arraycopy(engine.getVehiclesInf().toByteArray(true), 0, bytes, offset2, Vehicle.LENGTH);
+		System.arraycopy(bytes, offset2 + Vehicle.LENGTH, bytes, offset2 + Vehicle.LENGTH, bytes.length - offset2 - Vehicle.LENGTH);
+
 		return bytes;
 	}
 

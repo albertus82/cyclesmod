@@ -9,9 +9,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import io.github.albertus82.cyclesmod.common.data.DefaultBikes;
 import io.github.albertus82.cyclesmod.common.data.DefaultCars;
+import io.github.albertus82.cyclesmod.common.data.HiddenBike;
+import io.github.albertus82.cyclesmod.common.data.HiddenCar;
 import io.github.albertus82.cyclesmod.common.data.InvalidSizeException;
 import lombok.Getter;
 import lombok.NonNull;
@@ -70,6 +73,8 @@ public class VehiclesInf {
 			throw new IllegalStateException("Unknown or unsupported game: " + game);
 		}
 		parse(bytes, vehicleTypes);
+
+		vehicles.put(VehicleType.OPPONENTS, new Vehicle(VehicleType.OPPONENTS, game == Game.CYCLES ? HiddenBike.getByteArray() : HiddenCar.getByteArray()));
 	}
 
 	private void parse(@NonNull final byte[] bytes, VehicleType... vehicleTypes) {
@@ -77,9 +82,15 @@ public class VehiclesInf {
 			vehicleTypes = VehicleType.values();
 		}
 		for (final VehicleType vehicleType : vehicleTypes) {
+			if (vehicleType == VehicleType.OPPONENTS) {
+				continue;
+			}
 			final int index = vehicleType.getIndex();
 			vehicles.put(vehicleType, new Vehicle(vehicleType, Arrays.copyOfRange(bytes, Vehicle.LENGTH * index, Vehicle.LENGTH * (index + 1))));
 		}
+
+		vehicles.put(VehicleType.OPPONENTS, new Vehicle(VehicleType.OPPONENTS, game == Game.CYCLES ? HiddenBike.getByteArray() : HiddenCar.getByteArray()));
+
 	}
 
 	/**
@@ -88,10 +99,22 @@ public class VehiclesInf {
 	 * 
 	 * @return A new byte array representing the BIKES.INF file.
 	 */
-	public byte[] toByteArray() {
-		final ByteBuffer buf = ByteBuffer.allocate(FILE_SIZE);
-		for (final ByteArray vehicle : vehicles.values()) {
-			buf.put(vehicle.toByteArray());
+	public byte[] toByteArray(final boolean opponents) {
+		final ByteBuffer buf = ByteBuffer.allocate(opponents ? FILE_SIZE / 3 : FILE_SIZE);
+		for (final Entry<VehicleType, Vehicle> entry : vehicles.entrySet()) {
+			//			if (e.getKey() == VehicleType.OPPONENTS) {
+			//				continue;
+			//			}
+			if (opponents) {
+				if (VehicleType.OPPONENTS.equals(entry.getKey())) {
+					buf.put(entry.getValue().toByteArray());
+				}
+			}
+			else {
+				if (!VehicleType.OPPONENTS.equals(entry.getKey())) {
+					buf.put(entry.getValue().toByteArray());
+				}
+			}
 		}
 		if (buf.position() != buf.capacity()) {
 			throw new IllegalStateException(new InvalidSizeException(buf.capacity(), buf.position()));

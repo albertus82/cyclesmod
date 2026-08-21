@@ -12,7 +12,8 @@ public enum VehicleType {
 
 	FERRARI_125(0, "Ferrari", 125),
 	MCLAREN_250(1, "McLaren", 250),
-	WILLIAMS_500(2, "Williams", 500);
+	WILLIAMS_500(2, "Williams", 500),
+	OPPONENTS(3, "Opponents", -1);
 
 	private final int index;
 	@NonNull
@@ -34,7 +35,7 @@ public enum VehicleType {
 	public String getDescription(@NonNull final Game game) {
 		switch (game) {
 		case CYCLES:
-			return displacement + " cc";
+			return displacement > 0 ? displacement + " cc" : "Opponents";
 		case GPC:
 			return team;
 		default:

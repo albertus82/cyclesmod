@@ -113,6 +113,8 @@ public class BasicTorqueGraph implements TorqueGraph {
 			return display.getSystemColor(SWT.COLOR_BLUE);
 		case WILLIAMS_500:
 			return display.getSystemColor(SWT.COLOR_BLACK);
+		case OPPONENTS:
+			return display.getSystemColor(SWT.COLOR_DARK_GREEN);
 		default:
 			throw new IllegalArgumentException("Unknown vehicle type: " + vehicleType);
 		}

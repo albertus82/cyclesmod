@@ -202,7 +202,7 @@ public class CyclesModCli implements Callable<Integer> {
 
 	private void createBikesInf(@NonNull final Path bikesInfFile) throws IOException {
 		System.out.print(messages.get("console.message.preparing.new.file", VehiclesInf.getFileName(GAME)) + ' ');
-		final byte[] currentBytes = engine.getVehiclesInf().toByteArray();
+		final byte[] currentBytes = engine.getVehiclesInf().toByteArray(false);
 		if (bikesInfFile.toFile().exists()) {
 			if (Files.isDirectory(bikesInfFile)) {
 				System.out.println(ERROR);
