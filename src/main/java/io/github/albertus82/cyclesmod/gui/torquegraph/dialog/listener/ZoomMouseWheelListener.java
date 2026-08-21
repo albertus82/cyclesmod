@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.TreeSearch;

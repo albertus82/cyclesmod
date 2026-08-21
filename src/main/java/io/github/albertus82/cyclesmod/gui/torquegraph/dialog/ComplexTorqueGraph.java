@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -22,16 +22,16 @@ import org.eclipse.swt.widgets.Shell;
 import io.github.albertus82.cyclesmod.common.model.VehicleType;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
 import io.github.albertus82.cyclesmod.gui.Mode;
-import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraph;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ChangeValueListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.UpdateTitleListener;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
+import io.github.albertus82.cyclesmod.gui.torquegraph.BasicTorqueGraph;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ChangeValueListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.UpdateTitleListener;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 
 @Log
-public class ComplexPowerGraph extends PowerGraph {
+public class ComplexTorqueGraph extends BasicTorqueGraph {
 
 	private static final byte DEFAULT_POINT_SIZE = 6;
 	private static final byte DEFAULT_LINE_WIDTH = 2;
@@ -49,29 +49,30 @@ public class ComplexPowerGraph extends PowerGraph {
 	@Getter
 	private final ToolbarArmedXYGraph toolbarArmedXYGraph = new ToolbarArmedXYGraph(getXyGraph());
 
-	public ComplexPowerGraph(@NonNull final Map<Integer, Short> map, @NonNull final Mode mode, @NonNull final VehicleType vehicleType, @NonNull final Shell shell) {
+	public ComplexTorqueGraph(@NonNull final Map<Integer, Short> map, @NonNull final Mode mode, @NonNull final VehicleType vehicleType, @NonNull final Shell shell) {
 		super(map, vehicleType, () -> mode);
 		this.shell = shell;
 		this.mode = mode;
 		this.vehicleType = vehicleType;
 
-		final Axis abscissae = getAbscissae();
+		final IXYGraph xyGraph = getXyGraph();
+
+		final Axis abscissae = xyGraph.getPrimaryXAxis();
 		abscissae.setAutoScale(DEFAULT_AUTOSCALE);
 
-		final Axis ordinates = getOrdinates();
+		final Axis ordinates = xyGraph.getPrimaryYAxis();
 		ordinates.setAutoScale(DEFAULT_AUTOSCALE);
 
-		final Trace powerTrace = getPowerTrace();
-		powerTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
-		powerTrace.setLineWidth(DEFAULT_LINE_WIDTH);
-		powerTrace.setPointSize(DEFAULT_POINT_SIZE);
-
 		final Trace torqueTrace = getTorqueTrace();
+		torqueTrace.setPointStyle(PointStyle.FILLED_DIAMOND);
 		torqueTrace.setLineWidth(DEFAULT_LINE_WIDTH);
+		torqueTrace.setPointSize(DEFAULT_POINT_SIZE);
+
+		final Trace powerTrace = getPowerTrace();
+		powerTrace.setLineWidth(DEFAULT_LINE_WIDTH);
 
 		customizeToolbarButtons(toolbarArmedXYGraph);
 
-		final IXYGraph xyGraph = getXyGraph();
 		final PlotArea plotArea = xyGraph.getPlotArea();
 		final ChangeValueListener changeValueListener = new ChangeValueListener(this);
 		plotArea.addMouseListener(changeValueListener);
@@ -150,16 +151,12 @@ public class ComplexPowerGraph extends PowerGraph {
 	}
 
 	@Override
-	public void toggleTorqueVisibility(final boolean visibility) {
-		super.toggleTorqueVisibility(visibility);
+	public boolean togglePowerVisibility() {
+		final boolean visible = super.togglePowerVisibility();
 		if (shell != null && !shell.isDisposed()) {
-			if (visibility) {
-				shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDescription(mode.getGame())));
-			}
-			else {
-				shell.setText(messages.get("gui.label.graph.dialog.title.power", vehicleType.getDescription(mode.getGame())));
-			}
+			shell.setText(messages.get(visible ? "gui.label.graph.dialog.title.torque.power" : "gui.label.graph.dialog.title.torque", vehicleType.getDescription(mode.getGame())));
 		}
+		return visible;
 	}
 
 }

@@ -113,18 +113,18 @@ public class VehiclesCfg {
 				props.append(lineSeparator);
 			}
 
-			// Power
+			// Torque
 			props.append(lineSeparator);
-			props.append("# ").append(Power.class.getSimpleName()).append(" (").append(Power.getRpm(0)).append('-').append(Power.getRpm(Power.LENGTH) - 1).append(" RPM) #");
+			props.append("# ").append(Torque.class.getSimpleName()).append(" (").append(Torque.getRpm(0)).append('-').append(Torque.getRpm(Torque.LENGTH) - 1).append(" RPM) #");
 			props.append(lineSeparator);
-			for (int index = 0; index < vehicle.getPower().getCurve().length; index++) {
+			for (int index = 0; index < vehicle.getTorque().getCurve().length; index++) {
 				if (index > 0 && index % 8 == 0) {
-					props.append("# ").append(Power.getRpm(index)).append(" RPM");
+					props.append("# ").append(Torque.getRpm(index)).append(" RPM");
 					props.append(lineSeparator);
 				}
-				props.append(buildPropertyKey(game, vehicle.getType(), Power.PREFIX, index));
+				props.append(buildPropertyKey(game, vehicle.getType(), Torque.PREFIX, index));
 				props.append('=');
-				props.append(vehicle.getPower().getCurve()[index]);
+				props.append(vehicle.getTorque().getCurve()[index]);
 				props.append(lineSeparator);
 			}
 
@@ -154,7 +154,7 @@ public class VehiclesCfg {
 
 	private void manageDeprecatedProperties() {
 		final Map<String, String> replacements = new HashMap<>();
-		replacements.put(".torque.", '.' + Power.PREFIX + '.');
+		replacements.put(".torque.", '.' + Torque.PREFIX + '.');
 		replacements.put(".unknown1", '.' + Setting.GRIP_0.getKey());
 		replacements.put(".unknown2", '.' + Setting.BRAKING_SPEED_0.getKey());
 		replacements.put(".unknown3", '.' + Setting.SPIN_THRESHOLD_0.getKey());

@@ -11,13 +11,15 @@ import lombok.Getter;
 import lombok.NonNull;
 
 @Getter
-public class Power implements ByteArray {
+public class Torque implements ByteArray {
 
 	public static final int LENGTH = 106;
 	public static final short MIN_VALUE = 0;
 	public static final short MAX_VALUE = 0xFF;
 
-	public static final String PREFIX = "power";
+	public static final String PREFIX = "torque";
+	@Deprecated
+	public static final String ALT_PREFIX = "power";
 
 	private static final Messages messages = CommonMessages.INSTANCE;
 
@@ -29,13 +31,13 @@ public class Power implements ByteArray {
 	public static final short POINT_WIDTH_RPM = 128;
 
 	/**
-	 * 42-147: power curve (RPM range: 768-14335 RPM).
+	 * 42-147: torque curve (RPM range: 768-14335 RPM).
 	 */
 	private final short[] curve;
 
-	public Power(@NonNull final short[] curve) {
+	public Torque(@NonNull final short[] curve) {
 		if (curve.length > LENGTH) {
-			throw new IllegalArgumentException(messages.get("common.error.power", LENGTH, curve.length));
+			throw new IllegalArgumentException(messages.get("common.error.torque", LENGTH, curve.length));
 		}
 		this.curve = Arrays.copyOf(curve, LENGTH);
 	}

@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph.dialog;
+package io.github.albertus82.cyclesmod.gui.torquegraph.dialog;
 
 import java.util.Map;
 
@@ -22,18 +22,19 @@ import io.github.albertus82.cyclesmod.common.model.VehicleType;
 import io.github.albertus82.cyclesmod.common.resources.Messages;
 import io.github.albertus82.cyclesmod.gui.Images;
 import io.github.albertus82.cyclesmod.gui.Mode;
-import io.github.albertus82.cyclesmod.gui.powergraph.PowerGraphProvider;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.RedoListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.SaveSnapshotListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.UndoListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomInListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomMouseWheelListener;
-import io.github.albertus82.cyclesmod.gui.powergraph.dialog.listener.ZoomOutListener;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
+import io.github.albertus82.cyclesmod.gui.torquegraph.TorqueGraphProvider;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.RedoListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.SaveSnapshotListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.UndoListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ZoomInListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ZoomMouseWheelListener;
+import io.github.albertus82.cyclesmod.gui.torquegraph.dialog.listener.ZoomOutListener;
 import io.github.albertus82.jface.SwtUtils;
+import lombok.Getter;
 import lombok.NonNull;
 
-public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
+public class TorqueGraphDialog extends Dialog implements TorqueGraphProvider {
 
 	private static final int SHELL_SIZE_FACTOR = 3;
 
@@ -42,19 +43,21 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 	private final Mode mode;
 
 	private int returnCode = SWT.CANCEL;
-	private ComplexPowerGraph powerGraph;
 
-	public PowerGraphDialog(@NonNull final Shell parent, @NonNull final Mode mode) {
+	@Getter
+	private ComplexTorqueGraph graph;
+
+	public TorqueGraphDialog(@NonNull final Shell parent, @NonNull final Mode mode) {
 		super(parent, SWT.SHEET | SWT.RESIZE | SWT.MAX);
 		this.mode = mode;
 	}
 
-	public int open(@NonNull final Map<Integer, Short> map, @NonNull final VehicleType vehicleType, final boolean torqueVisible) {
+	public int open(@NonNull final Map<Integer, Short> map, @NonNull final VehicleType vehicleType, final boolean powerVisible) {
 		final Shell shell = new Shell(getParent(), getStyle());
-		shell.setText(messages.get("gui.label.graph.dialog.title.power.torque", vehicleType.getDescription(mode.getGame())));
+		shell.setText(messages.get("gui.label.graph.dialog.title.torque.power", vehicleType.getDescription(mode.getGame())));
 		shell.setImages(Images.getAppIconArray());
 		GridLayoutFactory.swtDefaults().applyTo(shell);
-		createContents(shell, map, vehicleType, torqueVisible);
+		createContents(shell, map, vehicleType, powerVisible);
 		final Point minimumSize = getMinimumSize(shell);
 		shell.setSize(getSize(shell));
 		shell.setMinimumSize(minimumSize);
@@ -78,26 +81,26 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 		return shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 	}
 
-	private void createContents(final Shell shell, final Map<Integer, Short> map, final VehicleType vehicleType, final boolean torqueVisible) {
-		createGraph(shell, map, vehicleType, torqueVisible);
+	private void createContents(final Shell shell, final Map<Integer, Short> map, final VehicleType vehicleType, final boolean powerVisible) {
+		createGraph(shell, map, vehicleType, powerVisible);
 		createButtonBox(shell);
 	}
 
-	private void createGraph(final Shell shell, final Map<Integer, Short> map, final VehicleType vehicleType, final boolean torqueVisible) {
+	private void createGraph(final Shell shell, final Map<Integer, Short> map, final VehicleType vehicleType, final boolean powerVisible) {
 		final Canvas canvas = new Canvas(shell, SWT.NONE);
 
 		final LightweightSystem lws = new LightweightSystem(canvas);
-		powerGraph = new ComplexPowerGraph(map, mode, vehicleType, shell);
-		final ComplexPowerGraphContextMenu menu = new ComplexPowerGraphContextMenu(canvas, powerGraph);
-		if (torqueVisible) {
-			powerGraph.toggleTorqueVisibility(true);
-			menu.getShowTorqueMenuItem().setSelection(true);
+		graph = new ComplexTorqueGraph(map, mode, vehicleType, shell);
+		final ComplexTorqueGraphContextMenu menu = new ComplexTorqueGraphContextMenu(canvas, graph);
+		if (powerVisible != graph.isPowerVisible()) {
+			graph.togglePowerVisibility();
+			menu.getShowTorqueMenuItem().setSelection(graph.isPowerVisible());
 		}
-		lws.setContents(powerGraph.getToolbarArmedXYGraph());
+		lws.setContents(graph.getToolbarArmedXYGraph());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(canvas);
 
-		final IXYGraph xyGraph = powerGraph.getXyGraph();
+		final IXYGraph xyGraph = graph.getXyGraph();
 		canvas.addKeyListener(new ZoomInListener(xyGraph));
 		canvas.addKeyListener(new ZoomOutListener(xyGraph));
 		canvas.addKeyListener(new UndoListener(xyGraph.getOperationsManager()));
@@ -140,11 +143,6 @@ public class PowerGraphDialog extends Dialog implements PowerGraphProvider {
 
 	public int getReturnCode() {
 		return returnCode;
-	}
-
-	@Override
-	public ComplexPowerGraph getPowerGraph() {
-		return powerGraph;
 	}
 
 }

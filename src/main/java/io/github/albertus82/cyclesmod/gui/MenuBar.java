@@ -20,7 +20,7 @@ import io.github.albertus82.cyclesmod.gui.listener.CopySelectionListener;
 import io.github.albertus82.cyclesmod.gui.listener.CutSelectionListener;
 import io.github.albertus82.cyclesmod.gui.listener.EditMenuListener;
 import io.github.albertus82.cyclesmod.gui.listener.ExitListener;
-import io.github.albertus82.cyclesmod.gui.listener.OpenPowerGraphDialogListener;
+import io.github.albertus82.cyclesmod.gui.listener.OpenTorqueGraphDialogListener;
 import io.github.albertus82.cyclesmod.gui.listener.PasteSelectionListener;
 import io.github.albertus82.cyclesmod.gui.resources.GuiMessages;
 import io.github.albertus82.jface.Multilanguage;
@@ -185,13 +185,13 @@ public class MenuBar implements Multilanguage {
 
 		new MenuItem(editMenu, SWT.SEPARATOR);
 
-		final MenuItem editPowerSubMenuItem = newLocalizedMenuItem(editMenu, SWT.CASCADE, "gui.label.menu.item.power.curve");
+		final MenuItem editTorqueSubMenuItem = newLocalizedMenuItem(editMenu, SWT.CASCADE, "gui.label.menu.item.torque.curve");
 
-		final Menu editPowerSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
-		editPowerSubMenuItem.setMenu(editPowerSubMenu);
+		final Menu editTorqueSubMenu = new Menu(gui.getShell(), SWT.DROP_DOWN);
+		editTorqueSubMenuItem.setMenu(editTorqueSubMenu);
 
 		for (final VehicleType vehicleType : VehicleType.values()) {
-			newLocalizedMenuItem(editPowerSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.power.curve.vehicle", vehicleType.getDescription(gui.getMode().getGame()))).addSelectionListener(new OpenPowerGraphDialogListener(gui, vehicleType));
+			newLocalizedMenuItem(editTorqueSubMenu, SWT.PUSH, () -> messages.get("gui.label.menu.item.torque.curve.vehicle", vehicleType.getDescription(gui.getMode().getGame()))).addSelectionListener(new OpenTorqueGraphDialogListener(gui, vehicleType));
 		}
 
 		new MenuItem(editMenu, SWT.SEPARATOR);

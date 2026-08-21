@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import io.github.albertus82.cyclesmod.common.model.Gearbox;
-import io.github.albertus82.cyclesmod.common.model.Power;
 import io.github.albertus82.cyclesmod.common.model.Setting;
 import io.github.albertus82.cyclesmod.common.model.Settings;
+import io.github.albertus82.cyclesmod.common.model.Torque;
 import io.github.albertus82.cyclesmod.common.model.Vehicle;
 import io.github.albertus82.cyclesmod.common.model.VehicleType;
 import io.github.albertus82.cyclesmod.common.model.VehiclesInf;
@@ -44,8 +44,8 @@ public class CyclesModEngine {
 		else if (isGearboxProperty(propertyName)) {
 			applied = applyGearboxProperty(propertyName, value, vehicle);
 		}
-		else if (isPowerProperty(propertyName)) {
-			applied = applyPowerProperty(propertyName, value, vehicle);
+		else if (isTorqueProperty(propertyName)) {
+			applied = applyTorqueProperty(propertyName, value, vehicle);
 		}
 		else {
 			throw new UnknownPropertyException(propertyName);
@@ -53,15 +53,15 @@ public class CyclesModEngine {
 		return applied;
 	}
 
-	private boolean applyPowerProperty(final String propertyName, final String value, @NonNull final Vehicle vehicle) throws InvalidNumberException, ValueOutOfRangeException, UnknownPropertyException {
+	private boolean applyTorqueProperty(final String propertyName, final String value, @NonNull final Vehicle vehicle) throws InvalidNumberException, ValueOutOfRangeException, UnknownPropertyException {
 		boolean applied = false;
-		final short newValue = Power.parse(propertyName, value, numeralSystem.getRadix());
-		final String suffix = StringUtils.substringAfter(propertyName, Power.PREFIX + '.');
-		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < vehicle.getPower().getCurve().length) {
+		final short newValue = Torque.parse(propertyName, value, numeralSystem.getRadix());
+		final String suffix = StringUtils.substringAfter(propertyName, Torque.PREFIX + '.');
+		if (StringUtils.isNotEmpty(suffix) && StringUtils.isNumeric(suffix) && Integer.parseInt(suffix) < vehicle.getTorque().getCurve().length) {
 			final int index = Integer.parseInt(suffix);
-			final short defaultValue = vehicle.getPower().getCurve()[index];
+			final short defaultValue = vehicle.getTorque().getCurve()[index];
 			if (defaultValue != newValue) {
-				vehicle.getPower().getCurve()[index] = newValue;
+				vehicle.getTorque().getCurve()[index] = newValue;
 				applied = true;
 			}
 		}
@@ -140,8 +140,9 @@ public class CyclesModEngine {
 		}
 	}
 
-	public static boolean isPowerProperty(final String propertyName) {
-		return StringUtils.substringAfter(propertyName, ".").startsWith(Power.PREFIX);
+	public static boolean isTorqueProperty(final String propertyName) {
+		final String suffix = StringUtils.substringAfter(propertyName, ".");
+		return suffix.startsWith(Torque.PREFIX) || suffix.startsWith(Torque.ALT_PREFIX);
 	}
 
 	public static boolean isGearboxProperty(final String propertyName) {

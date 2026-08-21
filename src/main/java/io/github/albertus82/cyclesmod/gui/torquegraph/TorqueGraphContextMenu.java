@@ -1,4 +1,4 @@
-package io.github.albertus82.cyclesmod.gui.powergraph;
+package io.github.albertus82.cyclesmod.gui.torquegraph;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -27,7 +27,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Value;
 
-public abstract class PowerGraphContextMenu implements Multilanguage {
+public abstract class TorqueGraphContextMenu implements Multilanguage {
 
 	private static final byte[] POINT_SIZE_OPTIONS = { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20 };
 	private static final byte[] LINE_WIDTH_OPTIONS = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -37,15 +37,15 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 	private final LocalizedWidgets localizedWidgets = new LocalizedWidgets();
 
-	private final IPowerGraph powerGraph;
+	private final TorqueGraph graph;
 	private final Control parent;
 
 	@Getter(AccessLevel.PROTECTED)
 	private final Menu menu;
 
-	protected PowerGraphContextMenu(@NonNull final Control parent, @NonNull final IPowerGraph powerGraph) {
+	protected TorqueGraphContextMenu(@NonNull final Control parent, @NonNull final TorqueGraph graph) {
 		this.parent = parent;
-		this.powerGraph = powerGraph;
+		this.graph = graph;
 
 		menu = new Menu(parent);
 		parent.setMenu(menu);
@@ -61,13 +61,13 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 		for (final TraceType traceType : TraceType.values()) {
 			final MenuItem menuItem = new MenuItem(traceTypeSubMenu, SWT.RADIO);
 			menuItem.setText("&" + traceType.toString());
-			if (traceType.equals(powerGraph.getPowerTrace().getTraceType())) {
+			if (traceType.equals(graph.getTorqueTrace().getTraceType())) {
 				traceTypeSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					powerGraph.getPowerTrace().setTraceType(traceType);
+					graph.getTorqueTrace().setTraceType(traceType);
 				}
 			});
 			traceTypeSubMenuItems.put(traceType, menuItem);
@@ -82,13 +82,13 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 		for (final int areaAlpha : AREA_ALPHA_OPTIONS) {
 			final MenuItem menuItem = new MenuItem(areaAlphaSubMenu, SWT.RADIO);
 			menuItem.setText("&" + Math.round(areaAlpha / 2.55f) + "%");
-			if (Math.round(areaAlpha / 255f * AREA_ALPHA_OPTIONS.length) == Math.round(powerGraph.getPowerTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length)) {
+			if (Math.round(areaAlpha / 255f * AREA_ALPHA_OPTIONS.length) == Math.round(graph.getTorqueTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length)) {
 				areaAlphaSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					powerGraph.getPowerTrace().setAreaAlpha(areaAlpha);
+					graph.getTorqueTrace().setAreaAlpha(areaAlpha);
 				}
 			});
 			areaAlphaSubMenuItems.put(areaAlpha, menuItem);
@@ -96,10 +96,10 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 		parent.addMenuDetectListener(e -> {
 			for (final Entry<TraceType, MenuItem> entry : traceTypeSubMenuItems.entrySet()) {
-				entry.getValue().setSelection(entry.getKey().equals(powerGraph.getPowerTrace().getTraceType()));
+				entry.getValue().setSelection(entry.getKey().equals(graph.getTorqueTrace().getTraceType()));
 			}
 			for (final Entry<Integer, MenuItem> entry : areaAlphaSubMenuItems.entrySet()) {
-				entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / 255 * AREA_ALPHA_OPTIONS.length) == Math.round(powerGraph.getPowerTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length));
+				entry.getValue().setSelection(Math.round(entry.getKey().floatValue() / 255 * AREA_ALPHA_OPTIONS.length) == Math.round(graph.getTorqueTrace().getAreaAlpha() / 255f * AREA_ALPHA_OPTIONS.length));
 			}
 		});
 
@@ -118,14 +118,14 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 		for (final int lineWidth : LINE_WIDTH_OPTIONS) {
 			final MenuItem menuItem = new MenuItem(lineWidthSubMenu, SWT.RADIO);
 			menuItem.setText("&" + lineWidth);
-			if (lineWidth == powerGraph.getPowerTrace().getLineWidth()) {
+			if (lineWidth == graph.getTorqueTrace().getLineWidth()) {
 				lineWidthSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					powerGraph.getPowerTrace().setLineWidth(lineWidth);
-					powerGraph.getTorqueTrace().setLineWidth(lineWidth);
+					graph.getTorqueTrace().setLineWidth(lineWidth);
+					graph.getPowerTrace().setLineWidth(lineWidth);
 				}
 			});
 			lineWidthSubMenuItems.put(lineWidth, menuItem);
@@ -133,7 +133,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 		parent.addMenuDetectListener(e -> {
 			for (final Entry<Integer, MenuItem> entry : lineWidthSubMenuItems.entrySet()) {
-				entry.getValue().setSelection(entry.getKey().intValue() == powerGraph.getPowerTrace().getLineWidth());
+				entry.getValue().setSelection(entry.getKey().intValue() == graph.getTorqueTrace().getLineWidth());
 			}
 		});
 
@@ -150,13 +150,13 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 		for (final PointStyle pointStyle : PointStyle.values()) {
 			final MenuItem menuItem = new MenuItem(traceTypeSubMenu, SWT.RADIO);
 			menuItem.setText("&" + pointStyle.toString());
-			if (pointStyle.equals(powerGraph.getPowerTrace().getPointStyle())) {
+			if (pointStyle.equals(graph.getTorqueTrace().getPointStyle())) {
 				traceTypeSubMenu.setDefaultItem(menuItem);
 			}
 			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
-					powerGraph.getPowerTrace().setPointStyle(pointStyle);
+					graph.getTorqueTrace().setPointStyle(pointStyle);
 				}
 			});
 			pointStyleSubMenuItems.put(pointStyle, menuItem);
@@ -164,7 +164,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 
 		parent.addMenuDetectListener(e -> {
 			for (final Entry<PointStyle, MenuItem> entry : pointStyleSubMenuItems.entrySet()) {
-				entry.getValue().setSelection(entry.getKey().equals(powerGraph.getPowerTrace().getPointStyle()));
+				entry.getValue().setSelection(entry.getKey().equals(graph.getTorqueTrace().getPointStyle()));
 			}
 		});
 
@@ -172,7 +172,7 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 	}
 
 	protected SubMenu<Integer> addPointSizeSubMenu() {
-		final Trace trace = powerGraph.getPowerTrace();
+		final Trace trace = graph.getTorqueTrace();
 
 		final Map<Integer, MenuItem> pointSizeSubMenuItems = new HashMap<>();
 		final MenuItem pointSizeMenuItem = newLocalizedMenuItem(menu, SWT.CASCADE, "gui.label.menu.item.graph.pointSize");
@@ -204,16 +204,16 @@ public abstract class PowerGraphContextMenu implements Multilanguage {
 		return new SubMenu<>(pointSizeMenuItem, pointSizeSubMenuItems);
 	}
 
-	protected MenuItem addShowTorqueMenuItem() {
-		final MenuItem showTorqueMenuItem = newLocalizedMenuItem(menu, SWT.CHECK, "gui.label.menu.item.graph.showTorque");
-		showTorqueMenuItem.setSelection(powerGraph.isTorqueVisible());
-		showTorqueMenuItem.addSelectionListener(new SelectionAdapter() {
+	protected MenuItem addShowPowerMenuItem() {
+		final MenuItem item = newLocalizedMenuItem(menu, SWT.CHECK, "gui.label.menu.item.graph.showPower");
+		item.setSelection(graph.isPowerVisible());
+		item.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				powerGraph.toggleTorqueVisibility(showTorqueMenuItem.getSelection());
+				graph.togglePowerVisibility( );
 			}
 		});
-		return showTorqueMenuItem;
+		return item;
 	}
 
 	@Value

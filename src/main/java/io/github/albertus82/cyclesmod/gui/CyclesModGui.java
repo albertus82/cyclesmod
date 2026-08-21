@@ -54,6 +54,7 @@ import io.github.albertus82.unexepack.ByteArrayUtils;
 import io.github.albertus82.unexepack.InvalidDosHeaderException;
 import io.github.albertus82.unexepack.InvalidExepackHeaderException;
 import io.github.albertus82.unexepack.UnExepack;
+import io.github.albertus82.unexepack.UnExepackException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -368,7 +369,7 @@ public class CyclesModGui implements IShellProvider, Multilanguage {
 			log.log(Level.FINE, "File '" + file + "' may be already unpacked:", e);
 			return originalExec;
 		}
-		catch (final RuntimeException e) {
+		catch (final UnExepackException e) {
 			log.log(Level.WARNING, "Cannot unpack '" + file + "':", e);
 			return originalExec;
 		}
