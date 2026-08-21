@@ -15,7 +15,7 @@ Nowadays it cannot be executed natively on modern operating systems, but it runs
 
 **CyclesMod** is a *mod* for the DOS version of this game, which allows to **change the configurations of the bikes**, which are normally not modifiable by the player:
 
-![Screenshot](https://user-images.githubusercontent.com/8672431/122607209-86bc3180-d07a-11eb-9e86-dc7e967c41a9.png)
+![Screenshot](https://github.com/user-attachments/assets/0c74ab2f-1158-4fa5-8b99-a6d5abf8607e)
 
 The game allows to choose three different bikes: 125, 250 or 500cc. The motorcycle operating parameters are stored in the **`BIKES.INF`** binary file in the game directory. *CyclesMod* loads and interprets this file, and provides a graphical interface for inspecting and modifying the configuration of the bikes. On save, the program generates a new `BIKES.INF` containing the modified configuration.
 
